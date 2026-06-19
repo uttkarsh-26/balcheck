@@ -1,0 +1,83 @@
+---
+const siteUrl = 'https://balcheck.in';
+const faqItems = [
+  {
+    q: 'मिस्ड कॉल से बैलेंस कैसे पता करें?',
+    a: 'अपने बैंक का रजिस्टर्ड मोबाइल नंबर से ऊपर दिए गए missed call number पर कॉल करें और 2-3 ring के बाद कॉल काट दें। कुछ ही सेकंड में आपको SMS में बैलेंस आ जाएगा। यह सेवा बिल्कुल मुफ़्त है।'
+  },
+  {
+    q: 'मिस्ड कॉल बैलेंस सेवा मुफ़्त है?',
+    a: 'हाँ, सभी बैंकों की missed call balance enquiry सेवा बिल्कुल मुफ़्त है। आपको कोई charge नहीं देना। बस अपना नंबर बैंक में रजिस्टर्ड होना चाहिए।'
+  },
+  {
+    q: 'मेरा नंबर बैंक में रजिस्टर्ड नहीं है तो?',
+    a: 'अगर आपका मोबाइल नंबर बैंक खाते से लिंक नहीं है, तो missed call सेवा काम नहीं करेगी। अपनी बैंक शाखा में जाकर या ATM से मोबाइल नंबर रजिस्टर करवाएं। इसके बाद missed call सेवा उपलब्ध हो जाएगी।'
+  },
+  {
+    q: 'SMS नहीं आया तो क्या करें?',
+    a: 'अगर SMS नहीं आता, तो जांचें: (1) आपका नंबर बैंक में रजिस्टर्ड है या नहीं, (2) DND सेवा तो चालू नहीं है, (3) आप सही नंबर पर कॉल कर रहे हैं। फिर भी समस्या हो तो बैंक के customer care से संपर्क करें।'
+  },
+  {
+    q: 'क्या ये नंबर सुरक्षित हैं?',
+    a: 'जी हाँ, ये सभी नंबर आधिकारिक बैंक वेबसाइटों से लिए गए हैं। मिस्ड कॉल से आपका कोई पैसा या जानकारी नहीं चली जाती। आपको सिर्फ अपना बैलेंस SMS में मिलता है। फिर भी, हम समय-समय पर नंबर सत्यापित करते हैं।'
+  },
+  {
+    q: 'अपना बैंक इस लिस्ट में नहीं है?',
+    a: 'अगर आपका बैंक इस सूची में नहीं है, तो उस बैंक की वेबसाइट पर जाकर "missed call balance" सेवा देखें या उनके customer care से पूछें। हम लगातार इस सूची को अपडेट करते हैं।'
+  },
+];
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'BalCheck.in',
+  url: siteUrl,
+  description: 'बैंक बैलेंस मिस्ड कॉल नंबर — सभी बैंकों के balance enquiry missed call numbers एक जगह',
+  inLanguage: 'hi-IN',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: `${siteUrl}/?q={search_term_string}`,
+    'query-input': 'required name=search_term_string',
+  },
+};
+
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'BalCheck',
+  url: siteUrl,
+  description: 'All bank missed call balance check numbers in one place',
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map(item => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+
+// First question of the FAQPage schema, for BreadcrumbList
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: siteUrl,
+    },
+  ],
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />

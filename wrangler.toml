@@ -1,0 +1,10 @@
+name = "balcheck"
+compatibility_date = "2026-01-30"
+pages_build_output_dir = "dist"
+
+[assets]
+binding = "ASSETS"
+directory = "./dist"
+
+[observability]
+enabled = true
