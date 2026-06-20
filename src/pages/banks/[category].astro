@@ -1,0 +1,126 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { banks, categories, categoryHindi } from '../../data/banks';
+
+const siteUrl = 'https://balcheck.in';
+
+export function getStaticPaths() {
+  return categories.map(cat => {
+    const slug = cat.toLowerCase().replace(/\s+/g, '-');
+    const catBanks = banks.filter(b => b.category === cat);
+    return {
+      params: { category: slug },
+      props: { category: cat, catBanks },
+    };
+  });
+}
+
+interface Props {
+  category: string;
+  catBanks: typeof banks;
+}
+
+const { category, catBanks } = Astro.props;
+const canonicalUrl = `${siteUrl}/banks/${category.toLowerCase().replace(/\s+/g, '-')}`;
+const hindiName = categoryHindi[category];
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+    { '@type': 'ListItem', position: 2, name: hindiName, item: canonicalUrl },
+  ],
+};
+
+const collectionSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `${hindiName} मिस्ड कॉल बैलेंस नंबर`,
+  description: `सभी ${hindiName} के missed call balance enquiry numbers एक जगह। ${catBanks.length} बैंकों के नंबर।`,
+  url: canonicalUrl,
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: catBanks.length,
+    itemListElement: catBanks.map((b, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `${siteUrl}/bank/${b.slug}`,
+      name: b.name,
+    })),
+  },
+};
+
+const pageTitle = `${hindiName} मिस्ड कॉल बैलेंस नंबर — ${catBanks.length} बैंक | BalCheck.in`;
+const pageDesc = `सभी ${hindiName} के missed call balance enquiry numbers एक जगह। ${catBanks.length} बैंकों के नंबर। मुफ़्त और 24×7।`;
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(collectionSchema)} />
+
+<!-- Breadcrumb -->
+<nav class="max-w-6xl mx-auto px-4 pt-4">
+  <ol class="flex items-center gap-2 text-xs text-gray-500 flex-wrap">
+    <li><a href="/" class="hover:text-brand-600">होम</a></li>
+    <li>›</li>
+    <li class="text-gray-900 font-medium">{hindiName}</li>
+  </ol>
+</nav>
+
+<!-- Header -->
+<section class="bg-gradient-to-b from-brand-50 to-white border-b border-gray-100">
+  <div class="max-w-6xl mx-auto px-4 py-8 text-center">
+    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">{hindiName} मिस्ड कॉल बैलेंस नंबर</h1>
+    <p class="mt-2 text-gray-600">सभी {hindiName} के balance enquiry numbers एक जगह — {catBanks.length} बैंक</p>
+  </div>
+</section>
+
+<!-- Bank Cards -->
+<main class="max-w-6xl mx-auto px-4 py-8">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {catBanks.map(bank => (
+      <div class="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md hover:border-brand-300 transition-all duration-200">
+        <div class="flex items-start justify-between mb-3">
+          <div>
+            <a href={`/bank/${bank.slug}`}>
+              <h3 class="font-bold text-gray-900 text-base leading-tight hover:text-brand-600">{bank.nameHindi}</h3>
+            </a>
+            <p class="text-xs text-gray-500 mt-0.5">{bank.name}</p>
+          </div>
+          <span class="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded shrink-0">{bank.shortName}</span>
+        </div>
+        <a href={`tel:${bank.missedCall}`} class="block">
+          <div class="bg-brand-50 rounded-lg p-3 mb-3 hover:bg-brand-100 transition-colors">
+            <p class="text-xs text-brand-700 font-medium mb-1">📞 मिस्ड कॉल नंबर</p>
+            <span class="text-xl font-bold text-brand-700 tracking-wide">{bank.missedCall}</span>
+          </div>
+        </a>
+        <div class="flex items-center gap-2">
+          <a href={`tel:${bank.missedCall}`} class="flex-1 flex items-center justify-center gap-1.5 bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium py-2 rounded-lg transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+            कॉल करें
+          </a>
+          <a href={`/bank/${bank.slug}`} class="px-3 py-2 text-sm font-medium text-brand-600 bg-brand-50 hover:bg-brand-100 rounded-lg transition-colors">
+            विवरण →
+          </a>
+        </div>
+      </div>
+    ))}
+  </div>
+</main>
+
+<!-- Category Links -->
+<section class="bg-gray-50 border-t border-gray-100">
+  <div class="max-w-4xl mx-auto px-4 py-8 text-center">
+    <h2 class="text-lg font-bold text-gray-900 mb-4">अन्य बैंक श्रेणियाँ</h2>
+    <div class="flex flex-wrap justify-center gap-2">
+      {categories.map(cat => (
+        <a href={`/banks/${cat.toLowerCase().replace(/\s+/g, '-')}`} class={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${cat === category ? 'bg-brand-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-200 border border-gray-200'}`}>
+          {categoryHindi[cat]} ({banks.filter(b => b.category === cat).length})
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+</Layout>
