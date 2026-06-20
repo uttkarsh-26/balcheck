@@ -6,6 +6,7 @@ export default defineConfig({
   site: 'https://balcheck.in',
   trailingSlash: 'never',
   output: 'static',
+  devToolbar: { enabled: false },
   integrations: [
     tailwind(),
     sitemap(),

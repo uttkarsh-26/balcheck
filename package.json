@@ -7,6 +7,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "wrangler pages dev dist",
+    "preview:static": "serve dist -l 4321",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
     "astro": "astro"
   },
   "dependencies": {
@@ -17,6 +20,8 @@
     "typescript": "^5.9.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "serve": "^14.2.0",
     "wrangler": "^3.0.0"
   },
   "keywords": [
