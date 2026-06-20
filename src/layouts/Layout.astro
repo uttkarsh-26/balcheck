@@ -52,17 +52,25 @@ const siteUrl = 'https://balcheck.in';
   <script is:inline>(function(s){s.dataset.zone='11176675',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
   <script is:inline>(function(s){s.dataset.zone='11176681',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 
-  <!-- Monetag ad position fix: push fixed iframes below sticky header, hide duplicates -->
+  <!-- Monetag ad position fix: push top fixed iframes below sticky header, hide duplicate top ads only -->
   <script is:inline>
     (function() {
       const HEADER_HEIGHT = 70;
+      const TOP_AD_THRESHOLD = 100;
       const manageAds = function() {
         const fixedIframes = document.querySelectorAll('iframe[style*="position: fixed"], iframe[style*="position:fixed"]');
-        fixedIframes.forEach(function(iframe, index) {
-          if (index === 0) {
-            iframe.style.top = HEADER_HEIGHT + 'px';
-          } else {
-            iframe.style.display = 'none';
+        let topAdIndex = 0;
+        fixedIframes.forEach(function(iframe) {
+          const rect = iframe.getBoundingClientRect();
+          const currentTop = parseInt(iframe.style.top, 10) || rect.top || 0;
+          // Only touch top-positioned ads; leave bottom in-page push ads alone
+          if (currentTop < TOP_AD_THRESHOLD) {
+            if (topAdIndex === 0) {
+              iframe.style.top = HEADER_HEIGHT + 'px';
+            } else {
+              iframe.style.display = 'none'; // duplicate top ad
+            }
+            topAdIndex++;
           }
         });
       };
