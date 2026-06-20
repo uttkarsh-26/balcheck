@@ -49,8 +49,30 @@ const siteUrl = 'https://balcheck.in';
 </head>
 <body class="bg-gray-50 font-hindi antialiased">
   <!-- Monetag Ads -->
-  <script is:inline>(function(s){s.dataset.zone='10542784',s.src='https://gizokraijaw.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-  <script is:inline>(function(s){s.dataset.zone='10542790',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+  <script is:inline>(function(s){s.dataset.zone='11176675',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+  <script is:inline>(function(s){s.dataset.zone='11176681',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
+  <!-- Monetag ad position fix: push fixed iframes below sticky header, hide duplicates -->
+  <script is:inline>
+    (function() {
+      const HEADER_HEIGHT = 70;
+      const manageAds = function() {
+        const fixedIframes = document.querySelectorAll('iframe[style*="position: fixed"], iframe[style*="position:fixed"]');
+        fixedIframes.forEach(function(iframe, index) {
+          if (index === 0) {
+            iframe.style.top = HEADER_HEIGHT + 'px';
+          } else {
+            iframe.style.display = 'none';
+          }
+        });
+      };
+      manageAds();
+      const interval = setInterval(manageAds, 200);
+      setTimeout(function() { clearInterval(interval); }, 5000);
+      const observer = new MutationObserver(manageAds);
+      observer.observe(document.body, { childList: true, subtree: true });
+    })();
+  </script>
 
   <slot />
 </body>
