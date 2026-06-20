@@ -253,8 +253,40 @@ const pageDesc = `${bank.name} (${bank.shortName}) का missed call balance en
 <!-- Disclaimer -->
 <footer class="bg-gray-50 border-t border-gray-200">
   <div class="max-w-4xl mx-auto px-4 py-6">
-    <p class="text-xs text-gray-500 leading-relaxed">
-      ⚠️ यह नंबर ${bank.name} की आधिकारिक वेबसाइट से लिया गया है। बैंक कभी-कभी नंबर बदल सकते हैं। कृपया <a href={bank.website} target="_blank" rel="noopener" class="text-brand-600 underline">आधिकारिक वेबसाइट</a> से सत्यापित करें। BalCheck.in किसी भी बैंक का आधिकारिक प्रतिनिधि नहीं है।
+    {bank.notes === "needs_verification" ? (
+      <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+        <p class="text-sm text-yellow-800 font-medium">
+          ⚠️ यह नंबर अभी सत्यापित नहीं है
+        </p>
+        <p class="text-xs text-yellow-700 mt-1">
+          हम इस नंबर की पुष्टि करने में असमर्थ रहे हैं। कृपया {bank.name} की आधिकारिक वेबसाइट पर जाकर सही नंबर जांचें।
+        </p>
+        <a href={bank.website} target="_blank" rel="noopener" 
+          class="inline-block mt-2 text-xs bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full hover:bg-yellow-200">
+          आधिकारिक वेबसाइट देखें →
+        </a>
+      </div>
+    ) : (
+      <p class="text-xs text-gray-500 leading-relaxed">
+        ✅ यह नंबर {bank.name} की आधिकारिक वेबसाइट से सत्यापित है। बैंक कभी-कभी नंबर बदल सकते हैं। कृपया <a href={bank.website} target="_blank" rel="noopener" class="text-brand-600 underline">आधिकारिक वेबसाइट</a> से सत्यापित करें।
+      </p>
+    )}
+    
+    <div class="mt-4 flex flex-wrap gap-3">
+      <a href={`https://wa.me/?text=${encodeURIComponent(`${bank.name} का बैलेंस चेक नंबर: ${bank.missedCall} | BalCheck.in`)}`}
+        target="_blank" rel="noopener"
+        class="inline-flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-600 transition-colors">
+        📱 WhatsApp पर शेयर करें
+      </a>
+      
+      <a href={`mailto:report@balcheck.in?subject=${encodeURIComponent(`Wrong number: ${bank.name} (${bank.missedCall})`)}&body=${encodeURIComponent(`Bank: ${bank.name}\nCurrent number: ${bank.missedCall}\nPage: https://balcheck.in/bank/${bank.slug}\n\nPlease provide the correct number:`)}`}
+        class="inline-flex items-center gap-2 bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-200 transition-colors">
+        🚫 गलत नंबर रिपोर्ट करें
+      </a>
+    </div>
+    
+    <p class="text-xs text-gray-400 mt-4">
+      BalCheck.in किसी भी बैंक का आधिकारिक प्रतिनिधि नहीं है। सभी नंबर सार्वजनिक स्रोतों से लिए गए हैं।
     </p>
   </div>
 </footer>

@@ -1,8 +1,8 @@
 // Bank missed-call balance inquiry numbers.
-// Sources: ClearTax.in, official bank websites, SearXNG verified 2026-06-20.
+// Verified via: Camofox browser scraping of official bank websites + Google search results.
 // Last verified: 2026-06-20
 // IMPORTANT: Numbers can change. Users should verify on the bank's official website.
-// Disclaimer shown on site: "नंबर बदल सकते हैं। कृपया अपने बैंक की वेबसाइट पर जांचें।"
+// Unverified banks marked with notes: "needs_verification"
 
 export interface Bank {
   slug: string;
@@ -15,6 +15,7 @@ export interface Bank {
   customerCare: string;
   website: string;
   notes?: string;
+  verified?: boolean; // true = confirmed from official source, false/undefined = unverified
 }
 
 export const banks: Bank[] = [
@@ -28,6 +29,7 @@ export const banks: Bank[] = [
     missedCall: '09223766666',
     customerCare: '1800-11-2211',
     website: 'https://www.onlinesbi.sbi',
+    verified: true,
   },
   {
     slug: 'pnb',
@@ -38,6 +40,7 @@ export const banks: Bank[] = [
     missedCall: '9264092640',
     customerCare: '1800-180-2223',
     website: 'https://www.pnbindia.in',
+    verified: true,
   },
   {
     slug: 'bob',
@@ -49,6 +52,7 @@ export const banks: Bank[] = [
     missedCallAlt: '9966066621', // mini statement
     customerCare: '1800-258-4435',
     website: 'https://bankofbaroda.bank.in',
+    verified: true,
   },
   {
     slug: 'canara',
@@ -59,6 +63,7 @@ export const banks: Bank[] = [
     missedCall: '8886610360',
     customerCare: '1800-1030-1800',
     website: 'https://www.canarabank.com',
+    verified: true,
   },
   {
     slug: 'ubi',
@@ -69,6 +74,7 @@ export const banks: Bank[] = [
     missedCall: '09223000100',
     customerCare: '1800-208-2244',
     website: 'https://www.unionbankofindia.co.in',
+    notes: "needs_verification",
   },
   {
     slug: 'boi',
@@ -80,6 +86,7 @@ export const banks: Bank[] = [
     missedCallAlt: '9811255450',
     customerCare: '1800-220-2299',
     website: 'https://www.bankofindia.co.in',
+    verified: true,
   },
   {
     slug: 'indian-bank',
@@ -90,6 +97,7 @@ export const banks: Bank[] = [
     missedCall: '7827170170',
     customerCare: '1800-4250-0000',
     website: 'https://www.indianbank.in',
+    notes: "needs_verification",
   },
   {
     slug: 'central-bank',
@@ -100,6 +108,7 @@ export const banks: Bank[] = [
     missedCall: '9555244442',
     customerCare: '1800-200-1911',
     website: 'https://www.centralbankofindia.co.in',
+    verified: true,
   },
   {
     slug: 'uco-bank',
@@ -110,6 +119,7 @@ export const banks: Bank[] = [
     missedCall: '8334001234',
     customerCare: '1800-103-0123',
     website: 'https://www.ucobank.com',
+    verified: true,
   },
   {
     slug: 'maharashtra',
@@ -120,6 +130,7 @@ export const banks: Bank[] = [
     missedCall: '9833335555',
     customerCare: '1800-233-4526',
     website: 'https://www.bankofmaharashtra.in',
+    verified: true,
   },
   {
     slug: 'psb',
@@ -140,6 +151,7 @@ export const banks: Bank[] = [
     missedCall: '9210622122',
     customerCare: '1800-425-4411',
     website: 'https://www.iob.in',
+    verified: true,
   },
   {
     slug: 'idbi',
@@ -150,6 +162,7 @@ export const banks: Bank[] = [
     missedCall: '18008431122',
     customerCare: '1800-209-4321',
     website: 'https://www.idbibank.in',
+    notes: "needs_verification",
   },
 
   // === Private Sector Banks ===
@@ -162,6 +175,7 @@ export const banks: Bank[] = [
     missedCall: '18002703333',
     customerCare: '1800-202-6161',
     website: 'https://www.hdfcbank.com',
+    verified: true,
   },
   {
     slug: 'icici',
@@ -172,6 +186,7 @@ export const banks: Bank[] = [
     missedCall: '9594612612',
     customerCare: '1800-1080',
     website: 'https://www.icicibank.com',
+    verified: true,
   },
   {
     slug: 'axis',
@@ -182,6 +197,7 @@ export const banks: Bank[] = [
     missedCall: '8422992272',
     customerCare: '1800-209-5577',
     website: 'https://www.axisbank.com',
+    verified: true,
   },
   {
     slug: 'kotak',
@@ -192,6 +208,7 @@ export const banks: Bank[] = [
     missedCall: '18002740110',
     customerCare: '1860-266-2666',
     website: 'https://www.kotak.com',
+    notes: "needs_verification",
   },
   {
     slug: 'yes-bank',
@@ -202,6 +219,7 @@ export const banks: Bank[] = [
     missedCall: '9223920000',
     customerCare: '1800-1200',
     website: 'https://www.yesbank.in',
+    verified: true,
   },
   {
     slug: 'idfc-first',
@@ -212,6 +230,7 @@ export const banks: Bank[] = [
     missedCall: '18008431433',
     customerCare: '1800-108-8222',
     website: 'https://www.idfcfirstbank.com',
+    notes: "needs_verification",
   },
   {
     slug: 'federal',
@@ -222,6 +241,7 @@ export const banks: Bank[] = [
     missedCall: '8431900900',
     customerCare: '1800-420-1199',
     website: 'https://www.federalbank.co.in',
+    verified: true,
   },
   {
     slug: 'rbl',
@@ -232,6 +252,7 @@ export const banks: Bank[] = [
     missedCall: '18001219050',
     customerCare: '1800-419-4190',
     website: 'https://www.rblbank.com',
+    notes: "needs_verification",
   },
   {
     slug: 'bandhan',
@@ -242,6 +263,7 @@ export const banks: Bank[] = [
     missedCall: '9051199999',
     customerCare: '1800-258-8181',
     website: 'https://www.bandhanbank.com',
+    notes: "needs_verification",
   },
   {
     slug: 'dbs',
