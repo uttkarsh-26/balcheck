@@ -8,7 +8,7 @@ export interface Bank {
   name: string;
   nameHindi: string;
   shortName: string;
-  category: 'Public Sector' | 'Private Sector' | 'Small Finance Bank' | 'Payments Bank' | 'Foreign Bank' | 'Cooperative Bank';
+  category: 'Public Sector' | 'Private Sector' | 'Small Finance Bank' | 'Payments Bank' | 'Foreign Bank' | 'Cooperative Bank' | 'Regional Rural Bank';
   missedCall: string;
   missedCallAlt?: string;
   customerCare: string;
@@ -545,6 +545,76 @@ export const banks: Bank[] = [
     customerCare: '1800-233-3583',
     website: 'https://www.cosmosbank.in',
   },
+
+  // === Additional Private Sector / Small Finance Banks ===
+  {
+    slug: 'indusind',
+    name: 'IndusInd Bank',
+    nameHindi: 'इंडसइंड बैंक',
+    shortName: 'IndusInd',
+    category: 'Private Sector',
+    missedCall: '18002741000',
+    customerCare: '1800-274-1000',
+    website: 'https://www.indusind.com/in/en/personal/mobile-banking-services/missed-call-banking.html',
+    verified: true,
+  },
+  {
+    slug: 'utkarsh-sfb',
+    name: 'Utkarsh Small Finance Bank',
+    nameHindi: 'उत्कर्ष स्मॉल फाइनेंस बैंक',
+    shortName: 'Utkarsh SFB',
+    category: 'Small Finance Bank',
+    missedCall: '18001239878',
+    customerCare: '1800-1239-878',
+    website: 'https://www.utkarsh.bank',
+    verified: true,
+  },
+
+  // === Regional Rural Banks ===
+  {
+    slug: 'apgb',
+    name: 'Andhra Pradesh Grameena Vikas Bank',
+    nameHindi: 'आंध्र प्रदेश ग्रामीण विकास बैंक',
+    shortName: 'APGB',
+    category: 'Regional Rural Bank',
+    missedCall: '9289222024',
+    customerCare: '1800-123-6235',
+    website: 'https://www.apgb.co.in',
+    verified: true,
+  },
+  {
+    slug: 'kvgb',
+    name: 'Karnataka Vikas Grameena Bank',
+    nameHindi: 'कर्नाटक विकास ग्रामीण बैंक',
+    shortName: 'KVGB',
+    category: 'Regional Rural Bank',
+    missedCall: '09278700859',
+    customerCare: '1800-425-1100',
+    website: 'https://www.kvgbank.com',
+    verified: true,
+  },
+  {
+    slug: 'baroda-up-gramin',
+    name: 'Baroda UP Gramin Bank',
+    nameHindi: 'बड़ौदा यूपी ग्रामीण बैंक',
+    shortName: 'Baroda UP',
+    category: 'Regional Rural Bank',
+    missedCall: '9986454440',
+    customerCare: '1800-180-7700',
+    website: 'https://www.barodaupbank.in',
+    verified: true,
+  },
+  {
+    slug: 'punjab-gramin',
+    name: 'Punjab Gramin Bank',
+    nameHindi: 'पंजाब ग्रामीण बैंक',
+    shortName: 'Punjab Gramin',
+    category: 'Regional Rural Bank',
+    missedCall: '18001807777',
+    customerCare: '1800-180-7777',
+    website: 'https://www.punjabgraminbank.com',
+    verified: true,
+  },
 ];
 
 export const categories = [
@@ -554,6 +624,7 @@ export const categories = [
   'Payments Bank',
   'Foreign Bank',
   'Cooperative Bank',
+  'Regional Rural Bank',
 ] as const;
 
 export const categoryHindi: Record<string, string> = {
@@ -563,4 +634,5 @@ export const categoryHindi: Record<string, string> = {
   'Payments Bank': 'पेमेंट्स बैंक',
   'Foreign Bank': 'विदेशी बैंक',
   'Cooperative Bank': 'सहकारी बैंक',
+  'Regional Rural Bank': 'क्षेत्रीय ग्रामीण बैंक',
 };
