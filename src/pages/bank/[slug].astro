@@ -1,6 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import NativeAd from '../../components/NativeAd.astro';
 import { banks, categories, categoryHindi } from '../../data/banks';
 import type { Bank } from '../../data/banks';
 
@@ -154,9 +153,6 @@ const pageDesc = `${bank.name} (${bank.shortName}) का missed call balance en
       </div>
     )}
 
-    <!-- Native Ad -->
-    <NativeAd />
-
     <!-- WhatsApp Share -->
     <a
       href={`https://wa.me/?text=${encodeURIComponent(`${bank.nameHindi} का बैलेंस चेक नंबर: ${bank.missedCall} — ${siteUrl}/bank/${bank.slug}`)}`}
@@ -184,11 +180,6 @@ const pageDesc = `${bank.name} (${bank.shortName}) का missed call balance en
       <span class="text-sm font-bold text-brand-600 break-all">{bank.website.replace('https://www.', '').replace('https://', '')}</span>
     </a>
   </div>
-</section>
-
-<!-- Native Ad -->
-<section class="max-w-4xl mx-auto px-4">
-  <NativeAd />
 </section>
 
 <!-- How It Works -->
