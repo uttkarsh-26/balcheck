@@ -23,8 +23,8 @@ export default {
         },
       },
       fontFamily: {
-        hindi: ['"Noto Sans Devanagari"', 'sans-serif'],
-        sans: ['Inter', '"Noto Sans Devanagari"', 'system-ui', 'sans-serif'],
+        hindi: ['"Noto Sans Devanagari"', '"Mangal"', 'system-ui', 'sans-serif'],
+        sans: ['system-ui', '"Segoe UI"', 'Roboto', 'sans-serif'],
       },
     },
   },

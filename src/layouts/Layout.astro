@@ -19,10 +19,10 @@ const siteUrl = 'https://balcheck.in';
   
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- System fonts only — Noto Sans Devanagari is the default Android Devanagari face;
+       Inter is replaced by system-ui (Android Roboto/Fira). Eliminates the
+       render-blocking external fonts.googleapis.com chain (PageSpeed 79 -> target 90+). -->
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
   
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
@@ -37,14 +37,15 @@ const siteUrl = 'https://balcheck.in';
   <!-- Theme color -->
   <meta name="theme-color" content="#2563eb" />
 
-  <!-- Google Analytics (GA4) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZEL0FEF89W"></script>
-  <script is:inline>
+  <!-- Google Analytics (GA4) — deferred to next paint, not blocking -->
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+  <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-ZEL0FEF89W');
   </script>
+  <script src="https://www.googletagmanager.com/gtag/js?id=G-ZEL0FEF89W" defer></script>
 </head>
 <body class="bg-gray-50 font-hindi antialiased">
   <slot />
