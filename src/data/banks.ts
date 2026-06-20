@@ -74,6 +74,7 @@ export const banks: Bank[] = [
     missedCall: '09223000100',
     customerCare: '1800-208-2244',
     website: 'https://www.unionbankofindia.co.in',
+    notes: "needs_verification - numbers from aggregator sites may be outdated",
     notes: "needs_verification",
   },
   {
@@ -97,6 +98,7 @@ export const banks: Bank[] = [
     missedCall: '7827170170',
     customerCare: '1800-4250-0000',
     website: 'https://www.indianbank.in',
+    notes: "needs_verification - numbers from aggregator sites may be outdated",
     notes: "needs_verification",
   },
   {
@@ -208,6 +210,7 @@ export const banks: Bank[] = [
     missedCall: '18002740110',
     customerCare: '1860-266-2666',
     website: 'https://www.kotak.com',
+    notes: "needs_verification - numbers from aggregator sites may be outdated",
     notes: "needs_verification",
   },
   {
@@ -230,6 +233,7 @@ export const banks: Bank[] = [
     missedCall: '18008431433',
     customerCare: '1800-108-8222',
     website: 'https://www.idfcfirstbank.com',
+    notes: "needs_verification - numbers from aggregator sites may be outdated",
     notes: "needs_verification",
   },
   {
@@ -252,6 +256,7 @@ export const banks: Bank[] = [
     missedCall: '18001219050',
     customerCare: '1800-419-4190',
     website: 'https://www.rblbank.com',
+    notes: "needs_verification - numbers from aggregator sites may be outdated",
     notes: "needs_verification",
   },
   {
@@ -263,6 +268,7 @@ export const banks: Bank[] = [
     missedCall: '9051199999',
     customerCare: '1800-258-8181',
     website: 'https://www.bandhanbank.com',
+    notes: "needs_verification - numbers from aggregator sites may be outdated",
     notes: "needs_verification",
   },
   {
