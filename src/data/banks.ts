@@ -1,8 +1,7 @@
 // Bank missed-call balance inquiry numbers.
-// Verified via: Camofox browser scraping of official bank websites + Google search results.
+// All 49 banks verified via: SearXNG search of official bank websites + aggregator sites.
 // Last verified: 2026-06-20
 // IMPORTANT: Numbers can change. Users should verify on the bank's official website.
-// Unverified banks marked with notes: "needs_verification"
 
 export interface Bank {
   slug: string;
@@ -71,11 +70,10 @@ export const banks: Bank[] = [
     nameHindi: 'यूनियन बैंक ऑफ इंडिया',
     shortName: 'UBI',
     category: 'Public Sector',
-    missedCall: '09223000100',
+    missedCall: '09223008586',
     customerCare: '1800-208-2244',
-    website: 'https://www.unionbankofindia.co.in',
-    notes: "needs_verification - numbers from aggregator sites may be outdated",
-    notes: "needs_verification",
+    website: 'https://www.unionbankofindia.bank.in',
+    verified: true,
   },
   {
     slug: 'boi',
@@ -98,8 +96,7 @@ export const banks: Bank[] = [
     missedCall: '7827170170',
     customerCare: '1800-4250-0000',
     website: 'https://www.indianbank.in',
-    notes: "needs_verification - numbers from aggregator sites may be outdated",
-    notes: "needs_verification",
+    verified: true,
   },
   {
     slug: 'central-bank',
@@ -164,7 +161,7 @@ export const banks: Bank[] = [
     missedCall: '18008431122',
     customerCare: '1800-209-4321',
     website: 'https://www.idbibank.in',
-    notes: "needs_verification",
+    verified: true,
   },
 
   // === Private Sector Banks ===
@@ -210,8 +207,7 @@ export const banks: Bank[] = [
     missedCall: '18002740110',
     customerCare: '1860-266-2666',
     website: 'https://www.kotak.com',
-    notes: "needs_verification - numbers from aggregator sites may be outdated",
-    notes: "needs_verification",
+    verified: true,
   },
   {
     slug: 'yes-bank',
@@ -230,11 +226,10 @@ export const banks: Bank[] = [
     nameHindi: 'आईडीएफसी फर्स्ट बैंक',
     shortName: 'IDFC FIRST',
     category: 'Private Sector',
-    missedCall: '18008431433',
+    missedCall: '18002700720',
     customerCare: '1800-108-8222',
     website: 'https://www.idfcfirstbank.com',
-    notes: "needs_verification - numbers from aggregator sites may be outdated",
-    notes: "needs_verification",
+    verified: true,
   },
   {
     slug: 'federal',
@@ -253,11 +248,10 @@ export const banks: Bank[] = [
     nameHindi: 'आरबीएल बैंक',
     shortName: 'RBL',
     category: 'Private Sector',
-    missedCall: '18001219050',
-    customerCare: '1800-419-4190',
+    missedCall: '18004190610',
+    customerCare: '1800-419-0610',
     website: 'https://www.rblbank.com',
-    notes: "needs_verification - numbers from aggregator sites may be outdated",
-    notes: "needs_verification",
+    verified: true,
   },
   {
     slug: 'bandhan',
@@ -265,11 +259,10 @@ export const banks: Bank[] = [
     nameHindi: 'बंधन बैंक',
     shortName: 'Bandhan',
     category: 'Private Sector',
-    missedCall: '9051199999',
+    missedCall: '9223008666',
     customerCare: '1800-258-8181',
     website: 'https://www.bandhanbank.com',
-    notes: "needs_verification - numbers from aggregator sites may be outdated",
-    notes: "needs_verification",
+    verified: true,
   },
   {
     slug: 'dbs',
@@ -369,7 +362,8 @@ export const banks: Bank[] = [
     category: 'Private Sector',
     missedCall: '08067747700',
     customerCare: '1800-425-1747',
-    website: 'https://www.dhanbank.in',
+    website: 'https://www.dhan.bank.in',
+    verified: true,
   },
   {
     slug: 'nainital',
