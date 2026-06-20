@@ -36,6 +36,15 @@ const siteUrl = 'https://balcheck.in';
   
   <!-- Theme color -->
   <meta name="theme-color" content="#2563eb" />
+
+  <!-- Google Analytics (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZEL0FEF89W"></script>
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ZEL0FEF89W');
+  </script>
 </head>
 <body class="bg-gray-50 font-hindi antialiased">
   <slot />
