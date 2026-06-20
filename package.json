@@ -10,6 +10,7 @@
     "preview:static": "serve dist -l 4321",
     "test": "playwright test",
     "test:headed": "playwright test --headed",
+    "setup": "cp scripts/pre-push.sh .git/hooks/pre-push && chmod +x .git/hooks/pre-push && echo 'git hooks installed'",
     "astro": "astro"
   },
   "dependencies": {
