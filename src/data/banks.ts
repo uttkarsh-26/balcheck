@@ -1,8 +1,8 @@
 // Bank missed-call balance inquiry numbers.
-// Sources: Official bank websites, RBI financial education materials.
-// Last verified: 2026-06-19
-// IMPORTANT: Numbers can change. Always include verification disclaimer.
-// Users should verify on the bank's official website.
+// Sources: ClearTax.in, official bank websites, SearXNG verified 2026-06-20.
+// Last verified: 2026-06-20
+// IMPORTANT: Numbers can change. Users should verify on the bank's official website.
+// Disclaimer shown on site: "नंबर बदल सकते हैं। कृपया अपने बैंक की वेबसाइट पर जांचें।"
 
 export interface Bank {
   slug: string;
@@ -45,7 +45,8 @@ export const banks: Bank[] = [
     nameHindi: 'बैंक ऑफ बड़ौदा',
     shortName: 'BoB',
     category: 'Public Sector',
-    missedCall: '8467001111',
+    missedCall: '8468001111',
+    missedCallAlt: '8468001122', // mini statement
     customerCare: '1800-258-4435',
     website: 'https://www.bankofbaroda.in',
   },
@@ -55,7 +56,7 @@ export const banks: Bank[] = [
     nameHindi: 'केनरा बैंक',
     shortName: 'Canara',
     category: 'Public Sector',
-    missedCall: '09015734700',
+    missedCall: '8886610360',
     customerCare: '1800-1030-1800',
     website: 'https://www.canarabank.com',
   },
@@ -75,7 +76,8 @@ export const banks: Bank[] = [
     nameHindi: 'बैंक ऑफ इंडिया',
     shortName: 'BOI',
     category: 'Public Sector',
-    missedCall: '09015135135',
+    missedCall: '9811255430',
+    missedCallAlt: '9811255450',
     customerCare: '1800-220-2299',
     website: 'https://www.bankofindia.co.in',
   },
@@ -85,7 +87,7 @@ export const banks: Bank[] = [
     nameHindi: 'इंडियन बैंक',
     shortName: 'Indian Bank',
     category: 'Public Sector',
-    missedCall: '180042500000',
+    missedCall: '9677633000',
     customerCare: '1800-4250-0000',
     website: 'https://www.indianbank.in',
   },
@@ -105,7 +107,7 @@ export const banks: Bank[] = [
     nameHindi: 'यूको बैंक',
     shortName: 'UCO',
     category: 'Public Sector',
-    missedCall: '9270879879',
+    missedCall: '8334001234',
     customerCare: '1800-103-0123',
     website: 'https://www.ucobank.com',
   },
@@ -115,7 +117,7 @@ export const banks: Bank[] = [
     nameHindi: 'बैंक ऑफ महाराष्ट्र',
     shortName: 'BoM',
     category: 'Public Sector',
-    missedCall: '18002334526',
+    missedCall: '9833335555',
     customerCare: '1800-233-4526',
     website: 'https://www.bankofmaharashtra.in',
   },
@@ -135,7 +137,7 @@ export const banks: Bank[] = [
     nameHindi: 'इंडियन ओवरसीज बैंक',
     shortName: 'IOB',
     category: 'Public Sector',
-    missedCall: '842811122',
+    missedCall: '9210622122',
     customerCare: '1800-425-4411',
     website: 'https://www.iob.in',
   },
@@ -145,7 +147,7 @@ export const banks: Bank[] = [
     nameHindi: 'आईडीबीआई बैंक',
     shortName: 'IDBI',
     category: 'Public Sector',
-    missedCall: '18008431133',
+    missedCall: '18008431122',
     customerCare: '1800-209-4321',
     website: 'https://www.idbibank.in',
   },
@@ -197,7 +199,7 @@ export const banks: Bank[] = [
     nameHindi: 'यस बैंक',
     shortName: 'YES',
     category: 'Private Sector',
-    missedCall: '09999999999',
+    missedCall: '9223920000',
     customerCare: '1800-1200',
     website: 'https://www.yesbank.in',
   },
@@ -217,7 +219,7 @@ export const banks: Bank[] = [
     nameHindi: 'फेडरल बैंक',
     shortName: 'Federal',
     category: 'Private Sector',
-    missedCall: '08432000000',
+    missedCall: '8431900900',
     customerCare: '1800-420-1199',
     website: 'https://www.federalbank.co.in',
   },
