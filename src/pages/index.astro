@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import SchemaOrg from '../components/SchemaOrg.astro';
+import VideoHeroBanner from '../components/VideoHeroBanner.astro';
 import { banks, categories, categoryHindi } from '../data/banks';
 
 const bankCount = banks.length;
@@ -37,32 +38,30 @@ const siteUrl = 'https://balcheck.in';
   </div>
 </header>
 
-<!-- Hero -->
-<section class="bg-gradient-to-b from-brand-50 to-white border-b border-gray-100">
-  <div class="max-w-4xl mx-auto px-4 py-8 sm:py-12 text-center">
-    <h1 class="text-2xl sm:text-4xl font-bold text-gray-900 leading-tight">
-      बैंक बैलेंस मिस्ड कॉल नंबर
-    </h1>
-    <p class="mt-3 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-      अपने बैंक का बैलेंस जानने के लिए मिस्ड कॉल दें — सभी बैंकों के नंबर एक जगह
-    </p>
-    
-    <!-- Stats -->
-    <div class="mt-5 flex items-center justify-center gap-4 sm:gap-6 text-sm">
-      <div class="flex items-center gap-1.5">
-        <span class="font-bold text-brand-600">{bankCount}</span>
-        <span class="text-gray-500">बैंक</span>
-      </div>
-      <div class="w-px h-4 bg-gray-300"></div>
-      <div class="flex items-center gap-1.5">
-        <span class="font-bold text-brand-600">100%</span>
-        <span class="text-gray-500">मुफ़्त</span>
-      </div>
-      <div class="w-px h-4 bg-gray-300"></div>
-      <div class="flex items-center gap-1.5">
-        <span class="font-bold text-brand-600">24×7</span>
-        <span class="text-gray-500">उपलब्ध</span>
-      </div>
+<!-- Hero — Video Background -->
+<VideoHeroBanner
+  src="/videos/balcheck-homepage-hero.mp4"
+  poster="/videos/balcheck-poster.jpg"
+  title="बैंक बैलेंस मिस्ड कॉल नंबर"
+  subtitle={`अपने बैंक का बैलेंस जानने के लिए मिस्ड कॉल दें — सभी बैंकों के नंबर एक जगह`}
+/>
+
+<!-- Stats Bar -->
+<section class="bg-white border-b border-gray-100">
+  <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-center gap-4 sm:gap-6 text-sm">
+    <div class="flex items-center gap-1.5">
+      <span class="font-bold text-brand-600">{bankCount}</span>
+      <span class="text-gray-500">बैंक</span>
+    </div>
+    <div class="w-px h-4 bg-gray-300"></div>
+    <div class="flex items-center gap-1.5">
+      <span class="font-bold text-brand-600">100%</span>
+      <span class="text-gray-500">मुफ़्त</span>
+    </div>
+    <div class="w-px h-4 bg-gray-300"></div>
+    <div class="flex items-center gap-1.5">
+      <span class="font-bold text-brand-600">24×7</span>
+      <span class="text-gray-500">उपलब्ध</span>
     </div>
   </div>
 </section>
