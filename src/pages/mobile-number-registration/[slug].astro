@@ -1,0 +1,215 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { banks } from '../../data/banks';
+import type { Bank } from '../../data/banks';
+
+export function getStaticPaths() {
+  return banks.map((bank: Bank) => ({
+    params: { slug: bank.slug },
+    props: { bank },
+  }));
+}
+
+interface Props {
+  bank: Bank;
+}
+
+const { bank } = Astro.props;
+const siteUrl = 'https://balcheck.in';
+const canonicalUrl = `${siteUrl}/mobile-number-registration/${bank.slug}`;
+
+const title = `${bank.shortName} Mobile Number Registration — ${bank.nameHindi} Mobile Link`;
+const description = `${bank.name} में mobile number registration कैसे करें। Branch visit, ATM, या net banking से mobile number register कराएं। ${bank.shortName} mobile number link करने की पूरी जानकारी।`;
+
+const faqs = [
+  {
+    q: `${bank.shortName} में mobile number registration कैसे करें?`,
+    a: `${bank.name} में mobile number register करने के 3 तरीके हैं: 1) Branch जाकर KYC form भरें — सबसे reliable, 2) ATM में जाकर "Mobile Registration" option select करें, 3) ${bank.website} पर net banking में जाकर "Update Mobile Number" option से। एक बार register होने के बाद आप missed call balance, SMS banking, और transaction alerts का लाभ उठा सकते हैं।`,
+  },
+  {
+    q: `Mobile number register करने के लिए क्या documents चाहिए?`,
+    a: `${bank.name} में mobile number register करने के लिए: 1) Account passbook या account number, 2) Aadhaar card (पहचान के लिए), 3) Active mobile number जो आप register करना चाहते हैं, 4) ATM/debit card (अगर ATM से register कर रहे हैं)। Branch में KYC form भरकर submit करें।`,
+  },
+  {
+    q: `${bank.shortName} mobile number update online कैसे करें?`,
+    a: `Online mobile number update के लिए ${bank.website} पर net banking में login करें। "Profile" या "Settings" में जाकर "Update Mobile Number" option select करें। पुराना और नया mobile number डालें, OTP verify करें। अगर online update नहीं होता तो branch में जाना पड़ेगा।`,
+  },
+  {
+    q: `Mobile number registered है या नहीं कैसे check करें?`,
+    a: `Mobile number registered है या नहीं check करने के लिए ${bank.missedCall} पर missed call दें। अगर SMS आता है तो number registered है। अगर SMS नहीं आता तो number registered नहीं है — branch में जाकर register कराएं। सहायता के लिए customer care ${bank.customerCare} पर call करें।`,
+  },
+  {
+    q: `Mobile number change करने में कितना समय लगता है?`,
+    a: `${bank.name} में mobile number change/register होने में 24-48 घंटे लग सकते हैं। Branch में form देने के बाद verification process होता है। एक बार registered होने के बाद आपको SMS notification आएगा। अगर 48 घंटे में नहीं होता तो customer care ${bank.customerCare} पर संपर्क करें।`,
+  },
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "HowTo",
+      "name": `${bank.shortName} Mobile Number Registration`,
+      "description": `${bank.name} में mobile number register करने की विधि`,
+      "step": [
+        { "@type": "HowToStep", "position": 1, "name": "Branch में जाएं", "text": `Nearest ${bank.name} branch में जाएं और KYC/Mobile Registration form मांगें।` },
+        { "@type": "HowToStep", "position": 2, "name": "Form भरें", "text": `Form में account number, नया mobile number, और पहचान की जानकारी भरें।` },
+        { "@type": "HowToStep", "position": 3, "name": "Document submit करें", "text": `Aadhaar card और passbook की copy के साथ form submit करें।` },
+        { "@type": "HowToStep", "position": 4, "name": "Verification का इंतज़ार करें", "text": `24-48 घंटे में mobile number registered हो जाएगा। SMS notification आएगा।` },
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(f => ({
+        "@type": "Question",
+        "name": f.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": f.a,
+        },
+      })),
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": siteUrl },
+        { "@type": "ListItem", "position": 2, "name": "Mobile Number Registration", "item": `${siteUrl}/mobile-number-registration` },
+        { "@type": "ListItem", "position": 3, "name": bank.shortName, "item": canonicalUrl },
+      ],
+    },
+  ],
+};
+---
+<Layout title={title} description={description} canonical={canonicalUrl}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+  <div class="max-w-3xl mx-auto px-4 py-6">
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-500 mb-4">
+      <a href="/" class="hover:text-brand-600">Home</a>
+      <span class="mx-1">›</span>
+      <a href="/mobile-number-registration" class="hover:text-brand-600">Mobile Registration</a>
+      <span class="mx-1">›</span>
+      <span class="text-gray-700">{bank.shortName}</span>
+    </nav>
+
+    <!-- Header -->
+    <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-6">
+      <h1 class="text-2xl font-bold mb-1">{bank.shortName} Mobile Number Registration</h1>
+      <p class="text-brand-100 text-sm">{bank.nameHindi} — मोबाइल नंबर रजिस्टर करने की पूरी जानकारी</p>
+    </div>
+
+    <!-- Why Register -->
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">📱 Mobile Number क्यों Register कराएं?</h2>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> Missed call balance check — {bank.missedCall} पर call करके balance पाएं</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> SMS banking और mini statement</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> Transaction alerts — हर deposit/withdrawal की SMS</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> UPI और mobile banking app का उपयोग</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> OTP verification — net banking और online transactions के लिए</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> Card block और security alerts</li>
+      </ul>
+    </div>
+
+    <!-- Registration Methods -->
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">📝 Registration के तरीके</h2>
+      <div class="space-y-4">
+        <!-- Method 1: Branch -->
+        <div class="border border-gray-100 rounded-lg p-4">
+          <h3 class="font-medium text-gray-900 text-sm mb-2">1️⃣ Branch Visit (सबसे reliable)</h3>
+          <ol class="space-y-2 text-sm text-gray-600 ml-4">
+            <li>• Nearest {bank.name} branch में जाएं</li>
+            <li>• KYC / Mobile Registration form मांगें</li>
+            <li>• Account number, नया mobile number, और Aadhaar details भरें</li>
+            <li>• Form submit करें — 24-48 घंटे में activated हो जाएगा</li>
+          </ol>
+        </div>
+        <!-- Method 2: ATM -->
+        <div class="border border-gray-100 rounded-lg p-4">
+          <h3 class="font-medium text-gray-900 text-sm mb-2">2️⃣ ATM से</h3>
+          <ol class="space-y-2 text-sm text-gray-600 ml-4">
+            <li>• {bank.shortName} ATM में debit card डालें</li>
+            <li>• Language select करें और PIN डालें</li>
+            <li>• "Mobile Registration" या "Other Services" option select करें</li>
+            <li>• नया mobile number डालें और confirm करें</li>
+            <li>• OTP आएगा — verify करें</li>
+          </ol>
+        </div>
+        <!-- Method 3: Net Banking -->
+        <div class="border border-gray-100 rounded-lg p-4">
+          <h3 class="font-medium text-gray-900 text-sm mb-2">3️⃣ Net Banking से</h3>
+          <ol class="space-y-2 text-sm text-gray-600 ml-4">
+            <li>• <a href={bank.website} target="_blank" rel="noopener noreferrer" class="text-brand-700 font-medium">{bank.shortName} net banking</a> में login करें</li>
+            <li>• "Profile" या "Settings" में जाएं</li>
+            <li>• "Update Mobile Number" option select करें</li>
+            <li>• नया number डालें, OTP verify करें</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Check Status -->
+    <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-6">
+      <h2 class="text-lg font-semibold text-blue-900 mb-3">✅ Mobile Number Registered है या नहीं?</h2>
+      <p class="text-sm text-blue-800 mb-3">
+        Check करने के लिए अपने mobile से <strong>{bank.missedCall}</strong> पर missed call दें।
+      </p>
+      <ul class="space-y-1 text-sm text-blue-800">
+        <li>✓ SMS आता है → number registered है</li>
+        <li>✗ SMS नहीं आता → number registered नहीं है, branch में जाएं</li>
+      </ul>
+      <a href={`tel:${bank.missedCall}`}
+         class="mt-3 inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+        📞 {bank.missedCall}
+      </a>
+    </div>
+
+    <!-- Required Documents -->
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">📋 जरूरी Documents</h2>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex gap-2"><span class="text-brand-600">📄</span> Account passbook या account number</li>
+        <li class="flex gap-2"><span class="text-brand-600">📄</span> Aadhaar card (पहचान के लिए)</li>
+        <li class="flex gap-2"><span class="text-brand-600">📄</span> PAN card</li>
+        <li class="flex gap-2"><span class="text-brand-600">📱</span> Active mobile number (जो register करना है)</li>
+        <li class="flex gap-2"><span class="text-brand-600">💳</span> ATM/debit card (अगर ATM से register कर रहे हैं)</li>
+      </ul>
+    </div>
+
+    <!-- FAQ -->
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">❓ अक्सर पूछे जाने वाले प्रश्न</h2>
+      <div class="space-y-4">
+        {faqs.map(faq => (
+          <div class="border-b border-gray-100 pb-4 last:border-0">
+            <h3 class="font-medium text-gray-900 text-sm mb-2">{faq.q}</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">{faq.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Related Links -->
+    <div class="grid grid-cols-2 gap-3 mb-6">
+      <a href={`/bank/${bank.slug}`}
+         class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
+        <p class="text-xs text-gray-500 mb-1">📞 Missed Call Balance</p>
+        <p class="text-sm font-medium text-brand-700">{bank.shortName} Balance Check →</p>
+      </a>
+      <a href={`/customer-care/${bank.slug}`}
+         class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
+        <p class="text-xs text-gray-500 mb-1">🎧 Customer Care</p>
+        <p class="text-sm font-medium text-brand-700">{bank.shortName} Helpline →</p>
+      </a>
+    </div>
+
+    <!-- Customer Care -->
+    <div class="bg-white rounded-xl border border-gray-200 p-4">
+      <p class="text-xs text-gray-500 font-medium mb-1">🎧 सहायता के लिए Customer Care</p>
+      <a href={`tel:${bank.customerCare}`}
+         class="text-lg font-semibold text-brand-700">{bank.customerCare}</a>
+    </div>
+  </div>
+</Layout>

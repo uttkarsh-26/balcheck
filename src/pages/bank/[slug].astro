@@ -235,7 +235,7 @@ const pageDesc = `${bank.name} (${bank.shortName}) का missed call balance en
 <section class="bg-gray-50 border-t border-gray-100">
   <div class="max-w-4xl mx-auto px-4 py-6">
     <h2 class="text-sm font-bold text-gray-900 mb-3">{bank.shortName} — अन्य सेवाएं</h2>
-    <div class="grid grid-cols-3 gap-3">
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
       <a href={`/customer-care/${bank.slug}`}
          class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
         <p class="text-xs text-gray-500">🎧 Customer Care</p>
@@ -250,6 +250,16 @@ const pageDesc = `${bank.name} (${bank.shortName}) का missed call balance en
          class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
         <p class="text-xs text-gray-500">🌐 Net Banking</p>
         <p class="text-xs font-medium text-brand-700 mt-1">Login →</p>
+      </a>
+      <a href={`/mini-statement/${bank.slug}`}
+         class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
+        <p class="text-xs text-gray-500">📄 Mini Statement</p>
+        <p class="text-xs font-medium text-brand-700 mt-1">Last 5 Txns →</p>
+      </a>
+      <a href={`/mobile-number-registration/${bank.slug}`}
+         class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
+        <p class="text-xs text-gray-500">📱 Mobile Registration</p>
+        <p class="text-xs font-medium text-brand-700 mt-1">Register Number →</p>
       </a>
     </div>
   </div>
