@@ -231,6 +231,30 @@ const pageDesc = `${bank.name} (${bank.shortName}) का missed call balance en
   </div>
 </section>
 
+<!-- Banking Services Cross-Links -->
+<section class="bg-gray-50 border-t border-gray-100">
+  <div class="max-w-4xl mx-auto px-4 py-6">
+    <h2 class="text-sm font-bold text-gray-900 mb-3">{bank.shortName} — अन्य सेवाएं</h2>
+    <div class="grid grid-cols-3 gap-3">
+      <a href={`/customer-care/${bank.slug}`}
+         class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
+        <p class="text-xs text-gray-500">🎧 Customer Care</p>
+        <p class="text-xs font-medium text-brand-700 mt-1">Helpline →</p>
+      </a>
+      <a href={`/sms-banking/${bank.slug}`}
+         class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
+        <p class="text-xs text-gray-500">📱 SMS Banking</p>
+        <p class="text-xs font-medium text-brand-700 mt-1">Balance by SMS →</p>
+      </a>
+      <a href={`/net-banking/${bank.slug}`}
+         class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
+        <p class="text-xs text-gray-500">🌐 Net Banking</p>
+        <p class="text-xs font-medium text-brand-700 mt-1">Login →</p>
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- Related Banks -->
 {related.length > 0 && (
   <section class="bg-white border-t border-gray-100">

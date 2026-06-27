@@ -1,0 +1,80 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { banks, categories, categoryHindi } from '../../data/banks';
+
+const siteUrl = 'https://balcheck.in';
+const canonicalUrl = `${siteUrl}/net-banking`;
+
+const title = 'Net Banking Login Portal — भारतीय बैंकों के Online Banking Links';
+const description = 'सभी भारतीय बैंकों के net banking login links एक जगह पर। SBI, HDFC, ICICI, Axis, PNB और 60+ बैंकों की internet banking website। Online fund transfer, bill payment, statement download।';
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Net Banking Login Directory",
+  "description": description,
+  "url": canonicalUrl,
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": siteUrl },
+      { "@type": "ListItem", "position": 2, "name": "Net Banking", "item": canonicalUrl },
+    ],
+  },
+};
+---
+<Layout title={title} description={description} canonical={canonicalUrl}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+  <div class="max-w-4xl mx-auto px-4 py-6">
+    <nav class="text-sm text-gray-500 mb-4">
+      <a href="/" class="hover:text-brand-600">Home</a>
+      <span class="mx-1">›</span>
+      <span class="text-gray-700">Net Banking</span>
+    </nav>
+
+    <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-6">
+      <h1 class="text-2xl font-bold mb-2">Net Banking Login Directory</h1>
+      <p class="text-brand-100 text-sm">भारतीय बैंकों के internet banking login links — {banks.length} बैंकों की online banking सुविधा</p>
+    </div>
+
+    <p class="text-gray-600 text-sm mb-6">
+      अपने बैंक का net banking login page नीचे खोजें। Click करके आधिकारिक website पर login करें।
+      नए user registration के लिए account number और ATM card की जरूरत होगी।
+    </p>
+
+    {categories.map(cat => {
+      const catBanks = banks.filter(b => b.category === cat);
+      return (
+        <div class="mb-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+            {cat}
+            <span class="text-sm font-normal text-gray-500">({categoryHindi[cat]})</span>
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {catBanks.map(bank => (
+              <a href={`/net-banking/${bank.slug}`}
+                 class="bg-white rounded-xl border border-gray-200 p-4 hover:border-brand-300 hover:shadow-sm transition-all">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="font-medium text-gray-900 text-sm">{bank.shortName}</p>
+                    <p class="text-xs text-gray-500">{bank.nameHindi}</p>
+                  </div>
+                  <span class="text-brand-600 text-sm">→</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      );
+    })}
+
+    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
+      <p class="text-sm text-amber-800">
+        ⚠️ <strong>Safety Alert:</strong> केवल आधिकारिक website पर ही login करें।
+        URL में "https" और padlock 🔒 जरूर check करें।
+        कभी भी OTP या password किसी को न दें।
+      </p>
+    </div>
+  </div>
+</Layout>

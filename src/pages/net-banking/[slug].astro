@@ -1,0 +1,207 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { banks } from '../../data/banks';
+import type { Bank } from '../../data/banks';
+
+export function getStaticPaths() {
+  return banks.map((bank: Bank) => ({
+    params: { slug: bank.slug },
+    props: { bank },
+  }));
+}
+
+interface Props {
+  bank: Bank;
+}
+
+const { bank } = Astro.props;
+const siteUrl = 'https://balcheck.in';
+const canonicalUrl = `${siteUrl}/net-banking/${bank.slug}`;
+
+const title = `${bank.shortName} Net Banking Login — ${bank.nameHindi} Online Banking`;
+const description = `${bank.name} net banking login at ${bank.website}. Internet banking services: fund transfer, statement download, bill payment, FD/RD opening, loan application. 24×7 online banking.`;
+
+const faqs = [
+  {
+    q: `${bank.shortName} की net banking login URL क्या है?`,
+    a: `${bank.name} की net banking के लिए ${bank.website} पर जाएं। अपने user ID और password से login करें। नए user registration के लिए अपने account details और ATM card की जरूरत पड़ेगी।`,
+  },
+  {
+    q: `Net banking से क्या-क्या काम होते हैं?`,
+    a: `${bank.shortName} net banking से आप कर सकते हैं: balance check, fund transfer (NEFT/RTGS/IMPS), mini statement download, bill payment, FD/RD खोलना, loan EMI payment, क्रेडिट card payment, और account statement download।`,
+  },
+  {
+    q: `${bank.shortName} net banking registration कैसे करें?`,
+    a: `Net banking के लिए registration: 1) ${bank.website} पर जाएं, 2) "New User Registration" पर click करें, 3) अपना account number, CIF number, और ATM card details डालें, 4) OTP verify करें, 5) user ID और password set करें।`,
+  },
+  {
+    q: `Net banking safe है?`,
+    a: `हाँ, ${bank.shortName} net banking 128-bit encryption के साथ secure है। Safety tips: 1) कभी भी OTP या password किसी को न दें, 2) public WiFi पर login न करें, 3) हमेशा URL में "https" और padlock icon check करें, 4) regular password बदलें।`,
+  },
+  {
+    q: `${bank.shortName} net banking password भूल गए?`,
+    a: `अगर password भूल गए हैं तो ${bank.website} पर जाएं, "Forgot Password" पर click करें। अपने user ID, account number और registered mobile number डालें। OTP verify करके नया password set करें। सहायता के लिए customer care ${bank.customerCare} पर call करें।`,
+  },
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": `${bank.name} Net Banking`,
+      "url": bank.website,
+      "publisher": {
+        "@type": "BankOrCreditUnion",
+        "name": bank.name,
+      },
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(f => ({
+        "@type": "Question",
+        "name": f.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": f.a,
+        },
+      })),
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": siteUrl },
+        { "@type": "ListItem", "position": 2, "name": "Net Banking", "item": `${siteUrl}/net-banking` },
+        { "@type": "ListItem", "position": 3, "name": bank.shortName, "item": canonicalUrl },
+      ],
+    },
+  ],
+};
+---
+<Layout title={title} description={description} canonical={canonicalUrl}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+  <div class="max-w-3xl mx-auto px-4 py-6">
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-500 mb-4">
+      <a href="/" class="hover:text-brand-600">Home</a>
+      <span class="mx-1">›</span>
+      <a href="/net-banking" class="hover:text-brand-600">Net Banking</a>
+      <span class="mx-1">›</span>
+      <span class="text-gray-700">{bank.shortName}</span>
+    </nav>
+
+    <!-- Header -->
+    <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-6">
+      <h1 class="text-2xl font-bold mb-1">{bank.shortName} Net Banking</h1>
+      <p class="text-brand-100 text-sm">{bank.nameHindi} — इंटरनेट बैंकिंग सेवाएं</p>
+    </div>
+
+    <!-- Login CTA -->
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">🔒 Net Banking Login</h2>
+      <p class="text-gray-600 text-sm mb-4">
+        {bank.name} की online banking सेवा के लिए नीचे दिए गए link पर click करें।
+        अपने user ID और password से login करें।
+      </p>
+      <a href={bank.website}
+         target="_blank"
+         rel="noopener noreferrer"
+         class="inline-flex items-center gap-2 bg-brand-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-brand-700 transition-colors">
+        <span>{bank.website.replace(/^https?:\/\//, '').replace(/\/$/, '')}</span>
+        <span>↗</span>
+      </a>
+      <p class="text-xs text-gray-400 mt-2">
+        ⚠️ केवल आधिकारिक website पर ही login करें। URL में "https" और padlock 🔒 जरूर check करें।
+      </p>
+    </div>
+
+    <!-- Services -->
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">📋 Net Banking से मिलने वाली सुविधाएं</h2>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> Balance check और mini statement download</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> Fund transfer — NEFT, RTGS, IMPS</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> Bill payment — electricity, water, gas, mobile</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> FD/RD खोलना और manage करना</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> Loan application और EMI payment</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> क्रेडिट card payment और statement</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> Cheque book request और stop payment</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> Account statement download (PDF)</li>
+      </ul>
+    </div>
+
+    <!-- Registration Steps -->
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">📝 Registration कैसे करें?</h2>
+      <ol class="space-y-3 text-sm text-gray-700">
+        <li class="flex gap-3">
+          <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">1</span>
+          <span>{bank.website} पर जाएं और "New User Registration" पर click करें</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">2</span>
+          <span>अपना account number, CIF number और ATM/debit card details डालें</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">3</span>
+          <span>Registered mobile number पर आए OTP को verify करें</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">4</span>
+          <span>अपना user ID और password set करें</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">5</span>
+          <span>Login करके net banking का लाभ उठाएं</span>
+        </li>
+      </ol>
+    </div>
+
+    <!-- Safety Tips -->
+    <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
+      <h2 class="text-lg font-semibold text-amber-900 mb-3">⚠️ Net Banking Safety Tips</h2>
+      <ul class="space-y-2 text-sm text-amber-800">
+        <li class="flex gap-2"><span>🔒</span> कभी भी OTP, password या ATM PIN किसी को न दें — बैंक भी नहीं मांगता</li>
+        <li class="flex gap-2"><span>🔒</span> Public WiFi या cyber café पर login न करें</li>
+        <li class="flex gap-2"><span>🔒</span> URL में हमेशा "https" और padlock icon 🔒 check करें</li>
+        <li class="flex gap-2"><span>🔒</span> Regular password बदलें (3 महीने में एक बार)</li>
+        <li class="flex gap-2"><span>🔒</span> Unknown email या SMS में दिए लिंक पर click न करें</li>
+      </ul>
+    </div>
+
+    <!-- FAQ -->
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">❓ अक्सर पूछे जाने वाले प्रश्न</h2>
+      <div class="space-y-4">
+        {faqs.map(faq => (
+          <div class="border-b border-gray-100 pb-4 last:border-0">
+            <h3 class="font-medium text-gray-900 text-sm mb-2">{faq.q}</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">{faq.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Related Links -->
+    <div class="grid grid-cols-2 gap-3 mb-6">
+      <a href={`/bank/${bank.slug}`}
+         class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
+        <p class="text-xs text-gray-500 mb-1">📞 Missed Call Balance</p>
+        <p class="text-sm font-medium text-brand-700">{bank.shortName} Balance Check →</p>
+      </a>
+      <a href={`/customer-care/${bank.slug}`}
+         class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
+        <p class="text-xs text-gray-500 mb-1">🎧 Customer Care</p>
+        <p class="text-sm font-medium text-brand-700">{bank.shortName} Helpline →</p>
+      </a>
+    </div>
+
+    <!-- Customer Care -->
+    <div class="bg-white rounded-xl border border-gray-200 p-4">
+      <p class="text-xs text-gray-500 font-medium mb-1">🎧 सहायता के लिए Customer Care</p>
+      <a href={`tel:${bank.customerCare}`}
+         class="text-lg font-semibold text-brand-700">{bank.customerCare}</a>
+    </div>
+  </div>
+</Layout>
