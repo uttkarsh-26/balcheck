@@ -684,6 +684,42 @@ export const banks: Bank[] = [
     notes: 'No separate missed-call balance service; contact customer care for balance enquiry',
     verified: false,
   },
+  // === Additional Regional Rural Banks (medium confidence) ===
+  {
+    slug: 'jharkhand-gramin',
+    name: 'Jharkhand Gramin Bank',
+    nameHindi: 'झारखंड ग्रामीण बैंक',
+    shortName: 'Jharkhand Gramin',
+    category: 'Regional Rural Bank',
+    missedCall: '18005327444',
+    customerCare: '18005327444',
+    website: 'https://jrgbank.bank.in',
+    notes: 'Customer care confirmed; missed-call service not officially published separately',
+    verified: false,
+  },
+  {
+    slug: 'himachal-pradesh-gramin',
+    name: 'Himachal Pradesh Gramin Bank',
+    nameHindi: 'हिमाचल प्रदेश ग्रामीण बैंक',
+    shortName: 'HP Gramin',
+    category: 'Regional Rural Bank',
+    missedCall: '1800-180-7777',
+    customerCare: '1800-180-7777',
+    website: 'https://www.hpgb.bank.in',
+    notes: 'Customer care confirmed; no dedicated missed-call number published',
+    verified: false,
+  },
+  {
+    slug: 'arunachal-pradesh-rural',
+    name: 'Arunachal Pradesh Rural Bank',
+    nameHindi: 'अरुणाचल प्रदेश ग्रामीण बैंक',
+    shortName: 'APRB',
+    category: 'Regional Rural Bank',
+    missedCall: '1800-300-00620',
+    customerCare: '0360-2230051',
+    website: 'https://aprb.bank.in',
+    verified: false,
+  },
 ];
 
 export const categories = [

@@ -71,7 +71,13 @@ const siteUrl = 'https://balcheck.in';
   <div class="max-w-6xl mx-auto px-4 py-3">
     <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
       <a href="/customer-care" class="px-4 py-2.5 text-sm font-medium rounded-full bg-brand-50 text-brand-700 hover:bg-brand-100 active:bg-brand-200 whitespace-nowrap transition-colors min-h-[44px] inline-flex items-center">
-        Customer Care ({bankCount})
+        🎧 Customer Care
+      </a>
+      <a href="/net-banking" class="px-4 py-2.5 text-sm font-medium rounded-full bg-brand-50 text-brand-700 hover:bg-brand-100 active:bg-brand-200 whitespace-nowrap transition-colors min-h-[44px] inline-flex items-center">
+        🌐 Net Banking
+      </a>
+      <a href="/sms-banking" class="px-4 py-2.5 text-sm font-medium rounded-full bg-brand-50 text-brand-700 hover:bg-brand-100 active:bg-brand-200 whitespace-nowrap transition-colors min-h-[44px] inline-flex items-center">
+        📱 SMS Banking
       </a>
       {categories.map(cat => (
         <a href={`/banks/${cat.toLowerCase().replace(/\s+/g, '-')}`} class="px-4 py-2.5 text-sm font-medium rounded-full bg-gray-100 text-gray-700 hover:bg-brand-100 hover:text-brand-700 active:bg-brand-200 whitespace-nowrap transition-colors min-h-[44px] inline-flex items-center">
@@ -198,6 +204,34 @@ const siteUrl = 'https://balcheck.in';
   </div>
 </section>
 
+<!-- Banking Services Directory -->
+<section class="bg-white border-t border-gray-100">
+  <div class="max-w-4xl mx-auto px-4 py-10">
+    <h2 class="text-xl font-bold text-gray-900 text-center mb-2">बैंकिंग सेवाएं</h2>
+    <p class="text-sm text-gray-500 text-center mb-6">अपने बैंक की सभी सेवाएं एक जगह — {bankCount} बैंकों के लिए</p>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <a href="/customer-care" class="bg-white rounded-xl border border-gray-200 p-5 hover:border-brand-300 hover:shadow-sm transition-all text-center">
+        <div class="text-3xl mb-2">🎧</div>
+        <h3 class="font-semibold text-gray-900 text-sm mb-1">Customer Care</h3>
+        <p class="text-xs text-gray-500">सभी बैंकों के helpline नंबर</p>
+        <p class="text-xs text-brand-600 font-medium mt-2">{bankCount} बैंक →</p>
+      </a>
+      <a href="/net-banking" class="bg-white rounded-xl border border-gray-200 p-5 hover:border-brand-300 hover:shadow-sm transition-all text-center">
+        <div class="text-3xl mb-2">🌐</div>
+        <h3 class="font-semibold text-gray-900 text-sm mb-1">Net Banking</h3>
+        <p class="text-xs text-gray-500">Online banking login links</p>
+        <p class="text-xs text-brand-600 font-medium mt-2">{bankCount} बैंक →</p>
+      </a>
+      <a href="/sms-banking" class="bg-white rounded-xl border border-gray-200 p-5 hover:border-brand-300 hover:shadow-sm transition-all text-center">
+        <div class="text-3xl mb-2">📱</div>
+        <h3 class="font-semibold text-gray-900 text-sm mb-1">SMS Banking</h3>
+        <p class="text-xs text-gray-500">SMS से balance check</p>
+        <p class="text-xs text-brand-600 font-medium mt-2">{bankCount} बैंक →</p>
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- FAQ -->
 <section class="bg-gray-50 border-t border-gray-100">
   <div class="max-w-3xl mx-auto px-4 py-10">
@@ -253,6 +287,9 @@ const siteUrl = 'https://balcheck.in';
       <div class="flex items-center gap-4 text-sm">
         <a href="/" class="text-gray-400 hover:text-white transition-colors">होम</a>
         <a href="/how-it-works" class="text-gray-400 hover:text-white transition-colors">कैसे काम करता है</a>
+        <a href="/customer-care" class="text-gray-400 hover:text-white transition-colors">Customer Care</a>
+        <a href="/net-banking" class="text-gray-400 hover:text-white transition-colors">Net Banking</a>
+        <a href="/sms-banking" class="text-gray-400 hover:text-white transition-colors">SMS Banking</a>
         <a href="/banks/public-sector" class="text-gray-400 hover:text-white transition-colors">सरकारी बैंक</a>
         <a href="/banks/private-sector" class="text-gray-400 hover:text-white transition-colors">निजी बैंक</a>
       </div>
