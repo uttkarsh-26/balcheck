@@ -261,6 +261,16 @@ const pageDesc = `${bank.name} (${bank.shortName}) का missed call balance en
         <p class="text-xs text-gray-500">📱 Mobile Registration</p>
         <p class="text-xs font-medium text-brand-700 mt-1">Register Number →</p>
       </a>
+      <a href={`/aadhaar-link/${bank.slug}`}
+         class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
+        <p class="text-xs text-gray-500">🔗 Aadhaar Link</p>
+        <p class="text-xs font-medium text-brand-700 mt-1">Link Aadhaar →</p>
+      </a>
+      <a href={`/atm-pin/${bank.slug}`}
+         class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
+        <p class="text-xs text-gray-500">🔑 ATM PIN</p>
+        <p class="text-xs font-medium text-brand-700 mt-1">Generate PIN →</p>
+      </a>
     </div>
   </div>
 </section>
