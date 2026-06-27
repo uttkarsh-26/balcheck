@@ -15,7 +15,7 @@ export default {
     // Aggressive edge cache for static HTML — 24h edge, 1h browser, 7d stale revalidate
     r.headers.set(
       "Cache-Control",
-      "public, s-maxage=2592000, max-age=3600, stale-while-revalidate=604800"
+      "public, s-maxage=2592000, max-age=0, stale-while-revalidate=604800"
     );
     return r;
   },
