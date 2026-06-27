@@ -173,6 +173,7 @@ const pageDesc = `${bank.name} (${bank.shortName}) का missed call balance en
     <div class="bg-white rounded-xl border border-gray-200 p-4">
       <p class="text-xs text-gray-500 font-medium mb-1">🎧 Customer Care</p>
       <a href={`tel:${bank.customerCare}`} class="text-lg font-bold text-gray-900">{bank.customerCare}</a>
+      <a href={`/customer-care/${bank.slug}`} class="block text-xs text-brand-600 font-medium mt-2 hover:text-brand-700">Customer care details →</a>
     </div>
     <!-- Website -->
     <a href={bank.website} target="_blank" rel="noopener" class="bg-white rounded-xl border border-gray-200 p-4 hover:border-brand-300 transition-colors">

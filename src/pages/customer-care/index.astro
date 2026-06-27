@@ -1,0 +1,122 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { banks, categories, categoryHindi } from '../../data/banks';
+
+const siteUrl = 'https://balcheck.in';
+const canonicalUrl = `${siteUrl}/customer-care`;
+
+const collectionSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Bank Customer Care Numbers India',
+  description: 'भारत के बैंकों के customer care और missed call balance numbers की directory.',
+  url: canonicalUrl,
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: banks.length,
+    itemListElement: banks.map((bank, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: `${siteUrl}/customer-care/${bank.slug}`,
+      name: `${bank.name} Customer Care Number`,
+    })),
+  },
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+    { '@type': 'ListItem', position: 2, name: 'Customer Care', item: canonicalUrl },
+  ],
+};
+
+const pageTitle = `Bank Customer Care Numbers India — ${banks.length}+ बैंक Helpline | BalCheck.in`;
+const pageDesc = `SBI, HDFC, ICICI, PNB सहित ${banks.length}+ बैंकों के customer care और missed call balance numbers एक जगह। Official website links और safety tips।`;
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+<script type="application/ld+json" set:html={JSON.stringify(collectionSchema)} />
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+<header class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2">
+      <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-gradient-to-br from-brand-600 to-brand-700 text-white font-bold text-lg">₹</div>
+      <div>
+        <span class="text-xl font-bold text-gray-900">BalCheck</span><span class="text-brand-600 font-bold">.in</span>
+      </div>
+    </a>
+    <a href="/" class="text-xs text-gray-600 hover:text-brand-600 transition-colors px-2 py-1 rounded">Balance Numbers</a>
+  </div>
+</header>
+
+<nav class="max-w-6xl mx-auto px-4 pt-4" aria-label="Breadcrumb">
+  <ol class="flex items-center gap-1.5 text-sm text-gray-500 flex-wrap">
+    <li><a href="/" class="inline-block py-1.5 px-2 -ml-2 rounded-lg hover:text-brand-600 hover:bg-gray-100 active:bg-gray-200 transition-colors">होम</a></li>
+    <li aria-hidden="true" class="text-gray-400">›</li>
+    <li class="text-gray-900 font-medium py-1.5 px-1">Customer Care</li>
+  </ol>
+</nav>
+
+<section class="bg-gradient-to-b from-brand-50 to-white border-b border-gray-100">
+  <div class="max-w-6xl mx-auto px-4 py-8 text-center">
+    <p class="text-sm font-medium text-brand-700 mb-2">Bank Helpline Directory</p>
+    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Bank Customer Care Numbers India</h1>
+    <p class="mt-2 text-gray-600">SBI, HDFC, ICICI, PNB सहित {banks.length}+ बैंकों के customer care और balance enquiry numbers</p>
+  </div>
+</section>
+
+<main class="max-w-6xl mx-auto px-4 py-8">
+  <section class="bg-amber-50 rounded-2xl border border-amber-200 p-5 mb-8">
+    <h2 class="text-lg font-bold text-amber-900 mb-2">Safety first</h2>
+    <p class="text-sm text-amber-800 leading-relaxed">Customer care call पर OTP, PIN, CVV, UPI PIN या password कभी न बताएं। Bank ये details phone पर नहीं मांगता।</p>
+  </section>
+
+  {categories.map(category => {
+    const catBanks = banks.filter(bank => bank.category === category);
+    return catBanks.length > 0 && (
+      <section class="mb-8">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold text-gray-900">{categoryHindi[category]}</h2>
+          <a href={`/banks/${category.toLowerCase().replace(/\s+/g, '-')}`} class="text-sm font-medium text-brand-600 hover:text-brand-700">Balance numbers →</a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {catBanks.map(bank => (
+            <a href={`/customer-care/${bank.slug}`} class="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md hover:border-brand-300 active:bg-gray-50 transition-all duration-200">
+              <div class="flex items-start justify-between gap-3 mb-3">
+                <div>
+                  <h3 class="font-bold text-gray-900 text-base leading-tight">{bank.nameHindi}</h3>
+                  <p class="text-xs text-gray-500 mt-0.5">{bank.name}</p>
+                </div>
+                <span class="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded shrink-0">{bank.shortName}</span>
+              </div>
+              <div class="bg-brand-50 rounded-lg p-3">
+                <p class="text-xs text-brand-700 font-medium mb-1">🎧 Customer Care</p>
+                <span class="text-xl font-bold text-brand-700 tracking-wide">{bank.customerCare}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    );
+  })}
+</main>
+
+<section class="bg-gray-50 border-t border-gray-100">
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <h2 class="text-xl font-bold text-gray-900 text-center mb-6">Customer Care FAQ</h2>
+    <div class="space-y-3">
+      <details class="bg-white rounded-lg border border-gray-200 p-4 group">
+        <summary class="font-medium text-gray-900 cursor-pointer list-none flex justify-between items-center gap-2">Bank customer care पर कब call करें?</summary>
+        <p class="mt-3 text-sm text-gray-600 leading-relaxed">Missed call balance SMS न आए, card block करना हो, transaction issue हो, mobile number update करना हो या account help चाहिए हो तो bank customer care से संपर्क करें।</p>
+      </details>
+      <details class="bg-white rounded-lg border border-gray-200 p-4 group">
+        <summary class="font-medium text-gray-900 cursor-pointer list-none flex justify-between items-center gap-2">क्या BalCheck official bank site है?</summary>
+        <p class="mt-3 text-sm text-gray-600 leading-relaxed">नहीं। BalCheck.in एक public directory है। Account-specific issue के लिए official bank customer care, official website या branch से संपर्क करें।</p>
+      </details>
+    </div>
+  </div>
+</section>
+</Layout>
