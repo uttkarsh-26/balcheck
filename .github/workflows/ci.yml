@@ -30,6 +30,14 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Verify no stale cache headers
+        run: |
+          if grep -rn '2592000\|604800' --include='*.ts' --include='*.tsx' --include='*.js' --include='*.mjs' --include='*.astro' src/ 2>/dev/null | grep -v node_modules; then
+            echo "❌ Found old 30-day cache header values!"
+            exit 1
+          fi
+          echo "✅ No stale cache headers found"
+
       - name: Build
         run: npm run build
 
