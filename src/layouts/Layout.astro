@@ -7,8 +7,9 @@ interface Props {
 const { title, description = 'बैंक बैलेंस मिस्ड कॉल नंबर — सभी बैंकों के balance enquiry missed call numbers एक जगह' } = Astro.props;
 const siteUrl = 'https://balcheck.in';
 
-// HTML: browser always revalidates (max-age=0), CF edge caches 30d with SWR
-Astro.response.headers.set('Cache-Control', 'public, s-maxage=2592000, max-age=0, stale-while-revalidate=604800');
+// HTML: browser always revalidates (max-age=0), CF edge caches 1h with SWR
+// Short edge TTL ensures deploys are visible within ~1h even if purge fails
+Astro.response.headers.set('Cache-Control', 'public, s-maxage=3600, max-age=0, stale-while-revalidate=86400');
 ---
 
 <!DOCTYPE html>

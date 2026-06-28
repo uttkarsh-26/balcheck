@@ -19,7 +19,7 @@ export default {
     if (contentType.includes("text/html")) {
       r.headers.set(
         "Cache-Control",
-        "public, s-maxage=2592000, max-age=0, stale-while-revalidate=604800"
+        "public, s-maxage=3600, max-age=0, stale-while-revalidate=86400"
       );
     }
     return r;
