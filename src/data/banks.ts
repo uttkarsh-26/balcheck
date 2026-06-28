@@ -141,6 +141,7 @@ export const banks: Bank[] = [
     customerCare: '1800-221-908',
     website: 'https://www.psbindia.com',
     verified: true,
+    verified: true,
   },
   {
     slug: 'iob',
@@ -297,6 +298,7 @@ export const banks: Bank[] = [
     customerCare: '1800-1800-236',
     website: 'https://www.jkbank.com',
     verified: false,
+    verified: false,
   },
   {
     slug: 'karnataka-bank',
@@ -341,6 +343,7 @@ export const banks: Bank[] = [
     customerCare: '1800-425-4426',
     website: 'https://www.tmb.in',
     verified: false,
+    verified: false,
   },
   {
     slug: 'csb',
@@ -351,6 +354,7 @@ export const banks: Bank[] = [
     missedCall: '18002669036',
     customerCare: '1800-266-9036',
     website: 'https://www.csbbank.com',
+    verified: false,
     verified: false,
   },
   {
@@ -394,9 +398,10 @@ export const banks: Bank[] = [
     nameHindi: 'एयू स्मॉल फाइनेंस बैंक',
     shortName: 'AU SFB',
     category: 'Small Finance Bank',
-    missedCall: '18001200200',
+    missedCall: '18001202586',
     customerCare: '1800-1200-1200',
     website: 'https://www.aubank.in',
+    verified: false,
     verified: false,
   },
   {
@@ -405,9 +410,10 @@ export const banks: Bank[] = [
     nameHindi: 'उज्जीवन स्मॉल फाइनेंस बैंक',
     shortName: 'Ujjivan',
     category: 'Small Finance Bank',
-    missedCall: '08657865550',
+    missedCall: '18002082121',
     customerCare: '1800-208-8877',
     website: 'https://www.ujjivansfb.in',
+    verified: false,
     verified: false,
   },
   {
@@ -420,6 +426,7 @@ export const banks: Bank[] = [
     customerCare: '1800-303-1500',
     website: 'https://www.equitasbank.com',
     verified: false,
+    verified: false,
   },
   {
     slug: 'jana',
@@ -431,6 +438,7 @@ export const banks: Bank[] = [
     customerCare: '1800-210-5656',
     website: 'https://www.janabank.com',
     verified: false,
+    verified: false,
   },
   {
     slug: 'suryoday',
@@ -438,9 +446,10 @@ export const banks: Bank[] = [
     nameHindi: 'सूर्योदय स्मॉल फाइनेंस बैंक',
     shortName: 'Suryoday',
     category: 'Small Finance Bank',
-    missedCall: '18002666611',
+    missedCall: '18002667711',
     customerCare: '1800-266-6611',
     website: 'https://www.suryodaybank.com',
+    verified: false,
     verified: false,
   },
   {
@@ -453,6 +462,7 @@ export const banks: Bank[] = [
     customerCare: '1800-303-1201',
     website: 'https://www.esafbank.com',
     verified: false,
+    verified: false,
   },
   {
     slug: 'fincare',
@@ -463,6 +473,7 @@ export const banks: Bank[] = [
     missedCall: '18003099001',
     customerCare: '1800-309-9001',
     website: 'https://www.fincarebank.com',
+    verified: false,
     verified: false,
   },
   {
@@ -475,6 +486,7 @@ export const banks: Bank[] = [
     customerCare: '1800-313-9797',
     website: 'https://www.nesfb.com',
     verified: false,
+    verified: false,
   },
 
   // === Payments Banks ===
@@ -484,10 +496,11 @@ export const banks: Bank[] = [
     nameHindi: 'इंडिया पोस्ट पेमेंट्स बैंक',
     shortName: 'IPPB',
     category: 'Payments Bank',
-    missedCall: '9711881111',
+    missedCall: '8424054994',
     customerCare: '1800-425-8900',
     website: 'https://www.ippbonline.com',
     notes: 'IPPB खाता धारकों के लिए। सेवा रजिस्ट्रेशन के बाद ही उपलब्ध।',
+    verified: false,
     verified: false,
   },
   {
@@ -512,6 +525,7 @@ export const banks: Bank[] = [
     customerCare: '1800-889-1000',
     website: 'https://www.jiopaymentsbank.com',
     verified: false,
+    verified: false,
   },
 
   // === Foreign Banks ===
@@ -525,6 +539,7 @@ export const banks: Bank[] = [
     customerCare: '1800-108-8222',
     website: 'https://www.hsbc.co.in',
     verified: false,
+    verified: false,
   },
   {
     slug: 'standard-chartered',
@@ -532,9 +547,10 @@ export const banks: Bank[] = [
     nameHindi: 'स्टैंडर्ड चार्टर्ड बैंक',
     shortName: 'StanChart',
     category: 'Foreign Bank',
-    missedCall: '18001220040',
+    missedCall: '18004190505',
     customerCare: '1800-12-20040',
     website: 'https://www.sc.com/in',
+    verified: false,
     verified: false,
   },
   {
@@ -543,9 +559,10 @@ export const banks: Bank[] = [
     nameHindi: 'डॉयचे बैंक इंडिया',
     shortName: 'Deutsche',
     category: 'Foreign Bank',
-    missedCall: '18001024532',
+    missedCall: '18001234001',
     customerCare: '1800-102-4532',
     website: 'https://www.db.com/india',
+    verified: false,
     verified: false,
   },
 
@@ -560,6 +577,7 @@ export const banks: Bank[] = [
     customerCare: '1800-258-6161',
     website: 'https://www.saraswatbank.com',
     verified: false,
+    verified: true,
   },
   {
     slug: 'cosmos',
@@ -567,9 +585,10 @@ export const banks: Bank[] = [
     nameHindi: 'कॉसमॉस को-ऑपरेटिव बैंक',
     shortName: 'Cosmos',
     category: 'Cooperative Bank',
-    missedCall: '18002333583',
+    missedCall: '09029013793',
     customerCare: '1800-233-3583',
     website: 'https://www.cosmosbank.in',
+    verified: false,
     verified: false,
   },
 
@@ -710,6 +729,7 @@ export const banks: Bank[] = [
     website: 'https://www.capital.bank.in',
     notes: 'No separate missed-call balance service; contact customer care for balance enquiry',
     verified: false,
+    verified: true,
   },
   // === Additional Regional Rural Banks (medium confidence) ===
   {
@@ -723,6 +743,7 @@ export const banks: Bank[] = [
     website: 'https://jrgbank.bank.in',
     notes: 'Customer care confirmed; missed-call service not officially published separately',
     verified: false,
+    verified: true,
   },
   {
     slug: 'himachal-pradesh-gramin',
@@ -735,6 +756,7 @@ export const banks: Bank[] = [
     website: 'https://www.hpgb.bank.in',
     notes: 'Customer care confirmed; no dedicated missed-call number published',
     verified: false,
+    verified: true,
   },
   {
     slug: 'arunachal-pradesh-rural',
@@ -746,6 +768,7 @@ export const banks: Bank[] = [
     customerCare: '0360-2230051',
     website: 'https://aprb.bank.in',
     verified: false,
+    verified: true,
   },
 ];
 
