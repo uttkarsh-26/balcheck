@@ -14,8 +14,8 @@ interface Props { bank: Bank }
 const { bank } = Astro.props;
 
 const siteUrl = 'https://balcheck.in';
-const canonicalUrl = `${siteUrl}/customer-care/${bank.slug}`;
-const bankUrl = `${siteUrl}/bank/${bank.slug}`;
+const canonicalUrl = `${siteUrl}/customer-care/${bank.slug}/`;
+const bankUrl = `${siteUrl}/bank/${bank.slug}/`;
 const catSlug = bank.category.toLowerCase().replace(/\s+/g, '-');
 
 const related = banks
@@ -72,7 +72,7 @@ const breadcrumbSchema = {
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
-    { '@type': 'ListItem', position: 2, name: 'Customer Care', item: `${siteUrl}/customer-care` },
+    { '@type': 'ListItem', position: 2, name: 'Customer Care', item: `${siteUrl}/customer-care/` },
     { '@type': 'ListItem', position: 3, name: `${bank.shortName} Customer Care`, item: canonicalUrl },
   ],
 };

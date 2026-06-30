@@ -14,7 +14,7 @@ interface Props { bank: Bank }
 const { bank } = Astro.props;
 
 const siteUrl = 'https://balcheck.in';
-const canonicalUrl = `${siteUrl}/bank/${bank.slug}`;
+const canonicalUrl = `${siteUrl}/bank/${bank.slug}/`;
 
 // Related banks (same category, max 4)
 const related = banks
@@ -89,7 +89,7 @@ const breadcrumbSchema = {
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
-    { '@type': 'ListItem', position: 2, name: categoryHindi[bank.category], item: `${siteUrl}/banks/${catSlug}` },
+    { '@type': 'ListItem', position: 2, name: categoryHindi[bank.category], item: `${siteUrl}/banks/${catSlug}/` },
     { '@type': 'ListItem', position: 3, name: bank.nameHindi, item: canonicalUrl },
   ],
 };
@@ -155,7 +155,7 @@ const pageDesc = `${bank.name} (${bank.shortName}) का missed call balance en
 
     <!-- WhatsApp Share -->
     <a
-      href={`https://wa.me/?text=${encodeURIComponent(`${bank.nameHindi} का बैलेंस चेक नंबर: ${bank.missedCall} — ${siteUrl}/bank/${bank.slug}`)}`}
+      href={`https://wa.me/?text=${encodeURIComponent(`${bank.nameHindi} का बैलेंस चेक नंबर: ${bank.missedCall} — ${siteUrl}/bank/${bank.slug}/`)}`}
       target="_blank"
       rel="noopener"
       class="mt-3 inline-flex items-center gap-2 text-sm text-green-700 bg-green-50 hover:bg-green-100 px-4 py-2 rounded-lg transition-colors"

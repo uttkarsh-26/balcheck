@@ -16,7 +16,7 @@ interface Props {
 
 const { bank } = Astro.props;
 const siteUrl = 'https://balcheck.in';
-const canonicalUrl = `${siteUrl}/mobile-number-registration/${bank.slug}`;
+const canonicalUrl = `${siteUrl}/mobile-number-registration/${bank.slug}/`;
 
 const title = `${bank.shortName} Mobile Number Registration — ${bank.nameHindi} Mobile Link`;
 const description = `${bank.name} में mobile number registration कैसे करें। Branch visit, ATM, या net banking से mobile number register कराएं। ${bank.shortName} mobile number link करने की पूरी जानकारी।`;
@@ -73,7 +73,7 @@ const schema = {
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Home", "item": siteUrl },
-        { "@type": "ListItem", "position": 2, "name": "Mobile Number Registration", "item": `${siteUrl}/mobile-number-registration` },
+        { "@type": "ListItem", "position": 2, "name": "Mobile Number Registration", "item": `${siteUrl}/mobile-number-registration/` },
         { "@type": "ListItem", "position": 3, "name": bank.shortName, "item": canonicalUrl },
       ],
     },

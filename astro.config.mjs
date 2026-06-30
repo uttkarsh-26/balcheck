@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://balcheck.in',
-  trailingSlash: 'never',
+  trailingSlash: 'always',
   output: 'static',
   devToolbar: { enabled: false },
   integrations: [

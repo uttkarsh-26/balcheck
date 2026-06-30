@@ -21,7 +21,7 @@ interface Props {
 }
 
 const { category, catBanks } = Astro.props;
-const canonicalUrl = `${siteUrl}/banks/${category.toLowerCase().replace(/\s+/g, '-')}`;
+const canonicalUrl = `${siteUrl}/banks/${category.toLowerCase().replace(/\s+/g, '-')}/`;
 const hindiName = categoryHindi[category];
 
 const breadcrumbSchema = {
@@ -45,7 +45,7 @@ const collectionSchema = {
     itemListElement: catBanks.map((b, i) => ({
       '@type': 'ListItem',
       position: i + 1,
-      url: `${siteUrl}/bank/${b.slug}`,
+      url: `${siteUrl}/bank/${b.slug}/`,
       name: b.name,
     })),
   },
