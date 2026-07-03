@@ -49,7 +49,7 @@ for (const bank of banks) {
 
     test('breadcrumb links to home and correct category page', async ({ page }) => {
       await expect(page.locator('nav[aria-label="Breadcrumb"]')).toContainText(bank.nameHindi);
-      const categoryLink = page.locator(`nav[aria-label="Breadcrumb"] a[href="/banks/${categorySlug(bank.category)}"]`);
+      const categoryLink = page.locator(`nav[aria-label="Breadcrumb"] a[href="/banks/${categorySlug(bank.category)}/"]`);
       await expect(categoryLink).toBeVisible();
     });
   });

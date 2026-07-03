@@ -37,12 +37,12 @@ test.describe('sitemap', () => {
   test('sampled pages return 200', async ({ request }) => {
     const samples = [
       '/',
-      '/how-it-works',
-      '/banks/public-sector',
-      '/banks/private-sector',
-      '/bank/sbi',
-      '/bank/hdfc',
-      '/bank/icici',
+      '/how-it-works/',
+      '/banks/public-sector/',
+      '/banks/private-sector/',
+      '/bank/sbi/',
+      '/bank/hdfc/',
+      '/bank/icici/',
     ];
 
     for (const path of samples) {

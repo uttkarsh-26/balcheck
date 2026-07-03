@@ -41,7 +41,7 @@ for (const category of categories) {
 
     test('links to every other category', async ({ page }) => {
       for (const other of categories) {
-        const link = page.locator(`a[href="/banks/${categorySlug(other)}"]`).first();
+        const link = page.locator(`a[href="/banks/${categorySlug(other)}/"]`).first();
         await expect(link).toBeVisible();
         await expect(link).toContainText(categoryHindi[other]);
       }

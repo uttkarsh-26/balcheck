@@ -43,7 +43,7 @@ test.describe('homepage', () => {
 
   test('category quick links point to valid category pages', async ({ page }) => {
     for (const cat of categories) {
-      const link = page.locator(`a[href="/banks/${categorySlug(cat)}"]`).first();
+      const link = page.locator(`a[href="/banks/${categorySlug(cat)}/"]`).first();
       await expect(link).toContainText(categoryHindi[cat]);
     }
   });
@@ -57,8 +57,8 @@ test.describe('homepage', () => {
   });
 
   test('navigates to how-it-works page', async ({ page }) => {
-    await page.locator('a[href="/how-it-works"]').first().click();
-    await expect(page).toHaveURL('/how-it-works');
+    await page.locator('a[href="/how-it-works/"]').first().click();
+    await expect(page).toHaveURL('/how-it-works/');
     await expect(page.getByRole('heading', { level: 1, name: 'मिस्ड कॉल से बैंक बैलेंस कैसे चेक करें' })).toBeVisible();
   });
 });
