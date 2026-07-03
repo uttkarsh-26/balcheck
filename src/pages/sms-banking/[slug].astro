@@ -86,7 +86,7 @@ const schema = {
     <nav class="text-sm text-gray-500 mb-4">
       <a href="/" class="hover:text-brand-600">Home</a>
       <span class="mx-1">›</span>
-      <a href="/sms-banking" class="hover:text-brand-600">SMS Banking</a>
+      <a href="/sms-banking/" class="hover:text-brand-600">SMS Banking</a>
       <span class="mx-1">›</span>
       <span class="text-gray-700">{bank.shortName}</span>
     </nav>
@@ -171,12 +171,12 @@ const schema = {
 
     <!-- Related Links -->
     <div class="grid grid-cols-2 gap-3 mb-6">
-      <a href={`/bank/${bank.slug}`}
+      <a href={`/bank/${bank.slug}/`}
          class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
         <p class="text-xs text-gray-500 mb-1">📞 Missed Call</p>
         <p class="text-sm font-medium text-brand-700">{bank.shortName} Balance Check →</p>
       </a>
-      <a href={`/customer-care/${bank.slug}`}
+      <a href={`/customer-care/${bank.slug}/`}
          class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
         <p class="text-xs text-gray-500 mb-1">🎧 Customer Care</p>
         <p class="text-sm font-medium text-brand-700">{bank.shortName} Helpline →</p>

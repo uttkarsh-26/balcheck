@@ -31,7 +31,7 @@ const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'BalCheck.in',
-  url: siteUrl,
+  url: `${siteUrl}/`,
   description: 'बैंक बैलेंस मिस्ड कॉल नंबर — सभी बैंकों के balance enquiry missed call numbers एक जगह',
   inLanguage: 'hi-IN',
   potentialAction: {
@@ -50,7 +50,7 @@ const orgSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'BalCheck',
-  url: siteUrl,
+  url: `${siteUrl}/`,
   description: 'All bank missed call balance check numbers in one place',
 };
 
@@ -76,7 +76,7 @@ const breadcrumbSchema = {
       '@type': 'ListItem',
       position: 1,
       name: 'Home',
-      item: siteUrl,
+      item: `${siteUrl}/`,
     },
   ],
 };
