@@ -23,14 +23,14 @@ test.describe('sitemap', () => {
     const text = await response.text();
 
     for (const bank of banks) {
-      expect(text).toContain(`https://balcheck.in/bank/${bank.slug}`);
+      expect(text).toContain(`https://balcheck.in/bank/${bank.slug}/`);
     }
 
     for (const category of categories) {
-      expect(text).toContain(`https://balcheck.in/banks/${categorySlug(category)}`);
+      expect(text).toContain(`https://balcheck.in/banks/${categorySlug(category)}/`);
     }
 
-    expect(text).toContain('https://balcheck.in/how-it-works');
+    expect(text).toContain('https://balcheck.in/how-it-works/');
     expect(text).toContain('https://balcheck.in/');
   });
 
