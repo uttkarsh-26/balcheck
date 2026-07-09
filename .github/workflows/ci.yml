@@ -87,7 +87,7 @@ jobs:
 
       - name: Purge Cloudflare Cache
         run: |
-          ZONE_RESPONSE=$(curl -s -H "Authorization: Bearer $CLOUD...KEN" \
+          ZONE_RESPONSE=$(curl -s -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
             "https://api.cloudflare.com/client/v4/zones?name=balcheck.in")
           ZONE_ID=$(python3 -c "import sys,json; r=json.load(sys.stdin); print(r['result'][0]['id'] if r.get('success') and r.get('result') else '')" <<< "$ZONE_RESPONSE")
           if [ -z "$ZONE_ID" ]; then
@@ -96,7 +96,7 @@ jobs:
             exit 1
           fi
           PURGE_RESPONSE=$(curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/purge_cache" \
-            -H "Authorization: Bearer $CLOUD...KEN" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
             -H "Content-Type: application/json" \
             --data '{"purge_everything": true}')
           echo "$PURGE_RESPONSE"
