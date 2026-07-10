@@ -34,6 +34,48 @@ test.describe('sitemap', () => {
     expect(text).toContain('https://balcheck.in/');
   });
 
+  test('sitemap contains vertical hub URLs', async ({ request }) => {
+    const response = await request.get('/sitemap-0.xml');
+    const text = await response.text();
+
+    const verticalHubs = [
+      '/customer-care/',
+      '/sms-banking/',
+      '/net-banking/',
+      '/mini-statement/',
+      '/mobile-number-registration/',
+      '/aadhaar-link/',
+      '/atm-pin/',
+      '/balance-enquiry/',
+      '/toll-free-number/',
+    ];
+
+    for (const hub of verticalHubs) {
+      expect(text, `sitemap should contain ${hub}`).toContain(`https://balcheck.in${hub}`);
+    }
+  });
+
+  test('sitemap contains balance-enquiry and toll-free-number bank pages', async ({ request }) => {
+    const response = await request.get('/sitemap-0.xml');
+    const text = await response.text();
+
+    // Check a sample of banks for each new vertical
+    const sampleSlugs = ['sbi', 'hdfc', 'icici', 'pnb', 'boi', 'canara', 'psb', 'baroda-up-gramin'];
+
+    for (const slug of sampleSlugs) {
+      expect(text).toContain(`https://balcheck.in/balance-enquiry/${slug}/`);
+      expect(text).toContain(`https://balcheck.in/toll-free-number/${slug}/`);
+    }
+  });
+
+  test('bank pages have cross-links to new verticals', async ({ page }) => {
+    await page.goto('/bank/sbi/');
+    const balanceEnquiryLink = page.locator(`a[href="/balance-enquiry/sbi/"]`);
+    const tollFreeLink = page.locator(`a[href="/toll-free-number/sbi/"]`);
+    await expect(balanceEnquiryLink).toBeVisible();
+    await expect(tollFreeLink).toBeVisible();
+  });
+
   test('sampled pages return 200', async ({ request }) => {
     const samples = [
       '/',
@@ -43,6 +85,10 @@ test.describe('sitemap', () => {
       '/bank/sbi/',
       '/bank/hdfc/',
       '/bank/icici/',
+      '/balance-enquiry/',
+      '/toll-free-number/',
+      '/balance-enquiry/sbi/',
+      '/toll-free-number/sbi/',
     ];
 
     for (const path of samples) {

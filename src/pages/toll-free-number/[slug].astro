@@ -1,0 +1,180 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { banks } from '../../data/banks';
+import type { Bank } from '../../data/banks';
+
+export function getStaticPaths() {
+  return banks.map((bank: Bank) => ({
+    params: { slug: bank.slug },
+    props: { bank },
+  }));
+}
+
+interface Props {
+  bank: Bank;
+}
+
+const { bank } = Astro.props;
+const siteUrl = 'https://balcheck.in';
+const canonicalUrl = `${siteUrl}/toll-free-number/${bank.slug}/`;
+
+const title = `${bank.shortName} Toll Free Number — ${bank.nameHindi} Helpline | BalCheck`;
+const description = `${bank.name} (${bank.shortName}) toll free customer care number ${bank.customerCare}। बैंकिंग समस्या, card block, account help के लिए call करें।`;
+
+const faqs = [
+  {
+    q: `${bank.shortName} toll free number क्या है?`,
+    a: `${bank.name} का toll free customer care number ${bank.customerCare} है। बैंकिंग समस्या, missed call balance enquiry, card blocking या account help के लिए इस नंबर पर संपर्क करें।`,
+  },
+  {
+    q: `${bank.nameHindi} का customer care number क्या है?`,
+    a: `${bank.name} (${bank.shortName}) का customer care number ${bank.customerCare} है। यह नंबर toll free है और 24×7 उपलब्ध है। आप इस पर बैंकिंग समस्याओं के लिए कॉल कर सकते हैं।`,
+  },
+  {
+    q: `${bank.shortName} toll free number पर कब call करें?`,
+    a: `Missed call balance SMS नहीं आया, मोबाइल नंबर बैंक खाते से लिंक या update करना है, ATM/debit card block या transaction issue है, net banking/UPI/account service में दिक्कत है — इन सभी समस्याओं के लिए ${bank.customerCare} पर call करें।`,
+  },
+  {
+    q: `क्या ${bank.shortName} toll free number पर call करने का charge लगता है?`,
+    a: `${bank.name} का customer care number ${bank.customerCare} है। Toll free numbers पर आम तौर पर कोई charge नहीं लगता। लेकिन अगर आप मोबाइल से कॉल कर रहे हैं तो अपने operator की पॉलिसी जांच लें।`,
+  },
+  {
+    q: `${bank.shortName} का official website क्या है?`,
+    a: `${bank.name} की आधिकारिक वेबसाइट ${bank.website} है। किसी भी नंबर या सेवा का उपयोग करने से पहले official website पर जानकारी cross-check कर लें।`,
+  },
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ContactPage",
+      "name": `${bank.name} Toll Free Customer Care Number`,
+      "description": `${bank.name} toll free customer care number ${bank.customerCare} और missed call balance number ${bank.missedCall}.`,
+      "url": canonicalUrl,
+      "mainEntity": {
+        "@type": "BankOrCreditUnion",
+        "name": bank.name,
+        "alternateName": bank.shortName,
+        "telephone": bank.customerCare,
+        "url": bank.website,
+        "areaServed": { "@type": "Country", "name": "India" },
+      },
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(f => ({
+        "@type": "Question",
+        "name": f.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": f.a,
+        },
+      })),
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": `${siteUrl}/` },
+        { "@type": "ListItem", "position": 2, "name": "Toll Free Number", "item": `${siteUrl}/toll-free-number/` },
+        { "@type": "ListItem", "position": 3, "name": bank.shortName, "item": canonicalUrl },
+      ],
+    },
+  ],
+};
+---
+<Layout title={title} description={description} canonical={canonicalUrl}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+  <div class="max-w-3xl mx-auto px-4 py-6">
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-500 mb-4">
+      <a href="/" class="hover:text-brand-600">Home</a>
+      <span class="mx-1">›</span>
+      <a href="/toll-free-number/" class="hover:text-brand-600">Toll Free Number</a>
+      <span class="mx-1">›</span>
+      <span class="text-gray-700">{bank.shortName}</span>
+    </nav>
+
+    <!-- Header -->
+    <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-6">
+      <h1 class="text-2xl font-bold mb-1">{bank.shortName} Toll Free Number</h1>
+      <p class="text-brand-100 text-sm">{bank.nameHindi} — Customer Care Helpline</p>
+    </div>
+
+    <!-- Toll Free CTA -->
+    <div class="bg-white rounded-xl border-2 border-brand-200 p-5 shadow-sm mb-6">
+      <p class="text-sm text-brand-700 font-medium mb-1">🎧 Customer Care Number</p>
+      <a href={`tel:${bank.customerCare}`} class="block">
+        <span class="text-3xl sm:text-4xl font-bold text-brand-700 tracking-wide">{bank.customerCare}</span>
+      </a>
+      <a href={`tel:${bank.customerCare}`}
+         class="mt-4 w-full flex items-center justify-center gap-2 bg-brand-600 text-white px-5 py-3.5 rounded-xl font-medium hover:bg-brand-700 transition-colors text-base min-h-[48px]">
+        अभी कॉल करें
+      </a>
+    </div>
+
+    <!-- When to Call -->
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">{bank.shortName} customer care पर कब कॉल करें?</h2>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> Missed call balance SMS नहीं आया</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> मोबाइल नंबर बैंक खाते से लिंक या update करना है</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> ATM/debit card block या transaction issue है</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> Net banking, UPI या account service में दिक्कत है</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> Account statement, KYC या loan संबंधी जानकारी चाहिए</li>
+      </ul>
+    </div>
+
+    <!-- Safety Note -->
+    <div class="bg-amber-50 rounded-xl border border-amber-200 p-5 mb-6">
+      <h2 class="text-lg font-bold text-amber-900 mb-2">⚠️ Safety Note</h2>
+      <p class="text-sm text-amber-800 leading-relaxed">किसी भी call पर OTP, PIN, CVV, UPI PIN या net banking password न बताएं। Bank कभी भी ये details फोन पर नहीं मांगता।</p>
+    </div>
+
+    <!-- Balance Check Number -->
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">📞 Balance Check Number</h2>
+      <p class="text-gray-600 text-sm mb-3">{bank.shortName} का missed call balance number:</p>
+      <a href={`tel:${bank.missedCall}`}
+         class="inline-flex items-center gap-2 text-2xl font-bold text-brand-700">
+        {bank.missedCall}
+      </a>
+      {bank.missedCallAlt && (
+        <p class="text-xs text-gray-500 mt-2">वैकल्पिक नंबर: <span class="font-bold">{bank.missedCallAlt}</span></p>
+      )}
+    </div>
+
+    <!-- FAQ -->
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">❓ अक्सर पूछे जाने वाले प्रश्न</h2>
+      <div class="space-y-4">
+        {faqs.map(faq => (
+          <div class="border-b border-gray-100 pb-4 last:border-0">
+            <h3 class="font-medium text-gray-900 text-sm mb-2">{faq.q}</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">{faq.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Related Links -->
+    <div class="grid grid-cols-2 gap-3 mb-6">
+      <a href={`/bank/${bank.slug}/`}
+         class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
+        <p class="text-xs text-gray-500 mb-1">📞 Balance Check</p>
+        <p class="text-sm font-medium text-brand-700">{bank.shortName} Details →</p>
+      </a>
+      <a href={`/customer-care/${bank.slug}/`}
+         class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
+        <p class="text-xs text-gray-500 mb-1">🎧 Customer Care</p>
+        <p class="text-sm font-medium text-brand-700">{bank.shortName} Helpline →</p>
+      </a>
+    </div>
+
+    <!-- Footer -->
+    <div class="bg-gray-50 rounded-xl border border-gray-200 p-4">
+      <p class="text-xs text-gray-500 leading-relaxed">BalCheck.in बैंक नहीं है। हम public bank contact directory हैं। Account-specific help के लिए official bank customer care या branch से संपर्क करें।</p>
+    </div>
+  </div>
+</Layout>

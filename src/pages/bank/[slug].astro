@@ -95,8 +95,8 @@ const breadcrumbSchema = {
   ],
 };
 
-const pageTitle = `${bank.nameHindi} मिस्ड कॉल बैलेंस नंबर ${bank.missedCall} | ${bank.shortName} Balance Check`;
-const pageDesc = `${bank.name} (${bank.shortName}) का missed call balance enquiry number ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें और SMS में बैलेंस पाएं। मुफ़्त, 24×7।`;
+const pageTitle = `${bank.nameHindi} बैलेंस चेक नंबर ${bank.missedCall} | ${bank.shortName} Missed Call`;
+const pageDesc = `${bank.nameHindi} (${bank.shortName}) का बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें और SMS में बैलेंस पाएं। मुफ़्त, 24×7।`;
 ---
 
 <Layout title={pageTitle} description={pageDesc}>
@@ -281,6 +281,16 @@ const pageDesc = `${bank.name} (${bank.shortName}) का missed call balance en
          class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
         <p class="text-xs text-gray-500">🔑 ATM PIN</p>
         <p class="text-xs font-medium text-brand-700 mt-1">Generate PIN →</p>
+      </a>
+      <a href={`/balance-enquiry/${bank.slug}/`}
+         class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
+        <p class="text-xs text-gray-500">💰 Balance Enquiry</p>
+        <p class="text-xs font-medium text-brand-700 mt-1">Check Balance →</p>
+      </a>
+      <a href={`/toll-free-number/${bank.slug}/`}
+         class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
+        <p class="text-xs text-gray-500">🆓 Toll Free Number</p>
+        <p class="text-xs font-medium text-brand-700 mt-1">Helpline →</p>
       </a>
     </div>
   </div>
