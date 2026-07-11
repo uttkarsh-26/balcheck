@@ -21,5 +21,26 @@ export async function getJsonLdScripts(page: Page): Promise<unknown[]> {
 }
 
 export function findSchema(scripts: unknown[], type: string): unknown | undefined {
-  return scripts.find(s => typeof s === 'object' && s !== null && (s as Record<string, unknown>)['@type'] === type);
+  // Check top-level @type first (e.g. BankOrCreditUnion, CollectionPage)
+  for (const s of scripts) {
+    if (typeof s === 'object' && s !== null && (s as Record<string, unknown>)['@type'] === type) {
+      return s;
+    }
+  }
+  // Then search inside @graph arrays (used by balance-enquiry/toll-free [slug] pages)
+  for (const s of scripts) {
+    if (typeof s === 'object' && s !== null) {
+      const graph = (s as Record<string, unknown>)['@graph'];
+      if (Array.isArray(graph)) {
+        const found = graph.find(
+          (item: unknown) =>
+            typeof item === 'object' &&
+            item !== null &&
+            (item as Record<string, unknown>)['@type'] === type
+        );
+        if (found) return found;
+      }
+    }
+  }
+  return undefined;
 }
