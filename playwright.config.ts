@@ -30,6 +30,6 @@ export default defineConfig({
     command: `npm run build && npm run preview:static`,
     url: BASE_URL,
     reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
+    timeout: 300_000,
   },
 });
