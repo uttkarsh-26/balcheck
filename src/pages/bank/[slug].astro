@@ -120,10 +120,11 @@ const pageDesc = `${bank.nameHindi} (${bank.shortName}) का बैलें�
 <VideoHeroBanner
   src="/videos/balcheck-bank-hero.mp4"
   poster="/videos/balcheck-poster.jpg"
-  title="Missed Call Balance Check"
+  title={`${bank.nameHindi} बैलेंस चेक नंबर`}
   subtitle={`अपने बैंक खाते का बैलेंस जानें — मिस्ड कॉल दें`}
   ctaText={`Call Now: ${bank.missedCall}`}
   ctaHref={`tel:${bank.missedCall}`}
+  headingLevel={2}
 />
 
 <!-- Bank Detail Hero -->
