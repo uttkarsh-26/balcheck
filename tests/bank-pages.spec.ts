@@ -3,9 +3,9 @@ import { banks } from '../src/data/banks';
 import { categorySlug, getJsonLdScripts, findSchema } from './utils';
 
 const ctrTitles: Record<string, string> = {
-  canara: 'केनरा बैंक बैलेंस चेक नंबर 8886610360 | Missed Call',
-  psb: 'पंजाब एंड सिंद बैंक बैलेंस चेक नंबर 7039035156 | PSB',
-  boi: 'BOI बैलेंस चेक नंबर 9811255430 | Bank of India',
+  canara: 'केनरा बैंक बैलेंस चेक नंबर 8886610360 — मिस्ड कॉल से तुरंत बैलेंस',
+  psb: 'पंजाब एंड सिंद बैंक बैलेंस चेक नंबर 7039035156 — मिस्ड कॉल से तुरंत बैलेंस',
+  boi: 'बैंक ऑफ इंडिया (BOI) बैलेंस चेक नंबर 9811255430 — मिस्ड कॉल से तुरंत बैलेंस',
   bandhan: 'बंधन बैंक बैलेंस चेक नंबर 9223008666 | Bandhan Bank',
   sbi: 'SBI बैलेंस चेक नंबर 09223766666 | मिस्ड कॉल सेवा',
   'baroda-up-gramin': 'बड़ौदा यूपी ग्रामीण बैंक बैलेंस चेक नंबर 9986454440 | Missed Call',
