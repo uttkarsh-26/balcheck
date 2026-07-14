@@ -15,6 +15,8 @@ const ctrTitles: Record<string, string> = {
   kvb: 'KVB बैलेंस चेक नंबर 09266292666 | Karur Vysya Missed Call',
 };
 
+const sprint3Banks = new Set(['canara', 'psb', 'boi']);
+
 for (const bank of banks) {
   test.describe(`/bank/${bank.slug}`, () => {
     test.beforeEach(async ({ page }) => {
@@ -41,6 +43,17 @@ for (const bank of banks) {
         expect(description).toContain('आधिकारिक');
         expect(description).toContain('तुरंत');
         if (bank.slug === 'boi') expect(description).toContain(bank.missedCallAlt);
+      });
+    }
+
+    if (sprint3Banks.has(bank.slug)) {
+      test('shows the Sprint 3 quick answer with the correct number', async ({ page }) => {
+        const answer = page.locator('section').filter({
+          hasText: `${bank.nameHindi} बैलेंस चेक नंबर:`,
+        }).first();
+        await expect(answer).toBeVisible();
+        await expect(answer).toContainText(bank.missedCall);
+        await expect(answer.locator(`a[href="tel:${bank.missedCall}"]`)).toBeVisible();
       });
     }
 
