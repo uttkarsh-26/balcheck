@@ -48,6 +48,18 @@ test.describe('homepage', () => {
     }
   });
 
+  test('links directly to every banking service hub', async ({ page }) => {
+    const serviceHubs = [
+      'customer-care', 'net-banking', 'sms-banking', 'mini-statement',
+      'balance-enquiry', 'toll-free-number', 'mobile-number-registration',
+      'aadhaar-link', 'atm-pin',
+    ];
+
+    for (const hub of serviceHubs) {
+      await expect(page.locator(`a[href="/${hub}/"]`).first()).toBeVisible();
+    }
+  });
+
   test('has homepage JSON-LD schemas', async ({ page }) => {
     const scripts = await getJsonLdScripts(page);
     expect(findSchema(scripts, 'WebSite')).toBeDefined();

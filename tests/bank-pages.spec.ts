@@ -2,6 +2,14 @@ import { test, expect } from '@playwright/test';
 import { banks } from '../src/data/banks';
 import { categorySlug, getJsonLdScripts, findSchema } from './utils';
 
+const ctrTitles: Record<string, string> = {
+  canara: 'केनरा बैंक बैलेंस चेक नंबर 8886610360 | Missed Call',
+  psb: 'पंजाब एंड सिंद बैंक बैलेंस चेक नंबर 7039035156 | PSB',
+  boi: 'BOI बैलेंस चेक नंबर 9811255430 | Bank of India',
+  bandhan: 'बंधन बैंक बैलेंस चेक नंबर 9223008666 | Bandhan Bank',
+  sbi: 'SBI बैलेंस चेक नंबर 09223766666 | मिस्ड कॉल सेवा',
+};
+
 for (const bank of banks) {
   test.describe(`/bank/${bank.slug}`, () => {
     test.beforeEach(async ({ page }) => {
@@ -17,6 +25,12 @@ for (const bank of banks) {
       const callLink = page.locator(`a[href="tel:${bank.missedCall}"]`).first();
       await expect(callLink).toBeVisible();
     });
+
+    if (ctrTitles[bank.slug]) {
+      test('uses the GSC-driven page title', async ({ page }) => {
+        await expect(page).toHaveTitle(ctrTitles[bank.slug]);
+      });
+    }
 
     test('shows customer care and website fields', async ({ page }) => {
       await expect(page.locator('body')).toContainText(bank.customerCare);

@@ -9,6 +9,17 @@ const publicCount = banks.filter(b => b.category === 'Public Sector').length;
 const privateCount = banks.filter(b => b.category === 'Private Sector').length;
 const sfbCount = banks.filter(b => b.category === 'Small Finance Bank').length;
 const siteUrl = 'https://balcheck.in';
+const bankingServices = [
+  { href: '/customer-care/', icon: '🎧', title: 'Customer Care', description: 'सभी बैंकों के helpline नंबर' },
+  { href: '/net-banking/', icon: '🌐', title: 'Net Banking', description: 'Online banking login links' },
+  { href: '/sms-banking/', icon: '📱', title: 'SMS Banking', description: 'SMS से balance check' },
+  { href: '/mini-statement/', icon: '🧾', title: 'Mini Statement', description: 'आखिरी transactions की जानकारी' },
+  { href: '/balance-enquiry/', icon: '💰', title: 'Balance Enquiry', description: 'बैंक बैलेंस जानने के सभी तरीके' },
+  { href: '/toll-free-number/', icon: '☎️', title: 'Toll-Free Number', description: 'मुफ़्त bank helpline नंबर' },
+  { href: '/mobile-number-registration/', icon: '📲', title: 'Mobile Registration', description: 'खाते में मोबाइल नंबर जोड़ें' },
+  { href: '/aadhaar-link/', icon: '🪪', title: 'Aadhaar Link', description: 'बैंक खाते से आधार लिंक करें' },
+  { href: '/atm-pin/', icon: '🔐', title: 'ATM PIN', description: 'Debit card PIN बनाएं' },
+] as const;
 ---
 
 <Layout 
@@ -70,15 +81,11 @@ const siteUrl = 'https://balcheck.in';
 <section class="bg-white border-b border-gray-100">
   <div class="max-w-6xl mx-auto px-4 py-3">
     <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-      <a href="/customer-care/" class="px-4 py-2.5 text-sm font-medium rounded-full bg-brand-50 text-brand-700 hover:bg-brand-100 active:bg-brand-200 whitespace-nowrap transition-colors min-h-[44px] inline-flex items-center">
-        🎧 Customer Care
-      </a>
-      <a href="/net-banking/" class="px-4 py-2.5 text-sm font-medium rounded-full bg-brand-50 text-brand-700 hover:bg-brand-100 active:bg-brand-200 whitespace-nowrap transition-colors min-h-[44px] inline-flex items-center">
-        🌐 Net Banking
-      </a>
-      <a href="/sms-banking/" class="px-4 py-2.5 text-sm font-medium rounded-full bg-brand-50 text-brand-700 hover:bg-brand-100 active:bg-brand-200 whitespace-nowrap transition-colors min-h-[44px] inline-flex items-center">
-        📱 SMS Banking
-      </a>
+      {bankingServices.map(service => (
+        <a href={service.href} class="px-4 py-2.5 text-sm font-medium rounded-full bg-brand-50 text-brand-700 hover:bg-brand-100 active:bg-brand-200 whitespace-nowrap transition-colors min-h-[44px] inline-flex items-center">
+          {service.icon} {service.title}
+        </a>
+      ))}
       {categories.map(cat => (
         <a href={`/banks/${cat.toLowerCase().replace(/\s+/g, '-')}/`} class="px-4 py-2.5 text-sm font-medium rounded-full bg-gray-100 text-gray-700 hover:bg-brand-100 hover:text-brand-700 active:bg-brand-200 whitespace-nowrap transition-colors min-h-[44px] inline-flex items-center">
           {categoryHindi[cat]} ({banks.filter(b => b.category === cat).length})
@@ -227,24 +234,14 @@ const siteUrl = 'https://balcheck.in';
     <h2 class="text-xl font-bold text-gray-900 text-center mb-2">बैंकिंग सेवाएं</h2>
     <p class="text-sm text-gray-500 text-center mb-6">अपने बैंक की सभी सेवाएं एक जगह — {bankCount} बैंकों के लिए</p>
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <a href="/customer-care/" class="bg-white rounded-xl border border-gray-200 p-5 hover:border-brand-300 hover:shadow-sm transition-all text-center">
-        <div class="text-3xl mb-2">🎧</div>
-        <h3 class="font-semibold text-gray-900 text-sm mb-1">Customer Care</h3>
-        <p class="text-xs text-gray-500">सभी बैंकों के helpline नंबर</p>
-        <p class="text-xs text-brand-600 font-medium mt-2">{bankCount} बैंक →</p>
-      </a>
-      <a href="/net-banking/" class="bg-white rounded-xl border border-gray-200 p-5 hover:border-brand-300 hover:shadow-sm transition-all text-center">
-        <div class="text-3xl mb-2">🌐</div>
-        <h3 class="font-semibold text-gray-900 text-sm mb-1">Net Banking</h3>
-        <p class="text-xs text-gray-500">Online banking login links</p>
-        <p class="text-xs text-brand-600 font-medium mt-2">{bankCount} बैंक →</p>
-      </a>
-      <a href="/sms-banking/" class="bg-white rounded-xl border border-gray-200 p-5 hover:border-brand-300 hover:shadow-sm transition-all text-center">
-        <div class="text-3xl mb-2">📱</div>
-        <h3 class="font-semibold text-gray-900 text-sm mb-1">SMS Banking</h3>
-        <p class="text-xs text-gray-500">SMS से balance check</p>
-        <p class="text-xs text-brand-600 font-medium mt-2">{bankCount} बैंक →</p>
-      </a>
+      {bankingServices.map(service => (
+        <a href={service.href} class="bg-white rounded-xl border border-gray-200 p-5 hover:border-brand-300 hover:shadow-sm transition-all text-center">
+          <div class="text-3xl mb-2">{service.icon}</div>
+          <h3 class="font-semibold text-gray-900 text-sm mb-1">{service.title}</h3>
+          <p class="text-xs text-gray-500">{service.description}</p>
+          <p class="text-xs text-brand-600 font-medium mt-2">{bankCount} बैंक →</p>
+        </a>
+      ))}
       <a href="https://upseva.in/tools/bank-cheatsheet/" target="_blank" rel="noopener" class="bg-gradient-to-br from-brand-50 to-purple-50 rounded-xl border-2 border-brand-200 p-5 hover:border-brand-400 hover:shadow-md transition-all text-center">
         <div class="text-3xl mb-2">📄</div>
         <h3 class="font-semibold text-gray-900 text-sm mb-1">Cheatsheet PDF</h3>

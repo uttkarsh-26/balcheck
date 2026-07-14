@@ -95,8 +95,35 @@ const breadcrumbSchema = {
   ],
 };
 
-const pageTitle = `${bank.nameHindi} बैलेंस चेक नंबर ${bank.missedCall} | ${bank.shortName} Missed Call`;
-const pageDesc = `${bank.nameHindi} (${bank.shortName}) का बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें और SMS में बैलेंस पाएं। मुफ़्त, 24×7।`;
+// GSC-driven overrides for high-impression pages. Keep the default scalable,
+// but match the exact language people use for the banks with the most demand.
+const seoOverrides: Partial<Record<string, { title: string; description: string }>> = {
+  canara: {
+    title: `केनरा बैंक बैलेंस चेक नंबर ${bank.missedCall} | Missed Call`,
+    description: `केनरा बैंक बैलेंस चेक नंबर ${bank.missedCall} पर रजिस्टर्ड मोबाइल से मिस्ड कॉल दें। SMS में तुरंत बैलेंस पाएं। सेवा मुफ़्त और 24×7 है।`,
+  },
+  psb: {
+    title: `पंजाब एंड सिंद बैंक बैलेंस चेक नंबर ${bank.missedCall} | PSB`,
+    description: `पंजाब एंड सिंद बैंक का बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल देकर SMS में PSB खाते का बैलेंस पाएं।`,
+  },
+  boi: {
+    title: `BOI बैलेंस चेक नंबर ${bank.missedCall} | Bank of India`,
+    description: `Bank of India बैलेंस चेक नंबर ${bank.missedCall} पर मिस्ड कॉल दें। BOI खाते का बैलेंस SMS में पाएं; मिनी स्टेटमेंट नंबर भी देखें।`,
+  },
+  bandhan: {
+    title: `बंधन बैंक बैलेंस चेक नंबर ${bank.missedCall} | Bandhan Bank`,
+    description: `बंधन बैंक बैलेंस चेक नंबर ${bank.missedCall} पर रजिस्टर्ड मोबाइल से मिस्ड कॉल दें और SMS में खाते का बैलेंस पाएं। मुफ़्त 24×7 सेवा।`,
+  },
+  sbi: {
+    title: `SBI बैलेंस चेक नंबर ${bank.missedCall} | मिस्ड कॉल सेवा`,
+    description: `SBI बैलेंस चेक नंबर ${bank.missedCall} पर रजिस्टर्ड मोबाइल से मिस्ड कॉल दें। भारतीय स्टेट बैंक खाते का बैलेंस SMS में तुरंत पाएं।`,
+  },
+};
+
+const pageTitle = seoOverrides[bank.slug]?.title
+  ?? `${bank.nameHindi} बैलेंस चेक नंबर ${bank.missedCall} | ${bank.shortName} Missed Call`;
+const pageDesc = seoOverrides[bank.slug]?.description
+  ?? `${bank.nameHindi} (${bank.shortName}) का बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें और SMS में बैलेंस पाएं। मुफ़्त, 24×7।`;
 ---
 
 <Layout title={pageTitle} description={pageDesc}>
