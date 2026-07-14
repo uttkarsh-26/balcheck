@@ -8,6 +8,11 @@ const ctrTitles: Record<string, string> = {
   boi: 'BOI बैलेंस चेक नंबर 9811255430 | Bank of India',
   bandhan: 'बंधन बैंक बैलेंस चेक नंबर 9223008666 | Bandhan Bank',
   sbi: 'SBI बैलेंस चेक नंबर 09223766666 | मिस्ड कॉल सेवा',
+  'baroda-up-gramin': 'बड़ौदा यूपी ग्रामीण बैंक बैलेंस चेक नंबर 9986454440 | Missed Call',
+  'punjab-gramin': 'पंजाब ग्रामीण बैंक बैलेंस चेक नंबर 18001807777 | Missed Call',
+  indusind: 'इंडसइंड बैंक बैलेंस चेक नंबर 18002741000 | IndusInd Missed Call',
+  'idfc-first': 'IDFC FIRST बैलेंस चेक नंबर 18002700720 | Missed Call',
+  kvb: 'KVB बैलेंस चेक नंबर 09266292666 | Karur Vysya Missed Call',
 };
 
 for (const bank of banks) {

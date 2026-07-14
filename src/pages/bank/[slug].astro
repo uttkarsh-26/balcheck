@@ -118,12 +118,32 @@ const seoOverrides: Partial<Record<string, { title: string; description: string 
     title: `SBI बैलेंस चेक नंबर ${bank.missedCall} | मिस्ड कॉल सेवा`,
     description: `भारतीय स्टेट बैंक (SBI) का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं।`,
   },
+  'baroda-up-gramin': {
+    title: `बड़ौदा यूपी ग्रामीण बैंक बैलेंस चेक नंबर ${bank.missedCall} | Missed Call`,
+    description: `बड़ौदा यूपी ग्रामीण बैंक का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
+  },
+  'punjab-gramin': {
+    title: `पंजाब ग्रामीण बैंक बैलेंस चेक नंबर ${bank.missedCall} | Missed Call`,
+    description: `पंजाब ग्रामीण बैंक का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
+  },
+  indusind: {
+    title: `इंडसइंड बैंक बैलेंस चेक नंबर ${bank.missedCall} | IndusInd Missed Call`,
+    description: `इंडसइंड बैंक का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
+  },
+  'idfc-first': {
+    title: `IDFC FIRST बैलेंस चेक नंबर ${bank.missedCall} | Missed Call`,
+    description: `आईडीएफसी फर्स्ट बैंक का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
+  },
+  kvb: {
+    title: `KVB बैलेंस चेक नंबर ${bank.missedCall} | Karur Vysya Missed Call`,
+    description: `करूर वैश्य बैंक (KVB) का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
+  },
 };
 
 const pageTitle = seoOverrides[bank.slug]?.title
   ?? `${bank.nameHindi} बैलेंस चेक नंबर ${bank.missedCall} | ${bank.shortName} Missed Call`;
 const pageDesc = seoOverrides[bank.slug]?.description
-  ?? `${bank.nameHindi} (${bank.shortName}) का बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें और SMS में बैलेंस पाएं। मुफ़्त, 24×7।`;
+  ?? `${bank.nameHindi} (${bank.shortName}) का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`;
 ---
 
 <Layout title={pageTitle} description={pageDesc}>
