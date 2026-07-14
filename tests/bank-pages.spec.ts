@@ -30,6 +30,13 @@ for (const bank of banks) {
       test('uses the GSC-driven page title', async ({ page }) => {
         await expect(page).toHaveTitle(ctrTitles[bank.slug]);
       });
+
+      test('uses a verified, action-oriented meta description', async ({ page }) => {
+        const description = await page.locator('meta[name="description"]').getAttribute('content');
+        expect(description).toContain('आधिकारिक');
+        expect(description).toContain('तुरंत');
+        if (bank.slug === 'boi') expect(description).toContain(bank.missedCallAlt);
+      });
     }
 
     test('shows customer care and website fields', async ({ page }) => {
