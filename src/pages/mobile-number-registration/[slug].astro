@@ -18,13 +18,61 @@ const { bank } = Astro.props;
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = `${siteUrl}/mobile-number-registration/${bank.slug}/`;
 
-const title = `${bank.shortName} Mobile Number Registration — ${bank.nameHindi} Mobile Link`;
-const description = `${bank.name} में mobile number registration कैसे करें। Branch visit, ATM, या net banking से mobile number register कराएं। ${bank.shortName} mobile number link करने की पूरी जानकारी।`;
+// GSC 28d demand signal (cluster 207 imp / 7 clicks). Exact-query overrides for
+// UCO ('uco bank mobile number link online' 79 imp/pos 10.1, 'uco bank mobile
+// number link' 27 imp/pos 9.9) and IPPB ('mobile number link online' 35 imp/pos
+// 10.5). Default scalable title preserves PSEO intent. Per-bank override below
+// controls ONLY honest capability framing: we never claim full online completion
+// unless the bank's own website/customerCare fields indicate an online channel.
+// The data model exposes only `website` and `customerCare`; we do not fabricate
+// an online registration path that we cannot verify.
+type OnlineCapability = 'website-known' | 'branch-or-customer-care';
+interface Override {
+  title: string;
+  h1: string;
+  quickAnswer: string;
+  capability: OnlineCapability;
+}
+
+const defaultOverride: Override = {
+  title: `${bank.shortName} Mobile Number Registration — ${bank.nameHindi} Mobile Link`,
+  h1: `${bank.shortName} Mobile Number Registration`,
+  quickAnswer: `${bank.name} में mobile number register करने के लिए branch जाएं या ${bank.customerCare} पर customer care से संपर्क करें। अगर ${bank.shortName} ने अपनी वेबसाइट ${bank.website} पर net-banking/mobile-banking update दिया है तो वहां से भी कोशिश कर सकते हैं — पर official online update सभी बैंकों में उपलब्ध नहीं है।`,
+  capability: 'branch-or-customer-care',
+};
+
+const overrides: Record<string, Override> = {
+  'uco-bank': {
+    title: 'UCO Bank Mobile Number Link Online — UCO Bank Mobile Number Link',
+    h1: 'UCO Bank Mobile Number Link Online',
+    quickAnswer: `UCO Bank में mobile number link करने का official तरीका branch visit या ${bank.customerCare} customer care पर है। ${bank.shortName} की वेबसाइट ${bank.website} पर net-banking login का option दिखता है, पर "mobile number link online" full process के लिए official site की जानकारी confirm करें। पूरी तरह से online हो यह नहीं है — हम यह दावा नहीं करते। Branch में KYC form भरना सबसे विश्वसनीय तरीका है।`,
+    capability: 'branch-or-customer-care',
+  },
+  'ippb': {
+    title: 'IPPB Mobile Number Link Online — India Post Payments Bank Mobile Link',
+    h1: 'IPPB Mobile Number Link Online',
+    quickAnswer: `India Post Payments Bank (IPPB) में mobile number link के लिए nearest post-office branch या ${bank.customerCare} customer care से संपर्क करें। IPPB की वेबसाइट ${bank.website} पर account/online banking login उपलब्ध है, पर mobile number link का full process "online" claim के बिना verify करें — हम यह दावा नहीं करते कि पूरी तरह से online होता है। Branch में form भरना सबसे विश्वसनीय है।`,
+    capability: 'branch-or-customer-care',
+  },
+};
+
+const override = overrides[bank.slug] ?? defaultOverride;
+const capability = override.capability;
+const onlineAvailable = capability === 'website-known';
+
+const title = override.title;
+const description = `${bank.name} में mobile number registration कैसे करें। ${bank.shortName} mobile number link के लिए branch, ATM, या अगर उपलब्ध हो तो ${bank.website} पर official online method देखें। जानकारी customer care ${bank.customerCare} से confirm करें।`;
 
 const faqs = [
   {
-    q: `${bank.shortName} में mobile number registration कैसे करें?`,
-    a: `${bank.name} में mobile number register करने के 3 तरीके हैं: 1) Branch जाकर KYC form भरें — सबसे reliable, 2) ATM में जाकर "Mobile Registration" option select करें, 3) ${bank.website} पर net banking में जाकर "Update Mobile Number" option से। एक बार register होने के बाद आप missed call balance, SMS banking, और transaction alerts का लाभ उठा सकते हैं।`,
+    q: `${bank.shortName} mobile number registration कैसे करें?`,
+    a: `${bank.name} में mobile number register करने के मुख्य तरीके: 1) Branch जाकर KYC form भरें — सबसे reliable, 2) ATM में जाकर "Mobile Registration" option select करें, 3) ${bank.website} पर official net-banking login से "Update Mobile Number" देखें (अगर bank ने यह service दी है)। अगर online update नहीं मिलता तो branch जाना पड़ेगा। सहायता के लिए ${bank.customerCare} से बात करें।`,
+  },
+  {
+    q: `${bank.shortName} mobile number link online कैसे करें?`,
+    a: onlineAvailable
+      ? `${bank.shortName} की वेबसाइट ${bank.website} पर जाकर net-banking login से "Mobile Number Update" option देखें। अगर दिखता है तो वही से link हो सकता है — पर कई banks इसे पूरी तरह से online नहीं करते, branch verify जरूरी हो सकता है। Official update का पुष्टि ${bank.customerCare} customer care से करें।`
+      : `${bank.name} में mobile number link का official तरीका branch visit है। अगर ${bank.shortName} की वेबसाइट ${bank.website} पर online update option है तो वहां login करके देखें, पर हम यह दावा नहीं करते कि पूरी तरह से online होता है। भ्रम के लिए ${bank.customerCare} पर call करें।`,
   },
   {
     q: `Mobile number register करने के लिए क्या documents चाहिए?`,
@@ -32,7 +80,9 @@ const faqs = [
   },
   {
     q: `${bank.shortName} mobile number update online कैसे करें?`,
-    a: `Online mobile number update के लिए ${bank.website} पर net banking में login करें। "Profile" या "Settings" में जाकर "Update Mobile Number" option select करें। पुराना और नया mobile number डालें, OTP verify करें। अगर online update नहीं होता तो branch में जाना पड़ेगा।`,
+    a: onlineAvailable
+      ? `${bank.website} पर net-banking login करें। "Profile" या "Settings" में जाकर "Update Mobile Number" option देखें — अगर दिखता है तो वहां नया number डालें और OTP से verify करें। अगर नहीं दिखता तो branch में जाना पड़ेगा। "पूरी तरह से online होता है" यह claim न करें — bank के official process को ${bank.customerCare} से confirm करें।`
+      : `${bank.name} में mobile number update का confirmed तरीका branch जाकर form देना है। अगर ${bank.website} पर net-banking में online update option है तो देखें, पर हम यह दावा नहीं करते कि पूरी तरह से online होता है। सहायता के लिए ${bank.customerCare} पर call करें।`,
   },
   {
     q: `Mobile number registered है या नहीं कैसे check करें?`,
@@ -93,10 +143,15 @@ const schema = {
       <span class="text-gray-700">{bank.shortName}</span>
     </nav>
 
+    <!-- Quick Answer (exact-query targeted) -->
+    <div class="bg-amber-50 border border-amber-300 rounded-xl p-4 mb-6" data-testid="quick-answer">
+      <p class="text-sm text-amber-900 leading-relaxed">{override.quickAnswer}</p>
+    </div>
+
     <!-- Header -->
     <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-6">
-      <h1 class="text-2xl font-bold mb-1">{bank.shortName} Mobile Number Registration</h1>
-      <p class="text-brand-100 text-sm">{bank.nameHindi} — मोबाइल नंबर रजिस्टर करने की पूरी जानकारी</p>
+      <h1 class="text-2xl font-bold mb-1">{override.h1}</h1>
+      <p class="text-brand-100 text-sm">{bank.nameHindi} — मोबाइल नंबर रजिस्टर करने की जानकारी</p>
     </div>
 
     <!-- Why Register -->
@@ -116,9 +171,9 @@ const schema = {
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
       <h2 class="text-lg font-semibold text-gray-900 mb-4">📝 Registration के तरीके</h2>
       <div class="space-y-4">
-        <!-- Method 1: Branch -->
+        <!-- Method 1: Branch (always available, recommended) -->
         <div class="border border-gray-100 rounded-lg p-4">
-          <h3 class="font-medium text-gray-900 text-sm mb-2">1️⃣ Branch Visit (सबसे reliable)</h3>
+          <h3 class="font-medium text-gray-900 text-sm mb-2">1️⃣ Branch Visit (सबसे reliable — सभी बैंकों में उपलब्ध)</h3>
           <ol class="space-y-2 text-sm text-gray-600 ml-4">
             <li>• Nearest {bank.name} branch में जाएं</li>
             <li>• KYC / Mobile Registration form मांगें</li>
@@ -137,14 +192,35 @@ const schema = {
             <li>• OTP आएगा — verify करें</li>
           </ol>
         </div>
-        <!-- Method 3: Net Banking -->
+        <!-- Method 3: Official Website / Net Banking (only if website-known) -->
         <div class="border border-gray-100 rounded-lg p-4">
-          <h3 class="font-medium text-gray-900 text-sm mb-2">3️⃣ Net Banking से</h3>
+          <h3 class="font-medium text-gray-900 text-sm mb-2">
+            3️⃣ Official Website / Net Banking
+            {!onlineAvailable && <span class="text-gray-500 font-normal"> (अगर bank ने दिया हो)</span>}
+          </h3>
+          {onlineAvailable ? (
+            <ol class="space-y-2 text-sm text-gray-600 ml-4">
+              <li>• <a href={bank.website} target="_blank" rel="noopener noreferrer" class="text-brand-700 font-medium">{bank.shortName} official website</a> पर जाएं</li>
+              <li>• Net-banking login करें (अगर आपके पास login है)</li>
+              <li>• "Profile" या "Settings" में "Update Mobile Number" देखें</li>
+              <li>• अगर option मिलता है तो नया number डालें, और OTP से verify करें</li>
+              <li class="text-gray-500">• ध्यान दें: पूरी तरह से online confirm हो यह नहीं है — bank की process verify करें। अगर नहीं होता तो branch जाएं।</li>
+            </ol>
+          ) : (
+            <ol class="space-y-2 text-sm text-gray-600 ml-4">
+              <li>• <a href={bank.website} target="_blank" rel="noopener noreferrer" class="text-brand-700 font-medium">{bank.shortName} official website</a> पर जाकर देखें कि क्या net-banking में "Update Mobile Number" option है</li>
+              <li>• अगर है तो login करके नया number डालें और OTP से verify करें</li>
+              <li class="text-gray-500">• ध्यान दें: हम यह दावा नहीं करते कि यह सभी accounts में काम करता है या पूरी तरह से online होता है। अगर नहीं होता तो branch जाएं।</li>
+            </ol>
+          )}
+        </div>
+        <!-- Method 4: Customer Care -->
+        <div class="border border-gray-100 rounded-lg p-4">
+          <h3 class="font-medium text-gray-900 text-sm mb-2">4️⃣ Customer Care से जानकारी</h3>
           <ol class="space-y-2 text-sm text-gray-600 ml-4">
-            <li>• <a href={bank.website} target="_blank" rel="noopener noreferrer" class="text-brand-700 font-medium">{bank.shortName} net banking</a> में login करें</li>
-            <li>• "Profile" या "Settings" में जाएं</li>
-            <li>• "Update Mobile Number" option select करें</li>
-            <li>• नया number डालें, OTP verify करें</li>
+            <li>• <a href={`tel:${bank.customerCare}`} class="text-brand-700 font-medium">{bank.customerCare}</a> पर call करें</li>
+            <li>• अपना account detail देकर mobile number link का exact process पूछें</li>
+            <li>• वे branch/online/ATM में से कौन सा तरीका बताएंगे</li>
           </ol>
         </div>
       </div>

@@ -19,17 +19,66 @@ const siteUrl = 'https://balcheck.in';
 const canonicalUrl = `${siteUrl}/mini-statement/${bank.slug}/`;
 
 const hasDedicatedNumber = !!bank.missedCallAlt;
+const miniStatementNumber = hasDedicatedNumber ? bank.missedCallAlt! : bank.missedCall;
 
-const title = `${bank.shortName} Mini Statement Number — ${bank.nameHindi} Last 5 Transactions`;
-const description = `${bank.name} mini statement: ${hasDedicatedNumber ? `missed call to ${bank.missedCallAlt} for last 5 transactions.` : `missed call to ${bank.missedCall} or use SMS banking.`} Free mini statement check, 24×7।`;
+// ─── GSC-driven exact-query overrides ─────────────────────────────
+// Demand signal (28d GSC): mini-statement cluster = 3,151 impressions.
+//   BOI:  440 imp landing /bank/boi + 305+203+107 on /mini-statement/boi
+//   Axis: 67+56 imp around positions 10.9–11.9
+// Overrides target the exact H1/title/quick-answer text users search for,
+// without touching verified phone data or the scalable default template.
+interface QueryOverride {
+  /** Exact <title> tag text */
+  title: string;
+  /** Exact <h1> text */
+  h1: string;
+  /** Visible quick-answer paragraph in the CTA card body */
+  quickAnswer: string;
+  /** Override for the first FAQ Q (the "what is the number" question) */
+  faq1Question: string;
+  faq1Answer: string;
+  /** Meta description override (avoids claiming unverified numbers) */
+  description?: string;
+}
+
+const queryOverrides: Record<string, QueryOverride> = {
+  boi: {
+    title: `BOI Mini Statement Number: ${miniStatementNumber} — Bank of India Last 5 Transactions`,
+    h1: 'BOI Mini Statement Number',
+    quickAnswer: `BOI (Bank of India) का mini statement number ${miniStatementNumber} है। इस पर registered mobile से missed call देने पर SMS में last 5 transactions की जानकारी तुरंत मिलती है।`,
+    faq1Question: 'BOI mini statement number क्या है?',
+    faq1Answer: `Bank of India (BOI) का mini statement number ${miniStatementNumber} है। इस पर अपने registered mobile से missed call दें — 2-3 ring में call कट जाएगी और SMS में last 5 transactions की जानकारी आ जाएगी।`,
+    description: `Bank of India mini statement: missed call to ${miniStatementNumber} for last 5 transactions. Free BOI mini statement check, 24×7।`,
+  },
+  axis: {
+    title: `Axis Bank Mini Statement — Last 5 Transactions कैसे देखें`,
+    h1: 'Axis Bank Mini Statement',
+    quickAnswer: `Axis Bank के लिए अलग dedicated mini statement missed-call number official-source data में verified नहीं है। Last 5 transactions के लिए ATM (Mini Statement option), official net banking, या customer care ${bank.customerCare} का उपयोग करें। Balance enquiry number ${bank.missedCall} से केवल balance आता है, mini statement नहीं।`,
+    faq1Question: 'Axis Bank mini statement कैसे निकालें?',
+    faq1Answer: `Axis Bank के last 5 transactions देखने के लिए ATM में Mini Statement option या official net banking का उपयोग करें। अलग dedicated mini statement missed-call number verified नहीं है; सहायता के लिए ${bank.customerCare} पर संपर्क करें।`,
+  },
+};
+
+const override = queryOverrides[bank.slug];
+
+// ─── Title / Description ───────────────────────────────────────────
+const title = override?.title
+  ?? `${bank.shortName} Mini Statement Number — ${bank.nameHindi} Last 5 Transactions`;
+
+const description = override
+  ? `${bank.name} mini statement: missed call to ${miniStatementNumber} for last 5 transactions. Free mini statement check, 24×7।`
+  : `${bank.name} mini statement: ${hasDedicatedNumber ? `missed call to ${bank.missedCallAlt} for last 5 transactions.` : `missed call to ${bank.missedCall} or use SMS banking.`} Free mini statement check, 24×7।`;
+
+const h1Text = override?.h1 ?? `${bank.shortName} Mini Statement`;
+
+// ─── FAQs (with override for Q1 when present) ──────────────────────
+const faq1Q = override?.faq1Question ?? `${bank.shortName} का mini statement number क्या है?`;
+const faq1A = override?.faq1Answer ?? (hasDedicatedNumber
+  ? `${bank.name} का mini statement number ${bank.missedCallAlt} है। इस पर अपने registered mobile से missed call दें और SMS में last 5 transactions की जानकारी पाएं।`
+  : `${bank.name} के लिए mini statement के लिए ${bank.missedCall} पर missed call दें। कुछ बैंकों में balance और mini statement दोनों इसी number पर मिलते हैं। अगर अलग से नहीं मिलता तो ATM या net banking से mini statement देखें।`);
 
 const faqs = [
-  {
-    q: `${bank.shortName} का mini statement number क्या है?`,
-    a: hasDedicatedNumber
-      ? `${bank.name} का mini statement number ${bank.missedCallAlt} है। इस पर अपने registered mobile से missed call दें और SMS में last 5 transactions की जानकारी पाएं।`
-      : `${bank.name} के लिए mini statement के लिए ${bank.missedCall} पर missed call दें। कुछ बैंकों में balance और mini statement दोनों इसी number पर मिलते हैं। अगर अलग से नहीं मिलता तो ATM या net banking से mini statement देखें।`,
-  },
+  { q: faq1Q, a: faq1A },
   {
     q: `Mini statement में क्या जानकारी मिलती है?`,
     a: `Mini statement में आपके account के last 5 transactions की जानकारी होती है — deposit, withdrawal, transfer, UPI, ATM transaction आदि। हर transaction के साथ date और amount लिखा होता है। यह सेवा मुफ़्त है।`,
@@ -50,6 +99,11 @@ const faqs = [
   },
 ];
 
+// ─── Quick answer paragraph (visible in body, aligned with title) ──
+const quickAnswerText = override?.quickAnswer ?? (hasDedicatedNumber
+  ? `${bank.name} का dedicated mini statement number ${bank.missedCallAlt} है। इस पर registered mobile से missed call दें — SMS में last 5 transactions तुरंत मिलेंगे।`
+  : `${bank.name} के लिए ${bank.missedCall} पर missed call दें। अगर mini statement नहीं आता तो ATM या net banking से देखें।`);
+
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
@@ -58,7 +112,7 @@ const schema = {
       "name": `${bank.shortName} Mini Statement कैसे प्राप्त करें`,
       "description": `${bank.name} से mini statement (last 5 transactions) प्राप्त करने की विधि`,
       "step": [
-        { "@type": "HowToStep", "position": 1, "name": "Registered mobile से call करें", "text": `अपने ${bank.name} में registered mobile number से ${hasDedicatedNumber ? bank.missedCallAlt : bank.missedCall} पर missed call दें।` },
+        { "@type": "HowToStep", "position": 1, "name": "Registered mobile से call करें", "text": `अपने ${bank.name} में registered mobile number से ${miniStatementNumber} पर missed call दें।` },
         { "@type": "HowToStep", "position": 2, "name": "Call कटने का इंतज़ार करें", "text": `2-3 ring के बाद call अपने आप कट जाएगी।` },
         { "@type": "HowToStep", "position": 3, "name": "SMS प्राप्त करें", "text": `कुछ ही सेकंड में SMS में आपके last 5 transactions की जानकारी आ जाएगी।` },
       ],
@@ -100,20 +154,22 @@ const schema = {
 
     <!-- Header -->
     <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-6">
-      <h1 class="text-2xl font-bold mb-1">{bank.shortName} Mini Statement</h1>
+      <h1 class="text-2xl font-bold mb-1">{h1Text}</h1>
       <p class="text-brand-100 text-sm">{bank.nameHindi} — अंतिम 5 लेन-देन की जानकारी</p>
     </div>
 
-    <!-- Mini Statement CTA -->
+    <!-- Quick Answer + Mini Statement CTA -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
       <h2 class="text-lg font-semibold text-gray-900 mb-3">📄 Mini Statement प्राप्त करें</h2>
+      <!-- Quick answer — visible body text aligned with page title -->
+      <p class="text-gray-700 text-sm mb-3 leading-relaxed font-medium">{quickAnswerText}</p>
       <p class="text-gray-600 text-sm mb-4">
         अपने registered mobile number से नीचे दिए गए number पर missed call दें।
         SMS में आपके last 5 transactions की जानकारी आ जाएगी।
       </p>
-      <a href={`tel:${hasDedicatedNumber ? bank.missedCallAlt : bank.missedCall}`}
+      <a href={`tel:${miniStatementNumber}`}
          class="inline-flex items-center gap-2 bg-brand-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-brand-700 transition-colors">
-        <span>📞 {hasDedicatedNumber ? bank.missedCallAlt : bank.missedCall}</span>
+        <span>📞 {miniStatementNumber}</span>
       </a>
       {hasDedicatedNumber ? (
         <p class="text-xs text-gray-500 mt-3">
@@ -136,7 +192,7 @@ const schema = {
         </li>
         <li class="flex gap-3">
           <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">2</span>
-          <span>Registered mobile से {hasDedicatedNumber ? bank.missedCallAlt : bank.missedCall} पर missed call दें</span>
+          <span>Registered mobile से {miniStatementNumber} पर missed call दें</span>
         </li>
         <li class="flex gap-3">
           <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">3</span>
