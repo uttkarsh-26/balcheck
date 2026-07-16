@@ -41,15 +41,21 @@ Astro.response.headers.set('Cache-Control', 'public, s-maxage=3600, max-age=0, s
   <!-- Theme color -->
   <meta name="theme-color" content="#2563eb" />
 
-  <!-- Google Analytics (GA4) — deferred to next paint, not blocking -->
-  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+  <!-- Google Analytics (GA4) — production hostname only.
+       Dynamic loading prevents localhost/Playwright traffic from polluting GA4. -->
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-ZEL0FEF89W');
+    if (window.location.hostname === 'balcheck.in' || window.location.hostname === 'www.balcheck.in') {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ZEL0FEF89W');
+
+      const analyticsScript = document.createElement('script');
+      analyticsScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-ZEL0FEF89W';
+      analyticsScript.async = true;
+      document.head.appendChild(analyticsScript);
+    }
   </script>
-  <script src="https://www.googletagmanager.com/gtag/js?id=G-ZEL0FEF89W" defer></script>
 </head>
 <body class="bg-gray-50 font-hindi antialiased">
   <!-- Monetag Multitag (all-in-one monetization) -->
