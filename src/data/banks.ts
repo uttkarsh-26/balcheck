@@ -340,10 +340,11 @@ export const banks: Bank[] = [
     shortName: 'TMB',
     category: 'Private Sector',
     missedCall: '09211937373',
+    missedCallAlt: '09211947474',
     customerCare: '1800-425-4426',
     website: 'https://www.tmb.in',
     verified: true,
-    notes: 'Balance: 09211937373; Mini statement: 09211937474 (Source: tmb.in website footer.)',
+    notes: 'Balance: 09211937373; Mini statement (last 5 transactions): 09211947474 (Source: tmb.bank.in Missed-call-facility page.)',
   },
   {
     slug: 'csb',

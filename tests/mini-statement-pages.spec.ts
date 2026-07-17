@@ -42,3 +42,12 @@ test('Axis answers demand without mislabelling its balance number', async ({ pag
   await expect(answer).toContainText('verified नहीं');
   await expect(answer).toContainText(axis.customerCare);
 });
+
+test('TMB uses its official dedicated last-five-transactions number', async ({ page }) => {
+  const tmb = banks.find(bank => bank.slug === 'tmb')!;
+  expect(tmb.missedCallAlt).toBe('09211947474');
+  await page.goto('/mini-statement/tmb/');
+  await expect(page.locator('h1')).toHaveText('TMB Mini Statement');
+  await expect(page.locator('a[href="tel:09211947474"]').first()).toBeVisible();
+  await expect(page.locator('body')).toContainText('09211947474');
+});
