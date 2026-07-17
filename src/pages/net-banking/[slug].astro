@@ -19,8 +19,12 @@ const { bank } = Astro.props;
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = `${siteUrl}/net-banking/${bank.slug}/`;
 
-const title = `${bank.shortName} Net Banking Login — ${bank.nameHindi} Online Banking`;
-const description = `${bank.name} net banking login at ${bank.website}. Internet banking services: fund transfer, statement download, bill payment, FD/RD opening, loan application. 24×7 online banking.`;
+const title = bank.slug === 'tmb'
+  ? 'TMB Net Banking Login — TMB Netbanking Online Banking'
+  : `${bank.shortName} Net Banking Login — ${bank.nameHindi} Online Banking`;
+const description = bank.slug === 'tmb'
+  ? `TMB net banking login और TMB netbanking access के लिए official website ${bank.website} खोलें। Online banking registration, balance और statement सेवाएं।`
+  : `${bank.name} net banking login at ${bank.website}. Internet banking services: fund transfer, statement download, bill payment, FD/RD opening, loan application. 24×7 online banking.`;
 
 const faqs = [
   {
@@ -71,7 +75,7 @@ const schema = {
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": siteUrl },
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": `${siteUrl}/` },
         { "@type": "ListItem", "position": 2, "name": "Net Banking", "item": `${siteUrl}/net-banking/` },
         { "@type": "ListItem", "position": 3, "name": bank.shortName, "item": canonicalUrl },
       ],
@@ -91,6 +95,7 @@ const schema = {
       <span class="mx-1">›</span>
       <span class="text-gray-700">{bank.shortName}</span>
     </nav>
+
 
     <VideoHeroBanner
       src="/videos/balcheck-netbanking-hero.mp4"
@@ -194,7 +199,7 @@ const schema = {
     </div>
 
     <!-- Related Links -->
-    <div class="grid grid-cols-2 gap-3 mb-6">
+    <div class="grid grid-cols-2 gap-3 mb-3">
       <a href={`/bank/${bank.slug}/`}
          class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
         <p class="text-xs text-gray-500 mb-1">📞 Missed Call Balance</p>
@@ -204,6 +209,18 @@ const schema = {
          class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
         <p class="text-xs text-gray-500 mb-1">🎧 Customer Care</p>
         <p class="text-sm font-medium text-brand-700">{bank.shortName} Helpline →</p>
+      </a>
+    </div>
+    <div class="grid grid-cols-2 gap-3 mb-6">
+      <a href={`/sms-banking/${bank.slug}/`}
+         class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
+        <p class="text-xs text-gray-500 mb-1">📱 SMS Banking</p>
+        <p class="text-sm font-medium text-brand-700">{bank.shortName} SMS Services →</p>
+      </a>
+      <a href={`/balance-enquiry/${bank.slug}/`}
+         class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
+        <p class="text-xs text-gray-500 mb-1">💰 Balance Enquiry</p>
+        <p class="text-sm font-medium text-brand-700">{bank.shortName} All Methods →</p>
       </a>
     </div>
 

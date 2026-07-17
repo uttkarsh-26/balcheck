@@ -51,8 +51,14 @@ const collectionSchema = {
   },
 };
 
-const pageTitle = `${hindiName} मिस्ड कॉल बैलेंस नंबर — ${catBanks.length} बैंक | BalCheck.in`;
-const pageDesc = `सभी ${hindiName} के missed call balance enquiry numbers एक जगह। ${catBanks.length} बैंकों के नंबर। मुफ़्त और 24×7।`;
+// GSC-aligned title/description for cooperative-bank category
+const isCooperative = category === 'Cooperative Bank';
+const pageTitle = isCooperative
+  ? `Cooperative Bank Balance Check Number — सहकारी बैंक बैलेंस चेक नंबर | BalCheck.in`
+  : `${hindiName} मिस्ड कॉल बैलेंस नंबर — ${catBanks.length} बैंक | BalCheck.in`;
+const pageDesc = isCooperative
+  ? `सहकारी बैंक balance check number लिस्ट। ${catBanks.length} सहकारी बैंकों (Cosmos Bank, Saraswat Bank) के missed call balance enquiry numbers। मुफ़्त और 24×7।`
+  : `सभी ${hindiName} के missed call balance enquiry numbers एक जगह। ${catBanks.length} बैंकों के नंबर। मुफ़्त और 24×7।`;
 ---
 
 <Layout title={pageTitle} description={pageDesc}>
@@ -71,7 +77,7 @@ const pageDesc = `सभी ${hindiName} के missed call balance enquiry numb
 <!-- Header -->
 <section class="bg-gradient-to-b from-brand-50 to-white border-b border-gray-100">
   <div class="max-w-6xl mx-auto px-4 py-8 text-center">
-    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">{hindiName} मिस्ड कॉल बैलेंस नंबर</h1>
+    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">{isCooperative ? 'Cooperative Bank Balance Check Number — सहकारी बैंक' : `${hindiName} मिस्ड कॉल बैलेंस नंबर`}</h1>
     <p class="mt-2 text-gray-600">सभी {hindiName} के balance enquiry numbers एक जगह — {catBanks.length} बैंक</p>
   </div>
 </section>
@@ -108,6 +114,12 @@ const pageDesc = `सभी ${hindiName} के missed call balance enquiry numb
       </div>
     ))}
   </div>
+
+  {isCooperative && (
+    <div class="mt-8 prose prose-sm max-w-none text-gray-600">
+      <p>Cooperative bank balance check number की verified लिस्ट ऊपर दी गई है। अपने registered mobile से संबंधित सहकारी बैंक के missed-call number पर कॉल करें; कॉल कटने के बाद SMS में balance मिलता है। ऊपर बैंक कार्ड पर “कॉल करें” बटन दबाएं या नंबर सीधे dial करें।</p>
+    </div>
+  )}
 </main>
 
 <!-- Category Links -->

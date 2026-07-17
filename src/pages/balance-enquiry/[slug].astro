@@ -165,7 +165,7 @@ const schema = {
     </div>
 
     <!-- Related Links -->
-    <div class="grid grid-cols-2 gap-3 mb-6">
+    <div class="grid grid-cols-2 gap-3 mb-3">
       <a href={`/bank/${bank.slug}/`}
          class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
         <p class="text-xs text-gray-500 mb-1">📞 Balance Check</p>
@@ -175,6 +175,18 @@ const schema = {
          class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
         <p class="text-xs text-gray-500 mb-1">🎧 Customer Care</p>
         <p class="text-sm font-medium text-brand-700">{bank.shortName} Helpline →</p>
+      </a>
+    </div>
+    <div class="grid grid-cols-2 gap-3 mb-6">
+      <a href={`/sms-banking/${bank.slug}/`}
+         class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
+        <p class="text-xs text-gray-500 mb-1">📱 SMS Banking</p>
+        <p class="text-sm font-medium text-brand-700">{bank.shortName} SMS Services →</p>
+      </a>
+      <a href={`/mini-statement/${bank.slug}/`}
+         class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
+        <p class="text-xs text-gray-500 mb-1">📄 Mini Statement</p>
+        <p class="text-sm font-medium text-brand-700">{bank.shortName} Last 5 Txns →</p>
       </a>
     </div>
 
