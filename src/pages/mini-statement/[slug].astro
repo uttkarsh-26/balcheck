@@ -82,6 +82,14 @@ const queryOverrides: Record<string, QueryOverride> = {
     faq1Answer: `Federal Bank के last 5 transactions देखने के लिए: 1) SMS banking से (format bank के SMS banking page पर देखें), 2) FedMobile app, 3) ATM से Mini Statement option, 4) Net banking से। अलग dedicated mini statement missed-call number verified नहीं है; सहायता के लिए ${bank.customerCare} पर संपर्क करें।`,
     description: `Federal Bank mini statement के last transactions official SMS banking, FedMobile, ATM या net banking से देखें। Dedicated missed-call number verified नहीं है।`,
   },
+  iob: {
+    title: `IOB Mini Statement — Indian Overseas Bank Last 5 Transactions कैसे देखें`,
+    h1: 'IOB Mini Statement',
+    quickAnswer: `Indian Overseas Bank (IOB) के लिए अलग dedicated mini statement missed-call number official-source data में verified नहीं है। Last transactions के लिए IOB mobile app, ATM, official net banking, या customer care ${bank.customerCare} का उपयोग करें। Balance enquiry number ${bank.missedCall} से केवल balance आता है, mini statement नहीं।`,
+    faq1Question: 'IOB mini statement कैसे निकालें?',
+    faq1Answer: `Indian Overseas Bank के last transactions देखने के लिए IOB mobile app, ATM के Mini Statement option या official net banking का उपयोग करें। अलग dedicated mini statement missed-call number verified नहीं है; सहायता के लिए ${bank.customerCare} पर संपर्क करें।`,
+    description: `IOB mini statement: Last transactions mobile app, ATM या official net banking से देखें। Dedicated missed-call mini-statement number verified नहीं है।`,
+  },
 };
 
 const override = queryOverrides[bank.slug];

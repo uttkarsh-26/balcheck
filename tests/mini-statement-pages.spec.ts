@@ -92,3 +92,34 @@ test('Net-banking pages have GSC-matched titles for SIB and Nainital', async ({ 
   await page.goto('/net-banking/nainital/');
   await expect(page).toHaveTitle(/^Nainital Bank Net Banking Login/);
 });
+
+test('IOB data has verified official numbers from iob.in', () => {
+  const iob = banks.find(bank => bank.slug === 'iob')!;
+  expect(iob.missedCall).toBe('9210622122');
+  expect(iob.missedCallAlt).toBeUndefined();
+  expect(iob.customerCare).toBe('1800-425-4445');
+  // The old wrong customer care number must not be present
+  expect(iob.customerCare).not.toBe('1800-425-4411');
+  expect(iob.verified).toBe(true);
+});
+
+
+test('IOB bank page has GSC-matched title', async ({ page }) => {
+  await page.goto('/bank/iob/');
+  await expect(page).toHaveTitle(/^Indian Overseas Bank/);
+  const iob = banks.find(bank => bank.slug === 'iob')!;
+  await expect(page).toHaveTitle(new RegExp(iob.missedCall));
+});
+
+test('IOB mini-statement page does not claim balance number gives mini statement', async ({ page }) => {
+  const iob = banks.find(bank => bank.slug === 'iob')!;
+  await page.goto('/mini-statement/iob/');
+  await expect(page).toHaveTitle(/^IOB Mini Statement/);
+  await expect(page.locator('h1')).toHaveText('IOB Mini Statement');
+  // Must NOT claim the balance number is a mini-statement number in the title
+  await expect(page).not.toHaveTitle(new RegExp(iob.missedCall));
+  const answer = page.locator('.bg-white.rounded-xl').first();
+  await expect(answer).toContainText('verified नहीं');
+  await expect(answer).toContainText(iob.customerCare);
+  await expect(page.locator('body')).not.toContainText('8424022122');
+});

@@ -150,9 +150,10 @@ export const banks: Bank[] = [
     shortName: 'IOB',
     category: 'Public Sector',
     missedCall: '9210622122',
-    customerCare: '1800-425-4411',
+    customerCare: '1800-425-4445', // Source: iob.bank.in/en/contact-us — "Toll Free No. 1800 890 4445 | 1800 425 4445"
     website: 'https://www.iob.in',
     verified: true,
+    notes: 'Balance enquiry missed call: 9210622122 (Source: iob.in Grievances_Redressal_mechanism). Customer care: 1800-425-4445 (Source: iob.bank.in/en/contact-us). No dedicated mini-statement missed-call number verified.',
   },
   {
     slug: 'idbi',
