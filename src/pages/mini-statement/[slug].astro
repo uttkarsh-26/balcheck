@@ -56,6 +56,31 @@ const queryOverrides: Record<string, QueryOverride> = {
     quickAnswer: `Axis Bank के लिए अलग dedicated mini statement missed-call number official-source data में verified नहीं है। Last 5 transactions के लिए ATM (Mini Statement option), official net banking, या customer care ${bank.customerCare} का उपयोग करें। Balance enquiry number ${bank.missedCall} से केवल balance आता है, mini statement नहीं।`,
     faq1Question: 'Axis Bank mini statement कैसे निकालें?',
     faq1Answer: `Axis Bank के last 5 transactions देखने के लिए ATM में Mini Statement option या official net banking का उपयोग करें। अलग dedicated mini statement missed-call number verified नहीं है; सहायता के लिए ${bank.customerCare} पर संपर्क करें।`,
+    description: `Axis Bank mini statement के last transactions ATM, official net banking या customer care से देखें। Dedicated mini-statement missed-call number verified नहीं है।`,
+  },
+  kvb: {
+    title: `KVB Mini Statement Number: ${miniStatementNumber} — Karur Vysya Last 3 Transactions`,
+    h1: 'KVB Mini Statement Number',
+    quickAnswer: `KVB (Karur Vysya Bank) का mini statement number ${miniStatementNumber} है। इस पर registered mobile से missed call देने पर SMS में last 3 transactions की जानकारी तुरंत मिलती है। (Source: kvb.bank.in)`,
+    faq1Question: 'KVB mini statement number क्या है?',
+    faq1Answer: `Karur Vysya Bank (KVB) का mini statement number ${miniStatementNumber} है। इस पर अपने registered mobile से missed call दें — SMS में last 3 transactions की जानकारी आ जाएगी। अलग से balance check के लिए ${bank.missedCall} पर call करें।`,
+    description: `Karur Vysya Bank mini statement: missed call to ${miniStatementNumber} for last 3 transactions. Free KVB mini statement check, 24×7।`,
+  },
+  tmb: {
+    title: `TMB Mini Statement Number: ${miniStatementNumber} — Tamilnad Mercantile Last 5 Transactions`,
+    h1: 'TMB Mini Statement Number',
+    quickAnswer: `TMB (Tamilnad Mercantile Bank) का mini statement number ${miniStatementNumber} है। इस पर registered mobile से missed call देने पर SMS में last 5 transactions की जानकारी तुरंत मिलती है। (Source: tmb.bank.in)`,
+    faq1Question: 'TMB mini statement number क्या है?',
+    faq1Answer: `Tamilnad Mercantile Bank (TMB) का mini statement number ${miniStatementNumber} है। इस पर अपने registered mobile से missed call दें — SMS में last 5 transactions की जानकारी आ जाएगी। अलग से balance check के लिए ${bank.missedCall} पर call करें।`,
+    description: `Tamilnad Mercantile Bank mini statement: missed call to ${miniStatementNumber} for last 5 transactions. Free TMB mini statement check, 24×7।`,
+  },
+  federal: {
+    title: `Federal Bank Mini Statement — Last 5 Transactions कैसे देखें`,
+    h1: 'Federal Bank Mini Statement',
+    quickAnswer: `Federal Bank के लिए अलग dedicated mini statement missed-call number official-source data में verified नहीं है। Last 5 transactions के लिए official SMS banking instructions, FedMobile app, ATM, net banking, या customer care ${bank.customerCare} का उपयोग करें। Balance enquiry number ${bank.missedCall} से केवल balance आता है।`,
+    faq1Question: 'Federal Bank mini statement कैसे निकालें?',
+    faq1Answer: `Federal Bank के last 5 transactions देखने के लिए: 1) SMS banking से (format bank के SMS banking page पर देखें), 2) FedMobile app, 3) ATM से Mini Statement option, 4) Net banking से। अलग dedicated mini statement missed-call number verified नहीं है; सहायता के लिए ${bank.customerCare} पर संपर्क करें।`,
+    description: `Federal Bank mini statement के last transactions official SMS banking, FedMobile, ATM या net banking से देखें। Dedicated missed-call number verified नहीं है।`,
   },
 };
 
@@ -65,9 +90,8 @@ const override = queryOverrides[bank.slug];
 const title = override?.title
   ?? `${bank.shortName} Mini Statement Number — ${bank.nameHindi} Last 5 Transactions`;
 
-const description = override
-  ? `${bank.name} mini statement: missed call to ${miniStatementNumber} for last 5 transactions. Free mini statement check, 24×7।`
-  : `${bank.name} mini statement: ${hasDedicatedNumber ? `missed call to ${bank.missedCallAlt} for last 5 transactions.` : `missed call to ${bank.missedCall} or use SMS banking.`} Free mini statement check, 24×7।`;
+const description = override?.description
+  ?? `${bank.name} mini statement: ${hasDedicatedNumber ? `missed call to ${bank.missedCallAlt} for recent transactions.` : `use ATM, official net banking or mobile banking for recent transactions; a dedicated missed-call number is not verified.`}`;
 
 const h1Text = override?.h1 ?? `${bank.shortName} Mini Statement`;
 
@@ -86,12 +110,14 @@ const faqs = [
   {
     q: `${bank.shortName} mini statement के लिए क्या करना होगा?`,
     a: hasDedicatedNumber
-      ? `अपने registered mobile से ${bank.missedCallAlt} पर missed call दें। 2-3 ring में कट जाएगी और SMS में last 5 transactions आ जाएंगे।`
-      : `अपने registered mobile से ${bank.missedCall} पर missed call दें। अगर mini statement नहीं आता तो ATM में जाकर "Mini Statement" option select करें या ${bank.website} पर net banking से देखें।`,
+      ? `अपने registered mobile से ${bank.missedCallAlt} पर missed call दें। 2-3 ring में कट जाएगी और SMS में recent transactions आ जाएंगे।`
+      : `अलग dedicated mini-statement missed-call number verified नहीं है। ATM में "Mini Statement" option चुनें या ${bank.website} पर official net banking/mobile banking से recent transactions देखें।`,
   },
   {
     q: `क्या mini statement सेवा मुफ़्त है?`,
-    a: `हाँ, missed call से mini statement प्राप्त करना पूरी तरह मुफ़्त है। कोई charge नहीं लगता। बस आपका mobile number ${bank.name} में registered होना चाहिए। अगर registered नहीं है तो nearest branch में जाकर mobile number register कराएं।`,
+    a: hasDedicatedNumber
+      ? `हाँ, verified missed-call mini statement सेवा मुफ़्त है। आपका mobile number ${bank.name} में registered होना चाहिए।`
+      : `ATM या official digital banking से mini statement देखने पर सामान्यतः अलग शुल्क नहीं लगता, लेकिन सेवा और account type के नियम ${bank.name} की official website पर जांचें।`,
   },
   {
     q: `Mini statement SMS नहीं आया तो क्या करें?`,

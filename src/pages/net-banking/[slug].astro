@@ -19,12 +19,29 @@ const { bank } = Astro.props;
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = `${siteUrl}/net-banking/${bank.slug}/`;
 
-const title = bank.slug === 'tmb'
-  ? 'TMB Net Banking Login — TMB Netbanking Online Banking'
-  : `${bank.shortName} Net Banking Login — ${bank.nameHindi} Online Banking`;
-const description = bank.slug === 'tmb'
-  ? `TMB net banking login और TMB netbanking access के लिए official website ${bank.website} खोलें। Online banking registration, balance और statement सेवाएं।`
-  : `${bank.name} net banking login at ${bank.website}. Internet banking services: fund transfer, statement download, bill payment, FD/RD opening, loan application. 24×7 online banking.`;
+// GSC-driven overrides for high-impression net-banking pages.
+// Demand signal (28d GSC): SIB 151 imp (sib login, sibnet banking),
+// Nainital 181 imp (nainital net banking), TMB 471 imp (tmb net banking).
+const netBankingOverrides: Record<string, { title: string; description: string }> = {
+  tmb: {
+    title: 'TMB Net Banking Login — TMB Netbanking Online Banking',
+    description: `TMB net banking login और TMB netbanking access के लिए official website ${bank.website} खोलें। Online banking registration, balance और statement सेवाएं।`,
+  },
+  sib: {
+    title: 'SIB Net Banking Login — South Indian Bank SIBnet Online Banking',
+    description: `SIB net banking login और SIBnet banking access के लिए ${bank.website} खोलें। South Indian Bank online registration, balance check और fund transfer सेवाएं। 24×7।`,
+  },
+  nainital: {
+    title: 'Nainital Bank Net Banking Login — Online Banking Registration',
+    description: `Nainital Bank net banking login के लिए ${bank.website} पर जाएं। Online banking registration, balance enquiry और fund transfer सेवाएं। 24×7 internet banking।`,
+  },
+};
+
+const override = netBankingOverrides[bank.slug];
+const title = override?.title
+  ?? `${bank.shortName} Net Banking Login — ${bank.nameHindi} Online Banking`;
+const description = override?.description
+  ?? `${bank.name} net banking login at ${bank.website}. Internet banking services: fund transfer, statement download, bill payment, FD/RD opening, loan application. 24×7 online banking.`;
 
 const faqs = [
   {

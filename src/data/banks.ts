@@ -318,6 +318,7 @@ export const banks: Bank[] = [
     shortName: 'KVB',
     category: 'Private Sector',
     missedCall: '09266292666',
+    missedCallAlt: '09266292665', // mini statement (last 3 transactions) — Source: kvb.bank.in/ways-to-bank/missed-call-banking/
     customerCare: '1860-200-1913',
     website: 'https://www.kvb.co.in',
     verified: true,

@@ -47,7 +47,48 @@ test('TMB uses its official dedicated last-five-transactions number', async ({ p
   const tmb = banks.find(bank => bank.slug === 'tmb')!;
   expect(tmb.missedCallAlt).toBe('09211947474');
   await page.goto('/mini-statement/tmb/');
-  await expect(page.locator('h1')).toHaveText('TMB Mini Statement');
+  await expect(page.locator('h1')).toHaveText('TMB Mini Statement Number');
+  await expect(page).toHaveTitle(/^TMB Mini Statement Number/);
+  await expect(page).toHaveTitle(new RegExp(tmb.missedCallAlt!));
   await expect(page.locator('a[href="tel:09211947474"]').first()).toBeVisible();
   await expect(page.locator('body')).toContainText('09211947474');
+});
+
+test('KVB shows its verified dedicated mini-statement number (last 3 transactions)', async ({ page }) => {
+  const kvb = banks.find(bank => bank.slug === 'kvb')!;
+  expect(kvb.missedCallAlt).toBe('09266292665');
+  await page.goto('/mini-statement/kvb/');
+  await expect(page).toHaveTitle(/^KVB Mini Statement Number/);
+  await expect(page).toHaveTitle(new RegExp(kvb.missedCallAlt!));
+  await expect(page.locator('h1')).toHaveText('KVB Mini Statement Number');
+  await expect(page.locator('a[href="tel:09266292665"]').first()).toBeVisible();
+  // Must mention "last 3" because KVB returns 3 transactions, not 5
+  await expect(page.locator('body')).toContainText('last 3 transactions');
+  await expect(page.locator('body')).toContainText('09266292665');
+});
+
+test('Federal mini-statement page does not claim balance number gives mini statement', async ({ page }) => {
+  const federal = banks.find(bank => bank.slug === 'federal')!;
+  await page.goto('/mini-statement/federal/');
+  await expect(page).toHaveTitle(/^Federal Bank Mini Statement/);
+  await expect(page.locator('h1')).toHaveText('Federal Bank Mini Statement');
+  // Must NOT claim the balance number is a mini-statement number
+  await expect(page).not.toHaveTitle(new RegExp(federal.missedCall));
+  const answer = page.locator('.bg-white.rounded-xl').first();
+  await expect(answer).toContainText('verified नहीं');
+  await expect(answer).toContainText(federal.customerCare);
+});
+
+test('KVB data has separate balance and mini-statement numbers', () => {
+  const kvb = banks.find(bank => bank.slug === 'kvb')!;
+  expect(kvb.missedCall).toBe('09266292666');
+  expect(kvb.missedCallAlt).toBe('09266292665');
+  expect(kvb.missedCall).not.toBe(kvb.missedCallAlt);
+});
+
+test('Net-banking pages have GSC-matched titles for SIB and Nainital', async ({ page }) => {
+  await page.goto('/net-banking/sib/');
+  await expect(page).toHaveTitle(/^SIB Net Banking Login/);
+  await page.goto('/net-banking/nainital/');
+  await expect(page).toHaveTitle(/^Nainital Bank Net Banking Login/);
 });
