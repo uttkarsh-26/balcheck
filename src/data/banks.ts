@@ -11,13 +11,16 @@ export interface Bank {
   category: 'Public Sector' | 'Private Sector' | 'Small Finance Bank' | 'Payments Bank' | 'Foreign Bank' | 'Cooperative Bank' | 'Regional Rural Bank';
   missedCall: string;
   missedCallAlt?: string;
+  balanceMode: 'missed-call' | 'customer-care' | 'ivr';
   customerCare: string;
   website: string;
   notes?: string;
   verified?: boolean; // true = confirmed from official source, false/undefined = unverified
 }
 
-export const banks: Bank[] = [
+type BankInput = Omit<Bank, 'balanceMode'> & { balanceMode?: Bank['balanceMode'] };
+
+const bankData: BankInput[] = [
   // === Public Sector Banks ===
   {
     slug: 'sbi',
@@ -939,6 +942,17 @@ export const banks: Bank[] = [
     verified: true,
   },
 ];
+
+const digits = (value: string) => value.replace(/\D/g, '');
+
+// Conservative default: when the same number is stored for balance enquiry and
+// customer care, do not present it as a missed-call facility without a distinct
+// official number. This prevents toll-free/IVR lines being mislabeled at scale.
+export const banks: Bank[] = bankData.map(bank => ({
+  ...bank,
+  balanceMode: bank.balanceMode
+    ?? (digits(bank.missedCall) === digits(bank.customerCare) ? 'customer-care' : 'missed-call'),
+}));
 
 export const categories = [
   'Public Sector',

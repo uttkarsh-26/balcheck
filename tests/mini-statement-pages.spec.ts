@@ -13,11 +13,12 @@ for (const bank of cases) {
     await expect(page.locator('h1')).toHaveCount(1);
     await expect(page.locator('h1')).toContainText(bank.shortName);
     await expect(page.locator('body')).toContainText(bank.customerCare);
-    const expectedNumber = bank.missedCallAlt ?? bank.missedCall;
+    const expectedNumber = bank.missedCallAlt ?? bank.customerCare;
     await expect(page.locator(`a[href="tel:${expectedNumber}"]`).first()).toBeVisible();
 
     const scripts = await getJsonLdScripts(page);
-    expect(findSchema(scripts, 'HowTo')).toBeDefined();
+    if (bank.missedCallAlt) expect(findSchema(scripts, 'HowTo')).toBeDefined();
+    else expect(findSchema(scripts, 'HowTo')).toBeUndefined();
     expect(findSchema(scripts, 'FAQPage')).toBeDefined();
     expect(findSchema(scripts, 'BreadcrumbList')).toBeDefined();
   });

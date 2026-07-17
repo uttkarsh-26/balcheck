@@ -12,6 +12,7 @@ export function getStaticPaths() {
 
 interface Props { bank: Bank }
 const { bank } = Astro.props;
+const isMissedCall = bank.balanceMode === 'missed-call';
 
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = `${siteUrl}/customer-care/${bank.slug}/`;
@@ -25,11 +26,11 @@ const related = banks
 const faqs = [
   {
     q: `${bank.shortName} customer care number क्या है?`,
-    a: `${bank.name} (${bank.shortName}) का customer care number ${bank.customerCare} है। बैंकिंग समस्या, missed call balance enquiry, card blocking या account help के लिए इस नंबर पर संपर्क करें।`,
+    a: `${bank.name} (${bank.shortName}) का customer care number ${bank.customerCare} है। बैंकिंग समस्या, balance enquiry, card blocking या account help के लिए इस नंबर पर संपर्क करें।`,
   },
   {
     q: `${bank.nameHindi} में बैलेंस enquiry काम नहीं कर रही तो क्या करें?`,
-    a: `पहले जांचें कि आपका मोबाइल नंबर बैंक खाते से रजिस्टर्ड है। अगर ${bank.missedCall} पर missed call देने के बाद SMS नहीं आता, तो ${bank.customerCare} पर customer care से संपर्क करें।`,
+    a: isMissedCall ? `पहले जांचें कि mobile registered है। ${bank.missedCall} पर missed call के बाद SMS नहीं आए तो ${bank.customerCare} पर संपर्क करें।` : `${bank.missedCall} Customer Care / IVR number है। Call करके balance enquiry विकल्प चुनें या bank representative से सहायता लें।`,
   },
   {
     q: `${bank.shortName} की आधिकारिक वेबसाइट क्या है?`,
@@ -45,7 +46,7 @@ const phoneSchema = {
   '@context': 'https://schema.org',
   '@type': 'ContactPage',
   name: `${bank.name} Customer Care Number`,
-  description: `${bank.name} customer care number ${bank.customerCare} और missed call balance number ${bank.missedCall}.`,
+  description: `${bank.name} customer care number ${bank.customerCare} और balance enquiry number ${bank.missedCall}.`,
   url: canonicalUrl,
   mainEntity: {
     '@type': 'BankOrCreditUnion',
@@ -78,7 +79,7 @@ const breadcrumbSchema = {
 };
 
 const pageTitle = `${bank.nameHindi} Customer Care Number ${bank.customerCare} | ${bank.shortName} Helpline`;
-const pageDesc = `${bank.name} (${bank.shortName}) customer care number ${bank.customerCare}. Missed call balance number ${bank.missedCall}, official website और help details एक जगह।`;
+const pageDesc = `${bank.name} (${bank.shortName}) customer care number ${bank.customerCare}. Balance enquiry number ${bank.missedCall}, official website और help details एक जगह।`;
 ---
 
 <Layout title={pageTitle} description={pageDesc}>
@@ -120,7 +121,7 @@ const pageDesc = `${bank.name} (${bank.shortName}) customer care number ${bank.c
 <main class="max-w-4xl mx-auto px-4 py-8">
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
     <a href={`/bank/${bank.slug}/`} class="bg-white rounded-xl border border-gray-200 p-4 hover:border-brand-300 transition-colors">
-      <p class="text-xs text-gray-500 font-medium mb-1">📞 Missed Call Balance Number</p>
+      <p class="text-xs text-gray-500 font-medium mb-1">📞 {isMissedCall ? 'Missed Call Balance Number' : 'Customer Care / IVR Balance Enquiry'}</p>
       <span class="text-xl font-bold text-gray-900">{bank.missedCall}</span>
       <p class="text-xs text-brand-600 mt-2">Balance check page देखें →</p>
     </a>

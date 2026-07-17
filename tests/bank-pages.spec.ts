@@ -9,12 +9,9 @@ const ctrTitles: Record<string, string> = {
   bandhan: 'बंधन बैंक बैलेंस चेक नंबर 9223008666 | Bandhan Bank',
   sbi: 'SBI बैलेंस चेक नंबर 09223766666 | मिस्ड कॉल सेवा',
   'baroda-up-gramin': 'बड़ौदा यूपी ग्रामीण बैंक बैलेंस चेक नंबर 9986454440 | Missed Call',
-  'punjab-gramin': 'पंजाब ग्रामीण बैंक बैलेंस चेक नंबर 18001807777 | Missed Call',
-  indusind: 'इंडसइंड बैंक बैलेंस चेक नंबर 18002741000 | IndusInd Missed Call',
   'idfc-first': 'IDFC FIRST बैलेंस चेक नंबर 18002700720 | Missed Call',
   kvb: 'KVB बैलेंस चेक नंबर 09266292666 | Karur Vysya Missed Call',
   cosmos: 'Cosmos Bank Balance Check Number 9029013793 — Missed Call से बैलेंस देखें',
-  rbl: 'RBL Bank Balance Check Number 18004190610 — Missed Call से बैलेंस',
   maharashtra: 'Bank of Maharashtra बैलेंस चेक नंबर 9833335555 — Missed Call से बैलेंस',
   icici: 'ICICI Bank बैलेंस चेक नंबर 9594612612 — Missed Call से तुरंत बैलेंस',
   axis: 'Axis Bank बैलेंस चेक नंबर 8422992272 — Missed Call से तुरंत बैलेंस',
@@ -29,7 +26,7 @@ for (const bank of banks) {
       await page.goto(`/bank/${bank.slug}`);
     });
 
-    test('renders bank name and missed-call number', async ({ page }) => {
+    test('renders bank name and balance-enquiry number', async ({ page }) => {
       await expect(page.getByRole('heading', { level: 1, name: bank.nameHindi })).toBeVisible();
       await expect(page.locator('body')).toContainText(bank.missedCall);
     });

@@ -15,6 +15,7 @@ interface Props {
 }
 
 const { bank } = Astro.props;
+const isMissedCall = bank.balanceMode === 'missed-call';
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = `${siteUrl}/mobile-number-registration/${bank.slug}/`;
 
@@ -86,7 +87,7 @@ const faqs = [
   },
   {
     q: `Mobile number registered है या नहीं कैसे check करें?`,
-    a: `Mobile number registered है या नहीं check करने के लिए ${bank.missedCall} पर missed call दें। अगर SMS आता है तो number registered है। अगर SMS नहीं आता तो number registered नहीं है — branch में जाकर register कराएं। सहायता के लिए customer care ${bank.customerCare} पर call करें।`,
+    a: isMissedCall ? `Registered mobile से ${bank.missedCall} पर missed call दें। SMS आने पर service registration active है; SMS न आना registration failure का पक्का प्रमाण नहीं है। Customer care ${bank.customerCare} से confirm करें।` : `Mobile registration status official app, ATM, branch या customer care ${bank.customerCare} से confirm करें। ${bank.missedCall} dedicated missed-call service नहीं है।`,
   },
   {
     q: `Mobile number change करने में कितना समय लगता है?`,
@@ -158,8 +159,8 @@ const schema = {
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
       <h2 class="text-lg font-semibold text-gray-900 mb-3">📱 Mobile Number क्यों Register कराएं?</h2>
       <ul class="space-y-2 text-sm text-gray-700">
-        <li class="flex gap-2"><span class="text-brand-600">✓</span> Missed call balance check — {bank.missedCall} पर call करके balance पाएं</li>
-        <li class="flex gap-2"><span class="text-brand-600">✓</span> SMS banking और mini statement</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> Balance enquiry — {isMissedCall ? `${bank.missedCall} पर missed call` : 'official app, ATM या Customer Care / IVR'}</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> Bank द्वारा उपलब्ध SMS banking और statement services</li>
         <li class="flex gap-2"><span class="text-brand-600">✓</span> Transaction alerts — हर deposit/withdrawal की SMS</li>
         <li class="flex gap-2"><span class="text-brand-600">✓</span> UPI और mobile banking app का उपयोग</li>
         <li class="flex gap-2"><span class="text-brand-600">✓</span> OTP verification — net banking और online transactions के लिए</li>
@@ -230,11 +231,17 @@ const schema = {
     <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-6">
       <h2 class="text-lg font-semibold text-blue-900 mb-3">✅ Mobile Number Registered है या नहीं?</h2>
       <p class="text-sm text-blue-800 mb-3">
-        Check करने के लिए अपने mobile से <strong>{bank.missedCall}</strong> पर missed call दें।
+        {isMissedCall ? <>Registered mobile से <strong>{bank.missedCall}</strong> पर missed call देकर service check करें।</> : <>Registration status official app, ATM, branch या <strong>{bank.customerCare}</strong> customer care से confirm करें।</>}
       </p>
       <ul class="space-y-1 text-sm text-blue-800">
-        <li>✓ SMS आता है → number registered है</li>
-        <li>✗ SMS नहीं आता → number registered नहीं है, branch में जाएं</li>
+        {isMissedCall ? (
+          <>
+            <li>✓ SMS आता है → service registration active है</li>
+            <li>✗ SMS नहीं आता → network/service issue भी हो सकता है; bank से confirm करें</li>
+          </>
+        ) : (
+          <li>✓ Bank app, ATM, branch या customer care की confirmation को authoritative मानें</li>
+        )}
       </ul>
       <a href={`tel:${bank.missedCall}`}
          class="mt-3 inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
@@ -271,7 +278,7 @@ const schema = {
     <div class="grid grid-cols-2 gap-3 mb-6">
       <a href={`/bank/${bank.slug}/`}
          class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
-        <p class="text-xs text-gray-500 mb-1">📞 Missed Call Balance</p>
+        <p class="text-xs text-gray-500 mb-1">📞 {isMissedCall ? 'Missed Call Balance' : 'Customer Care / IVR Balance'}</p>
         <p class="text-sm font-medium text-brand-700">{bank.shortName} Balance Check →</p>
       </a>
       <a href={`/customer-care/${bank.slug}/`}

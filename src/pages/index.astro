@@ -142,7 +142,7 @@ const bankingServices = [
           <!-- Missed Call Number -->
           <a href={`tel:${bank.missedCall}`} class="block">
             <div class="bg-brand-50 rounded-lg p-3 mb-3 hover:bg-brand-100 transition-colors">
-              <p class="text-xs text-brand-700 font-medium mb-1">📞 मिस्ड कॉल नंबर</p>
+              <p class="text-xs text-brand-700 font-medium mb-1">📞 {bank.balanceMode === 'missed-call' ? 'मिस्ड कॉल नंबर' : 'Customer Care / IVR'}</p>
               <span class="text-xl font-bold text-brand-700 tracking-wide">{bank.missedCall}</span>
             </div>
           </a>
@@ -157,7 +157,7 @@ const bankingServices = [
               कॉल करें
             </a>
             <a
-              href={`https://wa.me/?text=${encodeURIComponent(`${bank.nameHindi} का बैलेंस चेक नंबर: ${bank.missedCall} — ${siteUrl}/bank/${bank.slug}/`)}`}
+              href={`https://wa.me/?text=${encodeURIComponent(`${bank.nameHindi} का बैलेंस enquiry नंबर: ${bank.missedCall}${bank.balanceMode === 'missed-call' ? ' (missed call)' : ' (customer care/IVR)'} — ${siteUrl}/bank/${bank.slug}/`)}`}
               target="_blank"
               rel="noopener"
               class="flex items-center justify-center w-11 h-11 bg-green-50 hover:bg-green-100 active:bg-green-200 text-green-600 rounded-lg transition-colors shrink-0"

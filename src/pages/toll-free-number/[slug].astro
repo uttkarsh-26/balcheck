@@ -15,6 +15,7 @@ interface Props {
 }
 
 const { bank } = Astro.props;
+const isMissedCall = bank.balanceMode === 'missed-call';
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = `${siteUrl}/toll-free-number/${bank.slug}/`;
 
@@ -24,7 +25,7 @@ const description = `${bank.name} (${bank.shortName}) toll free customer care nu
 const faqs = [
   {
     q: `${bank.shortName} toll free number क्या है?`,
-    a: `${bank.name} का toll free customer care number ${bank.customerCare} है। बैंकिंग समस्या, missed call balance enquiry, card blocking या account help के लिए इस नंबर पर संपर्क करें।`,
+    a: `${bank.name} का toll free customer care number ${bank.customerCare} है। बैंकिंग समस्या, balance enquiry, card blocking या account help के लिए इस नंबर पर संपर्क करें।`,
   },
   {
     q: `${bank.nameHindi} का customer care number क्या है?`,
@@ -50,7 +51,7 @@ const schema = {
     {
       "@type": "ContactPage",
       "name": `${bank.name} Toll Free Customer Care Number`,
-      "description": `${bank.name} toll free customer care number ${bank.customerCare} और missed call balance number ${bank.missedCall}.`,
+      "description": `${bank.name} toll free customer care number ${bank.customerCare} और balance enquiry number ${bank.missedCall}.`,
       "url": canonicalUrl,
       "mainEntity": {
         "@type": "BankOrCreditUnion",
@@ -135,7 +136,7 @@ const schema = {
     <!-- Balance Check Number -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
       <h2 class="text-lg font-semibold text-gray-900 mb-3">📞 Balance Check Number</h2>
-      <p class="text-gray-600 text-sm mb-3">{bank.shortName} का missed call balance number:</p>
+      <p class="text-gray-600 text-sm mb-3">{bank.shortName} का {isMissedCall ? 'missed call balance number' : 'Customer Care / IVR balance enquiry number'}:</p>
       <a href={`tel:${bank.missedCall}`}
          class="inline-flex items-center gap-2 text-2xl font-bold text-brand-700">
         {bank.missedCall}
