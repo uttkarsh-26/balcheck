@@ -19,9 +19,18 @@ test('fallback bank and balance pages never present customer care as missed call
     await expect(primary).not.toContainText(/missed call/i);
 
     await page.goto(`/balance-enquiry/${slug}/`);
-    const service = page.locator('[data-testid="balance-enquiry-service"]');
-    await expect(service).toContainText(/Customer Care|IVR/);
-    await expect(service).not.toContainText(/missed call/i);
+    const section = page.getByTestId('balance-enquiry-service');
+    await expect(section).toContainText('Customer Care / IVR');
+    await expect(section).not.toContainText(/missed call/i);
+    const hero = page.getByTestId('balance-enquiry-hero');
+    await expect(hero).toContainText('Customer Care / IVR');
+    await expect(hero).not.toContainText(/missed call|मिस्ड कॉल/i);
+
+    for (const route of ['customer-care', 'toll-free-number']) {
+      await page.goto(`/${route}/${slug}/`);
+      await expect(page.locator('body')).not.toContainText('Missed call balance SMS नहीं आया');
+      await expect(page.locator('body')).toContainText(/Balance enquiry या IVR में सहायता चाहिए/i);
+    }
   }
 });
 

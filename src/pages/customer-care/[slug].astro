@@ -134,7 +134,7 @@ const pageDesc = `${bank.name} (${bank.shortName}) customer care number ${bank.c
   <section class="mt-8 bg-white rounded-2xl border border-gray-200 p-5">
     <h2 class="text-xl font-bold text-gray-900 mb-4">{bank.shortName} customer care पर कब कॉल करें?</h2>
     <ul class="space-y-3 text-sm text-gray-700">
-      <li>• Missed call balance SMS नहीं आया</li>
+      <li>• {isMissedCall ? 'Missed call balance SMS नहीं आया' : 'Balance enquiry या IVR में सहायता चाहिए'}</li>
       <li>• मोबाइल नंबर बैंक खाते से लिंक या update करना है</li>
       <li>• ATM/debit card block या transaction issue है</li>
       <li>• Net banking, UPI या account service में दिक्कत है</li>

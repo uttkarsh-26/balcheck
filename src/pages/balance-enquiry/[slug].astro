@@ -101,9 +101,9 @@ const schema = {
     </nav>
 
     <!-- Header -->
-    <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-6">
+    <div data-testid="balance-enquiry-hero" class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-6">
       <h1 class="text-2xl font-bold mb-1">{bank.shortName} Balance Enquiry</h1>
-      <p class="text-brand-100 text-sm">{bank.nameHindi} — मिस्ड कॉल से बैलेंस चेक करें</p>
+      <p class="text-brand-100 text-sm">{bank.nameHindi} — {isMissedCall ? 'मिस्ड कॉल से बैलेंस चेक करें' : 'Customer Care / IVR से बैलेंस पूछें'}</p>
     </div>
 
     <!-- Balance Enquiry CTA -->

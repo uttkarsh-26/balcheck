@@ -33,7 +33,7 @@ const faqs = [
   },
   {
     q: `${bank.shortName} toll free number पर कब call करें?`,
-    a: `Missed call balance SMS नहीं आया, मोबाइल नंबर बैंक खाते से लिंक या update करना है, ATM/debit card block या transaction issue है, net banking/UPI/account service में दिक्कत है — इन सभी समस्याओं के लिए ${bank.customerCare} पर call करें।`,
+    a: `${isMissedCall ? 'Missed call balance SMS नहीं आया' : 'Balance enquiry या IVR में सहायता चाहिए'}, मोबाइल नंबर बैंक खाते से लिंक या update करना है, ATM/debit card block या transaction issue है, net banking/UPI/account service में दिक्कत है — इन सभी समस्याओं के लिए ${bank.customerCare} पर call करें।`,
   },
   {
     q: `क्या ${bank.shortName} toll free number पर call करने का charge लगता है?`,
@@ -119,7 +119,7 @@ const schema = {
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
       <h2 class="text-lg font-semibold text-gray-900 mb-3">{bank.shortName} customer care पर कब कॉल करें?</h2>
       <ul class="space-y-2 text-sm text-gray-700">
-        <li class="flex gap-2"><span class="text-brand-600">✓</span> Missed call balance SMS नहीं आया</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> {isMissedCall ? 'Missed call balance SMS नहीं आया' : 'Balance enquiry या IVR में सहायता चाहिए'}</li>
         <li class="flex gap-2"><span class="text-brand-600">✓</span> मोबाइल नंबर बैंक खाते से लिंक या update करना है</li>
         <li class="flex gap-2"><span class="text-brand-600">✓</span> ATM/debit card block या transaction issue है</li>
         <li class="flex gap-2"><span class="text-brand-600">✓</span> Net banking, UPI या account service में दिक्कत है</li>
