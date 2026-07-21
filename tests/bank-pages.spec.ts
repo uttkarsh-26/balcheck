@@ -14,7 +14,7 @@ const ctrTitles: Record<string, string> = {
   cosmos: 'Cosmos Bank Balance Check Number 9029013793 — Missed Call से बैलेंस देखें',
   maharashtra: 'Bank of Maharashtra बैलेंस चेक नंबर 9833335555 — Missed Call से बैलेंस',
   icici: 'ICICI Bank बैलेंस चेक नंबर 9594612612 — Missed Call से तुरंत बैलेंस',
-  axis: 'Axis Bank बैलेंस चेक नंबर 8422992272 — Missed Call से तुरंत बैलेंस',
+  axis: 'Axis Bank बैलेंस चेक नंबर 18004195959 — Missed Call से तुरंत बैलेंस',
 
 };
 
