@@ -1,0 +1,229 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const siteUrl = 'https://balcheck.in';
+const slug = 'nbfc-loan-apps-harassment-controversy-2026';
+const canonicalUrl = `${siteUrl}/article/${slug}/`;
+const publishDate = '2026-07-23';
+const modifiedDate = '2026-07-24';
+
+const pageTitle = 'Loan App Harassment: RBI Rules, Safety Steps और Complaint Guide | BalCheck.in';
+const pageDesc = 'Loan app harassment, unauthorised debit या धमकी की स्थिति में evidence, lender complaint, cybercrime report और RBI CMS escalation के practical steps।';
+
+const faqItems = [
+  {
+    q: 'Fake loan app से blackmail या धमकी मिले तो क्या करें?',
+    a: 'Threatening calls, messages, app details और transaction records सुरक्षित रखें। Caller के personal account या अनजान payment link पर पैसा न भेजें। Financial cyber fraud में 1930 और cybercrime.gov.in पर report करें; धमकी या extortion में local police/cyber unit को भी शिकायत दें।',
+  },
+  {
+    q: 'RBI के digital lending rules में contacts और call logs के बारे में क्या है?',
+    a: 'RBI (Digital Lending) Directions, 2025 के अनुसार regulated entity को यह सुनिश्चित करना है कि उसके या उसके lending service provider के digital lending app contacts, call logs, files/media और telephony functions जैसे phone resources access न करें। Camera, microphone या location का one-time access onboarding/KYC के लिए explicit consent के साथ ही हो सकता है।',
+  },
+  {
+    q: 'Loan app मेरे contacts को message भेज रहा है, क्या करूँ?',
+    a: 'पहले screenshots, numbers, messages और app/lender details सुरक्षित करें। App की permissions review/revoke करें और device/account को secure करें। फिर lender के official grievance channel पर written complaint दें; threat, impersonation, extortion या fraud हो तो cybercrime.gov.in/1930 और local police/cyber unit में report करें।',
+  },
+  {
+    q: 'क्या loan app की वजह से bank account बंद कर देना चाहिए?',
+    a: 'Account अपने-आप बंद न करें। अगर unauthorised debit या mandate का risk है तो bank के verified channel से तुरंत debit/mandate block या revoke कराने और account secure करने की प्रक्रिया पूछें। Genuine loan की payment obligation को blanket तरीके से रोकने के बजाय lender से statement और official repayment channel लिखित में लें।',
+  },
+  {
+    q: 'RBI CMS में complaint कब कर सकते हैं?',
+    a: 'पहले concerned regulated lender/NBFC को written complaint दें और acknowledgement रखें। RBI के current digital lending directions के अनुसार complaint reject हो, reply से संतुष्टि न हो, या complaint मिलने के 30 दिन के भीतर reply न मिले, तो applicable eligibility के अधीन RBI CMS/RBI Integrated Ombudsman route इस्तेमाल किया जा सकता है। CMS police complaint का substitute नहीं है।',
+  },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: pageTitle,
+  description: pageDesc,
+  url: canonicalUrl,
+  datePublished: publishDate,
+  dateModified: modifiedDate,
+  inLanguage: 'hi-IN',
+  mainEntityOfPage: canonicalUrl,
+  author: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+};
+
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'Loan app harassment पर सुरक्षित तरीके से complaint कैसे करें',
+  description: 'Evidence सुरक्षित करने से लेकर lender complaint, cybercrime report और applicable RBI CMS escalation तक practical steps.',
+  step: [
+    { '@type': 'HowToStep', name: 'Evidence सुरक्षित करें', text: 'Calls की तारीख और number note करें; messages, screenshots, app details, loan documents और transaction alerts सुरक्षित रखें.' },
+    { '@type': 'HowToStep', name: 'Payment और access verify करें', text: 'Caller के personal account या unknown link पर payment न करें. Genuine dues के लिए lender का official statement और repayment channel verify करें.' },
+    { '@type': 'HowToStep', name: 'Lender को written complaint दें', text: 'Regulated lender/NBFC या उसके designated grievance officer को complaint दें और acknowledgement/reference number रखें.' },
+    { '@type': 'HowToStep', name: 'Threat या fraud report करें', text: 'Financial cyber fraud में 1930 या cybercrime.gov.in पर report करें; threat, extortion या immediate danger में local police/cyber unit से contact करें.' },
+    { '@type': 'HowToStep', name: 'Eligibility होने पर RBI CMS में जाएँ', text: 'Lender को complaint देने के बाद rejection, unsatisfactory reply या 30 दिन तक reply न मिलने पर applicable RBI CMS/RBI Integrated Ombudsman route देखें.' },
+  ],
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+    { '@type': 'ListItem', position: 2, name: 'Loan App Harassment Complaint Guide', item: canonicalUrl },
+  ],
+};
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <main class="min-h-screen bg-gray-50">
+    <div class="container mx-auto max-w-4xl px-4 py-8">
+      <nav aria-label="breadcrumb" class="mb-4 text-sm text-gray-600">
+        <a href="/" class="hover:underline">Home</a>
+        <span aria-hidden="true"> / </span>
+        <span class="text-gray-800">Loan App Harassment Complaint Guide</span>
+      </nav>
+
+      <h1 class="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">Loan App Harassment: RBI Rules और Complaint Guide</h1>
+      <p class="mb-6 text-lg text-gray-700">
+        धमकी, contacts को message, unauthorised debit या suspicious loan app की स्थिति में घबराकर caller के कहने पर payment न करें। Evidence सुरक्षित करें, actual lender और dues verify करें, पहले lender को written complaint दें और fraud/threat में police या cybercrime channel भी अपनाएँ।
+      </p>
+
+      <section class="mb-8 rounded-r-lg border-l-4 border-amber-500 bg-amber-50 p-4">
+        <p class="font-medium text-amber-900">
+          <strong>महत्वपूर्ण सीमा:</strong> यह general consumer-safety information है, personal legal या financial advice नहीं। BalCheck.in loan नहीं देता। RBI rules और complaint channels बदल सकते हैं; action लेने से पहले नीचे दिए official sources पर latest details देखें।
+        </p>
+      </section>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">NBFC और loan app को कैसे समझें?</h2>
+      <p class="mb-4 text-gray-700">
+        Loan app और lender एक ही entity हों, यह जरूरी नहीं। App किसी bank/NBFC का digital lending app या lending service provider (LSP) interface हो सकता है। Loan लेने से पहले sanction document या Key Fact Statement (KFS) में actual lender का legal name, APR, charges, repayment terms और grievance contact देखें। RBI की <strong>Digital Lending Directions, 2025</strong> regulated entities को अपने digital lending products, apps/LSPs और grievance mechanism की जानकारी उपलब्ध कराने के लिए कहती हैं।
+      </p>
+      <ul class="mb-6 list-inside list-disc space-y-2 text-gray-700">
+        <li>Actual bank/NBFC का नाम RBI की official NBFC information से cross-check करें; केवल app का नाम देखकर भरोसा न करें।</li>
+        <li>Actual lender की website पर उस app/LSP और customer-care/grievance details का link या विवरण देखें।</li>
+        <li>KFS/sanction terms में APR, total cost, repayment dates और applicable charges पढ़ें।</li>
+        <li>Contacts, call logs या files/media जैसी permissions को गंभीर warning sign मानें; regulated digital lending rules में इनके access पर रोक है।</li>
+        <li>App-store rating अकेला proof नहीं है; lender की official identity और documents verify करें।</li>
+      </ul>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">RBI के current digital lending safeguards</h2>
+      <p class="mb-4 text-gray-700">
+        RBI की 8 May 2025 की Digital Lending Directions के अनुसार regulated entity (RE) को अपने digital lending app और LSP के data collection को need-based और borrower की prior, explicit consent के साथ रखना है। Directions में contacts, call logs, files/media और telephony functions जैसे mobile resources access न करने की बात है। Camera, microphone या location का one-time access onboarding/KYC के लिए explicit consent के साथ ही लिया जा सकता है। Borrower को consent deny/revoke करने और applicable situation में data delete/forget request करने के options की जानकारी भी दी जानी चाहिए।
+      </p>
+      <p class="mb-6 text-gray-700">
+        Loan default में recovery agent assign या change होने पर authorised recovery agent की details borrower को email/SMS से agent के contact से पहले communicate की जानी चाहिए। RBI की recovery-agent instructions intimidation, harassment, public humiliation, family/friends की privacy में दखल, threatening/anonymous calls और overdue recovery के लिए सुबह 8 बजे से पहले या शाम 7 बजे के बाद calls पर रोक बताती हैं। ये protections regulated entities और उनके agents के संदर्भ में हैं; हर unknown app को RBI-regulated मान लेना सुरक्षित नहीं है।
+      </p>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">Harassment हो तो ये practical steps अपनाएँ</h2>
+      <ol class="mb-6 list-inside list-decimal space-y-3 text-gray-700">
+        <li><strong>Evidence बचाएँ:</strong> number, तारीख, समय, caller/company का दावा, messages, screenshots, app listing, KFS/loan documents और transaction alerts सुरक्षित रखें। Original messages delete न करें; call recording केवल applicable law और device rules के अनुसार करें।</li>
+        <li><strong>Caller को अनजान payment न करें:</strong> personal UPI, wallet या bank account पर पैसा भेजने के बजाय actual lender के verified website/app में दिए repayment channel से ही dues verify करें। Genuine loan होने पर भी blanket तरीके से सभी payments रोकने के बजाय statement और written clarification लें।</li>
+        <li><strong>App और bank access secure करें:</strong> Evidence लेने के बाद app permissions review/revoke करें। अगर OTP, password, card/UPI या bank details share हो गई हों, तो bank के official channel से account, card, UPI और unauthorised debit/mandate के बारे में तुरंत help लें। Account automatically close न करें।</li>
+        <li><strong>Regulated lender को written complaint दें:</strong> lender की website, KFS, app या statement में दिए nodal grievance officer/contact का उपयोग करें। Complaint, acknowledgement, ticket number और reply का timeline रखें।</li>
+        <li><strong>Threat या fraud में police/cybercrime report करें:</strong> Financial cyber fraud में 1930 पर call करें और cybercrime.gov.in पर report करें। Threat, extortion, impersonation या physical danger में local police/cyber unit से भी तुरंत contact करें।</li>
+        <li><strong>जरूरत होने पर RBI CMS escalation करें:</strong> पहले regulated entity को complaint देना जरूरी है। Rejection, unsatisfactory reply या complaint मिलने के 30 दिन के भीतर reply न मिलने की स्थिति में applicable RBI Integrated Ombudsman/CMS eligibility check करके complaint करें।</li>
+      </ol>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">Official complaint channels</h2>
+      <div class="mb-6 overflow-x-auto">
+        <table class="w-full border-collapse border border-gray-300 text-left">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-300 px-4 py-2">Channel</th>
+              <th class="border border-gray-300 px-4 py-2">कब उपयोग करें</th>
+              <th class="border border-gray-300 px-4 py-2">Official link/number</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Lender/NBFC grievance</td>
+              <td class="border border-gray-300 px-4 py-2">Loan, recovery conduct, data या account issue की first complaint</td>
+              <td class="border border-gray-300 px-4 py-2">Actual lender की website/KFS/app में दिया official contact</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">RBI CMS / Ombudsman</td>
+              <td class="border border-gray-300 px-4 py-2">पहले regulated entity को complaint के बाद applicable eligibility होने पर</td>
+              <td class="border border-gray-300 px-4 py-2"><a href="https://cms.rbi.org.in" class="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">cms.rbi.org.in</a></td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Cybercrime</td>
+              <td class="border border-gray-300 px-4 py-2">Financial cyber fraud, impersonation, extortion या online threat</td>
+              <td class="border border-gray-300 px-4 py-2"><a href="https://cybercrime.gov.in/home" class="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">cybercrime.gov.in</a> / <strong>1930</strong></td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Local police/cyber unit</td>
+              <td class="border border-gray-300 px-4 py-2">Threat, extortion, stalking, impersonation या immediate safety risk</td>
+              <td class="border border-gray-300 px-4 py-2">अपने क्षेत्र का official police channel</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">RBI CMS से पहले क्या तैयार रखें?</h2>
+      <p class="mb-4 text-gray-700">
+        RBI CMS regulated entity की grievance redressal escalation है, criminal investigation या emergency response नहीं। CMS में जाने से पहले actual lender का नाम, lender को भेजी गई complaint, acknowledgement/reference number, reply या 30-day timeline, relevant statements/messages और मांगा गया resolution एक जगह रखें। RBI CMS page पर entity coverage और current scheme instructions देखकर ही eligibility तय करें; unregulated app या active fraud के लिए cybercrime/police route अलग से अपनाएँ।
+      </p>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">Official sources</h2>
+      <div class="mb-8 space-y-3 rounded-lg border border-gray-200 bg-white p-5">
+        <p>
+          <a href="https://www.rbi.org.in/scripts/NotificationUser.aspx?Id=12848" class="text-blue-700 hover:underline" target="_blank" rel="noopener noreferrer">RBI (Digital Lending) Directions, 2025</a>
+          — digital lending, recovery-agent details, grievance redressal और borrower data requirements।
+        </p>
+        <p>
+          <a href="https://www.rbi.org.in/scripts/NotificationUser.aspx?Id=12378" class="text-blue-700 hover:underline" target="_blank" rel="noopener noreferrer">RBI recovery-agent instructions</a>
+          — intimidation/harassment, privacy intrusion, threatening calls और calling hours से जुड़े instructions।
+        </p>
+        <p>
+          <a href="https://www.rbi.org.in/Scripts/Complaints.aspx" class="text-blue-700 hover:underline" target="_blank" rel="noopener noreferrer">RBI Complaints page</a>
+          — banks, NBFCs और अन्य covered regulated entities के लिए complaint information और CMS route।
+        </p>
+        <p>
+          <a href="https://www.rbi.org.in/Scripts/BS_NBFCList.aspx" class="text-blue-700 hover:underline" target="_blank" rel="noopener noreferrer">RBI NBFC information</a>
+          — NBFC identity verify करने के लिए RBI का official page; app का नाम अकेला पर्याप्त proof नहीं है।
+        </p>
+        <p>
+          <a href="https://cybercrime.gov.in/home" class="text-blue-700 hover:underline" target="_blank" rel="noopener noreferrer">National Cyber Crime Reporting Portal</a>
+          — cybercrime report और financial cyber fraud के लिए official portal; helpline <strong>1930</strong>।
+        </p>
+      </div>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">अक्सर पूछे जाने वाले सवाल</h2>
+      <div class="mb-8 space-y-4">
+        {faqItems.map((item) => (
+          <details class="rounded-lg border border-gray-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-gray-900">{item.q}</summary>
+            <p class="mt-3 text-gray-700">{item.a}</p>
+          </details>
+        ))}
+      </div>
+
+      <p class="mt-8 text-sm text-gray-500">
+        Published: 23 July 2026 · Updated: 24 July 2026. Official RBI और cybercrime pages पर latest process, eligibility और contact details verify करें।
+      </p>
+    </div>
+  </main>
+</Layout>
