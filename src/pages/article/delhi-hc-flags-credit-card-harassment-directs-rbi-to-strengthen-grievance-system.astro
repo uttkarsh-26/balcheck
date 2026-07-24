@@ -1,0 +1,263 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const siteUrl = 'https://balcheck.in';
+const slug = 'delhi-hc-flags-credit-card-harassment-directs-rbi-to-strengthen-grievance-system';
+const publishDate = '2026-07-24';
+const modifiedDate = '2026-07-24';
+const pageTitle = 'Credit Card Harassment: RBI शिकायत और CMS प्रक्रिया | BalCheck.in';
+const pageDesc = 'Credit card harassment या unauthorised transaction पर पहले card-issuer को लिखित शिकायत दें, फिर RBI CMS में escalation करें और threat/fraud में police path अपनाएं।';
+
+const faqItems = [
+  {
+    q: 'Credit card harassment की शिकायत सबसे पहले कहाँ करें?',
+    a: 'सबसे पहले concerned card-issuer को शिकायत दें। RBI Direction ID 12300 के अनुसार card-issuer के पास grievance redressal mechanism होना चाहिए और उसके designated officer का contact bill या account statement पर दिया जाना चाहिए।',
+  },
+  {
+    q: 'RBI CMS में complaint कब दर्ज कर सकते हैं?',
+    a: 'RBI के official FAQ के अनुसार पहले card-issuer से संपर्क करें। अगर 30 दिन में जवाब नहीं मिलता, शिकायत पूरी या आंशिक रूप से reject होती है, या response/resolution से आप संतुष्ट नहीं हैं, तब RBI CMS में complaint दर्ज की जा सकती है।',
+  },
+  {
+    q: 'Unauthorised या fraud transaction पर क्या करें?',
+    a: 'Transaction को तुरंत card-issuer को dispute के रूप में report करें और statement, alerts तथा complaint reference सुरक्षित रखें। Direction ID 12300 में cardholder द्वारा fraud के रूप में disputed transactions पर dispute resolve होने तक charges न लगाने का प्रावधान दिया गया है।',
+  },
+  {
+    q: 'क्या card-issuer को disputed bill पर जानकारी देनी होती है?',
+    a: 'यदि cardholder किसी bill पर आपत्ति करता है, तो card-issuer को अधिकतम 30 दिन के भीतर explanation और जहाँ लागू हो documentary evidence देना होता है।',
+  },
+  {
+    q: 'धमकी या fraud होने पर सिर्फ RBI CMS complaint काफी है?',
+    a: 'नहीं। RBI CMS regulated entity की grievance redressal के लिए है। धमकी, extortion, impersonation, account takeover या fraud की स्थिति में evidence सुरक्षित करके स्थानीय पुलिस या cybercrime unit को भी तुरंत शिकायत दें।',
+  },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: pageTitle,
+  description: pageDesc,
+  datePublished: publishDate,
+  dateModified: modifiedDate,
+  inLanguage: 'hi-IN',
+  mainEntityOfPage: `${siteUrl}/article/${slug}/`,
+  author: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+};
+
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'Credit card harassment या unauthorised transaction पर शिकायत कैसे करें',
+  description: 'Evidence सुरक्षित करने से लेकर card-issuer complaint, RBI CMS escalation और threat/fraud में police path तक practical steps.',
+  step: [
+    { '@type': 'HowToStep', name: 'Evidence सुरक्षित करें', text: 'Calls, messages, account statement, disputed transaction और पहले की शिकायतों के reference सुरक्षित रखें.' },
+    { '@type': 'HowToStep', name: 'Card-issuer को लिखित शिकायत दें', text: 'Bill या account statement पर दिए grievance officer के contact का उपयोग करके harassment या disputed transaction की complaint दर्ज करें.' },
+    { '@type': 'HowToStep', name: 'Complaint reference संभालकर रखें', text: 'Complaint की तारीख, acknowledgement, ticket number और issuer का reply एक जगह सुरक्षित रखें.' },
+    { '@type': 'HowToStep', name: 'जरूरत होने पर RBI CMS में जाएँ', text: '30 दिन में जवाब न मिले, complaint reject हो या response से संतुष्टि न हो तो RBI CMS पर complaint दर्ज करें.' },
+    { '@type': 'HowToStep', name: 'Threat या fraud में police path अपनाएँ', text: 'धमकी, extortion, impersonation या fraud में evidence के साथ स्थानीय पुलिस या cybercrime unit को भी तुरंत report करें.' },
+  ],
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+    { '@type': 'ListItem', position: 2, name: 'Credit Card Harassment शिकायत गाइड', item: `${siteUrl}/article/${slug}/` },
+  ],
+};
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <main class="min-h-screen bg-gray-50">
+    <div class="container mx-auto max-w-4xl px-4 py-8">
+      <nav aria-label="breadcrumb" class="mb-4 text-sm text-gray-600">
+        <a href="/" class="hover:underline">Home</a>
+        <span aria-hidden="true"> / </span>
+        <span class="text-gray-800">Credit Card Harassment शिकायत गाइड</span>
+      </nav>
+
+      <h1 class="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">Credit Card Harassment: RBI शिकायत और CMS प्रक्रिया</h1>
+      <p class="mb-6 text-lg text-gray-700">
+        अगर credit card recovery call, गलत bill, unauthorised transaction या धमकी जैसी स्थिति सामने आए, तो घबराकर किसी अनधिकृत payment mode से भुगतान न करें। पहले अपने card-issuer को लिखित शिकायत दें, evidence सुरक्षित रखें और जरूरत पड़ने पर RBI CMS तक escalation करें।
+      </p>
+
+      <section class="mb-8 rounded-r-lg border-l-4 border-amber-500 bg-amber-50 p-4">
+        <p class="font-medium text-amber-900">
+          <strong>महत्वपूर्ण सीमा:</strong> यह consumer-safety information है, व्यक्तिगत legal advice नहीं। Card issuer के bill या account statement पर दिए official grievance contacts का ही उपयोग करें और किसी caller के दबाव में अनधिकृत payment mode न अपनाएँ।
+        </p>
+      </section>
+
+      <section class="mb-8 rounded-lg border border-blue-200 bg-blue-50 p-5">
+        <h2 class="mb-3 text-2xl font-bold text-gray-900">दिल्ली HC रिपोर्ट का संदर्भ</h2>
+        <p class="text-gray-700">
+          Economic Times की रिपोर्ट के संदर्भ में, दिल्ली High Court ने RBI से credit-card users की grievance redressal व्यवस्था मजबूत करने को कहा। यह लेख उस मीडिया रिपोर्ट से आगे कोई अतिरिक्त न्यायिक निष्कर्ष नहीं जोड़ता। नीचे दिए गए practical steps RBI के official complaints page और <strong>Direction ID 12300</strong> पर आधारित हैं।
+        </p>
+      </section>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">RBI Direction ID 12300 में card-issuer की जिम्मेदारी</h2>
+      <p class="mb-4 text-gray-700">
+        RBI के Master Direction में credit-card issuers के लिए grievance redressal का अलग प्रावधान है। इसमें card-issuer को अपनी entity के भीतर grievance redressal mechanism रखना, उसकी जानकारी का व्यापक प्रचार करना और card bills या account statements पर designated grievance redressal officer का नाम, direct contact number, email और postal address देना है।
+      </p>
+      <p class="mb-4 text-gray-700">
+        इसी प्रावधान के अनुसार grievance procedure और Board-approved policy को card-issuer की website पर clearly visible link के साथ दिखाया जाना चाहिए। यदि card-issuer के representative से mis-selling या harassment की शिकायत हो, तो cardholder के लिए dedicated helpline और email-id उपलब्ध होना चाहिए।
+      </p>
+      <p class="mb-6 text-gray-700">
+        इसका मतलब है कि recovery call या disputed transaction को केवल फोन पर बहस बनाकर न छोड़ें। उसे issuer के documented grievance channel में complaint के रूप में दर्ज करें ताकि आपके पास तारीख और reference का रिकॉर्ड रहे।
+      </p>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">Step 1: Evidence को व्यवस्थित तरीके से सुरक्षित करें</h2>
+      <p class="mb-4 text-gray-700">Complaint भेजने से पहले और उसके बाद ये records एक folder में रखें:</p>
+      <ul class="mb-6 list-inside list-disc space-y-2 text-gray-700">
+        <li>कॉल का date, time, number, caller का नाम/कंपनी और कही गई धमकी या demand का संक्षिप्त विवरण।</li>
+        <li>SMS, email, WhatsApp message, notice और caller-ID के screenshots; original messages को delete न करें।</li>
+        <li>Credit-card bill/account statement में disputed entry, transaction date, amount और transaction alert।</li>
+        <li>पहले की complaint, acknowledgement, ticket number, issuer का reply और हर follow-up की तारीख।</li>
+        <li>यदि payment या account access का fraud हुआ है, तो bank/card account में दिख रही हर संबंधित entry का record।</li>
+      </ul>
+      <p class="mb-6 text-gray-700">
+        Files को edit करके original evidence न बदलें। Screenshots के साथ original email, message या statement भी रखें। किसी threat या fraud में यही material issuer complaint और police/cybercrime complaint दोनों में काम आ सकता है।
+      </p>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">Step 2: पहले card-issuer को लिखित complaint दें</h2>
+      <p class="mb-4 text-gray-700">
+        RBI के official FAQ के अनुसार grievance redressal के लिए पहला कदम concerned card-issuer से संपर्क करना है। Bill या account statement पर दिए grievance officer के email, phone या postal address का उपयोग करें। यदि issuer का app या website complaint reference देता है, तो reference number का screenshot भी रखें।
+      </p>
+      <div class="mb-6 overflow-x-auto">
+        <table class="w-full border-collapse border border-gray-300 text-left">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-300 px-4 py-2">Complaint में लिखें</th>
+              <th class="border border-gray-300 px-4 py-2">साथ में रखें</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Card के last four digits और registered contact का विवरण</td>
+              <td class="border border-gray-300 px-4 py-2">पूरा card number, CVV या OTP कभी न भेजें</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Harassment call, गलत bill या disputed transaction की तारीख और रकम</td>
+              <td class="border border-gray-300 px-4 py-2">Statement, alerts और messages की copies</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">आप क्या resolution चाहते हैं और जवाब किस channel पर चाहिए</td>
+              <td class="border border-gray-300 px-4 py-2">Complaint भेजने का timestamp और acknowledgement</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mb-6 text-gray-700">
+        Complaint में साफ लिखें कि मामला harassment, bill dispute या fraud dispute में से किस प्रकार का है। अगर call करने वाला issuer का representative होने का दावा करता है, तो caller की पहचान verify करने के लिए issuer के bill/statement वाले channel से ही वापस संपर्क करें।
+      </p>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">Step 3: Fraud या disputed bill में RBI के card rules समझें</h2>
+      <p class="mb-4 text-gray-700">
+        Direction ID 12300 के billing provisions के अनुसार, cardholder किसी bill पर objection करे तो card-issuer को अधिकतम 30 दिन के भीतर explanation और जहाँ लागू हो documentary evidence देना होता है। इसलिए complaint में disputed line-item का नाम, date और amount अलग से लिखें; केवल “bill गलत है” लिखकर न छोड़ें।
+      </p>
+      <p class="mb-4 text-gray-700">
+        इसी Direction में कहा गया है कि cardholder द्वारा fraud के रूप में disputed transactions पर dispute resolve होने तक charges नहीं लगाए जाने चाहिए। Dispute को तुरंत issuer को report करें और issuer से लिखित confirmation मांगें कि transaction किस reference पर जांच में है। जो dues undisputed हैं, उनके बारे में issuer से अलग से लिखित clarification लें।
+      </p>
+      <p class="mb-6 text-gray-700">
+        RBI Direction cardholders को credit-card dues के लिए issuer द्वारा authorised payment modes की सूची देखने और किसी अन्य payment mode से भुगतान करने में सावधानी बरतने को भी कहता है। धमकी देने वाले caller के निजी account या अनजान payment channel पर पैसा भेजना इस शिकायत प्रक्रिया का विकल्प नहीं है।
+      </p>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">Step 4: 30 दिन बाद RBI CMS में escalation करें</h2>
+      <p class="mb-4 text-gray-700">
+        RBI के official complaints page पर banks, NBFCs और system participants जैसी regulated entities के खिलाफ complaint का रास्ता दिया गया है। Direction ID 12300 के FAQ के अनुसार, पहले issuer को complaint देने के बाद यदि 30 दिन में जवाब नहीं मिलता, complaint पूरी या आंशिक रूप से reject होती है, या response/resolution से आप संतुष्ट नहीं हैं, तो RBI CMS पर complaint दर्ज की जा सकती है।
+      </p>
+      <div class="mb-6 rounded-lg border border-green-200 bg-green-50 p-5">
+        <h3 class="mb-2 text-xl font-semibold text-gray-900">RBI CMS में क्या लगाएँ?</h3>
+        <ul class="list-inside list-disc space-y-2 text-gray-700">
+          <li>Issuer को भेजी गई मूल complaint और उसका acknowledgement/reference number।</li>
+          <li>Issuer का reply, rejection या 30 दिन तक reply न मिलने का स्पष्ट timeline।</li>
+          <li>Disputed statement/transaction, harassment messages और relevant screenshots।</li>
+          <li>आपने issuer से क्या resolution मांगा और अब RBI से किस grievance की जांच चाहते हैं।</li>
+        </ul>
+        <p class="mt-4 text-gray-700">
+          RBI CMS complaint number को download या लिखकर सुरक्षित रखें। RBI CMS issuer की grievance redressal escalation है; यह धमकी या active fraud के मामले में police/cybercrime complaint का substitute नहीं है।
+        </p>
+      </div>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">Step 5: धमकी, extortion या fraud में police path भी अपनाएँ</h2>
+      <p class="mb-4 text-gray-700">
+        अगर caller धमकी दे रहा है, पैसे ऐंठने की कोशिश कर रहा है, किसी bank/issuer अधिकारी का impersonation कर रहा है, account access या OTP-related fraud हुआ है, तो evidence delete न करें। Card-issuer को dispute report करने के साथ स्थानीय पुलिस या cybercrime unit में भी शिकायत दें।
+      </p>
+      <ol class="mb-6 list-inside list-decimal space-y-2 text-gray-700">
+        <li>Threatening number, messages, statements और transaction alerts सुरक्षित करें।</li>
+        <li>Issuer complaint reference और disputed transaction details police/cybercrime complaint में जोड़ें।</li>
+        <li>अगर account/card access का जोखिम हो, issuer के verified channel से card और related access को secure कराने के निर्देश लें।</li>
+        <li>Immediate physical danger हो तो स्थानीय emergency/police assistance लें; RBI CMS की प्रक्रिया का इंतजार न करें।</li>
+      </ol>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">इन गलतियों से बचें</h2>
+      <ul class="mb-6 list-inside list-disc space-y-2 text-gray-700">
+        <li>सिर्फ verbal call पर निर्भर न रहें; written complaint और reference जरूर लें।</li>
+        <li>Unverified caller के कहने पर निजी account या अनजान payment mode में पैसा न भेजें।</li>
+        <li>Threatening messages या transaction alerts delete न करें।</li>
+        <li>RBI CMS में जाने से पहले issuer complaint का record तैयार रखें, क्योंकि escalation में वही timeline जरूरी होगी।</li>
+        <li>पूरा card number, CVV, PIN या OTP public post या अनजान व्यक्ति को न भेजें।</li>
+      </ul>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">Official RBI links</h2>
+      <div class="mb-8 space-y-3 rounded-lg border border-gray-200 bg-white p-5">
+        <p>
+          <a href="https://www.rbi.org.in/Scripts/Complaints.aspx" class="text-blue-700 hover:underline" target="_blank" rel="noopener noreferrer">RBI Complaints page</a>
+          — regulated entity के खिलाफ complaint और grievance redressal information।
+        </p>
+        <p>
+          <a href="https://www.rbi.org.in/scripts/NotificationUser.aspx?Id=12300&amp;Mode=0" class="text-blue-700 hover:underline" target="_blank" rel="noopener noreferrer">RBI Direction ID 12300</a>
+          — credit card और debit card issuance/conduct directions, जिसमें grievance redressal और complaint escalation provisions हैं।
+        </p>
+        <p>
+          <a href="https://cms.rbi.org.in" class="text-blue-700 hover:underline" target="_blank" rel="noopener noreferrer">RBI CMS</a>
+          — issuer के response न मिलने, rejection या असंतोषजनक resolution के बाद RBI complaint escalation का online channel।
+        </p>
+        <p>
+          <a href="https://www.rbi.org.in/commonman/Upload/English/FAQs/PDFs/RBIOS01072026.pdf" class="text-blue-700 hover:underline" target="_blank" rel="noopener noreferrer">RBI Integrated Ombudsman Scheme FAQ</a>
+          — 30-day complaint timing और dissatisfied-response exception का official FAQ reference।
+        </p>
+      </div>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">अक्सर पूछे जाने वाले सवाल</h2>
+      <div class="mb-8 space-y-4">
+        {faqItems.map((item) => (
+          <details class="rounded-lg border border-gray-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-gray-900">{item.q}</summary>
+            <p class="mt-3 text-gray-700">{item.a}</p>
+          </details>
+        ))}
+      </div>
+
+      <p class="mt-8 text-sm text-gray-500">
+        Published/updated: 24 July 2026. RBI rules और complaint channels बदल सकते हैं; complaint दर्ज करने से पहले ऊपर दिए official RBI pages पर latest information देखें।
+      </p>
+    </div>
+  </main>
+</Layout>
