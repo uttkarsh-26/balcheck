@@ -44,6 +44,9 @@ public/
 ## Hermes Skills
 For PSEO/content work, load the `balcheck-pseo` Hermes skill. It contains the full data model, vertical expansion patterns, audit commands, and site-specific pitfalls.
 
+## Article Authoring
+Every new article must include [`ScannableArticleSummary`](docs/templates/scannable-article-summary.md); this future-only rule does not require changing existing articles. Follow the linked template for the enforced summary, optional-section, timeline, action-step, and safe-link contract.
+
 ## Deployment
 Push to `main` → GitHub Actions → Cloudflare Pages. Never use `wrangler deploy` directly.
 

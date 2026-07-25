@@ -1,6 +1,6 @@
 # ScannableArticleSummary authoring guide
 
-Use this component only in **new, page-local Astro articles**. It is a static presentation component: it has no client-side JavaScript, chart library, autoplay, motion, or automatic Schema JSON-LD.
+Every **new article** must use this component; this is a future-only rule and does not require retrofitting existing articles. It is a static presentation component: it has no client-side JavaScript, chart library, autoplay, motion, or automatic Schema JSON-LD.
 
 ## Page-local usage
 
@@ -27,10 +27,10 @@ Replace the uppercase values with page-local constants built from the article's 
 ## Content constraints
 
 - `summary` is required, one sentence, and **35 words or fewer**. Put the direct answer first.
-- Keep `facts` to **3–5** label/value pairs. Use only claims that the article can support.
-- Keep `timeline` to **3–5** events. Use it only for factual sequencing, not as decoration or a prediction device. Each event may include an optional ISO 8601 `datetime` for machine-readable markup; keep the display `date` for readers.
-- Use `action` only when it has at least one nonempty `steps` entry or a safe official link. Use `action.steps` for a short, ordered checklist. Add `officialUrl` only when it is the current official destination and an absolute `https` URL without username/password credentials; the component opens it in a new tab with `noopener noreferrer`.
-- Use `details` for secondary context that readers may progressively disclose. Keep its body factual and concise.
+- `facts` is optional; when supplied, keep it to **at most 5** label/value pairs. Use only claims that the article can support.
+- `timeline` is optional; when supplied, keep it to **at most 5** events. Use it only for factual sequencing, not as decoration or a prediction device. Each event may include an optional ISO calendar date (`YYYY-MM-DD`) or ISO date-time with a timezone (for example, `2026-03-01T09:30:00Z`); keep the display `date` for readers.
+- `action` is optional; when supplied, keep `action.steps` to **at most 5** short, ordered steps. Use it only when it has at least one nonempty step or a safe official link. Add `officialUrl` only when it is the current official destination and an absolute `https` URL without username/password credentials; the component opens it in a new tab with `noopener noreferrer`.
+- `details` is optional and should contain concise, factual secondary context for progressive disclosure.
 - Charts belong outside this component and only when they show a **source-backed time series**. Do not add a chart for a single number, an unsupported trend, or visual decoration.
 - Do not add decorative animation, autoplay media, motion effects, or client-side behavior.
 - Verify every number, date, status, and sequence against a named source. Record the source date and distinguish published facts from estimates, demands, expectations, and future dates.

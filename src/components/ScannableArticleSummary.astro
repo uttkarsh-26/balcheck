@@ -1,4 +1,6 @@
 ---
+import { validateScannableArticleSummary } from './scannableArticleSummaryContract.js';
+
 interface Fact {
   label: string;
   value: string;
@@ -12,7 +14,7 @@ interface TimelineEvent {
 
 interface Action {
   title: string;
-  steps: string[];
+  steps?: string[];
   officialUrl?: string;
   officialLabel?: string;
 }
@@ -30,7 +32,13 @@ interface Props {
   details?: Details;
 }
 
-const { summary, facts, timeline, action, details } = Astro.props;
+const props = Astro.props as Props;
+const validationErrors = validateScannableArticleSummary(props);
+if (validationErrors.length > 0) {
+  throw new Error(`ScannableArticleSummary contract violation: ${validationErrors.join('; ')}`);
+}
+
+const { summary, facts, timeline, action, details } = props;
 const hasSummary = typeof summary === 'string' && summary.trim().length > 0;
 const safeOfficialUrl = (() => {
   const rawUrl = action?.officialUrl?.trim();
@@ -44,7 +52,7 @@ const safeOfficialUrl = (() => {
     return undefined;
   }
 })();
-const hasAction = Boolean(action && (action.steps.length > 0 || safeOfficialUrl));
+const hasAction = Boolean(action && ((action.steps?.length ?? 0) > 0 || safeOfficialUrl));
 ---
 
 {hasSummary && (
@@ -89,9 +97,9 @@ const hasAction = Boolean(action && (action.steps.length > 0 || safeOfficialUrl)
       {hasAction && action && (
         <section class="space-y-3 rounded-lg border border-green-200 bg-green-50 p-4 sm:p-5">
           <h3 class="min-w-0 break-words [overflow-wrap:anywhere] text-lg font-bold text-green-900">{action.title}</h3>
-          {action.steps.length > 0 && (
+          {(action.steps?.length ?? 0) > 0 && (
             <ol class="min-w-0 list-decimal space-y-2 pl-5 text-gray-800 marker:font-semibold marker:text-green-700">
-              {action.steps.map((step) => <li class="min-w-0 break-words [overflow-wrap:anywhere] pl-1 leading-relaxed">{step}</li>)}
+              {action.steps?.map((step) => <li class="min-w-0 break-words [overflow-wrap:anywhere] pl-1 leading-relaxed">{step}</li>)}
             </ol>
           )}
           {safeOfficialUrl && (
