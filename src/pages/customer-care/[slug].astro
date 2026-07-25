@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import MoreServices from '../../components/MoreServices.astro';
 import { banks, categoryHindi } from '../../data/banks';
 import type { Bank } from '../../data/banks';
 
@@ -182,6 +183,8 @@ const pageDesc = `${bank.name} (${bank.shortName}) customer care number ${bank.c
     </div>
   </section>
 )}
+
+<MoreServices bank={bank} />
 
 <footer class="bg-gray-50 border-t border-gray-200">
   <div class="max-w-4xl mx-auto px-4 py-6">

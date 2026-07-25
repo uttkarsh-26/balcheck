@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import MoreServices from '../../components/MoreServices.astro';
 import { banks } from '../../data/banks';
 import type { Bank } from '../../data/banks';
 
@@ -294,5 +295,6 @@ const schema = {
       <a href={`tel:${bank.customerCare}`}
          class="text-lg font-semibold text-brand-700">{bank.customerCare}</a>
     </div>
+    <MoreServices bank={bank} />
   </div>
 </Layout>

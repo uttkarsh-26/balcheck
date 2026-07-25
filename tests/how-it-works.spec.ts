@@ -9,7 +9,7 @@ test.describe('/how-it-works', () => {
 
   test('renders guide heading and overview', async ({ page }) => {
     await expect(page.getByRole('heading', { level: 1, name: 'मिस्ड कॉल से बैंक बैलेंस कैसे चेक करें' })).toBeVisible();
-    await expect(page.locator('body')).toContainText(`${banks.length}+ बैंकों के मिस्ड कॉल नंबर`);
+    await expect(page.locator('body')).toContainText(`${banks.length} बैंकों के balance enquiry methods`);
   });
 
   test('renders five numbered steps', async ({ page }) => {

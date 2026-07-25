@@ -1,7 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import SchemaOrg from '../components/SchemaOrg.astro';
-import VideoHeroBanner from '../components/VideoHeroBanner.astro';
 import { banks, categories, categoryHindi } from '../data/banks';
 
 const bankCount = banks.length;
@@ -10,88 +9,33 @@ const privateCount = banks.filter(b => b.category === 'Private Sector').length;
 const sfbCount = banks.filter(b => b.category === 'Small Finance Bank').length;
 const siteUrl = 'https://balcheck.in';
 const bankingServices = [
-  { href: '/customer-care/', icon: '🎧', title: 'Customer Care', description: 'सभी बैंकों के helpline नंबर' },
-  { href: '/net-banking/', icon: '🌐', title: 'Net Banking', description: 'Online banking login links' },
-  { href: '/sms-banking/', icon: '📱', title: 'SMS Banking', description: 'SMS से balance check' },
+  { href: '/balance-enquiry/', icon: '💰', title: 'Balance Enquiry', description: 'बैलेंस enquiry के सभी तरीके' },
   { href: '/mini-statement/', icon: '🧾', title: 'Mini Statement', description: 'आखिरी transactions की जानकारी' },
-  { href: '/balance-enquiry/', icon: '💰', title: 'Balance Enquiry', description: 'बैंक बैलेंस जानने के सभी तरीके' },
-  { href: '/toll-free-number/', icon: '☎️', title: 'Toll-Free Number', description: 'मुफ़्त bank helpline नंबर' },
+  { href: '/customer-care/', icon: '🎧', title: 'Customer Care', description: 'सभी बैंकों के customer care नंबर' },
+  { href: '/net-banking/', icon: '🌐', title: 'Net Banking', description: 'Official online banking links' },
+  { href: '/sms-banking/', icon: '📱', title: 'SMS Banking', description: 'SMS और balance methods' },
   { href: '/mobile-number-registration/', icon: '📲', title: 'Mobile Registration', description: 'खाते में मोबाइल नंबर जोड़ें' },
   { href: '/aadhaar-link/', icon: '🪪', title: 'Aadhaar Link', description: 'बैंक खाते से आधार लिंक करें' },
   { href: '/atm-pin/', icon: '🔐', title: 'ATM PIN', description: 'Debit card PIN बनाएं' },
+  { href: '/toll-free-number/', icon: '☎️', title: '1800 Toll-Free Directory', description: '1800 numbers और correctly-labelled helplines' },
 ] as const;
+const popularBanks = ['sbi', 'bob', 'canara', 'ubi', 'pnb', 'boi', 'indian-bank', 'hdfc', 'icici', 'axis']
+  .map(slug => banks.find(bank => bank.slug === slug))
+  .filter((bank): bank is (typeof banks)[number] => Boolean(bank));
 ---
 
-<Layout 
-  title="बैंक बैलेंस मिस्ड कॉल नंबर — सभी बैंकों के Balance Check Numbers | BalCheck.in"
-  description="अपने बैंक का बैलेंस जानने के लिए मिस्ड कॉल दें। SBI, HDFC, ICICI, PNB सहित 50+ बैंकों के missed call balance enquiry numbers एक जगह। मुफ़्त और तुरंत।"
+<Layout
+  title={`बैंक बैलेंस चेक नंबर — ${bankCount} बैंकों के Balance Enquiry Methods | BalCheck.in`}
+  description={`भारत में ${bankCount} बैंकों के balance check numbers और enquiry methods: missed call, customer care/IVR, mini statement और official banking links एक जगह। अपना बैंक खोजें।`}
 >
 <SchemaOrg />
 
-<!-- Header -->
-<header class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
-  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-    <a href="/" class="flex items-center gap-2">
-      <div class="flex items-center justify-center w-9 h-9 rounded-lg bg-gradient-to-br from-brand-600 to-brand-700 text-white font-bold text-lg">₹</div>
-      <div>
-        <span class="text-xl font-bold text-gray-900">BalCheck</span>
-        <span class="text-brand-600 font-bold">.in</span>
-      </div>
-    </a>
-    <div class="flex items-center gap-2">
-      <a href="/how-it-works/" class="text-xs text-gray-600 hover:text-brand-600 transition-colors px-2 py-1 rounded">कैसे?</a>
-      <span class="text-xs text-gray-500">{bankCount}+ बैंक</span>
-      <span class="inline-flex items-center gap-1 text-xs font-medium text-green-700 bg-green-50 px-2.5 py-1 rounded-full">
-        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2v1.999A11.954 11.954 0 0010 15.056 11.954 11.954 0 002.166 9V7c0-.68.056-1.35.166-2.001z" clip-rule="evenodd"/></svg>
-        मुफ़्त
-      </span>
-    </div>
-  </div>
-</header>
-
-<!-- Hero — Video Background -->
-<VideoHeroBanner
-  src="/videos/balcheck-homepage-hero.mp4"
-  poster="/videos/balcheck-poster.jpg"
-  title="बैंक बैलेंस मिस्ड कॉल नंबर"
-  subtitle={`अपने बैंक का बैलेंस जानने के लिए मिस्ड कॉल दें — सभी बैंकों के नंबर एक जगह`}
-/>
-
-<!-- Stats Bar -->
-<section class="bg-white border-b border-gray-100">
-  <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-center gap-4 sm:gap-6 text-sm">
-    <div class="flex items-center gap-1.5">
-      <span class="font-bold text-brand-600">{bankCount}</span>
-      <span class="text-gray-500">बैंक</span>
-    </div>
-    <div class="w-px h-4 bg-gray-300"></div>
-    <div class="flex items-center gap-1.5">
-      <span class="font-bold text-brand-600">100%</span>
-      <span class="text-gray-500">मुफ़्त</span>
-    </div>
-    <div class="w-px h-4 bg-gray-300"></div>
-    <div class="flex items-center gap-1.5">
-      <span class="font-bold text-brand-600">24×7</span>
-      <span class="text-gray-500">उपलब्ध</span>
-    </div>
-  </div>
-</section>
-
-<!-- Category Quick Links (SEO) -->
-<section class="bg-white border-b border-gray-100">
-  <div class="max-w-6xl mx-auto px-4 py-3">
-    <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-      {bankingServices.map(service => (
-        <a href={service.href} class="px-4 py-2.5 text-sm font-medium rounded-full bg-brand-50 text-brand-700 hover:bg-brand-100 active:bg-brand-200 whitespace-nowrap transition-colors min-h-[44px] inline-flex items-center">
-          {service.icon} {service.title}
-        </a>
-      ))}
-      {categories.map(cat => (
-        <a href={`/banks/${cat.toLowerCase().replace(/\s+/g, '-')}/`} class="px-4 py-2.5 text-sm font-medium rounded-full bg-gray-100 text-gray-700 hover:bg-brand-100 hover:text-brand-700 active:bg-brand-200 whitespace-nowrap transition-colors min-h-[44px] inline-flex items-center">
-          {categoryHindi[cat]} ({banks.filter(b => b.category === cat).length})
-        </a>
-      ))}
-    </div>
+<!-- Demand-led hero: answer first, then search and directory -->
+<section class="bg-gradient-to-b from-brand-50 to-white border-b border-gray-100">
+  <div class="mx-auto max-w-4xl px-4 py-8 text-center sm:py-10">
+    <p class="mb-2 text-sm font-medium text-brand-700">Bank balance enquiry directory</p>
+    <h1 class="text-2xl font-bold leading-tight text-gray-900 sm:text-4xl">बैंक बैलेंस चेक नंबर</h1>
+    <p class="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-gray-600 sm:text-base">{bankCount} भारतीय बैंकों के balance check numbers और enquiry methods — missed call, customer care/IVR, mini statement और official banking links। अपना बैंक और सही तरीका चुनें।</p>
   </div>
 </section>
 
@@ -108,6 +52,22 @@ const bankingServices = [
     />
     <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
   </div>
+
+  <!-- Popular bank shortcuts for high-demand queries -->
+  <section id="popular-banks" class="mb-6 rounded-xl border border-brand-100 bg-brand-50/60 p-4">
+    <div class="mb-3 flex items-center justify-between gap-3">
+      <h2 class="text-base font-bold text-gray-900">Popular banks</h2>
+      <a href="/banks/" class="shrink-0 text-xs font-medium text-brand-700 hover:underline">सभी categories →</a>
+    </div>
+    <div class="grid grid-cols-2 gap-2 sm:grid-cols-5">
+      {popularBanks.map(bank => (
+        <a href={`/bank/${bank.slug}/`} class="min-w-0 rounded-lg border border-gray-200 bg-white px-3 py-3 text-center text-sm font-medium text-gray-900 hover:border-brand-300 hover:text-brand-700">
+          <span class="block truncate">{bank.shortName}</span>
+          <span class="mt-1 block truncate text-[11px] text-gray-500">{bank.nameHindi}</span>
+        </a>
+      ))}
+    </div>
+  </section>
 
   <!-- Category Tabs -->
   <div id="categories" class="flex gap-2 overflow-x-auto pb-2 mb-6 -mx-4 px-4 scrollbar-hide">
@@ -176,10 +136,25 @@ const bankingServices = [
   </div>
 
   <!-- No Results -->
-  <div id="no-results" class="hidden text-center py-12">
-    <p class="text-gray-500 text-lg">कोई बैंक नहीं मिला।</p>
-    <p class="text-gray-400 text-sm mt-1">कृपया अलग नाम से खोजें।</p>
+  <div id="no-results" class="hidden py-12 text-center">
+    <p class="text-lg text-gray-500">कोई बैंक नहीं मिला।</p>
+    <p class="mt-1 text-sm text-gray-400">कृपया अलग नाम से खोजें।</p>
   </div>
+
+  <!-- Category directory comes after the primary bank answer -->
+  <section class="mt-10 border-t border-gray-100 pt-8">
+    <div class="mb-4 flex items-center justify-between gap-3">
+      <h2 class="text-xl font-bold text-gray-900">Bank categories</h2>
+      <a href="/banks/" class="text-sm font-medium text-brand-700 hover:underline">Open directory →</a>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      {categories.map(cat => (
+        <a href={`/banks/${cat.toLowerCase().replace(/\s+/g, '-')}/`} class="inline-flex min-h-[44px] items-center rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700">
+          {categoryHindi[cat]} ({banks.filter(b => b.category === cat).length})
+        </a>
+      ))}
+    </div>
+  </section>
 </main>
 
 <!-- Cheatsheet PDF CTA -->
@@ -206,18 +181,18 @@ const bankingServices = [
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
       <div class="text-center">
         <div class="flex items-center justify-center w-12 h-12 rounded-full bg-brand-100 text-brand-600 font-bold text-lg mx-auto mb-3">1</div>
-        <h3 class="font-semibold text-gray-900 text-sm mb-1">मिस्ड कॉल दें</h3>
-        <p class="text-xs text-gray-500">अपने बैंक के नंबर पर registered mobile से कॉल करें</p>
+        <h3 class="font-semibold text-gray-900 text-sm mb-1">Eligible service चुनें</h3>
+        <p class="text-xs text-gray-500">Bank record में missed-call या customer-care/IVR label देखें</p>
       </div>
       <div class="text-center">
         <div class="flex items-center justify-center w-12 h-12 rounded-full bg-brand-100 text-brand-600 font-bold text-lg mx-auto mb-3">2</div>
-        <h3 class="font-semibold text-gray-900 text-sm mb-1">कॉल कट जाएगी</h3>
-        <p class="text-xs text-gray-500">2-3 ring के बाद कॉल अपने आप कट जाएगी</p>
+        <h3 class="font-semibold text-gray-900 text-sm mb-1">Linked mobile इस्तेमाल करें</h3>
+        <p class="text-xs text-gray-500">Missed-call service के लिए खाते से linked number जरूरी है</p>
       </div>
       <div class="text-center">
         <div class="flex items-center justify-center w-12 h-12 rounded-full bg-brand-100 text-brand-600 font-bold text-lg mx-auto mb-3">3</div>
-        <h3 class="font-semibold text-gray-900 text-sm mb-1">SMS में बैलेंस</h3>
-        <p class="text-xs text-gray-500">कुछ सेकंड में SMS आ जाएगा आपके बैलेंस के साथ</p>
+        <h3 class="font-semibold text-gray-900 text-sm mb-1">Bank instructions follow करें</h3>
+        <p class="text-xs text-gray-500">Missed-call में SMS आएगा; IVR में menu और charges हो सकते हैं</p>
       </div>
     </div>
     <div class="text-center mt-6">
@@ -262,14 +237,14 @@ const bankingServices = [
           मिस्ड कॉल से बैलेंस कैसे पता करें?
           <svg class="w-5 h-5 text-gray-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </summary>
-        <p class="mt-3 text-sm text-gray-600">अपने बैंक का रजिस्टर्ड मोबाइल नंबर से ऊपर दिए गए missed call number पर कॉल करें और 2-3 ring के बाद कॉल काट दें। कुछ ही सेकंड में आपको SMS में बैलेंस आ जाएगा। यह सेवा बिल्कुल मुफ़्त है।</p>
+        <p class="mt-3 text-sm text-gray-600">अपने बैंक के record में registered mobile से उपलब्ध balance-enquiry number पर कॉल करें। यदि वह missed-call service है तो कॉल अपने आप कट सकती है; customer-care/IVR numbers पर सामान्य call charges या menu लागू हो सकते हैं।</p>
       </details>
       <details class="bg-white rounded-lg border border-gray-200 p-4 group">
         <summary class="font-medium text-gray-900 cursor-pointer list-none flex justify-between items-center">
-          क्या मिस्ड कॉल बैलेंस सेवा मुफ़्त है?
+          क्या balance enquiry पर charge लगता है?
           <svg class="w-5 h-5 text-gray-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </summary>
-        <p class="mt-3 text-sm text-gray-600">हाँ, सभी बैंकों की missed call balance enquiry सेवा बिल्कुल मुफ़्त है। आपको कोई charge नहीं देना। बस अपना नंबर बैंक में रजिस्टर्ड होना चाहिए।</p>
+        <p class="mt-3 text-sm text-gray-600">Missed-call services आम तौर पर charge-free होती हैं, लेकिन हर bank और customer-care/IVR channel की शर्तें अलग हो सकती हैं। अपने bank की official instructions और telecom plan की जानकारी देखें।</p>
       </details>
       <details class="bg-white rounded-lg border border-gray-200 p-4 group">
         <summary class="font-medium text-gray-900 cursor-pointer list-none flex justify-between items-center">
@@ -290,7 +265,7 @@ const bankingServices = [
           क्या ये नंबर सुरक्षित हैं?
           <svg class="w-5 h-5 text-gray-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </summary>
-        <p class="mt-3 text-sm text-gray-600">जी हाँ, ये सभी नंबर आधिकारिक बैंक वेबसाइटों से लिए गए हैं। मिस्ड कॉल से आपका कोई पैसा या जानकारी नहीं चली जाती। आपको सिर्फ अपना बैलेंस SMS में मिलता है। फिर भी, हम समय-समय पर नंबर सत्यापित करते हैं।</p>
+        <p class="mt-3 text-sm text-gray-600">नंबर bank websites और cross-check sources से संकलित किए जाते हैं, लेकिन वे बदल सकते हैं। इस्तेमाल से पहले official bank website पर current number verify करें और किसी call पर OTP, PIN, CVV या password साझा न करें।</p>
       </details>
     </div>
   </div>
@@ -304,7 +279,7 @@ const bankingServices = [
         <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-white font-bold">₹</div>
         <span class="font-bold text-white">BalCheck.in</span>
       </div>
-      <div class="flex items-center gap-4 text-sm">
+      <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm">
         <a href="/" class="text-gray-400 hover:text-white transition-colors">होम</a>
         <a href="/how-it-works/" class="text-gray-400 hover:text-white transition-colors">कैसे काम करता है</a>
         <a href="/customer-care/" class="text-gray-400 hover:text-white transition-colors">Customer Care</a>
@@ -317,7 +292,7 @@ const bankingServices = [
     </div>
     <div class="mt-6 pt-6 border-t border-gray-800">
       <p class="text-xs text-gray-500 leading-relaxed">
-        ⚠️ ज़रूरी जानकारी: यहाँ दिए गए सभी नंबर आधिकारिक बैंक वेबसाइटों से एकत्रित किए गए हैं। बैंक कभी-कभी नंबर बदल सकते हैं। कृपया अपने बैंक की आधिकारिक वेबसाइट से सत्यापित करें। BalCheck.in किसी भी बैंक का आधिकारिक प्रतिनिधि नहीं है।
+        ⚠️ ज़रूरी जानकारी: नंबर bank websites और cross-check sources से संकलित किए जाते हैं और बदल सकते हैं। इस्तेमाल से पहले अपने bank की official website पर current details सत्यापित करें। BalCheck.in किसी भी बैंक का आधिकारिक प्रतिनिधि नहीं है।
       </p>
       <p class="mt-4 text-xs text-gray-500">© 2026 BalCheck.in — Made in India 🇮🇳</p>
     </div>

@@ -14,6 +14,11 @@ const schema = {
   "name": "SMS Banking Directory",
   "description": description,
   "url": canonicalUrl,
+  "mainEntity": {
+    "@type": "ItemList",
+    "numberOfItems": banks.length,
+    "itemListElement": banks.map((bank, index) => ({ "@type": "ListItem", "position": index + 1, "name": bank.name, "url": `${siteUrl}/sms-banking/${bank.slug}/` })),
+  },
   "breadcrumb": {
     "@type": "BreadcrumbList",
     "itemListElement": [

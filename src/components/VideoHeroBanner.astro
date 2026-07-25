@@ -21,16 +21,6 @@ const resolveUrl = (p: string) => (p.startsWith('http') ? p : `${siteOrigin}${p.
 const videoUrl = resolveUrl(src);
 const posterUrl = poster ? resolveUrl(poster) : undefined;
 const thumbnailUrl = posterUrl ?? videoUrl;
-
-function normalizeDate(date: string): string {
-  if (!date) return '';
-  const ist = '+05:30';
-  if (date.includes('T')) {
-    if (/Z|[+-]\d{2}:\d{2}$/.test(date)) return date;
-    return `${date}${ist}`;
-  }
-  return `${date}T00:00:00${ist}`;
-}
 ---
 
 <section class="relative w-full overflow-hidden bg-gray-900">
@@ -81,7 +71,6 @@ function normalizeDate(date: string): string {
     thumbnailUrl,
     contentUrl: videoUrl,
     embedUrl: videoUrl,
-    uploadDate: normalizeDate(new Date().toISOString().slice(0, 10)),
     duration: 'PT6S',
     inLanguage: 'hi',
     isAccessibleForFree: true,

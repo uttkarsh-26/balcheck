@@ -1,0 +1,66 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { banks, categories, categoryHindi } from '../../data/banks';
+
+const siteUrl = 'https://balcheck.in';
+const canonicalUrl = `${siteUrl}/banks/`;
+const title = `Bank Directory India — ${banks.length} बैंकों की categories | BalCheck.in`;
+const description = `${banks.length} भारतीय बैंकों को public, private, regional rural, small finance, payments, foreign और cooperative categories में खोजें। हर bank के balance enquiry methods और contact details देखें।`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Bank Directory India',
+  description,
+  url: canonicalUrl,
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: categories.length,
+    itemListElement: categories.map((category, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: categoryHindi[category],
+      url: `${siteUrl}/banks/${category.toLowerCase().replace(/\s+/g, '-')}/`,
+    })),
+  },
+  breadcrumb: {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+      { '@type': 'ListItem', position: 2, name: 'Bank Directory', item: canonicalUrl },
+    ],
+  },
+};
+---
+<Layout title={title} description={description} canonical={canonicalUrl}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <div class="mx-auto max-w-6xl px-4 py-6">
+    <nav class="mb-4 text-sm text-gray-500" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-brand-600">Home</a><span class="mx-1">›</span><span class="text-gray-700">Bank Directory</span>
+    </nav>
+    <section class="rounded-2xl bg-gradient-to-br from-brand-600 to-brand-800 p-6 text-white">
+      <h1 class="text-2xl font-bold sm:text-3xl">Bank Directory India</h1>
+      <p class="mt-2 text-sm text-brand-100">{banks.length} बैंकों को category के अनुसार खोजें और balance enquiry methods देखें।</p>
+    </section>
+    <main class="py-8">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {categories.map(category => {
+          const categoryBanks = banks.filter(bank => bank.category === category);
+          const slug = category.toLowerCase().replace(/\s+/g, '-');
+          return (
+            <a href={`/banks/${slug}/`} class="rounded-xl border border-gray-200 bg-white p-5 transition-all hover:border-brand-300 hover:shadow-md">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <h2 class="font-bold text-gray-900">{categoryHindi[category]}</h2>
+                  <p class="mt-1 text-sm text-gray-500">{category}</p>
+                </div>
+                <span class="rounded-full bg-brand-50 px-2.5 py-1 text-sm font-semibold text-brand-700">{categoryBanks.length}</span>
+              </div>
+              <p class="mt-4 text-sm font-medium text-brand-700">बैंक देखें →</p>
+            </a>
+          );
+        })}
+      </div>
+    </main>
+  </div>
+</Layout>

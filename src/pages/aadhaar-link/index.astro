@@ -14,6 +14,11 @@ const schema = {
   "name": "Bank Aadhaar Link India",
   "description": description,
   "url": canonicalUrl,
+  "mainEntity": {
+    "@type": "ItemList",
+    "numberOfItems": banks.length,
+    "itemListElement": banks.map((bank, index) => ({ "@type": "ListItem", "position": index + 1, "name": bank.name, "url": `${siteUrl}/aadhaar-link/${bank.slug}/` })),
+  },
   "breadcrumb": {
     "@type": "BreadcrumbList",
     "itemListElement": [

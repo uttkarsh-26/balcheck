@@ -31,7 +31,7 @@ test('service pages expose reciprocal discovery links', async ({ page }) => {
   for (const [path, links] of cases) {
     await page.goto(path);
     for (const href of links) {
-      await expect(page.locator(`a[href="${href}"]`)).toBeVisible();
+      await expect(page.locator(`a[href="${href}"]`).first()).toBeVisible();
     }
   }
 });

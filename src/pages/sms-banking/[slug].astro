@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import MoreServices from '../../components/MoreServices.astro';
 import { banks } from '../../data/banks';
 import type { Bank } from '../../data/banks';
 
@@ -63,9 +64,6 @@ const schema = {
       <h2 class="text-lg font-semibold mb-4">FAQ</h2>
       <div class="space-y-4">{faqs.map(f => <div><h3 class="font-medium text-sm mb-1">{f.q}</h3><p class="text-gray-600 text-sm">{f.a}</p></div>)}</div>
     </div>
-    <div class="grid grid-cols-2 gap-3 mt-6">
-      <a href={`/mini-statement/${bank.slug}/`} class="bg-white rounded-xl border border-gray-200 p-4 text-center text-brand-700">Mini Statement →</a>
-      <a href={`/balance-enquiry/${bank.slug}/`} class="bg-white rounded-xl border border-gray-200 p-4 text-center text-brand-700">Balance Enquiry →</a>
-    </div>
+    <MoreServices bank={bank} />
   </div>
 </Layout>

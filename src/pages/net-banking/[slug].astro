@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import MoreServices from '../../components/MoreServices.astro';
 import { banks } from '../../data/banks';
 import type { Bank } from '../../data/banks';
 import VideoHeroBanner from '../../components/VideoHeroBanner.astro';
@@ -70,12 +71,13 @@ const schema = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "WebSite",
-      "name": `${bank.name} Net Banking`,
-      "url": bank.website,
-      "publisher": {
+      "@type": "WebPage",
+      "name": `${bank.name} Net Banking Guide`,
+      "url": canonicalUrl,
+      "about": {
         "@type": "BankOrCreditUnion",
         "name": bank.name,
+        "url": bank.website,
       },
     },
     {
@@ -244,8 +246,8 @@ const schema = {
     <!-- Customer Care -->
     <div class="bg-white rounded-xl border border-gray-200 p-4">
       <p class="text-xs text-gray-500 font-medium mb-1">🎧 सहायता के लिए Customer Care</p>
-      <a href={`tel:${bank.customerCare}`}
-         class="text-lg font-semibold text-brand-700">{bank.customerCare}</a>
+      <a href={`tel:${bank.customerCare}`} class="text-lg font-semibold text-brand-700">{bank.customerCare}</a>
     </div>
+    <MoreServices bank={bank} />
   </div>
 </Layout>

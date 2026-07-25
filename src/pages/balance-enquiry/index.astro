@@ -14,6 +14,11 @@ const schema = {
   "name": "Bank Balance Enquiry Numbers India",
   "description": description,
   "url": canonicalUrl,
+  "mainEntity": {
+    "@type": "ItemList",
+    "numberOfItems": banks.length,
+    "itemListElement": banks.map((bank, index) => ({ "@type": "ListItem", "position": index + 1, "name": bank.name, "url": `${siteUrl}/balance-enquiry/${bank.slug}/` })),
+  },
   "breadcrumb": {
     "@type": "BreadcrumbList",
     "itemListElement": [

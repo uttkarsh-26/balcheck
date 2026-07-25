@@ -3,7 +3,7 @@ const siteUrl = 'https://balcheck.in';
 const faqItems = [
   {
     q: 'मिस्ड कॉल से बैलेंस कैसे पता करें?',
-    a: 'अपने बैंक का रजिस्टर्ड मोबाइल नंबर से ऊपर दिए गए missed call number पर कॉल करें और 2-3 ring के बाद कॉल काट दें। कुछ ही सेकंड में आपको SMS में बैलेंस आ जाएगा। यह सेवा बिल्कुल मुफ़्त है।'
+    a: 'यदि आपके बैंक की verified missed-call balance service उपलब्ध है, तो खाते से linked mobile से उस नंबर पर कॉल करें। कॉल आम तौर पर अपने आप कटती है और बैंक SMS भेजता है। Bank की official instructions और लागू charges जरूर जांचें।'
   },
   {
     q: 'मिस्ड कॉल बैलेंस सेवा मुफ़्त है?',
@@ -19,7 +19,7 @@ const faqItems = [
   },
   {
     q: 'क्या ये नंबर सुरक्षित हैं?',
-    a: 'जी हाँ, ये सभी नंबर आधिकारिक बैंक वेबसाइटों से लिए गए हैं। मिस्ड कॉल से आपका कोई पैसा या जानकारी नहीं चली जाती। आपको सिर्फ अपना बैलेंस SMS में मिलता है। फिर भी, हम समय-समय पर नंबर सत्यापित करते हैं।'
+    a: 'नंबर bank websites और cross-check sources से संकलित किए जाते हैं, लेकिन वे बदल सकते हैं। इस्तेमाल से पहले official bank website पर current number verify करें और किसी call पर OTP, PIN, CVV या password साझा न करें।'
   },
   {
     q: 'अपना बैंक इस लिस्ट में नहीं है?',
@@ -32,7 +32,7 @@ const websiteSchema = {
   '@type': 'WebSite',
   name: 'BalCheck.in',
   url: `${siteUrl}/`,
-  description: 'बैंक बैलेंस मिस्ड कॉल नंबर — सभी बैंकों के balance enquiry missed call numbers एक जगह',
+  description: 'भारतीय बैंकों के balance enquiry methods, missed-call और customer-care/IVR details एक जगह',
   inLanguage: 'hi-IN',
   potentialAction: {
     '@type': 'SearchAction',
@@ -51,7 +51,7 @@ const orgSchema = {
   '@type': 'Organization',
   name: 'BalCheck',
   url: `${siteUrl}/`,
-  description: 'All bank missed call balance check numbers in one place',
+  description: 'Indian bank balance enquiry methods and contact directory',
 };
 
 const faqSchema = {

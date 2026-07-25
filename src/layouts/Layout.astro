@@ -1,11 +1,16 @@
 ---
+import SiteHeader from '../components/SiteHeader.astro';
+
 interface Props {
   title: string;
   description?: string;
+  canonical?: string;
 }
 
-const { title, description = 'बैंक बैलेंस मिस्ड कॉल नंबर — सभी बैंकों के balance enquiry missed call numbers एक जगह' } = Astro.props;
+const { title, description = 'भारतीय बैंकों के balance enquiry methods और verified contact details एक जगह', canonical } = Astro.props;
 const siteUrl = 'https://balcheck.in';
+const canonicalUrl = (canonical ?? new URL(Astro.url.pathname, siteUrl).href).replace(/(?<!:)\/\/$/, '/');
+const canonicalHref = canonicalUrl.endsWith('/') ? canonicalUrl : `${canonicalUrl}/`;
 
 // HTML: browser always revalidates (max-age=0), CF edge caches 1h with SWR
 // Short edge TTL ensures deploys are visible within ~1h even if purge fails
@@ -30,13 +35,13 @@ Astro.response.headers.set('Cache-Control', 'public, s-maxage=3600, max-age=0, s
   
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content={new URL(Astro.url.pathname, siteUrl).href} />
+  <meta property="og:url" content={canonicalHref} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:locale" content="hi_IN" />
   
   <!-- Canonical -->
-  <link rel="canonical" href={new URL(Astro.url.pathname, siteUrl).href} />
+  <link rel="canonical" href={canonicalHref} />
   
   <!-- Theme color -->
   <meta name="theme-color" content="#2563eb" />
@@ -61,6 +66,7 @@ Astro.response.headers.set('Cache-Control', 'public, s-maxage=3600, max-age=0, s
   <!-- Monetag Multitag (all-in-one monetization) -->
   <script src="https://quge5.com/88/tag.min.js" data-zone="251914" async data-cfasync="false"></script>
 
+  <SiteHeader />
   <slot />
 </body>
 </html>

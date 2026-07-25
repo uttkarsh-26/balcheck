@@ -1,72 +1,79 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { banks, categories, categoryHindi } from '../../data/banks';
+import { isTrueTollFreeNumber } from '../../lib/phone';
 
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = `${siteUrl}/toll-free-number/`;
-
-const title = `Bank Toll Free Numbers India — ${banks.length}+ बैंक Helpline | BalCheck.in`;
-const description = `SBI, HDFC, ICICI, PNB सहित ${banks.length}+ बैंकों के toll free customer care numbers एक जगह। Official website links और safety tips।`;
+const tollFreeCount = banks.filter(bank => isTrueTollFreeNumber(bank.customerCare)).length;
+const title = `Bank Customer Care Numbers India — ${banks.length} बैंक helpline | BalCheck.in`;
+const description = `${banks.length} बैंकों के customer care numbers एक जगह। ${tollFreeCount} records में 1800 toll-free number हैं; बाकी को customer-care number के रूप में सही label किया गया है।`;
 
 const schema = {
-  "@context": "https://schema.org",
-  "@type": "CollectionPage",
-  "name": "Bank Toll Free Numbers India",
-  "description": description,
-  "url": canonicalUrl,
-  "breadcrumb": {
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": `${siteUrl}/` },
-      { "@type": "ListItem", "position": 2, "name": "Toll Free Number", "item": canonicalUrl },
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Bank Customer Care Numbers India',
+  description,
+  url: canonicalUrl,
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: banks.length,
+    itemListElement: banks.map((bank, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: `${bank.name} Customer Care Number`,
+      url: `${siteUrl}/toll-free-number/${bank.slug}/`,
+    })),
+  },
+  breadcrumb: {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+      { '@type': 'ListItem', position: 2, name: 'Customer Care', item: canonicalUrl },
     ],
   },
 };
 ---
 <Layout title={title} description={description} canonical={canonicalUrl}>
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
-
-  <div class="max-w-4xl mx-auto px-4 py-6">
-    <nav class="text-sm text-gray-500 mb-4">
-      <a href="/" class="hover:text-brand-600">Home</a>
-      <span class="mx-1">›</span>
-      <span class="text-gray-700">Toll Free Numbers</span>
+  <div class="mx-auto max-w-6xl px-4 py-6">
+    <nav class="mb-4 text-sm text-gray-500">
+      <a href="/" class="hover:text-brand-600">Home</a><span class="mx-1">›</span><span class="text-gray-700">Customer Care</span>
     </nav>
-
-    <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-6">
-      <h1 class="text-2xl font-bold mb-2">Bank Toll Free Numbers India</h1>
-      <p class="text-brand-100 text-sm">भारतीय बैंकों के customer care नंबर — {banks.length} बैंकों के helpline</p>
+    <section class="rounded-2xl bg-gradient-to-br from-brand-600 to-brand-800 p-6 text-white">
+      <h1 class="text-2xl font-bold sm:text-3xl">Bank Customer Care Numbers India</h1>
+      <p class="mt-2 text-sm text-brand-100">{banks.length} बैंकों के customer care numbers — {tollFreeCount} verified 1800 toll-free records और बाकी regular/other customer-care numbers</p>
+    </section>
+    <div class="my-6 rounded-2xl border border-amber-200 bg-amber-50 p-5">
+      <h2 class="mb-2 text-lg font-bold text-amber-900">Safety first</h2>
+      <p class="text-sm leading-relaxed text-amber-800">Customer care call पर OTP, PIN, CVV, UPI PIN या password कभी न बताएं। 1860 या अन्य non-1800 numbers को toll-free न मानें।</p>
     </div>
-
-    <div class="bg-amber-50 rounded-2xl border border-amber-200 p-5 mb-6">
-      <h2 class="text-lg font-bold text-amber-900 mb-2">⚠️ Safety first</h2>
-      <p class="text-sm text-amber-800 leading-relaxed">Customer care call पर OTP, PIN, CVV, UPI PIN या password कभी न बताएं। Bank ये details phone पर नहीं मांगता।</p>
-    </div>
-
-    {categories.map(cat => {
-      const catBanks = banks.filter(b => b.category === cat);
-      return (
-        <div class="mb-6">
-          <h2 class="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-            {cat}
-            <span class="text-sm font-normal text-gray-500">({categoryHindi[cat]})</span>
-          </h2>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {catBanks.map(bank => (
-              <a href={`/toll-free-number/${bank.slug}/`}
-                 class="bg-white rounded-xl border border-gray-200 p-4 hover:border-brand-300 hover:shadow-sm transition-all">
-                <div class="flex items-center justify-between">
-                  <div>
-                    <p class="font-medium text-gray-900 text-sm">{bank.shortName}</p>
-                    <p class="text-xs text-gray-500">{bank.nameHindi}</p>
-                  </div>
-                  <span class="text-xs font-bold text-brand-600">{bank.customerCare}</span>
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-      );
-    })}
+    <main>
+      {categories.map(category => {
+        const categoryBanks = banks.filter(bank => bank.category === category);
+        return categoryBanks.length > 0 && (
+          <section class="mb-8">
+            <div class="mb-4 flex items-center justify-between gap-3">
+              <h2 class="text-xl font-bold text-gray-900">{categoryHindi[category]}</h2>
+              <a href={`/banks/${category.toLowerCase().replace(/\s+/g, '-')}/`} class="text-sm font-medium text-brand-600 hover:underline">Bank category →</a>
+            </div>
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {categoryBanks.map(bank => {
+                const tollFree = isTrueTollFreeNumber(bank.customerCare);
+                return (
+                  <a href={`/toll-free-number/${bank.slug}/`} class="rounded-xl border border-gray-200 bg-white p-4 transition-all hover:border-brand-300 hover:shadow-md">
+                    <div class="mb-3 flex items-start justify-between gap-3">
+                      <div class="min-w-0"><h3 class="truncate font-bold text-gray-900">{bank.nameHindi}</h3><p class="truncate text-xs text-gray-500">{bank.shortName}</p></div>
+                      <span class="shrink-0 text-xs font-semibold text-brand-700">{tollFree ? '1800 toll-free' : 'Customer care'}</span>
+                    </div>
+                    <div class="rounded-lg bg-brand-50 p-3"><p class="mb-1 text-xs font-medium text-brand-700">🎧 {tollFree ? 'Toll-Free Customer Care' : 'Customer Care Number'}</p><span class="text-lg font-bold tracking-wide text-brand-700">{bank.customerCare}</span></div>
+                  </a>
+                );
+              })}
+            </div>
+          </section>
+        );
+      })}
+    </main>
   </div>
 </Layout>

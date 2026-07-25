@@ -7,10 +7,11 @@ test.describe('homepage', () => {
     await page.goto('/');
   });
 
-  test('renders hero heading and key stats', async ({ page }) => {
-    await expect(page.getByRole('heading', { level: 1, name: 'बैंक बैलेंस मिस्ड कॉल नंबर' })).toBeVisible();
-    await expect(page.locator('body')).toContainText(`${banks.length}+ बैंक`);
-    await expect(page.locator('body')).toContainText('24×7');
+  test('renders demand-led hero without unsupported universal claims', async ({ page }) => {
+    await expect(page.getByRole('heading', { level: 1, name: 'बैंक बैलेंस चेक नंबर' })).toBeVisible();
+    await expect(page.locator('body')).toContainText(`${banks.length} बैंक`);
+    await expect(page.locator('body')).not.toContainText('100%');
+    await expect(page.locator('body')).not.toContainText('24×7');
   });
 
   test('renders one bank card for every bank', async ({ page }) => {

@@ -23,6 +23,9 @@ interface Props {
 const { category, catBanks } = Astro.props;
 const canonicalUrl = `${siteUrl}/banks/${category.toLowerCase().replace(/\s+/g, '-')}/`;
 const hindiName = categoryHindi[category];
+const missedCallCount = catBanks.filter(bank => bank.balanceMode === 'missed-call').length;
+const alternateMethodCount = catBanks.length - missedCallCount;
+const categoryMethodLabel = alternateMethodCount > 0 ? 'Balance Enquiry Methods' : 'Missed Call Balance Numbers';
 
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
@@ -36,8 +39,8 @@ const breadcrumbSchema = {
 const collectionSchema = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
-  name: `${hindiName} मिस्ड कॉल बैलेंस नंबर`,
-  description: `सभी ${hindiName} के missed call balance enquiry numbers एक जगह। ${catBanks.length} बैंकों के नंबर।`,
+  name: `${hindiName} ${categoryMethodLabel}`,
+  description: `${hindiName} के ${categoryMethodLabel.toLowerCase()} एक जगह। ${catBanks.length} बैंकों में ${missedCallCount} missed-call records और ${alternateMethodCount} customer-care/IVR या अन्य methods हैं।`,
   url: canonicalUrl,
   mainEntity: {
     '@type': 'ItemList',
@@ -51,14 +54,13 @@ const collectionSchema = {
   },
 };
 
-// GSC-aligned title/description for cooperative-bank category
 const isCooperative = category === 'Cooperative Bank';
 const pageTitle = isCooperative
-  ? `Cooperative Bank Balance Check Number — सहकारी बैंक बैलेंस चेक नंबर | BalCheck.in`
-  : `${hindiName} मिस्ड कॉल बैलेंस नंबर — ${catBanks.length} बैंक | BalCheck.in`;
+  ? `Cooperative Bank Balance Check Number — सहकारी बैंकों की enquiry guide | BalCheck.in`
+  : `${hindiName} ${categoryMethodLabel} — ${catBanks.length} बैंक | BalCheck.in`;
 const pageDesc = isCooperative
-  ? `सहकारी बैंक balance check number लिस्ट। ${catBanks.length} सहकारी बैंकों (Cosmos Bank, Saraswat Bank) के missed call balance enquiry numbers। मुफ़्त और 24×7।`
-  : `सभी ${hindiName} के missed call balance enquiry numbers एक जगह। ${catBanks.length} बैंकों के नंबर। मुफ़्त और 24×7।`;
+  ? `सहकारी बैंकों के balance enquiry methods। ${catBanks.length} records में missed call, customer care और IVR details को अलग-अलग label के साथ देखें।`
+  : `${hindiName} के ${categoryMethodLabel.toLowerCase()} एक जगह। ${catBanks.length} बैंकों में ${missedCallCount} missed-call और ${alternateMethodCount} customer-care/IVR या अन्य records।`;
 ---
 
 <Layout title={pageTitle} description={pageDesc}>
@@ -77,8 +79,8 @@ const pageDesc = isCooperative
 <!-- Header -->
 <section class="bg-gradient-to-b from-brand-50 to-white border-b border-gray-100">
   <div class="max-w-6xl mx-auto px-4 py-8 text-center">
-    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">{isCooperative ? 'Cooperative Bank Balance Check Number — सहकारी बैंक' : `${hindiName} मिस्ड कॉल बैलेंस नंबर`}</h1>
-    <p class="mt-2 text-gray-600">सभी {hindiName} के balance enquiry numbers एक जगह — {catBanks.length} बैंक</p>
+    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">{isCooperative ? 'Cooperative Bank Balance Check Number — सहकारी बैंक' : `${hindiName} ${categoryMethodLabel}`}</h1>
+    <p class="mt-2 text-gray-600">{isCooperative ? 'Cooperative bank balance check number और enquiry methods' : `${hindiName} के ${categoryMethodLabel.toLowerCase()}`} — {catBanks.length} बैंक; {missedCallCount} missed-call और {alternateMethodCount} customer-care/IVR या अन्य methods</p>
   </div>
 </section>
 
