@@ -1,0 +1,123 @@
+---
+interface Fact {
+  label: string;
+  value: string;
+}
+
+interface TimelineEvent {
+  date: string;
+  text: string;
+  datetime?: string;
+}
+
+interface Action {
+  title: string;
+  steps: string[];
+  officialUrl?: string;
+  officialLabel?: string;
+}
+
+interface Details {
+  title: string;
+  body: string;
+}
+
+interface Props {
+  summary: string; // One verified sentence; authoring guide caps it at 35 words.
+  facts?: Fact[];
+  timeline?: TimelineEvent[];
+  action?: Action;
+  details?: Details;
+}
+
+const { summary, facts, timeline, action, details } = Astro.props;
+const hasSummary = typeof summary === 'string' && summary.trim().length > 0;
+const safeOfficialUrl = (() => {
+  const rawUrl = action?.officialUrl?.trim();
+  if (!rawUrl || !/^https:\/\//i.test(rawUrl)) return undefined;
+
+  try {
+    const url = new URL(rawUrl);
+    if (url.protocol !== 'https:' || !url.hostname || url.username || url.password) return undefined;
+    return url.href;
+  } catch {
+    return undefined;
+  }
+})();
+const hasAction = Boolean(action && (action.steps.length > 0 || safeOfficialUrl));
+---
+
+{hasSummary && (
+  <section class="my-8 rounded-xl border border-gray-200 bg-white shadow-sm">
+    <div class="border-b border-gray-200 bg-gray-50 px-4 py-5 sm:px-6">
+      <h2 class="text-xl font-bold text-brand-800 sm:text-2xl">Quick summary</h2>
+      <p class="mt-2 min-w-0 break-words [overflow-wrap:anywhere] text-base leading-relaxed text-gray-700">{summary}</p>
+    </div>
+
+    <div class="space-y-8 p-4 sm:p-6">
+      {facts && facts.length > 0 && (
+        <section class="space-y-3">
+          <h3 class="text-lg font-bold text-gray-900">Key facts</h3>
+          <dl class="grid gap-3 sm:grid-cols-2">
+            {facts.map((fact) => (
+              <div class="min-w-0 rounded-lg border border-brand-200 bg-brand-50 p-4">
+                <dt class="min-w-0 break-words [overflow-wrap:anywhere] text-sm font-semibold text-brand-800">{fact.label}</dt>
+                <dd class="mt-1 min-w-0 break-words [overflow-wrap:anywhere] text-base font-bold leading-relaxed text-gray-900">{fact.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )}
+
+      {timeline && timeline.length > 0 && (
+        <section class="space-y-3">
+          <h3 class="text-lg font-bold text-gray-900">Timeline</h3>
+          <ol class="space-y-4 border-l-2 border-amber-200 pl-4">
+            {timeline.map((event) => (
+              <li class="relative pl-1">
+                <span class="absolute -left-[1.4rem] top-1.5 h-3 w-3 rounded-full border-2 border-white bg-saffron-500" aria-hidden="true"></span>
+                <p class="min-w-0 break-words [overflow-wrap:anywhere] font-semibold text-gray-900">
+                  {event.datetime ? <time datetime={event.datetime}>{event.date}</time> : <time>{event.date}</time>}
+                </p>
+                <p class="mt-1 min-w-0 break-words [overflow-wrap:anywhere] leading-relaxed text-gray-700">{event.text}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+
+      {hasAction && action && (
+        <section class="space-y-3 rounded-lg border border-green-200 bg-green-50 p-4 sm:p-5">
+          <h3 class="min-w-0 break-words [overflow-wrap:anywhere] text-lg font-bold text-green-900">{action.title}</h3>
+          {action.steps.length > 0 && (
+            <ol class="min-w-0 list-decimal space-y-2 pl-5 text-gray-800 marker:font-semibold marker:text-green-700">
+              {action.steps.map((step) => <li class="min-w-0 break-words [overflow-wrap:anywhere] pl-1 leading-relaxed">{step}</li>)}
+            </ol>
+          )}
+          {safeOfficialUrl && (
+            <p class="min-w-0 break-words [overflow-wrap:anywhere] pt-1">
+              <a
+                href={safeOfficialUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex max-w-full items-center gap-1 break-words [overflow-wrap:anywhere] font-semibold text-green-800 underline decoration-green-700 underline-offset-2 hover:text-green-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700"
+                aria-label={`${action.officialLabel ?? 'Official source'} (opens in a new tab)`}
+              >
+                {action.officialLabel ?? 'Open official source'} <span aria-hidden="true">↗</span>
+              </a>
+            </p>
+          )}
+        </section>
+      )}
+
+      {details && (
+        <details class="rounded-lg border border-gray-200 bg-gray-50 p-4">
+          <summary class="min-w-0 cursor-pointer break-words [overflow-wrap:anywhere] font-semibold text-gray-900 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gray-950 focus-visible:ring-offset-2">
+            {details.title}
+          </summary>
+          <p class="mt-3 min-w-0 break-words [overflow-wrap:anywhere] leading-relaxed text-gray-700">{details.body}</p>
+        </details>
+      )}
+    </div>
+  </section>
+)}
