@@ -147,14 +147,17 @@ test.describe('truthful service architecture', () => {
     expect(parsed.some(schema => schema['@type'] === 'WebPage')).toBe(true);
   });
 
-  test('omits unsafe build-date uploadDate from video schema and emits one canonical', async ({ page }) => {
+  test('emits GSC-compliant uploadDate on video schema and one canonical', async ({ page }) => {
     await page.goto('/net-banking/sbi/');
     const scripts = await page.locator('script[type="application/ld+json"]').allTextContents();
     const video = scripts.flatMap(value => {
       const schema = JSON.parse(value);
       return schema['@graph'] ?? [schema];
     }).find(schema => schema['@type'] === 'VideoObject');
-    if (video) expect(video.uploadDate).toBeUndefined();
+    expect(video).toBeTruthy();
+    // GSC requires uploadDate as a full ISO 8601 datetime with timezone (not date-only, not undefined)
+    expect(video!.uploadDate).toBeTruthy();
+    expect(video!.uploadDate).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}$/);
     await expect(page.locator('link[rel="canonical"]')).toHaveCount(1);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/$/);
   });

@@ -12,8 +12,11 @@ interface Props {
   ctaHref?: string;
   poster?: string;
   headingLevel?: 1 | 2;
+  /** ISO 8601 uploadDate for VideoObject schema (full datetime with timezone).
+   *  Defaults to the date the hero video was first published on the site. */
+  uploadDate?: string;
 }
-const { src, title, subtitle, ctaText, ctaHref, poster, headingLevel = 1 } = Astro.props;
+const { src, title, subtitle, ctaText, ctaHref, poster, headingLevel = 1, uploadDate = '2026-06-22T18:34:39+05:30' } = Astro.props;
 const HeadingTag = `h${headingLevel}` as 'h1' | 'h2';
 
 const siteOrigin = Astro.url.origin;
@@ -68,6 +71,7 @@ const thumbnailUrl = posterUrl ?? videoUrl;
     '@type': 'VideoObject',
     name: title,
     description: subtitle ?? title,
+    uploadDate,
     thumbnailUrl,
     contentUrl: videoUrl,
     embedUrl: videoUrl,
