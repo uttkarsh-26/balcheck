@@ -17,6 +17,7 @@ const validBrief = {
     event(5),
   ],
   action: { title: 'Next steps', steps: [1, 2, 3, 4, 5].map(step) },
+  details: { title: 'Why this matters', body: 'This context is sourced from the verified update.' },
 };
 
 assert.deepEqual(validateScannableArticleSummary(validBrief), []);
@@ -27,11 +28,6 @@ assert.deepEqual(validateScannableArticleSummary({
 }), []);
 
 const failures = [
-  {
-    name: 'summary over 35 words',
-    brief: { ...validBrief, summary: Array.from({ length: 36 }, (_, index) => `word${index + 1}`).join(' ') },
-    message: 'summary must contain at most 35 words',
-  },
   {
     name: 'null fact',
     brief: { ...validBrief, facts: [null] },
@@ -48,6 +44,16 @@ const failures = [
     message: 'facts[0].value must be a non-empty string',
   },
   {
+    name: 'fact with non-string label',
+    brief: { ...validBrief, facts: [{ label: 42, value: 'Value' }] },
+    message: 'facts[0].label must be a non-empty string',
+  },
+  {
+    name: 'fact with empty value',
+    brief: { ...validBrief, facts: [{ label: 'Label', value: '   ' }] },
+    message: 'facts[0].value must be a non-empty string',
+  },
+  {
     name: 'null timeline event',
     brief: { ...validBrief, timeline: [null] },
     message: 'timeline[0] must be a non-null object',
@@ -60,6 +66,21 @@ const failures = [
   {
     name: 'timeline event with non-string text',
     brief: { ...validBrief, timeline: [{ date: 'Date', text: false }] },
+    message: 'timeline[0].text must be a non-empty string',
+  },
+  {
+    name: 'array timeline event',
+    brief: { ...validBrief, timeline: [[]] },
+    message: 'timeline[0] must be a non-null object',
+  },
+  {
+    name: 'timeline event with non-string date',
+    brief: { ...validBrief, timeline: [{ date: 42, text: 'Text' }] },
+    message: 'timeline[0].date must be a non-empty string',
+  },
+  {
+    name: 'timeline event with empty text',
+    brief: { ...validBrief, timeline: [{ date: 'Date', text: '  ' }] },
     message: 'timeline[0].text must be a non-empty string',
   },
   {
@@ -88,9 +109,24 @@ const failures = [
     message: 'action.steps[0] must be a non-empty string',
   },
   {
+    name: 'action with non-string step',
+    brief: { ...validBrief, action: { title: 'Action', steps: [false] } },
+    message: 'action.steps[0] must be a non-empty string',
+  },
+  {
     name: 'action with non-string official URL',
     brief: { ...validBrief, action: { title: 'Action', officialUrl: 123 } },
-    message: 'action.officialUrl must be a string when supplied',
+    message: 'action.officialUrl must be a safe absolute HTTPS URL without credentials when supplied',
+  },
+  {
+    name: 'action with unsafe official URL',
+    brief: { ...validBrief, action: { title: 'Action', officialUrl: 'http://example.com' } },
+    message: 'action.officialUrl must be a safe absolute HTTPS URL without credentials when supplied',
+  },
+  {
+    name: 'action with credentialed official URL',
+    brief: { ...validBrief, action: { title: 'Action', officialUrl: 'https://user:pass@example.com' } },
+    message: 'action.officialUrl must be a safe absolute HTTPS URL without credentials when supplied',
   },
   {
     name: 'action with empty official label',
@@ -113,44 +149,19 @@ const failures = [
     message: 'details.body must be a non-empty string',
   },
   {
-    name: 'fact with non-string label',
-    brief: { ...validBrief, facts: [{ label: 42, value: 'Value' }] },
-    message: 'facts[0].label must be a non-empty string',
-  },
-  {
-    name: 'fact with empty value',
-    brief: { ...validBrief, facts: [{ label: 'Label', value: '   ' }] },
-    message: 'facts[0].value must be a non-empty string',
-  },
-  {
-    name: 'array timeline event',
-    brief: { ...validBrief, timeline: [[]] },
-    message: 'timeline[0] must be a non-null object',
-  },
-  {
-    name: 'timeline event with non-string date',
-    brief: { ...validBrief, timeline: [{ date: 42, text: 'Text' }] },
-    message: 'timeline[0].date must be a non-empty string',
-  },
-  {
-    name: 'timeline event with empty text',
-    brief: { ...validBrief, timeline: [{ date: 'Date', text: '  ' }] },
-    message: 'timeline[0].text must be a non-empty string',
-  },
-  {
     name: 'array action',
     brief: { ...validBrief, action: [] },
     message: 'action must be a non-null object',
   },
   {
-    name: 'action with non-string step',
-    brief: { ...validBrief, action: { title: 'Action', steps: [false] } },
-    message: 'action.steps[0] must be a non-empty string',
-  },
-  {
     name: 'array details',
     brief: { ...validBrief, details: [] },
     message: 'details must be a non-null object',
+  },
+  {
+    name: 'summary over 35 words',
+    brief: { ...validBrief, summary: Array.from({ length: 36 }, (_, index) => `word${index + 1}`).join(' ') },
+    message: 'summary must contain at most 35 words',
   },
   {
     name: 'more than 5 facts',

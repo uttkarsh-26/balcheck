@@ -54,6 +54,17 @@ function isNonEmptyString(value) {
   return typeof value === 'string' && value.trim().length > 0;
 }
 
+function isSafeOfficialUrl(value) {
+  if (typeof value !== 'string' || !/^https:\/\//i.test(value.trim())) return false;
+
+  try {
+    const url = new URL(value.trim());
+    return url.protocol === 'https:' && Boolean(url.hostname) && !url.username && !url.password;
+  } catch {
+    return false;
+  }
+}
+
 function wordCount(value) {
   return value.match(/\S+/gu)?.length ?? 0;
 }
@@ -108,7 +119,7 @@ export function validateScannableArticleSummary(props) {
   }
 
   if (brief.action !== undefined) {
-    if (!isObject(brief.action)) {
+    if (!brief.action || typeof brief.action !== 'object' || Array.isArray(brief.action)) {
       errors.push('action must be a non-null object');
     } else {
       if (!isNonEmptyString(brief.action.title)) errors.push('action.title must be a non-empty string');
@@ -122,8 +133,8 @@ export function validateScannableArticleSummary(props) {
           });
         }
       }
-      if (brief.action.officialUrl !== undefined && typeof brief.action.officialUrl !== 'string') {
-        errors.push('action.officialUrl must be a string when supplied');
+      if (brief.action.officialUrl !== undefined && !isSafeOfficialUrl(brief.action.officialUrl)) {
+        errors.push('action.officialUrl must be a safe absolute HTTPS URL without credentials when supplied');
       }
       if (brief.action.officialLabel !== undefined && !isNonEmptyString(brief.action.officialLabel)) {
         errors.push('action.officialLabel must be a non-empty string');

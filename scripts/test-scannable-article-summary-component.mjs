@@ -9,10 +9,16 @@ const repoRoot = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const fixtureRoot = mkdtempSync(join(repoRoot, '.scannable-article-summary-'));
 const componentsPath = join(fixtureRoot, 'src', 'components');
 const pagesPath = join(fixtureRoot, 'src', 'pages');
+const validOutput = join(fixtureRoot, 'valid-dist');
+const invalidOutput = join(fixtureRoot, 'invalid-dist');
 
-const validBrief = {
-  summary: 'PM Kisan status is checked on the official portal after the latest verified payment update.',
-  facts: [1, 2, 3, 4, 5].map((index) => ({ label: `Fact ${index}`, value: `Value ${index}` })),
+function writeFixture(summary, includeUnsafe = false) {
+  writeFileSync(join(pagesPath, 'index.astro'), `---
+import ScannableArticleSummary from '../components/ScannableArticleSummary.astro';
+
+const articleBrief = {
+  summary: ${JSON.stringify(summary)},
+  facts: [1, 2, 3, 4, 5].map((index) => ({ label: \`Fact \${index}\`, value: \`Value \${index}\` })),
   timeline: [
     { date: '28 February 2026', text: 'The verified update was published.', datetime: '2026-02-28' },
     { date: '1 March 2026', text: 'The portal reflected the update.', datetime: '2026-03-01T09:30:00Z' },
@@ -23,13 +29,42 @@ const validBrief = {
     officialUrl: 'https://pmkisan.gov.in',
     officialLabel: 'Official source',
   },
-  details: { title: 'Why this matters', body: 'This context is sourced from the verified update.' },
+  details: {
+    title: 'Why this matters',
+    body: 'This context is sourced from the verified update.',
+  },
 };
 
-function writeFixture(briefs) {
-  const entries = briefs.map((brief, index) => `const brief${index} = ${JSON.stringify(brief)};`).join('\n');
-  const usages = briefs.map((_, index) => `<ScannableArticleSummary {...brief${index}} />`).join('\n');
-  writeFileSync(join(pagesPath, 'index.astro'), `---\nimport ScannableArticleSummary from '../components/ScannableArticleSummary.astro';\n\n${entries}\n---\n${usages}\n`);
+const stepOnlyBrief = {
+  summary: 'This summary checks that an action with steps but no official link still renders.',
+  action: {
+    title: 'Step-only action',
+    steps: ['Complete the first check'],
+  },
+};
+
+const officialLinkOnlyBrief = {
+  summary: 'This summary checks that an official link can render without action steps.',
+  action: {
+    title: 'Official portal',
+    officialUrl: 'https://pmkisan.gov.in',
+    officialLabel: 'Open official portal',
+  },
+};
+
+${includeUnsafe ? `
+const unsafeBrief = {
+  summary: 'This summary checks that unsafe official links are rejected.',
+  action: { title: 'Unsafe link', steps: [], officialUrl: 'javascript:alert(1)' },
+};
+` : ''}
+---
+
+<ScannableArticleSummary {...articleBrief} />
+<ScannableArticleSummary {...stepOnlyBrief} />
+<ScannableArticleSummary {...officialLinkOnlyBrief} />
+${includeUnsafe ? '<ScannableArticleSummary {...unsafeBrief} />' : ''}
+`);
 }
 
 function build(outputPath) {
@@ -50,24 +85,11 @@ try {
   writeFileSync(join(fixtureRoot, '.gitignore'), '');
   writeFileSync(join(fixtureRoot, 'src', '.gitkeep'), '');
   symlinkSync(join(repoRoot, 'src', 'components'), componentsPath, 'dir');
+  writeFixture('PM Kisan status is checked on the official portal after the latest verified payment update.');
 
-  const stepOnlyBrief = {
-    summary: 'This summary checks that an action with steps but no official link still renders.',
-    action: { title: 'Step-only action', steps: ['Complete the first check'] },
-  };
-  const officialLinkOnlyBrief = {
-    summary: 'This summary checks that an official link can render without action steps.',
-    action: { title: 'Official portal', officialUrl: 'https://pmkisan.gov.in', officialLabel: 'Open official portal' },
-  };
-  const unsafeBrief = {
-    summary: 'This second summary checks that unsafe official links are not rendered.',
-    action: { title: 'Unsafe link', steps: [], officialUrl: 'javascript:alert(1)' },
-  };
-
-  writeFixture([validBrief, stepOnlyBrief, officialLinkOnlyBrief, unsafeBrief]);
-  const validBuild = build(join(fixtureRoot, 'valid-dist'));
+  const validBuild = build(validOutput);
   assert.equal(validBuild.status, 0, `valid synthetic component build failed:\n${validBuild.output}`);
-  const html = readFileSync(join(fixtureRoot, 'valid-dist', 'index.html'), 'utf8');
+  const html = readFileSync(join(validOutput, 'index.html'), 'utf8');
   assert.match(html, /PM Kisan status is checked on the official portal/);
   assert.match(html, /href="https:\/\/pmkisan\.gov\.in\/"/);
   assert.match(html, /datetime="2026-03-01T09:30:00Z"/);
@@ -75,28 +97,22 @@ try {
   assert.match(html, /Complete the first check/);
   assert.match(html, /Official portal/);
   assert.match(html, /Open official portal/);
+  assert.match(html, /href="https:\/\/pmkisan\.gov\.in\/"/);
+  assert.match(html, /Why this matters/);
+  assert.match(html, /This context is sourced from the verified update/);
   assert.doesNotMatch(html, /javascript:alert/);
 
-  const malformedBriefs = [
-    { name: 'null-fact', brief: { ...validBrief, facts: [null] }, message: 'facts[0] must be a non-null object' },
-    { name: 'empty-fact-label', brief: { ...validBrief, facts: [{ label: '', value: 'Value' }] }, message: 'facts[0].label must be a non-empty string' },
-    { name: 'null-timeline-event', brief: { ...validBrief, timeline: [null] }, message: 'timeline[0] must be a non-null object' },
-    { name: 'empty-timeline-date', brief: { ...validBrief, timeline: [{ date: '', text: 'Text' }] }, message: 'timeline[0].date must be a non-empty string' },
-    { name: 'null-action', brief: { ...validBrief, action: null }, message: 'action must be a non-null object' },
-    { name: 'non-string-official-url', brief: { ...validBrief, action: { title: 'Action', officialUrl: 123 } }, message: 'action.officialUrl must be a string when supplied' },
-    { name: 'null-details', brief: { ...validBrief, details: null }, message: 'details must be a non-null object' },
-  ];
+  writeFixture(Array.from({ length: 36 }, (_, index) => `word${index + 1}`).join(' '));
+  const invalidBuild = build(invalidOutput);
+  assert.notEqual(invalidBuild.status, 0, 'invalid synthetic component build unexpectedly passed');
+  assert.match(invalidBuild.output, /summary must contain at most 35 words/);
 
-  for (const [index, malformed] of malformedBriefs.entries()) {
-    writeFixture([malformed.brief]);
-    const result = build(join(fixtureRoot, `invalid-${index}-dist`));
-    assert.notEqual(result.status, 0, `${malformed.name}: invalid component build unexpectedly passed`);
-    assert.match(result.output, /ScannableArticleSummary contract violation/);
-    assert.match(result.output, new RegExp(malformed.message.replace(/[.[\]\\]/gu, '\\$&')));
-    assert.doesNotMatch(result.output, /TypeError/);
-  }
+  writeFixture('This summary checks that unsafe official links fail the component contract.', true);
+  const unsafeBuild = build(join(fixtureRoot, 'unsafe-dist'));
+  assert.notEqual(unsafeBuild.status, 0, 'unsafe official URL unexpectedly passed component build');
+  assert.match(unsafeBuild.output, /action\.officialUrl must be a safe absolute HTTPS URL without credentials/);
 
-  console.log(`ScannableArticleSummary component integration: valid render plus ${malformedBriefs.length} malformed rejection cases passed`);
+  console.log('ScannableArticleSummary component integration: valid render plus invalid summary and URL rejection passed');
 } finally {
   rmSync(fixtureRoot, { recursive: true, force: true });
 }
