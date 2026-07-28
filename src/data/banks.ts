@@ -163,7 +163,7 @@ const bankData: BankInput[] = [
   {
     slug: 'psb',
     name: 'Punjab & Sind Bank',
-    nameHindi: 'पंजाब एंड सिंद बैंक',
+    nameHindi: 'पंजाब एंड सिंध बैंक',
     shortName: 'PSB',
     category: 'Public Sector',
     missedCall: '7039035156',

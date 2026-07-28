@@ -3,8 +3,6 @@ import { banks } from '../src/data/banks';
 import { categorySlug, getJsonLdScripts, findSchema } from './utils';
 
 const ctrTitles: Record<string, string> = {
-  canara: 'केनरा बैंक बैलेंस चेक नंबर 8886610360 — मिस्ड कॉल से तुरंत बैलेंस',
-  psb: 'पंजाब एंड सिंद बैंक बैलेंस चेक नंबर 7039035156 — मिस्ड कॉल से तुरंत बैलेंस',
   boi: 'बैंक ऑफ इंडिया (BOI) बैलेंस चेक नंबर 9811255430 — मिस्ड कॉल से तुरंत बैलेंस',
   bandhan: 'बंधन बैंक बैलेंस चेक नंबर 9223008666 | Bandhan Bank',
   sbi: 'SBI बैलेंस चेक नंबर 09223766666 | मिस्ड कॉल सेवा',
@@ -15,7 +13,6 @@ const ctrTitles: Record<string, string> = {
   maharashtra: 'Bank of Maharashtra बैलेंस चेक नंबर 9833335555 — Missed Call से बैलेंस',
   icici: 'ICICI Bank बैलेंस चेक नंबर 9594612612 — Missed Call से तुरंत बैलेंस',
   axis: 'Axis Bank बैलेंस चेक नंबर 18004195959 — Missed Call से तुरंत बैलेंस',
-
 };
 
 const sprint3Banks = new Set(['canara', 'psb', 'boi']);
@@ -30,6 +27,22 @@ for (const bank of banks) {
       await expect(page.getByRole('heading', { level: 1, name: bank.nameHindi })).toBeVisible();
       await expect(page.locator('body')).toContainText(bank.missedCall);
     });
+
+    if (bank.slug === 'canara' || bank.slug === 'psb') {
+      test('uses the scalable default title template', async ({ page }) => {
+        await expect(page).toHaveTitle(
+          `${bank.nameHindi} बैलेंस चेक नंबर ${bank.missedCall} | ${bank.shortName} Missed Call`
+        );
+      });
+
+      test('uses the scalable default description and correct bank spelling', async ({ page }) => {
+        const description = await page.locator('meta[name="description"]').getAttribute('content');
+        const expectedDescription = `${bank.nameHindi} (${bank.shortName}) का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`;
+
+        expect(description).toBe(expectedDescription);
+        expect(description).not.toContain('सिंद');
+      });
+    }
 
     test('call link uses tel: scheme', async ({ page }) => {
       const callLink = page.locator(`a[href="tel:${bank.missedCall}"]`).first();
