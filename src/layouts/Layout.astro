@@ -25,24 +25,24 @@ Astro.response.headers.set('Cache-Control', 'public, s-maxage=3600, max-age=0, s
   <title>{title}</title>
   <meta name="description" content={description} />
   <meta name="robots" content="index, follow" />
-  
+
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  
+
   <!-- System fonts only — Noto Sans Devanagari is the default Android Devanagari face;
        Inter is replaced by system-ui (Android Roboto/Fira). Eliminates the
        render-blocking external fonts.googleapis.com chain (PageSpeed 79 -> target 90+). -->
   <link rel="dns-prefetch" href="https://www.googletagmanager.com">
-  
+
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content={canonicalHref} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:locale" content="hi_IN" />
-  
+
   <!-- Canonical -->
   <link rel="canonical" href={canonicalHref} />
-  
+
   <!-- Theme color -->
   <meta name="theme-color" content="#2563eb" />
 
@@ -54,6 +54,22 @@ Astro.response.headers.set('Cache-Control', 'public, s-maxage=3600, max-age=0, s
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-ZEL0FEF89W');
+
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const utmMedium = params.get('utm_medium');
+
+        if (utmMedium && utmMedium.toLowerCase() === 'social') {
+          gtag('event', 'social_landing', {
+            utm_source: params.get('utm_source') || '',
+            utm_campaign: params.get('utm_campaign') || '',
+            utm_content: params.get('utm_content') || '',
+            landing_path: window.location.pathname,
+          });
+        }
+      } catch (_error) {
+        // ignore URL/params parse failures
+      }
 
       const analyticsScript = document.createElement('script');
       analyticsScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-ZEL0FEF89W';
