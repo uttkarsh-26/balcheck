@@ -123,14 +123,6 @@ const seoOverrides: Partial<Record<string, { title: string; description: string 
     title: `बड़ौदा यूपी ग्रामीण बैंक बैलेंस चेक नंबर ${bank.missedCall} | Missed Call`,
     description: `बड़ौदा यूपी ग्रामीण बैंक का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
   },
-  'punjab-gramin': {
-    title: `पंजाब ग्रामीण बैंक बैलेंस चेक नंबर ${bank.missedCall} | Missed Call`,
-    description: `पंजाब ग्रामीण बैंक का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
-  },
-  indusind: {
-    title: `इंडसइंड बैंक बैलेंस चेक नंबर ${bank.missedCall} | IndusInd Missed Call`,
-    description: `इंडसइंड बैंक का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
-  },
   'idfc-first': {
     title: `IDFC FIRST बैलेंस चेक नंबर ${bank.missedCall} | Missed Call`,
     description: `आईडीएफसी फर्स्ट बैंक का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
@@ -142,10 +134,6 @@ const seoOverrides: Partial<Record<string, { title: string; description: string 
   cosmos: {
     title: `Cosmos Bank Balance Check Number ${bank.missedCall} — Missed Call से बैलेंस देखें`,
     description: `Cosmos Bank balance check number: ${bank.missedCall}. आधिकारिक missed call सेवा — registered mobile से call करें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
-  },
-  rbl: {
-    title: `RBL Bank Balance Check Number ${bank.missedCall} — Missed Call से बैलेंस`,
-    description: `RBL Bank balance check number: ${bank.missedCall}. आधिकारिक missed call सेवा — registered mobile से call करें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
   },
   maharashtra: {
     title: `Bank of Maharashtra बैलेंस चेक नंबर ${bank.missedCall} — Missed Call से बैलेंस`,
@@ -165,11 +153,15 @@ const seoOverrides: Partial<Record<string, { title: string; description: string 
   },
 };
 
+const customerCareTitle = `${bank.name} Balance Check Number ${bank.missedCall}`;
+const conciseCustomerCareTitle = customerCareTitle.length <= 60
+  ? customerCareTitle
+  : `${bank.shortName} Balance Check Number ${bank.missedCall}`;
 const pageTitle = !isMissedCall
-  ? `${bank.nameHindi} Balance Enquiry / Customer Care ${bank.missedCall}`
+  ? conciseCustomerCareTitle
   : seoOverrides[bank.slug]?.title ?? `${bank.nameHindi} बैलेंस चेक नंबर ${bank.missedCall} | ${bank.shortName} Missed Call`;
 const pageDesc = !isMissedCall
-  ? `${bank.name} balance enquiry/customer-care number ${bank.missedCall}. Dedicated missed-call service verified नहीं है; IVR या bank support का उपयोग करें।`
+  ? `${bank.name} balance check number ${bank.missedCall}। यह customer-care/IVR line है; dedicated missed-call service verified नहीं है।`
   : seoOverrides[bank.slug]?.description ?? `${bank.nameHindi} (${bank.shortName}) का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`;
 ---
 

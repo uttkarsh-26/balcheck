@@ -62,6 +62,24 @@ for (const bank of banks) {
       });
     }
 
+    if (bank.balanceMode !== 'missed-call') {
+      test('matches balance-check query intent without mislabeling customer-care lines', async ({ page }) => {
+        const fullTitle = `${bank.name} Balance Check Number ${bank.missedCall}`;
+        const expectedTitle = fullTitle.length <= 60
+          ? fullTitle
+          : `${bank.shortName} Balance Check Number ${bank.missedCall}`;
+        const description = await page.locator('meta[name="description"]').getAttribute('content');
+
+        await expect(page).toHaveTitle(expectedTitle);
+        expect(expectedTitle.length).toBeLessThanOrEqual(60);
+        expect(expectedTitle).not.toContain('Missed Call');
+        expect(description).toContain(`${bank.name} balance check number ${bank.missedCall}`);
+        expect(description).toContain('customer-care/IVR');
+        expect(description).toContain('dedicated missed-call service verified नहीं है');
+        expect(description?.length).toBeLessThanOrEqual(155);
+      });
+    }
+
     if (sprint3Banks.has(bank.slug)) {
       test('shows the Sprint 3 quick answer with the correct number', async ({ page }) => {
         const answer = page.locator('section').filter({
