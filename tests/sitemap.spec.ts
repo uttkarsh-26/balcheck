@@ -1,6 +1,39 @@
 import { test, expect } from '@playwright/test';
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
 import { banks, categories } from '../src/data/banks';
 import { categorySlug } from './utils';
+
+const VERTICAL_HUBS = [
+  '/customer-care/',
+  '/sms-banking/',
+  '/net-banking/',
+  '/mini-statement/',
+  '/mobile-number-registration/',
+  '/aadhaar-link/',
+  '/atm-pin/',
+  '/balance-enquiry/',
+  '/toll-free-number/',
+];
+
+/**
+ * Exact sitemap URL count derived from the current route families and data
+ * (no magic numbers): homepage + how-it-works + bank pages + banks index and
+ * category pages + each vertical's hub and per-bank pages + article pages.
+ */
+function expectedSitemapUrlCount(): number {
+  const articleCount = readdirSync(
+    join(process.cwd(), 'src', 'pages', 'article')
+  ).filter((f) => f.endsWith('.astro')).length;
+  return (
+    1 + // homepage /
+    1 + // /how-it-works/
+    banks.length + // /bank/[slug]/
+    (1 + categories.length) + // /banks/ index + /banks/[category]/
+    VERTICAL_HUBS.length * (banks.length + 1) + // per vertical: hub + one page per bank
+    articleCount // /article/[slug]/
+  );
+}
 
 test.describe('sitemap', () => {
   test('sitemap index lists the main sitemap', async ({ request }) => {
@@ -38,21 +71,17 @@ test.describe('sitemap', () => {
     const response = await request.get('/sitemap-0.xml');
     const text = await response.text();
 
-    const verticalHubs = [
-      '/customer-care/',
-      '/sms-banking/',
-      '/net-banking/',
-      '/mini-statement/',
-      '/mobile-number-registration/',
-      '/aadhaar-link/',
-      '/atm-pin/',
-      '/balance-enquiry/',
-      '/toll-free-number/',
-    ];
-
-    for (const hub of verticalHubs) {
+    for (const hub of VERTICAL_HUBS) {
       expect(text, `sitemap should contain ${hub}`).toContain(`https://balcheck.in${hub}`);
     }
+  });
+
+  test('sitemap URL count matches the exact route inventory derived from current data', async ({ request }) => {
+    const response = await request.get('/sitemap-0.xml');
+    expect(response.status()).toBe(200);
+    const text = await response.text();
+    const locCount = (text.match(/<loc>/g) ?? []).length;
+    expect(locCount).toBe(expectedSitemapUrlCount());
   });
 
   test('sitemap contains balance-enquiry and toll-free-number bank pages', async ({ request }) => {
