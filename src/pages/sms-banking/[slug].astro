@@ -12,9 +12,24 @@ const { bank } = Astro.props;
 const isMissedCall = bank.balanceMode === 'missed-call';
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = `${siteUrl}/sms-banking/${bank.slug}/`;
-const title = bank.slug === 'punjab-gramin'
-  ? 'Punjab Gramin Bank Balance Check Number — Customer Care / IVR'
-  : `${bank.shortName} SMS Banking — Official Registration & Balance Methods`;
+
+// GSC-driven overrides for high-impression sms-banking pages (28d GSC, 2026-07-05..08-01).
+// - punjab-gramin: 3,515 imp; top query "punjab gramin bank balance check number" (913 imp) -> answer number added to title
+// - mp-gramin: 543 imp @ 0% CTR; top query "mpgb balance check number" (205 imp) -> title previously lacked the answer
+// - cosmos: 147 imp @ 0% CTR; top query "cosmos bank balance check number missed call" (38 imp) -> verified missed-call number
+const smsBankingOverrides: Partial<Record<string, { title: string }>> = {
+  'punjab-gramin': {
+    title: `Punjab Gramin Bank Balance Check Number ${bank.missedCall}`,
+  },
+  'mp-gramin': {
+    title: `MPGB Balance Check Number ${bank.missedCall} — Missed Call`,
+  },
+  cosmos: {
+    title: `Cosmos Bank Balance Check Number ${bank.missedCall} — Missed Call`,
+  },
+};
+const title = smsBankingOverrides[bank.slug]?.title
+  ?? `${bank.shortName} SMS Banking — Official Registration & Balance Methods`;
 const h1Text = bank.slug === 'punjab-gramin' ? 'Punjab Gramin Bank Balance Check Number' : `${bank.shortName} SMS Banking`;
 const description = `${bank.name} SMS banking guide. Official commands और registration के लिए bank website देखें। Balance enquiry: ${bank.missedCall} (${isMissedCall ? 'missed call' : 'customer care/IVR'})।`;
 const balanceText = isMissedCall

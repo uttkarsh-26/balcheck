@@ -3,10 +3,17 @@ import { banks } from '../src/data/banks';
 
 const normalize = (value: string) => value.replace(/\D/g, '');
 const fallbacks = banks.filter(bank => normalize(bank.missedCall) === normalize(bank.customerCare));
+const verifiedSameNumberMissedCallSlugs = new Set(['mp-gramin']);
 
-test('every overloaded balance/customer-care number is conservatively classified', () => {
+test('overloaded balance/customer-care numbers stay conservative unless officially verified', () => {
   expect(fallbacks.length).toBeGreaterThan(0);
   for (const bank of fallbacks) {
+    if (verifiedSameNumberMissedCallSlugs.has(bank.slug)) {
+      expect(bank.balanceMode, bank.slug).toBe('missed-call');
+      expect(bank.verificationSource, bank.slug).toContain('https://mpgb.bank.in/');
+      expect(bank.verificationSource, bank.slug).toContain('MISSED CALL FACILITY');
+      continue;
+    }
     expect(bank.balanceMode, bank.slug).toMatch(/customer-care|ivr/);
   }
 });
@@ -32,6 +39,18 @@ test('fallback bank and balance pages never present customer care as missed call
       await expect(page.locator('body')).toContainText(/Balance enquiry या IVR में सहायता चाहिए/i);
     }
   }
+});
+
+test('officially verified same-number MPGB service keeps missed-call flow', async ({ page }) => {
+  await page.goto('/bank/mp-gramin/');
+  const primary = page.locator('[data-testid="primary-balance-service"]');
+  await expect(primary).toContainText(/missed call|मिस्ड कॉल/i);
+  await expect(primary).not.toContainText('Customer Care / IVR');
+
+  await page.goto('/balance-enquiry/mp-gramin/');
+  const section = page.getByTestId('balance-enquiry-service');
+  await expect(section).toContainText(/missed call|मिस्ड कॉल/i);
+  await expect(section).not.toContainText('Customer Care / IVR');
 });
 
 test('verified dedicated missed-call bank keeps its original service flow', async ({ page }) => {
