@@ -90,6 +90,58 @@ Astro.response.headers.set('Cache-Control', 'public, s-maxage=3600, max-age=0, s
   <!-- Monetag Multitag (all-in-one monetization) -->
   <script src="https://quge5.com/88/tag.min.js" data-zone="251914" async data-cfasync="false"></script>
 
+  <!-- Keep Monetag's top fixed iframe below the rendered site header without touching bottom formats. -->
+  <script is:inline>
+    (function() {
+      const TOP_AD_THRESHOLD = 100;
+      const HEADER_HEIGHT_FALLBACK = 64;
+      const MONETAG_Z_INDEX_MIN = 2147480000;
+
+      const positionTopAd = function() {
+        const header = document.querySelector('header');
+        const headerBottom = header
+          ? Math.ceil(header.getBoundingClientRect().bottom)
+          : HEADER_HEIGHT_FALLBACK;
+        const offset = Math.max(headerBottom, HEADER_HEIGHT_FALLBACK);
+        const fixedIframes = document.querySelectorAll(
+          'iframe[style*="position: fixed"], iframe[style*="position:fixed"]'
+        );
+
+        for (const iframe of fixedIframes) {
+          const styles = window.getComputedStyle(iframe);
+          const rect = iframe.getBoundingClientRect();
+          const computedTop = Number.parseFloat(styles.top);
+          const currentTop = Number.isFinite(computedTop) ? computedTop : rect.top;
+          const zIndex = Number.parseInt(styles.zIndex, 10);
+
+          if (
+            rect.width > 0 &&
+            rect.height > 0 &&
+            styles.display !== 'none' &&
+            styles.visibility !== 'hidden' &&
+            styles.opacity !== '0' &&
+            zIndex >= MONETAG_Z_INDEX_MIN &&
+            currentTop >= 0 &&
+            currentTop < TOP_AD_THRESHOLD
+          ) {
+            // Monetag can set `inset: 15px ... !important`; top must also be important.
+            iframe.style.setProperty('top', `${offset}px`, 'important');
+            break;
+          }
+        }
+      };
+
+      const observer = new MutationObserver(positionTopAd);
+      observer.observe(document.documentElement, { childList: true, subtree: true });
+
+      positionTopAd();
+      const interval = window.setInterval(positionTopAd, 250);
+      window.setTimeout(function() {
+        window.clearInterval(interval);
+      }, 5000);
+    })();
+  </script>
+
   <SiteHeader />
   <slot />
 </body>

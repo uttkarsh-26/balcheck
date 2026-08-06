@@ -2,15 +2,10 @@ import { test, expect } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 
 /**
- * Regression test: The ad-position-fix script (MutationObserver that set display:none
- * on "duplicate" top iframes) was killing Monetag Multitag ads. Monetag injects multiple
- * ad iframes through one tag — the fix script hid all but the first as "duplicates".
+ * Monetag Multitag regression coverage.
  *
- * This test ensures:
- * 1. The Monetag Multitag script tag is present
- * 2. AdSense loader is present and has the approved publisher id
- * 3. ads.txt has the exact AdSense ownership line
- * 4. No ad-position-fix script exists that could hide injected ads
+ * The manager must move only a visible, top-positioned Monetag iframe below the
+ * rendered header. It must not hide injected ads or move bottom-positioned formats.
  */
 const layoutSource = readFileSync(new URL('../src/layouts/Layout.astro', import.meta.url), 'utf8');
 
@@ -30,20 +25,72 @@ test.describe('Monetag ads regression', () => {
     expect(layoutSource).toContain('crossorigin="anonymous"');
   });
 
-  test('No ad-position-fix script that hides iframes', async ({ page }) => {
+  test('Monetag position manager is scoped and never hides iframe formats', () => {
+    const managerStart = layoutSource.indexOf('const TOP_AD_THRESHOLD = 100;');
+    const managerEnd = layoutSource.indexOf('</script>', managerStart);
+    const manager = layoutSource.slice(managerStart, managerEnd);
+
+    expect(managerStart).toBeGreaterThan(-1);
+    expect(managerStart).toBeGreaterThan(layoutSource.indexOf('data-zone="251914"'));
+    expect(manager).toContain("document.querySelector('header')");
+    expect(manager).toContain('getBoundingClientRect().bottom');
+    expect(manager).toContain('HEADER_HEIGHT_FALLBACK = 64');
+    expect(manager).toContain("setProperty('top', `${offset}px`, 'important')");
+    expect(manager).toContain('new MutationObserver(positionTopAd)');
+    expect(manager).toContain('rect.width > 0');
+    expect(manager).toContain('zIndex >= MONETAG_Z_INDEX_MIN');
+    expect(manager).toContain('currentTop < TOP_AD_THRESHOLD');
+    expect(manager).not.toMatch(/\.style\.display|setProperty\('display'/);
+  });
+
+  test('Monetag manager moves an asynchronously injected top iframe below the header', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
-    const pageContent = await page.content();
 
-    // The buggy script contained manageAds and display:none logic
-    expect(pageContent).not.toContain('manageAds');
-    expect(pageContent).not.toContain('duplicate top ad');
+    const headerBottom = await page.locator('header[data-testid="global-header"]').evaluate((header) => {
+      return Math.ceil(header.getBoundingClientRect().bottom);
+    });
 
-    // No MutationObserver targeting iframes for ad manipulation
-    const scripts = await page.locator('script').allTextContents();
-    const hasAdObserver = scripts.some(
-      (s) => s.includes('MutationObserver') && s.includes('iframe')
-    );
-    expect(hasAdObserver).toBe(false);
+    await page.evaluate(() => {
+      const topAd = document.createElement('iframe');
+      topAd.dataset.testMonetag = 'top';
+      topAd.title = 'synthetic Monetag top ad';
+      topAd.style.cssText = [
+        'position: fixed',
+        'top: 15px',
+        'left: 0',
+        'width: 390px',
+        'height: 60px',
+        'border: 0',
+        'z-index: 2147483647',
+      ].join(';');
+      document.body.appendChild(topAd);
+
+      const bottomAd = document.createElement('iframe');
+      bottomAd.dataset.testMonetag = 'bottom';
+      bottomAd.title = 'synthetic Monetag bottom ad';
+      bottomAd.style.cssText = [
+        'position: fixed',
+        'right: 0',
+        'bottom: 0',
+        'width: 320px',
+        'height: 50px',
+        'border: 0',
+        'z-index: 2147483647',
+      ].join(';');
+      document.body.appendChild(bottomAd);
+    });
+
+    await expect.poll(async () => page.locator('iframe[data-test-monetag="top"]').evaluate((iframe) => {
+      return {
+        top: iframe.getBoundingClientRect().top,
+        priority: iframe instanceof HTMLIFrameElement ? iframe.style.getPropertyPriority('top') : '',
+        display: getComputedStyle(iframe).display,
+      };
+    })).toEqual({ top: headerBottom, priority: 'important', display: 'block' });
+
+    await expect(page.locator('iframe[data-test-monetag="bottom"]')).toHaveCSS('bottom', '0px');
+    await expect(page.locator('iframe[data-test-monetag="bottom"]')).toHaveCSS('display', 'block');
   });
 
   test('Monetag script present on bank detail pages', async ({ page }) => {
