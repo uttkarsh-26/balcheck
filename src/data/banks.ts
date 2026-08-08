@@ -167,12 +167,12 @@ const bankData: BankInput[] = [
     shortName: 'PSB',
     category: 'Public Sector',
     missedCall: '7039035156',
-    customerCare: '1800-221-908',
-    website: 'https://www.psbindia.com',
+    customerCare: '1800-419-8300',
+    website: 'https://punjabandsind.bank.in',
     verified: true,
-    notes: 'Official site migrated to punjabandsind.bank.in. Old domain psbindia.com still resolves. Customer care on official site: 1800-419-8300 (our data has 1800-221-908 — may be outdated).',
-    verificationSource: "https://punjabandsind.bank.in/ (official .bank.in homepage, 'For Balance Enquiry (By Missed Call) 7039035156' confirmed, 2026-07-20)",
-    lastVerified: '2026-07-20',
+    notes: 'Official site migrated to punjabandsind.bank.in. The official homepage lists toll-free customer care 1800-419-8300 and balance enquiry missed-call number 7039035156.',
+    verificationSource: "https://punjabandsind.bank.in/ (official .bank.in homepage: customer care 1800-419-8300 and 'For Balance Enquiry (By Missed Call) 7039035156' confirmed, 2026-08-08)",
+    lastVerified: '2026-08-08',
 
   },
   {

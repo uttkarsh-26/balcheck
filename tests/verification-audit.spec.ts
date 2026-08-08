@@ -97,4 +97,12 @@ test.describe('2026-07-20 verification audit regression', () => {
     // The old wrong number must not appear anywhere in the axis record
     expect(axis!.notes).toContain('CORRECTED');
   });
+
+  test('Punjab & Sind Bank uses the current official customer-care number', () => {
+    const psb = banks.find(b => b.slug === 'psb');
+    expect(psb).toBeDefined();
+    expect(psb!.customerCare).toBe('1800-419-8300');
+    expect(psb!.website).toBe('https://punjabandsind.bank.in');
+    expect(psb!.verificationSource).toContain('https://punjabandsind.bank.in/');
+  });
 });
