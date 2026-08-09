@@ -17,6 +17,8 @@ for (const action of ['actions/checkout', 'actions/setup-node', 'actions/upload-
 
 assert.match(workflow, /name: Deploy to Cloudflare Worker/);
 assert.doesNotMatch(workflow, /name: Deploy to Cloudflare Pages/);
+assert.match(workflow, /run: npx wrangler deploy/);
+assert.doesNotMatch(workflow, /cloudflare\/wrangler-action@/);
 
 assert.match(agentInstructions, /Stack: Astro 7, TypeScript, Tailwind CSS 4, Cloudflare Workers/);
 assert.match(agentInstructions, /Fresh-build baseline: 811 generated pages/);
