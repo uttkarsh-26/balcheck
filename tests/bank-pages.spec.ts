@@ -13,9 +13,12 @@ const ctrTitles: Record<string, string> = {
   maharashtra: 'Bank of Maharashtra बैलेंस चेक नंबर 9833335555 — Missed Call से बैलेंस',
   icici: 'ICICI Bank बैलेंस चेक नंबर 9594612612 — Missed Call से तुरंत बैलेंस',
   axis: 'Axis Bank बैलेंस चेक नंबर 18004195959 — Missed Call से तुरंत बैलेंस',
+  'up-gramin': 'Uttar Pradesh Gramin Bank Balance Check Number 9986454440',
+  psb: 'PSB Balance Check Number 7039035156 | Punjab & Sind Bank',
 };
 
 const sprint3Banks = new Set(['canara', 'psb', 'boi']);
+const englishAnswerTitleBanks = new Set(['up-gramin', 'psb']);
 
 for (const bank of banks) {
   test.describe(`/bank/${bank.slug}`, () => {
@@ -28,7 +31,7 @@ for (const bank of banks) {
       await expect(page.locator('body')).toContainText(bank.missedCall);
     });
 
-    if (bank.slug === 'canara' || bank.slug === 'psb') {
+    if (bank.slug === 'canara') {
       test('uses the scalable default title template', async ({ page }) => {
         await expect(page).toHaveTitle(
           `${bank.nameHindi} बैलेंस चेक नंबर ${bank.missedCall} | ${bank.shortName} Missed Call`
@@ -53,6 +56,15 @@ for (const bank of banks) {
       test('uses the GSC-driven page title', async ({ page }) => {
         await expect(page).toHaveTitle(ctrTitles[bank.slug]);
       });
+
+      if (englishAnswerTitleBanks.has(bank.slug)) {
+        test('uses a concise English answer-in-title for English-dominant queries', async ({ page }) => {
+          const title = await page.title();
+          expect(title).toContain('Balance Check Number');
+          expect(title).toContain(bank.missedCall);
+          expect(title.length).toBeLessThanOrEqual(60);
+        });
+      }
 
       test('uses a verified, action-oriented meta description', async ({ page }) => {
         const description = await page.locator('meta[name="description"]').getAttribute('content');

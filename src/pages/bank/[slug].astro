@@ -106,7 +106,7 @@ const breadcrumbSchema = {
 
 // GSC-driven overrides for high-impression pages. Keep the default scalable,
 // but match the exact language people use for the banks with the most demand.
-const seoOverrides: Partial<Record<string, { title: string; description: string }>> = {
+const seoOverrides: Partial<Record<string, { title: string; description?: string }>> = {
   boi: {
     title: `बैंक ऑफ इंडिया (BOI) बैलेंस चेक नंबर ${bank.missedCall} — मिस्ड कॉल से तुरंत बैलेंस`,
     description: `बैंक ऑफ इंडिया (BOI) बैलेंस चेक नंबर: ${bank.missedCall}। आधिकारिक मिस्ड कॉल सेवा — SMS में तुरंत बैलेंस पाएं। मिनी स्टेटमेंट: ${bank.missedCallAlt}। मुफ़्त, 24×7।`,
@@ -150,6 +150,12 @@ const seoOverrides: Partial<Record<string, { title: string; description: string 
   iob: {
     title: `Indian Overseas Bank बैलेंस चेक नंबर ${bank.missedCall} — IOB Missed Call`,
     description: `Indian Overseas Bank (IOB) balance enquiry number: ${bank.missedCall}. आधिकारिक missed call सेवा — registered mobile से call करें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
+  },
+  'up-gramin': {
+    title: `Uttar Pradesh Gramin Bank Balance Check Number ${bank.missedCall}`,
+  },
+  psb: {
+    title: `PSB Balance Check Number ${bank.missedCall} | Punjab & Sind Bank`,
   },
 };
 
