@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { banks, categories } from '../src/data/banks';
+import { mergers } from '../src/data/mergers';
 import { categorySlug } from './utils';
 
 const VERTICAL_HUBS = [
@@ -16,10 +17,13 @@ const VERTICAL_HUBS = [
   '/toll-free-number/',
 ];
 
+const MERGED_BANKS_HUB = '/merged-banks/';
+
 /**
  * Exact sitemap URL count derived from the current route families and data
  * (no magic numbers): homepage + how-it-works + bank pages + banks index and
- * category pages + each vertical's hub and per-bank pages + article pages.
+ * category pages + each vertical's hub and per-bank pages + article pages +
+ * merged-banks hub and per-merger pages.
  */
 function expectedSitemapUrlCount(): number {
   const articleCount = readdirSync(
@@ -31,7 +35,8 @@ function expectedSitemapUrlCount(): number {
     banks.length + // /bank/[slug]/
     (1 + categories.length) + // /banks/ index + /banks/[category]/
     VERTICAL_HUBS.length * (banks.length + 1) + // per vertical: hub + one page per bank
-    articleCount // /article/[slug]/
+    articleCount + // /article/[slug]/
+    (1 + mergers.length) // /merged-banks/ hub + one page per merger record
   );
 }
 
@@ -73,6 +78,16 @@ test.describe('sitemap', () => {
 
     for (const hub of VERTICAL_HUBS) {
       expect(text, `sitemap should contain ${hub}`).toContain(`https://balcheck.in${hub}`);
+    }
+  });
+
+  test('sitemap contains merged-banks hub and every merger detail URL', async ({ request }) => {
+    const response = await request.get('/sitemap-0.xml');
+    const text = await response.text();
+
+    expect(text).toContain(`https://balcheck.in${MERGED_BANKS_HUB}`);
+    for (const m of mergers) {
+      expect(text).toContain(`https://balcheck.in/merged-banks/${m.oldSlug}/`);
     }
   });
 

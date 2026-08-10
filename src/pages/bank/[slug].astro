@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { banks, categories, categoryHindi } from '../../data/banks';
 import type { Bank } from '../../data/banks';
+import { getMerger, getPredecessors } from '../../data/mergers';
 import VideoHeroBanner from '../../components/VideoHeroBanner.astro';
 
 export function getStaticPaths() {
@@ -21,6 +22,13 @@ const serviceInstruction = isMissedCall
 
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = `${siteUrl}/bank/${bank.slug}/`;
+
+// Merger record for this bank (only old pre-merger slugs have one)
+const merger = getMerger(bank.slug);
+const firstEvent = merger?.events[0];
+const finalEvent = merger?.events[merger.events.length - 1];
+// Reverse direction: banks that merged INTO this bank (successor pages only)
+const predecessors = getPredecessors(bank.slug);
 
 // Related banks (same category, max 4)
 const related = banks
@@ -188,6 +196,20 @@ const pageDesc = !isMissedCall
   </ol>
 </nav>
 
+<!-- Merger banner — only for old pre-merger slugs that still have a /bank/ page -->
+{merger && firstEvent && finalEvent && (
+  <div class="max-w-4xl mx-auto px-4 pt-4">
+    <div class="bg-amber-50 rounded-xl border-2 border-amber-200 p-4">
+      <p class="text-sm sm:text-base text-amber-900 font-medium">
+        ⚠️ {bank.nameHindi} अब अलग बैंक के रूप में मौजूद नहीं है — {firstEvent.effectiveDate} को {firstEvent.resultingNameHindi} में विलय हुआ। वर्तमान successor {finalEvent.resultingNameHindi} है।
+      </p>
+      <a href={`/merged-banks/${merger.oldSlug}/`} class="mt-2 inline-block text-sm font-semibold text-brand-700 hover:text-brand-800 underline">
+        विलय की पूरी जानकारी और नया balance check number देखें →
+      </a>
+    </div>
+  </div>
+)}
+
 <!-- Video Hero Banner — universal on all bank pages -->
 <VideoHeroBanner
   src="/videos/balcheck-bank-hero.mp4"
@@ -325,6 +347,23 @@ const pageDesc = !isMissedCall
     </div>
   </div>
 </section>
+
+<!-- Predecessor banks (reverse merger links — successor pages only) -->
+{predecessors.length > 0 && (
+  <section class="bg-white border-t border-gray-100">
+    <div class="max-w-4xl mx-auto px-4 py-6">
+      <h2 class="text-sm font-bold text-gray-900 mb-3">पूर्व बैंक — {bank.nameHindi} में विलय हुई बैंकें</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {predecessors.map(p => (
+          <a href={`/merged-banks/${p.oldSlug}/`} class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
+            <p class="text-xs text-gray-500">{p.oldName}</p>
+            <p class="text-xs font-medium text-brand-700 mt-1">विलय की जानकारी →</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
 
 <!-- Banking Services Cross-Links -->
 <section class="bg-gray-50 border-t border-gray-100">

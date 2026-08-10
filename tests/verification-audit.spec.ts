@@ -105,4 +105,11 @@ test.describe('2026-07-20 verification audit regression', () => {
     expect(psb!.website).toBe('https://punjabandsind.bank.in');
     expect(psb!.verificationSource).toContain('https://punjabandsind.bank.in/');
   });
+
+  test('Punjab Gramin Bank points to its current official .bank.in domain', () => {
+    const pgb = banks.find(b => b.slug === 'punjab-gramin');
+    expect(pgb).toBeDefined();
+    expect(pgb!.website).toBe('https://pgb.bank.in');
+    expect(pgb!.verificationSource).toContain('pgb.bank.in');
+  });
 });

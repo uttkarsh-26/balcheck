@@ -718,7 +718,7 @@ const bankData: BankInput[] = [
     category: 'Regional Rural Bank',
     missedCall: '18001807777',
     customerCare: '1800-180-7777',
-    website: 'https://www.punjabgraminbank.com',
+    website: 'https://pgb.bank.in',
     verified: true,
     notes: 'Official pgb.bank.in returns 468 (bot protection). codeforbanks.com states \'no missed call facility, dial toll-free 18001807777\'. indiacustomercare.com lists 1800-202-3005 as missed-call number. balanceMode may need review — currently set as missed-call but may be toll-free IVR.',
     verificationSource: "pgb.bank.in/customer-care (official, bot-blocked 468) + loansjagat.com + codeforbanks.com + wealthquint.com + indmoney.com (18001807777 confirmed by 4 aggregators, 2026-07-20)",

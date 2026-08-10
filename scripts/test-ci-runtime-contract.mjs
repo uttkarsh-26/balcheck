@@ -21,7 +21,7 @@ assert.match(workflow, /run: npx wrangler deploy/);
 assert.doesNotMatch(workflow, /cloudflare\/wrangler-action@/);
 
 assert.match(agentInstructions, /Stack: Astro 7, TypeScript, Tailwind CSS 4, Cloudflare Workers/);
-assert.match(agentInstructions, /Fresh-build baseline: 811 generated pages/);
+assert.match(agentInstructions, /Fresh-build baseline: 823 generated pages/);
 assert.match(agentInstructions, /GitHub Actions → Cloudflare Worker/);
 assert.doesNotMatch(agentInstructions, /Stack: Astro 4/);
 
