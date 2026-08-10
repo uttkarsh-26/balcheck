@@ -17,6 +17,10 @@ const TWO_LOC_XML =
   '<urlset><url><loc>https://balcheck.in/</loc></url>' +
   '<url><loc>https://balcheck.in/bank/sbi/</loc></url></urlset>';
 
+// Stale build: served by an edge that has not propagated the new deploy yet.
+const ONE_LOC_XML =
+  '<urlset><url><loc>https://balcheck.in/</loc></url></urlset>';
+
 test('countSitemapUrls counts <loc> in single-line minified XML', () => {
   assert.equal(gate.countSitemapUrls(TWO_LOC_XML), 2);
 });
@@ -72,12 +76,63 @@ test('verifySitemapCounts fails on live/dist mismatch and reports each host', as
         expected: 2,
         hosts: ['balcheck.in', 'gate.balcheck.workers.dev'],
         fetchImpl,
+        retries: 2,
+        delayMs: 1,
       }),
     (err) =>
       err.message.includes('mismatch') &&
       err.message.includes('balcheck.in') &&
       err.message.includes('live=1')
   );
+});
+
+test('verifySitemapCounts retries successful-but-stale counts until edge catches up', async () => {
+  // Early successful responses serve the stale count; a later one serves the
+  // freshly deployed count. Must be retried (bounded) and pass.
+  const calls = [];
+  const fetchImpl = async (url) => {
+    calls.push(url);
+    return new Response(calls.length <= 2 ? ONE_LOC_XML : TWO_LOC_XML, {
+      status: 200,
+    });
+  };
+  const results = await gate.verifySitemapCounts({
+    expected: 2,
+    hosts: ['balcheck.in'],
+    fetchImpl,
+    retries: 4,
+    delayMs: 1,
+  });
+  assert.equal(results.length, 1);
+  assert.equal(results[0].ok, true);
+  assert.equal(results[0].count, 2);
+  assert.equal(results[0].attempt, 3);
+  assert.equal(calls.length, 3);
+});
+
+test('verifySitemapCounts fails a persistently stale host after bounded retries', async () => {
+  // Every successful response serves the stale count forever: must fail with
+  // the per-host report and stop after exactly `retries` attempts.
+  let calls = 0;
+  const fetchImpl = async () => {
+    calls += 1;
+    return new Response(ONE_LOC_XML, { status: 200 });
+  };
+  await assert.rejects(
+    () =>
+      gate.verifySitemapCounts({
+        expected: 2,
+        hosts: ['balcheck.in'],
+        fetchImpl,
+        retries: 3,
+        delayMs: 1,
+      }),
+    (err) =>
+      err.message.includes('mismatch') &&
+      err.message.includes('balcheck.in') &&
+      err.message.includes('live=1')
+  );
+  assert.equal(calls, 3);
 });
 
 test('verifySitemapCounts passes when all hosts match', async () => {
@@ -194,6 +249,8 @@ test('main fails on live/dist mismatch', async () => {
           cwd: dir,
           fetchImpl,
           log: () => {},
+          retries: 2,
+          delayMs: 1,
         }),
       /mismatch/
     );

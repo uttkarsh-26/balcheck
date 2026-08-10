@@ -42,6 +42,11 @@ async function fetchWithTimeout(url, { timeoutMs = DEFAULT_TIMEOUT_MS, fetchImpl
 /**
  * Fetch a live sitemap and count its URLs, retrying up to `retries` times with
  * `delayMs` between attempts. Throws after the last attempt fails.
+ *
+ * When `expected` is provided, successful-but-stale counts (edge propagation)
+ * are retried too: the attempt only succeeds when the served count matches
+ * `expected`. After the last attempt, a still-stale count is returned as
+ * `{ count, attempt, ok: false }` so callers can report it per host.
  */
 export async function fetchSitemapCount(
   url,
@@ -51,14 +56,28 @@ export async function fetchSitemapCount(
     delayMs = DEFAULT_DELAY_MS,
     timeoutMs = DEFAULT_TIMEOUT_MS,
     log = console.error,
+    expected,
   } = {}
 ) {
   let lastErr;
+  let lastCount;
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
       const res = await fetchWithTimeout(url, { timeoutMs, fetchImpl });
       const text = await res.text();
-      return { count: countSitemapUrls(text), attempt };
+      lastCount = countSitemapUrls(text);
+      if (expected === undefined || lastCount === expected) {
+        return { count: lastCount, attempt, ok: lastCount === expected };
+      }
+      // Successful but stale (new deploy not fully propagated yet): retry
+      // within the same bounded budget as network errors.
+      lastErr = new Error(`stale count ${lastCount} (expected ${expected})`);
+      if (attempt < retries) {
+        log(
+          `sitemap gate: attempt ${attempt}/${retries} for ${url} served stale count ${lastCount}, expected ${expected}; retrying in ${delayMs}ms`
+        );
+        await new Promise((resolve) => setTimeout(resolve, delayMs));
+      }
     } catch (err) {
       lastErr = err;
       if (attempt < retries) {
@@ -68,6 +87,9 @@ export async function fetchSitemapCount(
         await new Promise((resolve) => setTimeout(resolve, delayMs));
       }
     }
+  }
+  if (expected !== undefined && lastCount !== undefined) {
+    return { count: lastCount, attempt: retries, ok: false };
   }
   throw new Error(
     `sitemap gate: could not fetch ${url} after ${retries} attempts: ${lastErr?.message}`
@@ -125,14 +147,15 @@ export async function verifySitemapCounts({
   const results = await Promise.all(
     hosts.map(async (host) => {
       const url = /^https?:\/\//.test(host) ? host : `https://${host}/sitemap-0.xml`;
-      const { count, attempt } = await fetchSitemapCount(url, {
+      const { count, attempt, ok } = await fetchSitemapCount(url, {
         fetchImpl,
         retries,
         delayMs,
         timeoutMs,
         log,
+        expected,
       });
-      return { host, url, count, attempt, ok: count === expected };
+      return { host, url, count, attempt, ok };
     })
   );
   const failures = results.filter((r) => !r.ok);
@@ -156,6 +179,8 @@ export async function main({
   cwd = process.cwd(),
   fetchImpl = fetch,
   log = console.error,
+  retries = DEFAULT_RETRIES,
+  delayMs = DEFAULT_DELAY_MS,
 } = {}) {
   const argIndex = argv.indexOf('--expected');
   let expected;
@@ -178,7 +203,7 @@ export async function main({
   });
   const hosts = ['balcheck.in', workersDevHost];
 
-  const results = await verifySitemapCounts({ expected, hosts, fetchImpl, log });
+  const results = await verifySitemapCounts({ expected, hosts, fetchImpl, log, retries, delayMs });
   for (const r of results) {
     log(`sitemap gate OK: ${r.host} ${r.count} URLs (attempt ${r.attempt})`);
   }
