@@ -1,0 +1,291 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ScannableArticleSummary from '../../components/ScannableArticleSummary.astro';
+
+const siteUrl = 'https://balcheck.in';
+const slug = 'rbi-loan-recovery-rules-2027-borrower-rights';
+const canonicalUrl = `${siteUrl}/article/${slug}/`;
+const publishDate = '2026-08-11';
+const modifiedDate = '2026-08-11';
+
+const pageTitle = 'RBI Loan Recovery Rules 2027: Recovery Calls, Agent Visits और Phone Lock के नए नियम | BalCheck.in';
+const pageDesc = 'RBI के नए loan recovery rules 1 जनवरी 2027 से लागू — recovery agent call timing, mandatory recording, phone lock limits, ₹250/hr का मुआवजा और borrower rights की पूरी जानकारी।';
+
+const articleBrief = {
+  summary: 'RBI ने 6 अगस्त 2026 को loan recovery के नए नियम जारी किए। 1 जनवरी 2027 से recovery calls रिकॉर्ड होंगी और agents सुबह 8 से शाम 7 तक ही contact कर सकेंगे।',
+  facts: [
+    { label: 'प्रभावी तिथि', value: '1 जनवरी 2027' },
+    { label: 'Call recording', value: 'सभी recovery calls की recording, 6 महीने तक सुरक्षित रखनी होगी' },
+    { label: 'Calling hours', value: 'सुबह 8:00 बजे से शाम 7:00 बजे तक ही' },
+    { label: 'Phone lock मुआवजा', value: 'गलत तरीके से lock रहने पर ₹250 प्रति घंटा' },
+    { label: 'Agent प्रमाणन', value: 'IIBF Debt Recovery Agent certificate अनिवार्य' },
+  ],
+  timeline: [
+    { date: '12 Feb 2026', text: 'RBI ने loan recovery पर draft amendment directions जारी किए', datetime: '2026-02-12' },
+    { date: '20 May 2026', text: 'Stakeholder feedback के बाद revised draft जारी', datetime: '2026-05-20' },
+    { date: '6 Aug 2026', text: 'RBI ने final Amendment Directions जारी किए (9 parallel circulars)', datetime: '2026-08-06' },
+    { date: '1 Jan 2027', text: 'सभी नए नियम प्रभावी — सभी regulated lenders पर लागू', datetime: '2027-01-01' },
+  ],
+  action: {
+    title: 'Recovery agent से harassment हो तो क्या करें?',
+    steps: [
+      'Call logs, messages, screenshots और date/time सुरक्षित रखें',
+      'Agent से ID card और authorization letter माँगें',
+      'Lender के official grievance officer को written complaint दें',
+      '30 दिन में समाधान न होने पर RBI Ombudsman (cms.rbi.org.in) में complaint करें',
+      'धमकी या violence की स्थिति में local police में FIR दर्ज कराएँ',
+    ],
+    officialUrl: 'https://cms.rbi.org.in',
+    officialLabel: 'RBI Ombudsman — complaint करें',
+  },
+};
+
+const faqItems = [
+  {
+    q: 'RBI के नए loan recovery rules कब से लागू होंगे?',
+    a: 'RBI के नए loan recovery rules 1 जनवरी 2027 से सभी regulated lenders — Commercial Banks, NBFCs, Small Finance Banks, Co-operative Banks, HFCs और AIFIs — पर लागू होंगे। RBI ने 6 अगस्त 2026 को Press Release 2026-2027/827 और 9 अलग-अलग Amendment Directions (RBI/2026-27/223 से 231) जारी किए हैं।',
+  },
+  {
+    q: 'Recovery agent किस समय call कर सकता है?',
+    a: 'नए नियमों के अनुसार recovery agent केवल सुबह 8:00 बजे से शाम 7:00 बजे के बीच ही borrower को contact कर सकता है। इस समय के बाहर call या visit की अनुमति नहीं है, जब तक borrower ने खुद विशेष अनुमति न दी हो। Borrower के bereavement, medical emergency या शादी जैसे अवसरों पर contact नहीं किया जा सकता।',
+  },
+  {
+    q: 'क्या recovery agent मेरे phone को lock कर सकता है?',
+    a: 'Phone को lock करने के लिए loan उसी specific device की खरीद के लिए लिया गया होना चाहिए। 30 दिन की overdue के बाद ही partial restriction लगाई जा सकती है, और 60 दिन बाद ही full restriction। Essential functions — incoming calls, SMS, emergency SOS — हमेशा active रहने चाहिए। Payment होने के 1 घंटे के भीतर device unlock करना अनिवार्य है; देरी पर ₹250 प्रति घंटे का मुआवजा देना होगा। Lender कभी भी borrower के contacts, photos या call logs access नहीं कर सकता।',
+  },
+  {
+    q: 'Recovery calls की recording का क्या नियम है?',
+    a: '1 जनवरी 2027 से सभी recovery calls की bi-directional recording अनिवार्य होगी और ये recordings कम से कम 6 महीने तक सुरक्षित रखनी होंगी। यह borrower और agent दोनों के लिए एक "paper trail" बनाएगा — अगर कोई विवाद होता है तो recording को evidence के रूप में इस्तेमाल किया जा सकेगा।',
+  },
+  {
+    q: 'Recovery agent धमकी दे या गाली दे तो क्या करें?',
+    a: 'RBI के नए नियमों में abusive language, धमकी, anonymous calls, borrower के family/friends/co-workers को intimidate करना, social media पर personal details डालना, और violence की धमकी स्पष्ट रूप से prohibited हैं। ऐसा होने पर: (1) सबूत इकट्ठा करें — call logs, screenshots, date/time; (2) lender के grievance officer को written complaint दें; (3) 30 दिन में समाधान न होने पर RBI Ombudsman (cms.rbi.org.in) में escalate करें; (4) धमकी या violence हो तो local police में FIR कराएँ।',
+  },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: pageTitle,
+  description: pageDesc,
+  url: canonicalUrl,
+  datePublished: publishDate,
+  dateModified: modifiedDate,
+  inLanguage: 'hi-IN',
+  mainEntityOfPage: canonicalUrl,
+  author: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+};
+
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'Recovery agent harassment की स्थिति में complaint कैसे करें',
+  description: 'Call logs और evidence सुरक्षित करने से लेकर lender grievance, RBI Ombudsman और police complaint तक step-by-step guide।',
+  step: [
+    { '@type': 'HowToStep', name: 'Evidence इकट्ठा करें', text: 'Call logs, messages, screenshots और हर interaction की date/time नोट करें। Agent का नाम, ID card और authorization letter माँगें।' },
+    { '@type': 'HowToStep', name: 'Lender को complaint करें', text: 'Lender के official grievance redressal officer को written complaint दें और acknowledgement/reference number प्राप्त करें।' },
+    { '@type': 'HowToStep', name: 'RBI Ombudsman में escalate करें', text: 'Lender से 30 दिन में समाधान न होने पर cms.rbi.org.in पर RBI Integrated Ombudsman में complaint करें।' },
+    { '@type': 'HowToStep', name: 'Police complaint करें', text: 'धमकी, violence, extortion या immediate danger की स्थिति में local police या cybercrime.gov.in पर complaint दर्ज कराएँ।' },
+  ],
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+    { '@type': 'ListItem', position: 2, name: 'RBI Loan Recovery Rules 2027', item: canonicalUrl },
+  ],
+};
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <main class="min-h-screen bg-gray-50">
+    <div class="container mx-auto max-w-4xl px-4 py-8">
+      <nav aria-label="breadcrumb" class="mb-4 text-sm text-gray-600">
+        <a href="/" class="hover:underline">Home</a>
+        <span aria-hidden="true"> / </span>
+        <span class="text-gray-800">RBI Loan Recovery Rules 2027</span>
+      </nav>
+
+      <h1 class="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">RBI Loan Recovery Rules 2027: Recovery Agent, Phone Lock और Borrower Rights</h1>
+      <p class="mb-6 text-lg text-gray-700">
+        1 जनवरी 2027 से RBI के नए loan recovery नियम लागू होंगे — recovery agent की हर call रिकॉर्ड होगी, सुबह 8 से शाम 7 के बाहर कोई call नहीं आएगी, financed phone को lock करने की सख्त सीमा होगी और गलत तरीके से lock रहने पर ₹250 प्रति घंटे का मुआवजा मिलेगा। जानिए आपके अधिकार और complaint करने का सही तरीका।
+      </p>
+
+      <section class="mb-8 rounded-r-lg border-l-4 border-amber-500 bg-amber-50 p-4">
+        <p class="font-medium text-amber-900">
+          <strong>महत्वपूर्ण सीमा:</strong> यह general consumer-safety information है, personal legal या financial advice नहीं। BalCheck.in loan नहीं देता। RBI rules और complaint channels बदल सकते हैं; action लेने से पहले नीचे दिए official sources पर latest details verify करें।
+        </p>
+      </section>
+
+      <ScannableArticleSummary {...articleBrief} />
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">RBI ने क्या बदला? — 9 Circulars, एक Framework</h2>
+      <p class="mb-4 text-gray-700">
+        6 अगस्त 2026 को RBI ने <strong>Press Release 2026-2027/827</strong> के तहत 9 अलग-अलग Amendment Directions जारी किए — एक Commercial Banks के लिए, एक NBFCs के लिए, एक Small Finance Banks के लिए, और इसी तरह सभी regulated lenders के लिए। ये Directions हर entity की मौजूदा Responsible Business Conduct (RBC) Directions में एक uniform recovery framework जोड़ते हैं।
+      </p>
+      <p class="mb-4 text-gray-700">
+        पहले recovery agent से जुड़े नियम अलग-अलग circulars में बिखरे हुए थे — कहीं calling hours का जिक्र था, कहीं harassment की मनाही, लेकिन "recovery agent" की कोई एक परिभाषा नहीं थी और mobile device locking जैसे modern tactics के लिए कोई framework नहीं था। अब सब कुछ एक जगह, सबके लिए एक जैसा।
+      </p>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">Recovery Agent Rules — अब क्या बदलेगा</h2>
+
+      <h3 class="mb-3 mt-6 text-xl font-semibold text-gray-800">1. Call Recording — "Paper Trail" अनिवार्य</h3>
+      <p class="mb-4 text-gray-700">
+        सबसे बड़ा बदलाव: हर recovery call की <strong>bi-directional recording</strong> अनिवार्य होगी और ये recordings <strong>6 महीने तक</strong> सुरक्षित रखनी होंगी। Supreme Court के advocate Amitraj Kaushal के अनुसार, "Recovery finally has a paper trail" — अब अगर कोई एजेंट रात 10 बजे कॉल करके harassment करे, तो borrower के पास सिर्फ अपना शब्द नहीं, बल्कि recorded evidence भी होगा।
+      </p>
+
+      <h3 class="mb-3 mt-6 text-xl font-semibold text-gray-800">2. Calling Hours — सिर्फ सुबह 8 से शाम 7 बजे तक</h3>
+      <p class="mb-4 text-gray-700">
+        Recovery agent अब केवल <strong>सुबह 8:00 बजे से शाम 7:00 बजे</strong> के बीच ही borrower को contact कर सकता है। इस समय के बाहर कोई call या visit नहीं हो सकती, जब तक borrower ने खुद लिखित में permission न दी हो।
+      </p>
+
+      <h3 class="mb-3 mt-6 text-xl font-semibold text-gray-800">3. Agent की पहचान — ID Card और Authorization अनिवार्य</h3>
+      <p class="mb-4 text-gray-700">
+        हर recovery agent के पास <strong>IIBF Debt Recovery Agent certificate</strong> होना अनिवार्य है। Field visit के समय agent को अपना ID card, lender का authorization letter और notice की copy साथ रखनी होगी। Borrower को पहली visit से पहले <strong>prior notice</strong> भी दिया जाना चाहिए।
+      </p>
+
+      <h3 class="mb-3 mt-6 text-xl font-semibold text-gray-800">4. Family और Friends को परेशान नहीं कर सकते</h3>
+      <p class="mb-4 text-gray-700">
+        RBI ने स्पष्ट किया है कि recovery agent borrower के <strong>relatives, friends या co-workers</strong> को contact नहीं कर सकता। WhatsApp group बनाना, personal details या photos share करना, employer या neighbours के सामने borrower को humiliate करना — ये सब prohibited हैं। Zavo के founder Kundan Shahi के अनुसार, "ये प्रावधान सुबह जल्दी या देर रात की harassment calls को रोकने में मदद करेंगे।"
+      </p>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">Mobile Phone Locking — सख्त सीमाएँ और मुआवजा</h2>
+      <p class="mb-4 text-gray-700">
+        Digital lending में phone lock एक आम परेशानी बन गया था। RBI ने इस पर स्पष्ट नियम बनाए हैं:
+      </p>
+      <ul class="mb-6 list-inside list-disc space-y-2 text-gray-700">
+        <li><strong>केवल उसी device पर लागू:</strong> Phone lock केवल उसी device पर लगाया जा सकता है जिसकी खरीद के लिए loan लिया गया हो। कोई दूसरा personal loan या credit card default होने पर phone lock नहीं किया जा सकता।</li>
+        <li><strong>Graduated timeline:</strong> 30 दिन की overdue के बाद ही partial restriction; 60 दिन के बाद ही full restriction।</li>
+        <li><strong>Essential functions सुरक्षित:</strong> Incoming calls, SMS और emergency SOS जैसे बुनियादी functions हमेशा active रहने चाहिए।</li>
+        <li><strong>1 घंटे में unlock:</strong> Payment होने के 1 घंटे के भीतर device unlock करना अनिवार्य है।</li>
+        <li><strong>₹250/hr मुआवजा:</strong> Lender की गलती से delay होने पर ₹250 प्रति घंटे का मुआवजा (capped at total loan amount)।</li>
+        <li><strong>Privacy की सुरक्षा:</strong> Lender कभी भी borrower के contacts, call logs, photos, location history या personal data को recovery के लिए access नहीं कर सकता।</li>
+      </ul>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">क्या-क्या पूरी तरह Prohibited है</h2>
+      <p class="mb-4 text-gray-700">
+        RBI ने "harsh practices" की एक स्पष्ट सूची जारी की है जो पूरी तरह prohibited हैं:
+      </p>
+      <ul class="mb-6 list-inside list-disc space-y-2 text-gray-700">
+        <li>Abusive या minatory (धमकी भरी) language</li>
+        <li>Borrower की recordings या personal details को social media पर डालना</li>
+        <li>जरूरत से ज्यादा या गलत समय पर बार-बार call/message करना</li>
+        <li>Threatening या anonymous calls</li>
+        <li>Borrower, परिवार, दोस्तों या co-workers को intimidate करना; public humiliation</li>
+        <li>व्यक्ति, परिवार, assets या reputation के खिलाफ violence या violence की धमकी</li>
+        <li>कर्ज या उसके परिणामों के बारे में false या misleading बयान देना</li>
+      </ul>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">Complaint कैसे करें — Step-by-Step Guide</h2>
+      <ol class="mb-6 list-inside list-decimal space-y-3 text-gray-700">
+        <li><strong>Evidence बचाएँ:</strong> Harassment होने पर सबसे पहले call logs, messages, screenshots और date/time नोट करें। Agent का ID card और authorization letter देखें और नोट करें।</li>
+        <li><strong>Lender को written complaint दें:</strong> Loan agreement, KFS या lender की website पर दिए grievance redressal officer को written complaint भेजें और acknowledgement/reference number प्राप्त करें।</li>
+        <li><strong>30 दिन का इंतजार:</strong> RBI Ombudsman में जाने से पहले lender को कम से कम 30 दिन का समय देना जरूरी है।</li>
+        <li><strong>RBI Ombudsman में escalate करें:</strong> 30 दिन में समाधान न होने पर <a href="https://cms.rbi.org.in" class="text-blue-700 hover:underline" target="_blank" rel="noopener noreferrer">cms.rbi.org.in</a> पर RBI Integrated Ombudsman में complaint करें।</li>
+        <li><strong>Police complaint:</strong> धमकी, violence, extortion या immediate danger की स्थिति में local police या <a href="https://cybercrime.gov.in" class="text-blue-700 hover:underline" target="_blank" rel="noopener noreferrer">cybercrime.gov.in</a> (helpline 1930) पर complaint दर्ज कराएँ।</li>
+      </ol>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">Grievance और Complaint Channels</h2>
+      <div class="mb-6 overflow-x-auto">
+        <table class="w-full border-collapse border border-gray-300 text-left">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-300 px-4 py-2">Channel</th>
+              <th class="border border-gray-300 px-4 py-2">कब उपयोग करें</th>
+              <th class="border border-gray-300 px-4 py-2">Link / Contact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Lender Grievance Officer</td>
+              <td class="border border-gray-300 px-4 py-2">Recovery agent misconduct की पहली शिकायत</td>
+              <td class="border border-gray-300 px-4 py-2">Loan agreement या lender की website पर दिया गया contact</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">RBI Integrated Ombudsman</td>
+              <td class="border border-gray-300 px-4 py-2">Lender से 30 दिन में समाधान न होने पर</td>
+              <td class="border border-gray-300 px-4 py-2"><a href="https://cms.rbi.org.in" class="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">cms.rbi.org.in</a></td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Cybercrime Portal</td>
+              <td class="border border-gray-300 px-4 py-2">Financial fraud, online threat या extortion</td>
+              <td class="border border-gray-300 px-4 py-2"><a href="https://cybercrime.gov.in" class="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">cybercrime.gov.in</a> / <strong>1930</strong></td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Local Police</td>
+              <td class="border border-gray-300 px-4 py-2">धमकी, violence या immediate safety risk</td>
+              <td class="border border-gray-300 px-4 py-2">अपने क्षेत्र का police station</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">अक्सर पूछे जाने वाले सवाल</h2>
+      <div class="mb-8 space-y-4">
+        {faqItems.map((item) => (
+          <details class="rounded-lg border border-gray-200 bg-white p-4">
+            <summary class="cursor-pointer font-semibold text-gray-900">{item.q}</summary>
+            <p class="mt-3 text-gray-700">{item.a}</p>
+          </details>
+        ))}
+      </div>
+
+      <h2 class="mb-4 mt-8 text-2xl font-bold text-gray-900">Official Sources</h2>
+      <div class="mb-8 space-y-3 rounded-lg border border-gray-200 bg-white p-5">
+        <p>
+          <a href="https://www.rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=60827" class="text-blue-700 hover:underline" target="_blank" rel="noopener noreferrer">RBI Press Release 2026-2027/827 (6 August 2026)</a>
+          — 9 Amendment Directions जारी करने की official announcement।
+        </p>
+        <p>
+          <a href="https://www.rbi.org.in/scripts/NotificationUser.aspx?Id=13666" class="text-blue-700 hover:underline" target="_blank" rel="noopener noreferrer">RBI Commercial Banks Amendment Directions — RBI/2026-27/223</a>
+          — Scheduled Commercial Banks के लिए final directions।
+        </p>
+        <p>
+          <a href="https://www.rbi.org.in/scripts/NotificationUser.aspx?Id=13669" class="text-blue-700 hover:underline" target="_blank" rel="noopener noreferrer">RBI NBFC Amendment Directions — RBI/2026-27/230</a>
+          — NBFCs (Non-Banking Financial Companies) के लिए final directions।
+        </p>
+        <p>
+          <a href="https://cms.rbi.org.in" class="text-blue-700 hover:underline" target="_blank" rel="noopener noreferrer">RBI Complaint Management System (CMS)</a>
+          — RBI Integrated Ombudsman के माध्यम से complaint दर्ज करें।
+        </p>
+        <p>
+          <a href="https://www.business-standard.com/finance/personal-finance/recovery-calls-agent-visits-phone-locks-experts-explain-rbi-s-new-rules-126081001164_1.html" class="text-blue-700 hover:underline" target="_blank" rel="noopener noreferrer">Business Standard: Experts explain RBI's new rules (10 August 2026)</a>
+          — विस्तृत expert analysis और borrower guidance।
+        </p>
+      </div>
+
+      <p class="mt-8 text-sm text-gray-500">
+        Published: 11 August 2026 · Official RBI और Ombudsman pages पर latest process, eligibility और contact details verify करें।
+      </p>
+    </div>
+  </main>
+</Layout>
