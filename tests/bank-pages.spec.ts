@@ -12,13 +12,14 @@ const ctrTitles: Record<string, string> = {
   cosmos: 'Cosmos Bank Balance Check Number 9029013793 — Missed Call से बैलेंस देखें',
   maharashtra: 'Bank of Maharashtra बैलेंस चेक नंबर 9833335555 — Missed Call से बैलेंस',
   icici: 'ICICI Bank बैलेंस चेक नंबर 9594612612 — Missed Call से तुरंत बैलेंस',
-  axis: 'Axis Bank बैलेंस चेक नंबर 18004195959 — Missed Call से तुरंत बैलेंस',
+  axis: 'Axis Bank Balance Enquiry Number 18004195959 | Missed Call',
   'up-gramin': 'Uttar Pradesh Gramin Bank Balance Check Number 9986454440',
   psb: 'PSB Balance Check Number 7039035156 | Punjab & Sind Bank',
 };
 
 const sprint3Banks = new Set(['canara', 'psb', 'boi']);
 const englishAnswerTitleBanks = new Set(['up-gramin', 'psb']);
+const exactQueryTitleBanks = new Set(['axis']);
 
 for (const bank of banks) {
   test.describe(`/bank/${bank.slug}`, () => {
@@ -63,6 +64,18 @@ for (const bank of banks) {
           expect(title).toContain('Balance Check Number');
           expect(title).toContain(bank.missedCall);
           expect(title.length).toBeLessThanOrEqual(60);
+        });
+      }
+
+      if (exactQueryTitleBanks.has(bank.slug)) {
+        test('frontloads the exact balance-enquiry query and preserves a concise title', async ({ page }) => {
+          const title = await page.title();
+          const description = await page.locator('meta[name="description"]').getAttribute('content');
+          expect(title).toContain('Balance Enquiry Number');
+          expect(title).toContain(bank.missedCall);
+          expect(title.length).toBeLessThanOrEqual(60);
+          expect(description).toBe(`Axis Bank balance enquiry number: ${bank.missedCall}. आधिकारिक missed call सेवा — registered mobile से call करें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`);
+          expect(description?.length).toBeLessThanOrEqual(155);
         });
       }
 
