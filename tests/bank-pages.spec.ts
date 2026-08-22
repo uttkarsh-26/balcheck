@@ -3,18 +3,22 @@ import { banks } from '../src/data/banks';
 import { categorySlug, getJsonLdScripts, findSchema } from './utils';
 
 const ctrTitles: Record<string, string> = {
-  boi: 'बैंक ऑफ इंडिया (BOI) बैलेंस चेक नंबर 9811255430 — मिस्ड कॉल से तुरंत बैलेंस',
+  boi: 'BOI बैलेंस चेक नंबर 9811255430 | Missed Call',
   bandhan: 'बंधन बैंक बैलेंस चेक नंबर 9223008666 | Bandhan Bank',
   sbi: 'SBI बैलेंस चेक नंबर 09223766666 | मिस्ड कॉल सेवा',
-  'baroda-up-gramin': 'बड़ौदा यूपी ग्रामीण बैंक बैलेंस चेक नंबर 9986454440 | Missed Call',
+  'baroda-up-gramin': 'Baroda UP Gramin Bank Balance Check Number 9986454440',
   'idfc-first': 'IDFC FIRST बैलेंस चेक नंबर 18002700720 | Missed Call',
   kvb: 'KVB बैलेंस चेक नंबर 09266292666 | Karur Vysya Missed Call',
-  cosmos: 'Cosmos Bank Balance Check Number 9029013793 — Missed Call से बैलेंस देखें',
-  maharashtra: 'Bank of Maharashtra बैलेंस चेक नंबर 9833335555 — Missed Call से बैलेंस',
-  icici: 'ICICI Bank बैलेंस चेक नंबर 9594612612 — Missed Call से तुरंत बैलेंस',
+  cosmos: 'Cosmos Bank Balance Check Number 9029013793',
+  maharashtra: 'Bank of Maharashtra Balance Check Number 9833335555',
+  icici: 'ICICI Bank Balance Check Number 9594612612',
   axis: 'Axis Bank Balance Enquiry Number 18004195959 | Missed Call',
   'up-gramin': 'Uttar Pradesh Gramin Bank Balance Check Number 9986454440',
   psb: 'PSB Balance Check Number 7039035156 | Punjab & Sind Bank',
+  iob: 'Indian Overseas Bank Balance Check Number 9210622122',
+  'central-bank': 'सेंट्रल बैंक बैलेंस चेक नंबर 9555244442 | Missed Call',
+  'mp-gramin': 'MPGB Balance Check Number 8010968293 | Missed Call',
+  'indian-bank': 'Indian Bank Balance Check Number 7827170170',
 };
 
 const sprint3Banks = new Set(['canara', 'psb', 'boi']);
@@ -30,6 +34,15 @@ for (const bank of banks) {
     test('renders bank name and balance-enquiry number', async ({ page }) => {
       await expect(page.getByRole('heading', { level: 1, name: bank.nameHindi })).toBeVisible();
       await expect(page.locator('body')).toContainText(bank.missedCall);
+    });
+
+    test('keeps search metadata within snippet length contracts', async ({ page }) => {
+      const title = await page.title();
+      const description = await page.locator('meta[name="description"]').getAttribute('content');
+
+      expect(title.length).toBeLessThanOrEqual(60);
+      expect(description).not.toBeNull();
+      expect(description!.length).toBeLessThanOrEqual(155);
     });
 
     if (bank.slug === 'canara') {

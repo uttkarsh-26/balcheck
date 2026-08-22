@@ -116,7 +116,7 @@ const breadcrumbSchema = {
 // but match the exact language people use for the banks with the most demand.
 const seoOverrides: Partial<Record<string, { title: string; description?: string }>> = {
   boi: {
-    title: `बैंक ऑफ इंडिया (BOI) बैलेंस चेक नंबर ${bank.missedCall} — मिस्ड कॉल से तुरंत बैलेंस`,
+    title: `BOI बैलेंस चेक नंबर ${bank.missedCall} | Missed Call`,
     description: `बैंक ऑफ इंडिया (BOI) बैलेंस चेक नंबर: ${bank.missedCall}। आधिकारिक मिस्ड कॉल सेवा — SMS में तुरंत बैलेंस पाएं। मिनी स्टेटमेंट: ${bank.missedCallAlt}। मुफ़्त, 24×7।`,
   },
   bandhan: {
@@ -128,7 +128,7 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
     description: `भारतीय स्टेट बैंक (SBI) का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं।`,
   },
   'baroda-up-gramin': {
-    title: `बड़ौदा यूपी ग्रामीण बैंक बैलेंस चेक नंबर ${bank.missedCall} | Missed Call`,
+    title: `Baroda UP Gramin Bank Balance Check Number ${bank.missedCall}`,
     description: `बड़ौदा यूपी ग्रामीण बैंक का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
   },
   'idfc-first': {
@@ -140,15 +140,15 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
     description: `करूर वैश्य बैंक (KVB) का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
   },
   cosmos: {
-    title: `Cosmos Bank Balance Check Number ${bank.missedCall} — Missed Call से बैलेंस देखें`,
+    title: `Cosmos Bank Balance Check Number ${bank.missedCall}`,
     description: `Cosmos Bank balance check number: ${bank.missedCall}. आधिकारिक missed call सेवा — registered mobile से call करें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
   },
   maharashtra: {
-    title: `Bank of Maharashtra बैलेंस चेक नंबर ${bank.missedCall} — Missed Call से बैलेंस`,
+    title: `Bank of Maharashtra Balance Check Number ${bank.missedCall}`,
     description: `Bank of Maharashtra balance check number: ${bank.missedCall}. आधिकारिक missed call सेवा — registered mobile से call करें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
   },
   icici: {
-    title: `ICICI Bank बैलेंस चेक नंबर ${bank.missedCall} — Missed Call से तुरंत बैलेंस`,
+    title: `ICICI Bank Balance Check Number ${bank.missedCall}`,
     description: `ICICI Bank balance check number: ${bank.missedCall}. आधिकारिक missed call सेवा — registered mobile से call करें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
   },
   axis: {
@@ -156,8 +156,8 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
     description: `Axis Bank balance enquiry number: ${bank.missedCall}. आधिकारिक missed call सेवा — registered mobile से call करें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
   },
   iob: {
-    title: `Indian Overseas Bank बैलेंस चेक नंबर ${bank.missedCall} — IOB Missed Call`,
-    description: `Indian Overseas Bank (IOB) balance enquiry number: ${bank.missedCall}. आधिकारिक missed call सेवा — registered mobile से call करें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
+    title: `Indian Overseas Bank Balance Check Number ${bank.missedCall}`,
+    description: `IOB balance check number ${bank.missedCall}. आधिकारिक missed call service: registered mobile से call करें, SMS में तुरंत बैलेंस पाएं। मुफ़्त 24×7।`,
   },
   'up-gramin': {
     title: `Uttar Pradesh Gramin Bank Balance Check Number ${bank.missedCall}`,
@@ -165,18 +165,40 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
   psb: {
     title: `PSB Balance Check Number ${bank.missedCall} | Punjab & Sind Bank`,
   },
+  'central-bank': {
+    title: `सेंट्रल बैंक बैलेंस चेक नंबर ${bank.missedCall} | Missed Call`,
+  },
+  'mp-gramin': {
+    title: `MPGB Balance Check Number ${bank.missedCall} | Missed Call`,
+  },
+  'indian-bank': {
+    title: `Indian Bank Balance Check Number ${bank.missedCall}`,
+  },
 };
 
 const customerCareTitle = `${bank.name} Balance Check Number ${bank.missedCall}`;
 const conciseCustomerCareTitle = customerCareTitle.length <= 60
   ? customerCareTitle
   : `${bank.shortName} Balance Check Number ${bank.missedCall}`;
+const defaultMissedCallTitle = `${bank.nameHindi} बैलेंस चेक नंबर ${bank.missedCall} | ${bank.shortName} Missed Call`;
+const conciseMissedCallTitle = `${bank.nameHindi} बैलेंस चेक नंबर ${bank.missedCall}`;
+const compactMissedCallTitle = `${bank.shortName} Balance Check Number ${bank.missedCall}`;
+const requestedMissedCallTitle = seoOverrides[bank.slug]?.title ?? defaultMissedCallTitle;
 const pageTitle = !isMissedCall
   ? conciseCustomerCareTitle
-  : seoOverrides[bank.slug]?.title ?? `${bank.nameHindi} बैलेंस चेक नंबर ${bank.missedCall} | ${bank.shortName} Missed Call`;
+  : requestedMissedCallTitle.length <= 60
+    ? requestedMissedCallTitle
+    : conciseMissedCallTitle.length <= 60
+      ? conciseMissedCallTitle
+      : compactMissedCallTitle;
+const defaultMissedCallDesc = `${bank.nameHindi} (${bank.shortName}) का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`;
+const compactMissedCallDesc = `${bank.nameHindi} का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall}। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें; SMS में तुरंत बैलेंस पाएं। मुफ़्त 24×7।`;
+const requestedMissedCallDesc = seoOverrides[bank.slug]?.description ?? defaultMissedCallDesc;
 const pageDesc = !isMissedCall
   ? `${bank.name} balance check number ${bank.missedCall}। यह customer-care/IVR line है; dedicated missed-call service verified नहीं है।`
-  : seoOverrides[bank.slug]?.description ?? `${bank.nameHindi} (${bank.shortName}) का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`;
+  : requestedMissedCallDesc.length <= 155
+    ? requestedMissedCallDesc
+    : compactMissedCallDesc;
 ---
 
 <Layout title={pageTitle} description={pageDesc}>
