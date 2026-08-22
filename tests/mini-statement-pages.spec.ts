@@ -124,3 +124,39 @@ test('IOB mini-statement page does not claim balance number gives mini statement
   await expect(answer).toContainText(iob.customerCare);
   await expect(page.locator('body')).not.toContainText('8424022122');
 });
+
+test('all mini-statement pages provide substantial bank-specific guidance', async ({ page }) => {
+  for (const bank of banks) {
+    await page.goto(`/mini-statement/${bank.slug}/`);
+
+    const guide = page.getByTestId('mini-statement-guide');
+    await expect(guide, `${bank.slug}: missing substantive mini-statement guide`).toHaveCount(1);
+
+    const text = (await guide.innerText()).replace(/\s+/g, ' ').trim();
+    const words = text.match(/[A-Za-z0-9\u0900-\u097F]+/g) ?? [];
+
+    expect(words.length, `${bank.slug}: mini-statement guide is thin (${words.length} words)`).toBeGreaterThanOrEqual(320);
+    expect(text, `${bank.slug}: missing full bank name`).toContain(bank.name);
+    expect(text, `${bank.slug}: missing Hindi bank name`).toContain(bank.nameHindi);
+    expect(text, `${bank.slug}: missing customer-care fallback`).toContain(bank.customerCare);
+    expect(text, `${bank.slug}: missing bank category context`).toContain(bank.category);
+    expect(text, `${bank.slug}: missing official website`).toContain(bank.website);
+    await expect(guide.getByTestId('mini-statement-evidence'), `${bank.slug}: missing evidence status`).toHaveCount(1);
+
+    if (bank.missedCallAlt) {
+      expect(text, `${bank.slug}: missing dedicated mini-statement number`).toContain(bank.missedCallAlt);
+      if (!bank.verificationSource || !bank.lastVerified) {
+        const scripts = await getJsonLdScripts(page);
+        const howTo = findSchema(scripts, 'HowTo');
+        const howToText = JSON.stringify(howTo);
+        expect(text, `${bank.slug}: undocumented number is presented as verified`).not.toContain(`verified number ${bank.missedCallAlt}`);
+        expect(text, `${bank.slug}: undocumented transaction count is presented as fact`).not.toMatch(/last \d+ transactions/);
+        expect(howToText, `${bank.slug}: schema presents undocumented method as verified`).not.toContain('verified');
+        expect(howToText, `${bank.slug}: schema presents undocumented count as fact`).not.toMatch(/last \d+ transactions/);
+      }
+    } else {
+      expect(text, `${bank.slug}: unsupported mini-statement service is not disclosed`).toContain('dedicated mini-statement missed-call number verified नहीं है');
+      expect(text, `${bank.slug}: balance number must not be presented as mini-statement number`).toContain(`Balance number ${bank.missedCall} को mini-statement number न मानें`);
+    }
+  }
+});
