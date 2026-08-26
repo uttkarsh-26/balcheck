@@ -62,6 +62,43 @@ const override = overrides[bank.slug] ?? defaultOverride;
 const capability = override.capability;
 const onlineAvailable = capability === 'website-known';
 
+// Category-aware context: bank-type reality differs materially for mobile
+// registration. Text is honest at the category level (no invented per-bank
+// capabilities) and gives each page a distinct, useful opening beyond the
+// shared process steps.
+type CategoryContext = { heading: string; body: string };
+const categoryContext: Record<Bank['category'], CategoryContext> = {
+  'Public Sector': {
+    heading: 'सरकारी (Public Sector) बैंक में प्रोसेस',
+    body: `${bank.name} एक public sector bank है। इन बैंकों में mobile number registration का standard तरीका branch form है, और बड़े banks की अपनी net-banking/mobile-banking app में भी update option मिलता है। ${bank.shortName} की official site ${bank.website} पर login करके देखें, न मिलने पर branch सबसे निश्चित रास्ता है।`,
+  },
+  'Regional Rural Bank': {
+    heading: 'ग्रामीण बैंक (RRB) में प्रोसेस',
+    body: `${bank.name} एक regional rural bank है। RRB शाखाएं अपने area में सीमित होती हैं, इसलिए branch visit पहले से plan करें और passbook+Aadhaar साथ ले जाएं। कई RRB अपने sponsor bank के system का उपयोग करते हैं, इसलिए ${bank.customerCare} पर पहले call करके exact process confirm करना समय बचाता है।`,
+  },
+  'Private Sector': {
+    heading: 'प्राइवेट बैंक में प्रोसेस',
+    body: `${bank.name} एक private sector bank है। इन बैंकों की mobile banking app और net-banking portal आमतौर पर profile settings से mobile number update करने का option देते हैं — ${bank.website} पर login करके देखें। OTP verification के लिए पुराना registered number active रखना जरूरी है, वरना branch form ही उपलब्ध रास्ता है।`,
+  },
+  'Small Finance Bank': {
+    heading: 'Small Finance Bank में प्रोसेस',
+    body: `${bank.name} एक small finance bank है। इन बैंकों की app-based services बड़े banks से अलग हो सकती हैं — ${bank.website} पर उपलब्ध options देखें। Account खुले समय का mobile number बदलने के लिए कई small finance banks branch KYC form मांगते हैं, इसलिए ${bank.customerCare} से पहले confirm करें।`,
+  },
+  'Payments Bank': {
+    heading: 'Payments Bank में प्रोसेस',
+    body: `${bank.name} एक payments bank है। Payments banks की branch/post-office network छोटी होती है पर app-first services ज्यादा होती हैं — ${bank.website} या official app में profile section देखें। KYC-linked changes के लिए nearest branch/csc point जाना पड़ सकता है; ${bank.customerCare} पर exact requirement पूछें।`,
+  },
+  'Foreign Bank': {
+    heading: 'विदेशी बैंक (Foreign Bank) में प्रोसेस',
+    body: `${bank.name} की India branches सीमित शहरों में होती हैं। इन बैंकों में relationship manager या ${bank.customerCare} customer care से request करना common रास्ता है। ${bank.website} पर net-banking login से profile update option जरूर देखें — कई foreign banks यह पूरी तरह online करा देते हैं।`,
+  },
+  'Cooperative Bank': {
+    heading: 'Cooperative Bank में प्रोसेस',
+    body: `${bank.name} एक cooperative bank है। इन बैंकों की digital services स्थानीय स्तर पर अलग-अलग होती हैं — ${bank.website} पर जो options दिखें उन्हीं पर भरोसा करें। Mobile registration के लिए home branch में form देना सबसे विश्वसनीय तरीका है; ${bank.customerCare} से timing confirm करें।`,
+  },
+};
+const ctx = categoryContext[bank.category];
+
 const title = override.title;
 const description = `${bank.name} में mobile number registration कैसे करें। ${bank.shortName} mobile number link के लिए branch, ATM, या अगर उपलब्ध हो तो ${bank.website} पर official online method देखें। जानकारी customer care ${bank.customerCare} से confirm करें।`;
 
@@ -154,6 +191,12 @@ const schema = {
     <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-6">
       <h1 class="text-2xl font-bold mb-1">{override.h1}</h1>
       <p class="text-brand-100 text-sm">{bank.nameHindi} — मोबाइल नंबर रजिस्टर करने की जानकारी</p>
+    </div>
+
+    <!-- Category-aware context (bank-type specific guidance) -->
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6" data-testid="category-context">
+      <h2 class="text-lg font-semibold text-gray-900 mb-2">🏦 {ctx.heading}</h2>
+      <p class="text-sm text-gray-700 leading-relaxed">{ctx.body}</p>
     </div>
 
     <!-- Why Register -->

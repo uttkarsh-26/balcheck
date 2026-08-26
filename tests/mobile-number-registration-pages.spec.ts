@@ -47,3 +47,13 @@ test('IPPB targets online-link intent without claiming online completion', async
   await expect(answer).toContainText(/post-office branch/i);
   await expect(answer).toContainText('दावा नहीं करते');
 });
+
+test('every mobile-reg page carries bank-type context (anti-template differentiation)', async ({ page }) => {
+  for (const slug of ['sbi', 'uco-bank', 'jnk-gramin', 'equitas', 'ippb'].filter(s => banks.some(b => b.slug === s))) {
+    const bank = banks.find(item => item.slug === slug)!;
+    await page.goto(`/mobile-number-registration/${slug}/`);
+    const ctx = page.locator('[data-testid="category-context"]');
+    await expect(ctx).toBeVisible();
+    await expect(ctx).toContainText(bank.name);
+  }
+});
