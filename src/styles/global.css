@@ -19,3 +19,20 @@
   --font-hindi: "Noto Sans Devanagari", "Mangal", system-ui, sans-serif;
   --font-sans: system-ui, "Segoe UI", Roboto, sans-serif;
 }
+
+/* Brand utility: hide the native scrollbar on horizontal chip rails.
+   Defined globally so SiteHeader chips are unstyled-scrollable on EVERY page,
+   not only pages whose own <style> block happens to define it. */
+@utility scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Brand utility: right-edge fade cue for horizontally scrollable rails,
+   so a clipped chip reads as "scrolls for more", not "broken layout". */
+@utility scroll-fade {
+  mask-image: linear-gradient(to right, black 0, black calc(100% - 28px), transparent 100%);
+}

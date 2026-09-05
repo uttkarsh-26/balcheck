@@ -30,8 +30,14 @@ src/
   data/banks.ts              # Bank missed-call number database (79 banks, 7 categories)
 public/
   favicon.svg
+  og-image.svg              # Social share image (Layout.astro og:image/twitter:image)
   robots.txt                 # Sitemap: https://balcheck.in/sitemap-index.xml
 ```
+
+## Brand / Design System
+- Brand tokens + component rules: `docs/brand-tokens.md` (implemented in `src/styles/global.css` @theme).
+- Global utilities `scrollbar-hide` and `scroll-fade` live in `global.css` — use them for ALL horizontal scroll rails; do not redefine them in page <style> blocks.
+- Sitewide footer links live only in `SiteFooter.astro`; never add inline page footers.
 
 ## PSEO Pages
 - **79 bank pages** at `/bank/[slug]` — each with BankOrCreditUnion, FAQPage, HowTo, BreadcrumbList schema

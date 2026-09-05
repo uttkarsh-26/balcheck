@@ -7,9 +7,11 @@ interface Props {
   title: string;
   description?: string;
   canonical?: string;
+  /** Path or absolute URL of the social share image (og:image / twitter:image). */
+  ogImage?: string;
 }
 
-const { title, description = 'भारतीय बैंकों के balance enquiry methods और verified contact details एक जगह', canonical } = Astro.props;
+const { title, description = 'भारतीय बैंकों के balance enquiry methods और verified contact details एक जगह', canonical, ogImage = '/og-image.svg' } = Astro.props;
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = (canonical ?? new URL(Astro.url.pathname, siteUrl).href).replace(/(?<!:)\/\/$/, '/');
 const canonicalHref = canonicalUrl.endsWith('/') ? canonicalUrl : `${canonicalUrl}/`;
@@ -35,12 +37,19 @@ Astro.response.headers.set('Cache-Control', 'public, s-maxage=3600, max-age=0, s
        render-blocking external fonts.googleapis.com chain (PageSpeed 79 -> target 90+). -->
   <link rel="dns-prefetch" href="https://www.googletagmanager.com">
 
-  <!-- Open Graph -->
+  <!-- Open Graph / Twitter — absolute URLs per ogp.me and Twitter card spec -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content={canonicalHref} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:locale" content="hi_IN" />
+  <meta property="og:site_name" content="BalCheck.in" />
+  <meta property="og:image" content={new URL(ogImage, siteUrl).href} />
+  <meta property="og:image:alt" content="BalCheck.in — बैंक बैलेंस चेक नंबर directory" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={new URL(ogImage, siteUrl).href} />
 
   <!-- Canonical -->
   <link rel="canonical" href={canonicalHref} />

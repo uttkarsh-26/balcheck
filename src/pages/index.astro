@@ -70,7 +70,7 @@ const popularBanks = ['sbi', 'bob', 'canara', 'ubi', 'pnb', 'boi', 'indian-bank'
   </section>
 
   <!-- Category Tabs -->
-  <div id="categories" class="flex gap-2 overflow-x-auto pb-2 mb-6 -mx-4 px-4 scrollbar-hide">
+  <div id="categories" class="scrollbar-hide flex gap-2 overflow-x-auto pb-2 mb-6 -mx-4 px-4">
     <button data-cat="all" class="cat-btn active px-4 py-2.5 text-sm font-medium rounded-full bg-brand-600 text-white whitespace-nowrap min-h-[44px]">
       सभी बैंक ({bankCount})
     </button>
@@ -167,6 +167,13 @@ const popularBanks = ['sbi', 'bob', 'canara', 'ubi', 'pnb', 'boi', 'indian-bank'
         सूची देखें →
       </a>
     </div>
+  </section>
+
+  <!-- Trust + disclaimer (moved above footer; SiteFooter owns sitewide footer links) -->
+  <section class="mt-10 border-t border-gray-100 pt-6">
+    <p class="text-xs leading-relaxed text-gray-500">
+      ⚠️ ज़रूरी जानकारी: नंबर bank websites और cross-check sources से संकलित किए जाते हैं और बदल सकते हैं। इस्तेमाल से पहले अपने bank की official website पर current details सत्यापित करें। BalCheck.in किसी भी बैंक का आधिकारिक प्रतिनिधि नहीं है। किसी भी कॉल में OTP, PIN, CVV या password साझा न करें।
+    </p>
   </section>
 </main>
 
@@ -284,40 +291,7 @@ const popularBanks = ['sbi', 'bob', 'canara', 'ubi', 'pnb', 'boi', 'indian-bank'
   </div>
 </section>
 
-<!-- Footer -->
-<footer class="bg-gray-900 text-gray-300">
-  <div class="max-w-6xl mx-auto px-4 py-8">
-    <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-2">
-        <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 text-white font-bold">₹</div>
-        <span class="font-bold text-white">BalCheck.in</span>
-      </div>
-      <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm">
-        <a href="/" class="text-gray-400 hover:text-white transition-colors">होम</a>
-        <a href="/how-it-works/" class="text-gray-400 hover:text-white transition-colors">कैसे काम करता है</a>
-        <a href="/customer-care/" class="text-gray-400 hover:text-white transition-colors">Customer Care</a>
-        <a href="/net-banking/" class="text-gray-400 hover:text-white transition-colors">Net Banking</a>
-        <a href="/sms-banking/" class="text-gray-400 hover:text-white transition-colors">SMS Banking</a>
-        <a href="https://upseva.in/tools/bank-cheatsheet/" target="_blank" rel="noopener" class="text-gray-400 hover:text-white transition-colors">Cheatsheet PDF</a>
-        <a href="/banks/public-sector/" class="text-gray-400 hover:text-white transition-colors">सरकारी बैंक</a>
-        <a href="/banks/private-sector/" class="text-gray-400 hover:text-white transition-colors">निजी बैंक</a>
-      </div>
-    </div>
-    <div class="mt-6 pt-6 border-t border-gray-800">
-      <p class="text-xs text-gray-500 leading-relaxed">
-        ⚠️ ज़रूरी जानकारी: नंबर bank websites और cross-check sources से संकलित किए जाते हैं और बदल सकते हैं। इस्तेमाल से पहले अपने bank की official website पर current details सत्यापित करें। BalCheck.in किसी भी बैंक का आधिकारिक प्रतिनिधि नहीं है।
-      </p>
-      <p class="mt-4 text-xs text-gray-500">© 2026 BalCheck.in — Made in India 🇮🇳</p>
-    </div>
-  </div>
-</footer>
-
 </Layout>
-
-<style>
-  .scrollbar-hide::-webkit-scrollbar { display: none; }
-  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-</style>
 
 <script>
   // Search filter
