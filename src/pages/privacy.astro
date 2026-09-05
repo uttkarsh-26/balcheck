@@ -1,0 +1,62 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const siteUrl = 'https://balcheck.in';
+const pageTitle = 'प्राइवेसी नीति | BalCheck.in';
+const pageDesc = 'BalCheck.in की प्राइवेसी नीति — हम कौन-सा डेटा रखते हैं, विज्ञापन cookies (Google AdSense) कैसे काम करते हैं, और आपसे संपर्क कैसे करें।';
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+    { '@type': 'ListItem', position: 2, name: 'Privacy Policy', item: `${siteUrl}/privacy/` },
+  ],
+};
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+<nav class="max-w-3xl mx-auto px-4 pt-4" aria-label="Breadcrumb">
+  <ol class="flex items-center gap-1.5 text-sm text-gray-500">
+    <li><a href="/" class="inline-block py-1.5 px-2 -ml-2 rounded-lg hover:text-brand-600 hover:bg-gray-100 transition-colors">होम</a></li>
+    <li aria-hidden="true" class="text-gray-400">›</li>
+    <li class="text-gray-900 font-medium py-1.5 px-1">प्राइवेसी नीति</li>
+  </ol>
+</nav>
+
+<main class="max-w-3xl mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">प्राइवेसी नीति</h1>
+  <p class="mt-2 text-sm text-gray-600">हम आपका डेटा कैसे संभालते हैं — सीधी भाषा में।</p>
+
+  <div class="mt-6 space-y-6 rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+    <section>
+      <h2 class="text-lg font-bold text-gray-900">हम कोई personal डेटा collect नहीं करते</h2>
+      <p class="mt-2 text-sm leading-relaxed text-gray-700">BalCheck.in एक सूचनात्मक directory है। आपका मोबाइल नंबर, खाता संख्या, आधार या कोई banking detail हमारे server पर कभी store नहीं होती — इस साइट पर ऐसा कोई form ही नहीं है। बैलेंस जानने के लिए आप अपने फोन से सीधे बैंक के official नंबर पर कॉल करते हैं।</p>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-bold text-gray-900">Analytics</h2>
+      <p class="mt-2 text-sm leading-relaxed text-gray-700">साइट को बेहतर बनाने के लिए हम Google Analytics (GA4) से anonymized page-view आंकड़े देखते हैं — जैसे कौन-से बैंक पेज ज़्यादा देखे गए। इसमें आपकी पहचान वाली कोई जानकारी नहीं होती।</p>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-bold text-gray-900">विज्ञापन और Cookies</h2>
+      <p class="mt-2 text-sm leading-relaxed text-gray-700">साइट चलाने की लागत निकालने के लिए हम third-party विज्ञापन दिखाते हैं (Google AdSense सहित)। Google और उसके partners आपकी रुचि के विज्ञापन दिखाने के लिए cookies का इस्तेमाल कर सकते हैं, जिनमें DoubleClick cookie भी शामिल है। आप <a class="text-brand-700 underline hover:text-brand-600" href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer">Google Ad Settings</a> में जाकर personalized ads बंद कर सकते हैं। Browser settings से भी cookies delete/block की जा सकती हैं।</p>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-bold text-gray-900">Third-party links</h2>
+      <p class="mt-2 text-sm leading-relaxed text-gray-700">हमारी साइट से बैंकों की official वेबसाइटों और customer-care नंबरों के links दिए गए हैं। उन साइटों की privacy policy अलग होती है — कृपया उन्हें अलग से पढ़ें।</p>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-bold text-gray-900">संपर्क</h2>
+      <p class="mt-2 text-sm leading-relaxed text-gray-700">प्राइवेसी से जुड़ी कोई चिंता हो तो हमारे <a class="text-brand-700 underline hover:text-brand-600" href="/contact/">संपर्क पेज</a> से लिखें।</p>
+    </section>
+
+    <p class="border-t border-gray-100 pt-4 text-xs text-gray-500">Last updated: 5 September 2026</p>
+  </div>
+</main>
+</Layout>

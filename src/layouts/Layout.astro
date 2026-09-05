@@ -1,5 +1,6 @@
 ---
 import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -145,5 +146,6 @@ Astro.response.headers.set('Cache-Control', 'public, s-maxage=3600, max-age=0, s
 
   <SiteHeader />
   <slot />
+  <SiteFooter />
 </body>
 </html>

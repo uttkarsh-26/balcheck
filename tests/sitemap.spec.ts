@@ -32,6 +32,7 @@ function expectedSitemapUrlCount(): number {
   return (
     1 + // homepage /
     1 + // /how-it-works/
+    3 + // /privacy/ /about/ /contact/
     banks.length + // /bank/[slug]/
     (1 + categories.length) + // /banks/ index + /banks/[category]/
     VERTICAL_HUBS.length * (banks.length + 1) + // per vertical: hub + one page per bank

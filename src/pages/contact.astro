@@ -1,0 +1,57 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const siteUrl = 'https://balcheck.in';
+const pageTitle = 'संपर्क करें | BalCheck.in';
+const pageDesc = 'BalCheck.in से संपर्क करें — गलत नंबर report करें, सुधार सुझाएं या feedback दें। Email से लिखें, हम जवाब देंगे।';
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+    { '@type': 'ListItem', position: 2, name: 'Contact Us', item: `${siteUrl}/contact/` },
+  ],
+};
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+<nav class="max-w-3xl mx-auto px-4 pt-4" aria-label="Breadcrumb">
+  <ol class="flex items-center gap-1.5 text-sm text-gray-500">
+    <li><a href="/" class="inline-block py-1.5 px-2 -ml-2 rounded-lg hover:text-brand-600 hover:bg-gray-100 transition-colors">होम</a></li>
+    <li aria-hidden="true" class="text-gray-400">›</li>
+    <li class="text-gray-900 font-medium py-1.5 px-1">संपर्क करें</li>
+  </ol>
+</nav>
+
+<main class="max-w-3xl mx-auto px-4 py-8">
+  <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">संपर्क करें</h1>
+  <p class="mt-2 text-sm text-gray-600">गलत नंबर, सुधार या feedback — हमें लिखें।</p>
+
+  <div class="mt-6 space-y-6 rounded-xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+    <section>
+      <h2 class="text-lg font-bold text-gray-900">Email</h2>
+      <p class="mt-2 text-sm leading-relaxed text-gray-700">हमें इस email पर लिखें — विषय (subject) में बैंक का नाम और पेज का link ज़रूर डालें:</p>
+      <p class="mt-3">
+        <a href="mailto:uttkarsh.26@gmail.com?subject=BalCheck.in%20feedback" class="inline-block rounded-xl bg-brand-600 px-5 py-3 text-sm font-bold text-white hover:bg-brand-700 active:bg-brand-800 transition-colors">uttkarsh.26@gmail.com</a>
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-bold text-gray-900">क्या लिखें</h2>
+      <ul class="mt-2 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-gray-700">
+        <li><strong>गलत नंबर:</strong> बैंक का नाम, कौन-सा नंबर गलत है, और सही नंबर का official source link।</li>
+        <li><strong>नया बैंक/सेवा:</strong> कौन-सा बैंक या service जोड़नी चाहिए।</li>
+        <li><strong>सुझाव:</strong> साइट को और आसान कैसे बनाएं।</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-bold text-gray-900">ज़रूरी नोट</h2>
+      <p class="mt-2 text-sm leading-relaxed text-gray-700">यह सूचनात्मक वेबसाइट है — <strong>अपना खाता नंबर, OTP, PIN या कोई banking detail email में कभी न भेजें</strong>। बैलेंस या शिकायत के लिए सीधे अपने बैंक के customer care से संपर्क करें (<a class="text-brand-700 underline hover:text-brand-600" href="/customer-care/">customer care directory</a>)। हम आमतौर पर कुछ दिनों में जवाब देते हैं।</p>
+    </section>
+  </div>
+</main>
+</Layout>

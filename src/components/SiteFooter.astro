@@ -1,0 +1,44 @@
+---
+// BalCheck.in global footer — policy + service discovery links.
+// AdSense site-review requirement: every page must reach Privacy/About/Contact.
+const serviceLinks = [
+  { href: '/balance-enquiry/', label: 'Balance Enquiry' },
+  { href: '/mini-statement/', label: 'Mini Statement' },
+  { href: '/customer-care/', label: 'Customer Care' },
+  { href: '/net-banking/', label: 'Net Banking' },
+  { href: '/banks/', label: 'All Banks' },
+  { href: '/how-it-works/', label: 'कैसे काम करता है' },
+] as const;
+
+const infoLinks = [
+  { href: '/about/', label: 'हमारे बारे में' },
+  { href: '/privacy/', label: 'प्राइवेसी नीति' },
+  { href: '/contact/', label: 'संपर्क करें' },
+] as const;
+---
+
+<footer class="mt-12 border-t border-gray-200 bg-white">
+  <div class="mx-auto max-w-6xl px-4 py-8">
+    <div class="flex flex-col gap-6 sm:flex-row sm:justify-between">
+      <div class="max-w-sm">
+        <p class="text-base font-bold text-gray-900">BalCheck<span class="text-brand-600">.in</span></p>
+        <p class="mt-1 text-xs leading-relaxed text-gray-600">भारतीय बैंकों के balance enquiry methods और verified contact details एक जगह — आसान हिंदी में।</p>
+      </div>
+      <nav aria-label="Services" class="flex flex-col gap-2 text-sm">
+        <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">सेवाएं</p>
+        {serviceLinks.map((l) => (
+          <a href={l.href} class="w-fit rounded px-1 py-1 text-gray-700 hover:text-brand-600 hover:underline">{l.label}</a>
+        ))}
+      </nav>
+      <nav aria-label="Information" class="flex flex-col gap-2 text-sm">
+        <p class="text-xs font-semibold uppercase tracking-wide text-gray-400">जानकारी</p>
+        {infoLinks.map((l) => (
+          <a href={l.href} class="w-fit rounded px-1 py-1 text-gray-700 hover:text-brand-600 hover:underline">{l.label}</a>
+        ))}
+      </nav>
+    </div>
+    <div class="mt-6 border-t border-gray-100 pt-4 text-xs leading-relaxed text-gray-500">
+      <p>© 2026 BalCheck.in — सूचनात्मक गाइड। यह किसी बैंक, RBI या सरकारी संस्था की official वेबसाइट नहीं है। नंबर बदल सकते हैं; हमेशा बैंक की official वेबसाइट से पुष्टि करें।</p>
+    </div>
+  </div>
+</footer>
