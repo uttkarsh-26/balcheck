@@ -9,6 +9,7 @@ const privateCount = banks.filter(b => b.category === 'Private Sector').length;
 const sfbCount = banks.filter(b => b.category === 'Small Finance Bank').length;
 const siteUrl = 'https://balcheck.in';
 const bankingServices = [
+  { href: '/missed-call/', icon: '📞', title: 'Missed Call Numbers', description: 'सभी बैंकों के missed call balance numbers' },
   { href: '/balance-enquiry/', icon: '💰', title: 'Balance Enquiry', description: 'बैलेंस enquiry के सभी तरीके' },
   { href: '/mini-statement/', icon: '🧾', title: 'Mini Statement', description: 'आखिरी transactions की जानकारी' },
   { href: '/customer-care/', icon: '🎧', title: 'Customer Care', description: 'सभी बैंकों के customer care नंबर' },

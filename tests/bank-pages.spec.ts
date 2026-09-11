@@ -32,9 +32,26 @@ for (const bank of banks) {
     });
 
     test('renders bank name and balance-enquiry number', async ({ page }) => {
-      await expect(page.getByRole('heading', { level: 1, name: bank.nameHindi })).toBeVisible();
+      const expectedH1 = bank.slug === 'psb'
+        ? 'Punjab & Sind Bank (PSB) बैलेंस चेक नंबर'
+        : bank.nameHindi;
+      await expect(page.getByRole('heading', { level: 1, name: expectedH1 })).toBeVisible();
       await expect(page.locator('body')).toContainText(bank.missedCall);
     });
+
+    if (bank.slug === 'psb') {
+      test('PSB page owns the full-name spellings (Punjab & Sind Bank / punjab and sind)', async ({ page }) => {
+        const h1 = await page.locator('h1').textContent();
+        expect(h1).toContain('Punjab & Sind Bank');
+        expect(h1).toContain('PSB');
+        await expect(page.locator('body')).toContainText('पंजाब एंड सिंध बैंक');
+
+        const schemas = await getJsonLdScripts(page);
+        const bankSchema = findSchema(schemas, 'BankOrCreditUnion') as Record<string, unknown> | undefined;
+        expect(bankSchema).toBeDefined();
+        expect(bankSchema?.telephone).toBe(bank.missedCall);
+      });
+    }
 
     test('keeps search metadata within snippet length contracts', async ({ page }) => {
       const title = await page.title();

@@ -17,6 +17,9 @@ const VERTICAL_HUBS = [
   '/toll-free-number/',
 ];
 
+// Standalone hub (not a per-bank vertical): missed-call number directory
+const MISSED_CALL_HUB = '/missed-call/';
+
 const MERGED_BANKS_HUB = '/merged-banks/';
 
 /**
@@ -37,7 +40,8 @@ function expectedSitemapUrlCount(): number {
     (1 + categories.length) + // /banks/ index + /banks/[category]/
     VERTICAL_HUBS.length * (banks.length + 1) + // per vertical: hub + one page per bank
     articleCount + // /article/[slug]/
-    (1 + mergers.length) // /merged-banks/ hub + one page per merger record
+    (1 + mergers.length) + // /merged-banks/ hub + one page per merger record
+    1 // /missed-call/ hub
   );
 }
 
@@ -90,6 +94,13 @@ test.describe('sitemap', () => {
     for (const m of mergers) {
       expect(text).toContain(`https://balcheck.in/merged-banks/${m.oldSlug}/`);
     }
+  });
+
+  test('sitemap contains the missed-call hub', async ({ request }) => {
+    const response = await request.get('/sitemap-0.xml');
+    expect(response.status()).toBe(200);
+    const text = await response.text();
+    expect(text).toContain(`https://balcheck.in${MISSED_CALL_HUB}`);
   });
 
   test('sitemap URL count matches the exact route inventory derived from current data', async ({ request }) => {

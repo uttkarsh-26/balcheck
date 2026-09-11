@@ -65,12 +65,35 @@ if (bank.notes) {
   });
 }
 
+// PSB full-name cluster: GSC shows 'punjab and sind bank balance check number',
+// 'psb balance check number' and 'punjab and sind' spellings as the top demand.
+// Make the H1 own both spellings and add full-name FAQs.
+const psbH1 = 'Punjab & Sind Bank (PSB) बैलेंस चेक नंबर';
+if (bank.slug === 'psb') {
+  faqs.push(
+    {
+      q: 'Punjab and Sind Bank का balance check number क्या है?',
+      a: `Punjab & Sind Bank, जिसे PSB के नाम से भी जाना जाता है, का balance check number ${bank.missedCall} है। अपने registered mobile नंबर से मिस्ड कॉल दें — कॉल 2-3 ring के बाद अपने आप कट जाएगी और SMS में तुरंत बैलेंस आ जाएगा।`,
+    },
+    {
+      q: 'PSB किस बैंक का छोटा नाम है — पूरा नाम क्या है?',
+      a: `PSB का पूरा नाम Punjab & Sind Bank है — हिंदी में पंजाब एंड सिंध बैंक। यह भारत का सरकारी (public sector) बैंक है जिसकी स्थापना 1908 में हुई थी। इस पेज पर PSB/Punjab & Sind Bank के balance check, missed call और customer care नंबर दिए गए हैं।`,
+    },
+    {
+      q: 'Punjab & Sind Bank balance enquiry मुफ़्त है या charge लगता है?',
+      a: `${bank.name} की missed-call balance enquiry सेवा अधिकांश ऑपरेटरों पर मुफ़्त है क्योंकि कॉल जवाब में जुड़ती नहीं। बैंक की नवीनतम शर्तें आधिकारिक वेबसाइट ${bank.website.replace('https://', '')} पर देखें।`,
+    },
+  );
+}
+
 // JSON-LD: BankOrCreditUnion + FAQPage + BreadcrumbList + HowTo
 const bankSchema = {
   '@context': 'https://schema.org',
   '@type': 'BankOrCreditUnion',
   name: bank.name,
-  alternateName: bank.shortName,
+  alternateName: bank.slug === 'psb'
+    ? [bank.shortName, 'Punjab and Sind Bank', 'पंजाब एंड सिंध बैंक']
+    : bank.shortName,
   description: `${bank.name} balance enquiry number ${bank.missedCall}. ${serviceInstruction}`,
   url: canonicalUrl,
   telephone: bank.missedCall,
@@ -164,6 +187,7 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
   },
   psb: {
     title: `PSB Balance Check Number ${bank.missedCall} | Punjab & Sind Bank`,
+    description: `Punjab & Sind Bank (PSB) का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। Registered mobile से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
   },
   'central-bank': {
     title: `सेंट्रल बैंक बैलेंस चेक नंबर ${bank.missedCall} | Missed Call`,
@@ -259,11 +283,19 @@ const pageDesc = !isMissedCall
   <div class="max-w-4xl mx-auto px-4 py-6 sm:py-8">
     <div class="flex items-start justify-between gap-4 flex-wrap">
       <div>
-        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">{bank.nameHindi}</h1>
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">{bank.slug === 'psb' ? psbH1 : bank.nameHindi}</h1>
         <p class="text-sm text-gray-500 mt-1">{bank.name} · {categoryHindi[bank.category]}</p>
       </div>
       <span class="text-xs font-medium text-brand-700 bg-brand-100 px-3 py-2 rounded-full">{bank.shortName}</span>
     </div>
+
+    {bank.slug === 'psb' && (
+      <div class="mt-4 bg-brand-50 rounded-xl border border-brand-100 p-4">
+        <p class="text-sm text-gray-700 leading-relaxed">
+          <strong>PSB</strong> <span lang="en">Punjab &amp; Sind Bank</span> — पंजाब एंड सिंध बैंक — का ही छोटा नाम है। बैलेंस चेक करने के लिए नंबर वही है चाहे आप PSB, Punjab &amp; Sind Bank या पंजाब एंड सिंध बैंक लिखकर खोजें: registered mobile से <a href={`tel:${bank.missedCall}`} class="text-brand-700 font-bold underline">{bank.missedCall}</a> पर मिस्ड कॉल दें और SMS में बैलेंस पाएं।
+        </p>
+      </div>
+    )}
 
     <!-- Missed Call Number — big -->
     <div data-testid="primary-balance-service" class="mt-6 bg-white rounded-2xl border-2 border-brand-200 p-5 shadow-sm">

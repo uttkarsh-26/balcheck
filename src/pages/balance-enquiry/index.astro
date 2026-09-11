@@ -48,6 +48,16 @@ const schema = {
       यह सेवा मुफ़्त है और 24×7 उपलब्ध है।
     </p>
 
+    <div class="mb-6 flex flex-col sm:flex-row sm:items-center gap-3 justify-between rounded-xl border border-brand-200 bg-brand-50 p-4">
+      <div>
+        <h2 class="text-sm font-bold text-gray-900">सिर्फ missed call नंबर चाहिए?</h2>
+        <p class="text-xs text-gray-600 mt-0.5">सभी {banks.length} बैंकों के missed call balance enquiry numbers एक ही पेज पर।</p>
+      </div>
+      <a href="/missed-call/" class="shrink-0 inline-flex items-center justify-center min-h-[44px] rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold px-5 transition-colors">
+        Missed Call Numbers →
+      </a>
+    </div>
+
     {categories.map(cat => {
       const catBanks = banks.filter(b => b.category === cat);
       return (
