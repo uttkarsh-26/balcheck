@@ -11,6 +11,7 @@
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "test:analytics-contract": "node scripts/verify-ga4-social-landing-contract.mjs",
+    "test:sitemap-canonical": "node scripts/test-sitemap-canonical.mjs",
     "setup": "cp scripts/pre-push.sh .git/hooks/pre-push && chmod +x .git/hooks/pre-push && echo 'git hooks installed'",
     "astro": "astro"
   },
