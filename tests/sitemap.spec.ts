@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { banks, categories } from '../src/data/banks';
+import { isTrueTollFreeNumber } from '../src/lib/phone';
 import { mergers } from '../src/data/mergers';
 import { categorySlug } from './utils';
 
@@ -41,7 +42,11 @@ function expectedSitemapUrlCount(): number {
     VERTICAL_HUBS.length * (banks.length + 1) + // per vertical: hub + one page per bank
     articleCount + // /article/[slug]/
     (1 + mergers.length) + // /merged-banks/ hub + one page per merger record
-    1 // /missed-call/ hub
+    1 - // /missed-call/ hub
+    // Legacy /toll-free-number/<bank>/ routes whose bank has no real 1800 number
+    // are kept live but excluded from the sitemap, because those pages declare
+    // /customer-care/<slug>/ as canonical (see astro.config.mjs).
+    banks.filter((bank) => !isTrueTollFreeNumber(bank.customerCare)).length
   );
 }
 
@@ -109,6 +114,23 @@ test.describe('sitemap', () => {
     const text = await response.text();
     const locCount = (text.match(/<loc>/g) ?? []).length;
     expect(locCount).toBe(expectedSitemapUrlCount());
+  });
+
+  test('sitemap omits legacy toll-free URLs that canonicalise to customer-care', async ({ request }) => {
+    const response = await request.get('/sitemap-0.xml');
+    const text = await response.text();
+
+    const legacySlugs = banks
+      .filter((bank) => !isTrueTollFreeNumber(bank.customerCare))
+      .map((bank) => bank.slug);
+
+    for (const slug of legacySlugs) {
+      expect(text, `${slug} has no true 1800 number, so its legacy toll-free URL must not be submitted`)
+        .not.toContain(`https://balcheck.in/toll-free-number/${slug}/`);
+      // …but the page itself stays live for users who land on it.
+      const page = await request.get(`/toll-free-number/${slug}/`);
+      expect(page.status()).toBe(200);
+    }
   });
 
   test('sitemap contains balance-enquiry and toll-free-number bank pages', async ({ request }) => {
