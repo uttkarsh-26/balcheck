@@ -1,0 +1,76 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { banks } from '../data/banks';
+
+// Unknown URLs returned a blank page before this route existed; keep a short,
+// Hindi recovery path (home + popular banks + service hubs) instead of a dead end.
+const popularSlugs = ['sbi', 'pnb', 'bob', 'canara', 'hdfc', 'icici'];
+const popularBanks = popularSlugs
+  .map((slug) => banks.find((bank) => bank.slug === slug))
+  .filter((bank): bank is (typeof banks)[number] => Boolean(bank));
+
+const serviceLinks = [
+  { href: '/missed-call/', label: 'Missed Call नंबर' },
+  { href: '/balance-enquiry/', label: 'Balance Enquiry' },
+  { href: '/customer-care/', label: 'Customer Care' },
+  { href: '/net-banking/', label: 'Net Banking' },
+  { href: '/mini-statement/', label: 'Mini Statement' },
+  { href: '/how-it-works/', label: 'कैसे काम करता है' },
+];
+---
+
+<Layout
+  title="पेज नहीं मिला (404) — BalCheck.in"
+  description="यह पेज मौजूद नहीं है। BalCheck.in पर बैंक balance enquiry नंबर और customer care details खोजें।"
+  noindex
+>
+  <section class="bg-gradient-to-b from-brand-50 to-white border-b border-gray-100">
+    <div class="max-w-3xl mx-auto px-4 py-10 text-center">
+      <p class="text-5xl font-bold text-brand-600">404</p>
+      <h1 class="mt-3 text-2xl sm:text-3xl font-bold text-gray-900">पेज नहीं मिला</h1>
+      <p class="mt-3 text-gray-600">
+        आप जिस पेज पर आए हैं वह मौजूद नहीं है या हटा दिया गया है। नीचे दिए लिंक से आगे बढ़ें।
+      </p>
+      <a
+        href="/"
+        class="mt-6 inline-flex min-h-[44px] items-center justify-center rounded-lg bg-brand-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-brand-700"
+      >
+        होम पेज पर जाएं
+      </a>
+      <p class="mt-4 text-sm text-gray-600">
+        सुझाव: होम पेज पर बैंक का नाम सर्च करें — जैसे <span class="font-medium">SBI</span> या
+        <span class="font-medium">एसबीआई</span>
+      </p>
+    </div>
+  </section>
+
+  <section class="max-w-3xl mx-auto px-4 py-8">
+    <h2 class="text-lg font-bold text-gray-900">लोकप्रिय बैंक</h2>
+    <div class="mt-3 flex flex-wrap gap-2">
+      {popularBanks.map((bank) => (
+        <a
+          href={`/bank/${bank.slug}/`}
+          class="inline-flex min-h-[40px] items-center rounded-full bg-brand-50 px-4 py-2 text-sm font-medium text-brand-700 transition-colors hover:bg-brand-100"
+        >
+          {bank.nameHindi}
+        </a>
+      ))}
+    </div>
+
+    <h2 class="mt-8 text-lg font-bold text-gray-900">सेवाएं</h2>
+    <div class="mt-3 flex flex-wrap gap-2">
+      {serviceLinks.map((service) => (
+        <a
+          href={service.href}
+          class="inline-flex min-h-[40px] items-center rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-brand-700 transition-colors hover:border-brand-300 hover:bg-brand-50"
+        >
+          {service.label}
+        </a>
+      ))}
+    </div>
+
+    <p class="mt-8 text-sm text-gray-600">
+      सभी बैंकों की सूची <a href="/banks/" class="text-brand-600 underline">यहां</a> देखें।
+    </p>
+  </section>
+</Layout>

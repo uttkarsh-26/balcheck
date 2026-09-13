@@ -7,6 +7,8 @@ compatibility_flags = ["nodejs_compat"]
 binding = "ASSETS"
 directory = "./dist"
 run_worker_first = true
+# Missing paths (typos, stale links) return the custom 404 page with a 404 status.
+not_found_handling = "404-page"
 
 [observability]
 enabled = true
