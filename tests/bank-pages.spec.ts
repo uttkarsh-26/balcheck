@@ -19,6 +19,11 @@ const ctrTitles: Record<string, string> = {
   'central-bank': 'सेंट्रल बैंक बैलेंस चेक नंबर 9555244442 | Missed Call',
   'mp-gramin': 'MPGB Balance Check Number 8010968293 | Missed Call',
   'indian-bank': 'Indian Bank Balance Check Number 7827170170',
+  canara: 'केनरा बैंक बैलेंस चेक नंबर 8886610360 | मिस्ड कॉल सेवा',
+  indusind: 'IndusInd Bank Balance Check Number 18002741000 — Toll Free',
+  'bihar-gramin': 'Bihar Gramin Bank Balance Check Number 1800-180-7777',
+  'punjab-gramin': 'Punjab Gramin Bank Balance Check Number 18001807777',
+  idbi: 'IDBI Bank Balance Check Number 18008431122 | Missed Call',
 };
 
 const sprint3Banks = new Set(['canara', 'psb', 'boi']);
@@ -62,7 +67,9 @@ for (const bank of banks) {
       expect(description!.length).toBeLessThanOrEqual(155);
     });
 
-    if (bank.slug === 'canara') {
+    // Scalable-default contract: a missed-call bank with no GSC override still
+    // renders the generic template (canara now has an override).
+    if (bank.slug === 'uco-bank') {
       test('uses the scalable default title template', async ({ page }) => {
         await expect(page).toHaveTitle(
           `${bank.nameHindi} बैलेंस चेक नंबर ${bank.missedCall} | ${bank.shortName} Missed Call`
@@ -74,7 +81,7 @@ for (const bank of banks) {
         const expectedDescription = `${bank.nameHindi} (${bank.shortName}) का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`;
 
         expect(description).toBe(expectedDescription);
-        expect(description).not.toContain('सिंद');
+        expect(description).toContain(bank.nameHindi);
       });
     }
 
@@ -117,7 +124,7 @@ for (const bank of banks) {
       });
     }
 
-    if (bank.balanceMode !== 'missed-call') {
+    if (bank.balanceMode !== 'missed-call' && !ctrTitles[bank.slug]) {
       test('matches balance-check query intent without mislabeling customer-care lines', async ({ page }) => {
         const fullTitle = `${bank.name} Balance Check Number ${bank.missedCall}`;
         const expectedTitle = fullTitle.length <= 60

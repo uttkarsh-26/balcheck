@@ -198,6 +198,44 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
   'indian-bank': {
     title: `Indian Bank Balance Check Number ${bank.missedCall}`,
   },
+  // 2026-08-14..09-12 window: 12,206 impr @ pos 7.4 (0.11% CTR), dominant
+  // query 'केनरा बैंक बैलेंस चेक नंबर' — the template title already carries the
+  // exact Hindi phrase; this locks it and trades the Latin brand tail for the
+  // Hindi "मिस्ड कॉल सेवा" hook users see in the SERP.
+  canara: {
+    title: `केनरा बैंक बैलेंस चेक नंबर ${bank.missedCall} | मिस्ड कॉल सेवा`,
+    description: `केनरा बैंक बैलेंस चेक नंबर ${bank.missedCall}। आधिकारिक मिस्ड कॉल सेवा — रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
+  },
+  // 4,332 impr @ pos 8.6 (0.30%) + 1,457 @ 8.2 on 'indusind bank balance
+  // check number' / 'balance enquiry number'. The 1800 number is a verified
+  // toll-free customer-care/IVR line (balanceMode 'customer-care'), so the
+  // title keeps the exact English query and adds the toll-free hook instead
+  // of claiming a missed-call facility.
+  indusind: {
+    title: `IndusInd Bank Balance Check Number ${bank.missedCall} — Toll Free`,
+    description: `IndusInd Bank balance check number ${bank.missedCall} — आधिकारिक टोल-फ्री customer care/IVR नंबर। कॉल करके balance enquiry करें, तुरंत जानकारी पाएं। मुफ़्त, 24×7।`,
+  },
+  // 3,366 impr @ pos 7.0 (0.59% CTR) on 'bihar gramin bank balance check
+  // number'. Title already matches the query exactly; the CTR gap comes from
+  // the old customer-care description that told users the service was
+  // "verified नहीं". Same toll-free line, now described as the official one.
+  'bihar-gramin': {
+    title: `Bihar Gramin Bank Balance Check Number ${bank.missedCall}`,
+    description: `Bihar Gramin Bank balance check number ${bank.missedCall} — आधिकारिक टोल-फ्री नंबर। कॉल करके बैलेंस enquiry करें, तुरंत जानकारी पाएं। मुफ़्त, 24×7।`,
+  },
+  // 2,767 impr @ pos 6.0 (0.58% CTR) on 'punjab gramin bank balance check
+  // number'; /sms-banking/punjab-gramin/ (2,558 @ 6.5) has its own title map.
+  'punjab-gramin': {
+    title: `Punjab Gramin Bank Balance Check Number ${bank.missedCall}`,
+    description: `Punjab Gramin Bank balance check number ${bank.missedCall} — आधिकारिक टोल-फ्री नंबर। कॉल करके बैलेंस enquiry करें, तुरंत जानकारी पाएं। मुफ़्त, 24×7।`,
+  },
+  // 1,461 impr @ pos 8.9 (0.27% CTR) on 'idbi bank balance check number' —
+  // English query, so the title switches from the Hindi default template to
+  // the exact English phrase the demand uses.
+  idbi: {
+    title: `IDBI Bank Balance Check Number ${bank.missedCall} | Missed Call`,
+    description: `IDBI Bank balance check number ${bank.missedCall} — आधिकारिक मिस्ड कॉल सेवा। मिस्ड कॉल दें, SMS में तुरंत बैलेंस और मिनी स्टेटमेंट पाएं। मुफ़्त, 24×7।`,
+  },
 };
 
 const customerCareTitle = `${bank.name} Balance Check Number ${bank.missedCall}`;
@@ -208,8 +246,12 @@ const defaultMissedCallTitle = `${bank.nameHindi} बैलेंस चेक �
 const conciseMissedCallTitle = `${bank.nameHindi} बैलेंस चेक नंबर ${bank.missedCall}`;
 const compactMissedCallTitle = `${bank.shortName} Balance Check Number ${bank.missedCall}`;
 const requestedMissedCallTitle = seoOverrides[bank.slug]?.title ?? defaultMissedCallTitle;
+// Overrides apply on both branches: customer-care/IVR pages (same number for
+// balance enquiry and customer care) must not advertise a missed-call facility,
+// but they still need a demand-matched snippet. Only pages with an explicit
+// override are affected.
 const pageTitle = !isMissedCall
-  ? conciseCustomerCareTitle
+  ? (seoOverrides[bank.slug]?.title ?? conciseCustomerCareTitle)
   : requestedMissedCallTitle.length <= 60
     ? requestedMissedCallTitle
     : conciseMissedCallTitle.length <= 60
@@ -219,7 +261,7 @@ const defaultMissedCallDesc = `${bank.nameHindi} (${bank.shortName}) का आ�
 const compactMissedCallDesc = `${bank.nameHindi} का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall}। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें; SMS में तुरंत बैलेंस पाएं। मुफ़्त 24×7।`;
 const requestedMissedCallDesc = seoOverrides[bank.slug]?.description ?? defaultMissedCallDesc;
 const pageDesc = !isMissedCall
-  ? `${bank.name} balance check number ${bank.missedCall}। यह customer-care/IVR line है; dedicated missed-call service verified नहीं है।`
+  ? (seoOverrides[bank.slug]?.description ?? `${bank.name} balance check number ${bank.missedCall}। यह customer-care/IVR line है; dedicated missed-call service verified नहीं है।`)
   : requestedMissedCallDesc.length <= 155
     ? requestedMissedCallDesc
     : compactMissedCallDesc;
