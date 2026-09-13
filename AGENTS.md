@@ -14,6 +14,7 @@ Stack: Astro 7, TypeScript, Tailwind CSS 4, Cloudflare Workers
 - Unknown URLs serve dist/404.html only while `[assets] not_found_handling = "404-page"` stays in wrangler.toml — remove it (or change run_worker_first) and every unknown path returns a blank body again; fix: keep the key and re-check any bogus path after asset/worker config changes.
 - og:image must stay a raster file (public/og-image.jpg) — social crawlers (WhatsApp/Facebook/X) do not render SVG previews; fix: edit public/og-image.svg, then run `node scripts/render-og-image.mjs`.
 - The bank search matches every whitespace token of the query (`tokens.every(...)`) — reverting to a single `includes(query)` substring breaks natural multi-word queries like "sbi bank"; fix: keep token matching and add the query shape to tests/homepage.spec.ts.
+- The 9-page snippet experiment cohort (central-bank, mp-gramin, indian-bank, airtel-payments, maharashtra, iob, ippb, gujarat-gramin, jio-payments) is read by the BALCHECK_CTR_69896FB_28D_CLOSEOUT cron — editing those pages' title/description while the measurement window is open confounds the matched GSC readout; fix: check that closeout job's status before touching their metadata.
 
 ## Commands
 ```bash
