@@ -32,6 +32,24 @@ test.describe('homepage', () => {
     await expect(visibleCards.first()).toContainText('भारतीय स्टेट बैंक');
   });
 
+  test('search matches the Devanagari spelling of bank acronyms', async ({ page }) => {
+    const search = page.locator('#search');
+    const visibleCards = page.locator('.bank-card:not([style*="display: none"])');
+
+    // Rural users type the Hindi acronym; these banks' Hindi names are
+    // translations (भारतीय स्टेट बैंक), so the query used to return nothing.
+    await search.fill('एसबीआई');
+    await expect(visibleCards).toHaveCount(1);
+    await expect(visibleCards.first()).toContainText('भारतीय स्टेट बैंक');
+
+    await search.fill('पीएनबी');
+    await expect(visibleCards).toHaveCount(1);
+    await expect(visibleCards.first()).toContainText('पंजाब नेशनल बैंक');
+
+    await search.fill('ककककक');
+    await expect(page.locator('#no-results')).toBeVisible();
+  });
+
   test('category tabs filter bank cards', async ({ page }) => {
     const privateCategory = categories.find(c => c === 'Private Sector')!;
     const privateCount = banks.filter(b => b.category === privateCategory).length;

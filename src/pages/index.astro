@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import SchemaOrg from '../components/SchemaOrg.astro';
 import { banks, categories, categoryHindi } from '../data/banks';
+import { searchAliases } from '../lib/search-aliases';
 
 const bankCount = banks.length;
 const publicCount = banks.filter(b => b.category === 'Public Sector').length;
@@ -46,10 +47,12 @@ const popularBanks = ['sbi', 'bob', 'canara', 'ubi', 'pnb', 'boi', 'indian-bank'
   <div class="relative mb-6">
     <input
       id="search"
-      type="text"
+      type="search"
+      enterkeyhint="search"
       placeholder="बैंक का नाम खोजें... (जैसे SBI, HDFC, Canara)"
       class="w-full px-5 py-3.5 pl-12 text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent shadow-sm"
       autocomplete="off"
+      aria-label="बैंक का नाम खोजें"
     />
     <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
   </div>
@@ -64,7 +67,7 @@ const popularBanks = ['sbi', 'bob', 'canara', 'ubi', 'pnb', 'boi', 'indian-bank'
       {popularBanks.map(bank => (
         <a href={`/bank/${bank.slug}/`} class="min-w-0 rounded-lg border border-gray-200 bg-white px-3 py-3 text-center text-sm font-medium text-gray-900 hover:border-brand-300 hover:text-brand-700">
           <span class="block truncate">{bank.shortName}</span>
-          <span class="mt-1 block truncate text-[11px] text-gray-500">{bank.nameHindi}</span>
+          <span class="mt-1 block truncate text-xs text-gray-500">{bank.nameHindi}</span>
         </a>
       ))}
     </div>
@@ -85,7 +88,7 @@ const popularBanks = ['sbi', 'bob', 'canara', 'ubi', 'pnb', 'boi', 'indian-bank'
   <!-- Bank Cards Grid -->
   <div id="bank-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     {banks.map(bank => (
-      <div class="bank-card" data-name={`${bank.name} ${bank.nameHindi} ${bank.shortName}`.toLowerCase()} data-cat={bank.category}>
+      <div class="bank-card" data-name={`${bank.name} ${bank.nameHindi} ${bank.shortName} ${searchAliases(bank)}`.toLowerCase()} data-cat={bank.category}>
         <div class="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md hover:border-brand-300 transition-all duration-200">
           <!-- Bank Name -->
           <div class="flex items-start justify-between mb-3">
@@ -129,7 +132,7 @@ const popularBanks = ['sbi', 'bob', 'canara', 'ubi', 'pnb', 'boi', 'indian-bank'
           </div>
           
           {bank.notes && (
-            <p class="text-xs text-gray-400 mt-2">⚠️ {bank.notes}</p>
+            <p class="text-xs text-gray-600 mt-2">⚠️ {bank.notes}</p>
           )}
         </div>
       </div>
@@ -139,7 +142,7 @@ const popularBanks = ['sbi', 'bob', 'canara', 'ubi', 'pnb', 'boi', 'indian-bank'
   <!-- No Results -->
   <div id="no-results" class="hidden py-12 text-center">
     <p class="text-lg text-gray-500">कोई बैंक नहीं मिला।</p>
-    <p class="mt-1 text-sm text-gray-400">कृपया अलग नाम से खोजें।</p>
+    <p class="mt-1 text-sm text-gray-600">कृपया अलग नाम से खोजें।</p>
   </div>
 
   <!-- Category directory comes after the primary bank answer -->
