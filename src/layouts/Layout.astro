@@ -13,7 +13,7 @@ interface Props {
   noindex?: boolean;
 }
 
-const { title, description = 'भारतीय बैंकों के balance enquiry methods और verified contact details एक जगह', canonical, ogImage = '/og-image.svg', noindex = false } = Astro.props;
+const { title, description = 'भारतीय बैंकों के balance enquiry methods और verified contact details एक जगह', canonical, ogImage = '/og-image.jpg', noindex = false } = Astro.props;
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = (canonical ?? new URL(Astro.url.pathname, siteUrl).href).replace(/(?<!:)\/\/$/, '/');
 const canonicalHref = canonicalUrl.endsWith('/') ? canonicalUrl : `${canonicalUrl}/`;
@@ -47,8 +47,11 @@ Astro.response.headers.set('Cache-Control', 'public, s-maxage=3600, max-age=0, s
   <meta property="og:locale" content="hi_IN" />
   <meta property="og:site_name" content="BalCheck.in" />
   <meta property="og:image" content={new URL(ogImage, siteUrl).href} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:image:alt" content="BalCheck.in — बैंक बैलेंस चेक नंबर directory" />
-  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={new URL(ogImage, siteUrl).href} />
