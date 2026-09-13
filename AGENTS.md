@@ -10,6 +10,11 @@ Stack: Astro 7, TypeScript, Tailwind CSS 4, Cloudflare Workers
 4. **Build must pass** before any commit
 5. **Data accuracy** — bank numbers must be from official sources. Include source URL in data file comments.
 
+## Landmines
+- Unknown URLs serve dist/404.html only while `[assets] not_found_handling = "404-page"` stays in wrangler.toml — remove it (or change run_worker_first) and every unknown path returns a blank body again; fix: keep the key and re-check any bogus path after asset/worker config changes.
+- og:image must stay a raster file (public/og-image.jpg) — social crawlers (WhatsApp/Facebook/X) do not render SVG previews; fix: edit public/og-image.svg, then run `node scripts/render-og-image.mjs`.
+- The bank search matches every whitespace token of the query (`tokens.every(...)`) — reverting to a single `includes(query)` substring breaks natural multi-word queries like "sbi bank"; fix: keep token matching and add the query shape to tests/homepage.spec.ts.
+
 ## Commands
 ```bash
 npm run dev       # Dev server (localhost:4321)
