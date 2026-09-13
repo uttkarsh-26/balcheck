@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 /**
  * Brand / visual-system regression tests (docs/brand-tokens.md contract).
  * Guards the Sep 2026 visual audit fixes:
- *  - OG/Twitter social meta sitewide (Layout.astro ogImage default)
+ *  - OG/Twitter social meta sitewide (Layout.astro ogImage default): raster 1200x630, large-image card
  *  - VideoObject schema hygiene (no embedUrl pointing at the page's own mp4)
  *  - Header chip rail: scrollbar-hide + scroll-fade affordance (global utilities)
  *  - Sticky header
@@ -19,10 +19,12 @@ test.describe('social meta contract (sitewide)', () => {
       await expect(ogImage).toHaveCount(1);
       const content = await ogImage.getAttribute('content');
       expect(content).toMatch(/^https:\/\/balcheck\.in\//);
+      // social crawlers don't render SVG previews: og:image must be a raster
+      expect(content).toMatch(/\.(jpe?g|png|webp)$/);
 
       const twitterCard = page.locator('meta[name="twitter:card"]');
       await expect(twitterCard).toHaveCount(1);
-      expect(await twitterCard.getAttribute('content')).toBe('summary');
+      expect(await twitterCard.getAttribute('content')).toBe('summary_large_image');
 
       await expect(page.locator('meta[property="og:site_name"]')).toHaveCount(1);
     });
