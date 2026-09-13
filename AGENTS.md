@@ -62,5 +62,7 @@ Bank missed-call numbers sourced from:
 - Official bank websites
 - RBI financial education materials
 - Public domain banking directories
-
 Last verified: 2026-06-27
+
+## Local Testing
+Playwright's `webServer` reuses an existing server on port 4321 (`reuseExistingServer: !CI`): a manually started `serve dist` makes a local test run skip `npm run build` and assert against a stale `dist/`. Stop the manual server (or rebuild `dist/`) before running `npx playwright test` locally.

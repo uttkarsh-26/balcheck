@@ -30,6 +30,7 @@ const thumbnailUrl = posterUrl ?? videoUrl;
   {/* Video background */}
   <div class="absolute inset-0 h-full w-full">
     <video
+      data-hero-video
       class="absolute inset-0 h-full w-full object-cover"
       src={src}
       poster={posterUrl}
@@ -70,8 +71,12 @@ const thumbnailUrl = posterUrl ?? videoUrl;
 
   {/* Play the hero video only while it is on screen — saves mobile data */}
   <script>
-    const video = document.currentScript?.previousElementSibling?.querySelector('video');
-    if (video) {
+    // Astro emits this as a module script, and document.currentScript is null in
+    // module scripts - the previousElementSibling trick silently disabled autoplay.
+    const videos = document.querySelectorAll('video[data-hero-video]');
+    // Decorative background video: reduced-motion users keep the static poster.
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reducedMotion) videos.forEach((video) => {
       const observer = new IntersectionObserver((entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
@@ -82,7 +87,7 @@ const thumbnailUrl = posterUrl ?? videoUrl;
         }
       }, { threshold: 0.25 });
       observer.observe(video);
-    }
+    });
   </script>
 
   {/* VideoObject schema for SEO */}

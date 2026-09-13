@@ -49,4 +49,34 @@ test.describe('VideoHeroBanner mobile contract', () => {
       expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth);
     });
   }
+
+  test('reduced-motion users keep the static poster - no autoplay', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(route, { waitUntil: 'domcontentloaded' });
+
+    const video = page.locator('video[src*="balcheck-netbanking-hero"]');
+    await video.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1000);
+
+    expect(await video.evaluate((el) => (el as HTMLVideoElement).paused)).toBe(true);
+  });
+
+  test('hero video plays in view and pauses off screen', async ({ page }) => {
+    await page.goto(route, { waitUntil: 'load' });
+
+    const video = page.locator('video[src*="balcheck-netbanking-hero"]');
+    await video.scrollIntoViewIfNeeded();
+
+    // Autoplay must actually start: a module-script currentScript lookup silently
+    // disabled this for every bank/net-banking page before.
+    await expect
+      .poll(async () => video.evaluate((el) => (el as HTMLVideoElement).paused), { timeout: 5000 })
+      .toBe(false);
+    expect(await video.evaluate((el) => (el as HTMLVideoElement).currentTime)).toBeGreaterThan(0);
+
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await expect
+      .poll(async () => video.evaluate((el) => (el as HTMLVideoElement).paused), { timeout: 5000 })
+      .toBe(true);
+  });
 });
