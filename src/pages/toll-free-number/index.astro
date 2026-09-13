@@ -48,7 +48,7 @@ const schema = {
       <h2 class="mb-2 text-lg font-bold text-amber-900">Safety first</h2>
       <p class="text-sm leading-relaxed text-amber-800">Customer care call पर OTP, PIN, CVV, UPI PIN या password कभी न बताएं। 1860 या अन्य non-1800 numbers को toll-free न मानें।</p>
     </div>
-    <main>
+    <div>
       {categories.map(category => {
         const categoryBanks = banks.filter(bank => bank.category === category);
         return categoryBanks.length > 0 && (
@@ -74,6 +74,6 @@ const schema = {
           </section>
         );
       })}
-    </main>
+    </div>
   </div>
 </Layout>

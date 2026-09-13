@@ -46,6 +46,16 @@ test.describe('homepage', () => {
     await expect(visibleCards).toHaveCount(1);
     await expect(visibleCards.first()).toContainText('पंजाब नेशनल बैंक');
 
+    // multi-word queries match token-wise, any order
+    await search.fill('sbi bank');
+    await expect(visibleCards).toHaveCount(1);
+    await expect(visibleCards.first()).toContainText('भारतीय स्टेट बैंक');
+
+    // "union बैंक" matches Union Bank of India AND City Union Bank (सिटी यूनियन बैंक)
+    await search.fill('union बैंक');
+    await expect(visibleCards).toHaveCount(2);
+    await expect(visibleCards.first()).toContainText('यूनियन बैंक');
+
     await search.fill('ककककक');
     await expect(page.locator('#no-results')).toBeVisible();
   });

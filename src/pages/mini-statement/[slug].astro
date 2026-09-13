@@ -99,7 +99,7 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 ---
 <Layout title={title} description={description} canonical={canonicalUrl}>
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
-  <main data-testid="mini-statement-guide" class="max-w-3xl mx-auto px-4 py-6">
+  <div data-testid="mini-statement-guide" class="max-w-3xl mx-auto px-4 py-6">
     <nav class="text-sm text-gray-500 mb-4">
       <a href="/">Home</a><span class="mx-1">›</span><a href="/mini-statement/">Mini Statement</a><span class="mx-1">›</span><span>{bank.shortName}</span>
     </nav>
@@ -209,7 +209,7 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
       <h2 class="text-lg font-semibold mb-4">अक्सर पूछे जाने वाले प्रश्न</h2>
       <div class="space-y-4">{faqs.map(f => <div><h3 class="font-medium text-sm mb-1">{f.q}</h3><p class="text-gray-600 text-sm leading-relaxed">{f.a}</p></div>)}</div>
     </section>
-  </main>
+  </div>
 
   <div class="max-w-3xl mx-auto px-4 pb-6">
     <MoreServices bank={bank} />

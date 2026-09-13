@@ -42,7 +42,7 @@ const popularBanks = ['sbi', 'bob', 'canara', 'ubi', 'pnb', 'boi', 'indian-bank'
 </section>
 
 <!-- Search + Bank Directory -->
-<main class="max-w-6xl mx-auto px-4 py-8">
+<div class="max-w-6xl mx-auto px-4 py-8">
   <!-- Search -->
   <div class="relative mb-6">
     <input
@@ -179,7 +179,7 @@ const popularBanks = ['sbi', 'bob', 'canara', 'ubi', 'pnb', 'boi', 'indian-bank'
       ⚠️ ज़रूरी जानकारी: नंबर bank websites और cross-check sources से संकलित किए जाते हैं और बदल सकते हैं। इस्तेमाल से पहले अपने bank की official website पर current details सत्यापित करें। BalCheck.in किसी भी बैंक का आधिकारिक प्रतिनिधि नहीं है। किसी भी कॉल में OTP, PIN, CVV या password साझा न करें।
     </p>
   </section>
-</main>
+</div>
 
 <!-- Cheatsheet PDF CTA -->
 <section class="bg-gradient-to-r from-brand-600 to-brand-800">
@@ -306,12 +306,15 @@ const popularBanks = ['sbi', 'bob', 'canara', 'ubi', 'pnb', 'boi', 'indian-bank'
 
   function filter() {
     const query = (search as HTMLInputElement).value.toLowerCase().trim();
+    // Multi-word queries ("sbi bank", "union बैंक") must match in any order:
+    // require every token to appear, not the whole phrase as one substring.
+    const tokens = query.split(/\s+/).filter(Boolean);
     let visible = 0;
     
     grid.querySelectorAll<HTMLElement>('.bank-card').forEach(card => {
       const name = card.dataset.name || '';
       const cat = card.dataset.cat || '';
-      const matchesText = !query || name.includes(query);
+      const matchesText = tokens.length === 0 || tokens.every(token => name.includes(token));
       const matchesCat = activeCat === 'all' || cat === activeCat;
       const show = matchesText && matchesCat;
       card.style.display = show ? '' : 'none';

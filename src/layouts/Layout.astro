@@ -103,8 +103,16 @@ Astro.response.headers.set('Cache-Control', 'public, s-maxage=3600, max-age=0, s
 </head>
 
 <body class="bg-gray-50 font-hindi antialiased">
-  <SiteHeader />
-  <slot />
-  <SiteFooter />
+  <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-brand-600 focus:px-4 focus:py-2 focus:font-medium focus:text-white focus:shadow-lg"
+    >
+      मुख्य सामग्री पर जाएं
+    </a>
+    <SiteHeader />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
 </body>
 </html>

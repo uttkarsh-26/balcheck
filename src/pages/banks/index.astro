@@ -42,7 +42,7 @@ const schema = {
       <h1 class="text-2xl font-bold sm:text-3xl">Bank Directory India</h1>
       <p class="mt-2 text-sm text-brand-100">{banks.length} बैंकों को category के अनुसार खोजें और balance enquiry methods देखें।</p>
     </section>
-    <main class="py-8">
+    <div class="py-8">
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {categories.map(category => {
           const categoryBanks = banks.filter(bank => bank.category === category);
@@ -61,6 +61,6 @@ const schema = {
           );
         })}
       </div>
-    </main>
+    </div>
   </div>
 </Layout>
