@@ -102,7 +102,7 @@ const schema = {
   ],
 };
 ---
-<Layout title={title} description={description} canonical={canonicalUrl}>
+<Layout title={title} description={description} canonical={canonicalUrl} preloadImage="/videos/balcheck-poster.jpg">
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
 
   <div class="max-w-3xl mx-auto px-4 py-6">
@@ -118,6 +118,7 @@ const schema = {
 
     <VideoHeroBanner
       src="/videos/balcheck-netbanking-hero.mp4"
+      poster="/videos/balcheck-poster.jpg"
       title="Net Banking Login"
       subtitle="Quick access to your bank's online banking portal"
       ctaText="Login Now"

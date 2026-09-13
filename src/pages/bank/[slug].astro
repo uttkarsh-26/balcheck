@@ -225,7 +225,7 @@ const pageDesc = !isMissedCall
     : compactMissedCallDesc;
 ---
 
-<Layout title={pageTitle} description={pageDesc}>
+<Layout title={pageTitle} description={pageDesc} preloadImage="/videos/balcheck-poster.jpg">
 <script type="application/ld+json" set:html={JSON.stringify(bankSchema)} />
 <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />

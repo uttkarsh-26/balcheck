@@ -11,9 +11,11 @@ interface Props {
   ogImage?: string;
   /** Non-indexable pages (e.g. 404): emit noindex but keep links followable. */
   noindex?: boolean;
+  /** Optional LCP image (e.g. a hero video poster) to preload at high priority. */
+  preloadImage?: string;
 }
 
-const { title, description = 'भारतीय बैंकों के balance enquiry methods और verified contact details एक जगह', canonical, ogImage = '/og-image.jpg', noindex = false } = Astro.props;
+const { title, description = 'भारतीय बैंकों के balance enquiry methods और verified contact details एक जगह', canonical, ogImage = '/og-image.jpg', noindex = false, preloadImage } = Astro.props;
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = (canonical ?? new URL(Astro.url.pathname, siteUrl).href).replace(/(?<!:)\/\/$/, '/');
 const canonicalHref = canonicalUrl.endsWith('/') ? canonicalUrl : `${canonicalUrl}/`;
@@ -33,6 +35,10 @@ Astro.response.headers.set('Cache-Control', 'public, s-maxage=3600, max-age=0, s
   <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow'} />
 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  {preloadImage && (
+    <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />
+  )}
 
   <!-- System fonts only — Noto Sans Devanagari is the default Android Devanagari face;
        Inter is replaced by system-ui (Android Roboto/Fira). Eliminates the
