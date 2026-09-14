@@ -118,7 +118,11 @@ for (const bank of banks) {
 
       test('uses a verified, action-oriented meta description', async ({ page }) => {
         const description = await page.locator('meta[name="description"]').getAttribute('content');
-        expect(description).toContain('आधिकारिक');
+        // punjab-gramin's number is aggregator-confirmed only (official site bot-blocked),
+        // so its snippet deliberately avoids the आधिकारिक claim — see seoOverrides.
+        if (bank.slug !== 'punjab-gramin') {
+          expect(description).toContain('आधिकारिक');
+        }
         expect(description).toContain('तुरंत');
         if (bank.slug === 'boi') expect(description).toContain(bank.missedCallAlt);
       });
@@ -138,6 +142,22 @@ for (const bank of banks) {
         expect(description).toContain(`${bank.name} balance check number ${bank.missedCall}`);
         expect(description).toContain('customer-care/IVR');
         expect(description).toContain('dedicated missed-call service verified नहीं है');
+        expect(description?.length).toBeLessThanOrEqual(155);
+      });
+    }
+
+    // Demand-matched overrides on customer-care pages keep their CTR-optimized
+    // snippet, but must stay truthful: never advertise a missed-call facility
+    // on a customer-care/IVR line, and always carry the number.
+    if (bank.balanceMode !== 'missed-call' && ctrTitles[bank.slug]) {
+      test('demand-matched override stays truthful for customer-care lines', async ({ page }) => {
+        const title = await page.title();
+        const description = await page.locator('meta[name="description"]').getAttribute('content');
+
+        expect(title).not.toContain('Missed Call');
+        expect(title).not.toContain('मिस्ड कॉल');
+        expect(description).not.toContain('मिस्ड कॉल');
+        expect(description).toContain(bank.missedCall);
         expect(description?.length).toBeLessThanOrEqual(155);
       });
     }

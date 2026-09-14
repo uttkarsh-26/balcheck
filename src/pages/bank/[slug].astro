@@ -225,16 +225,18 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
   },
   // 2,767 impr @ pos 6.0 (0.58% CTR) on 'punjab gramin bank balance check
   // number'; /sms-banking/punjab-gramin/ (2,558 @ 6.5) has its own title map.
+  // Truthfulness: pgb.bank.in is bot-blocked (468) and 18001807777 is confirmed
+  // by aggregators only — the snippet must NOT claim आधिकारिक (official).
   'punjab-gramin': {
     title: `Punjab Gramin Bank Balance Check Number ${bank.missedCall}`,
-    description: `Punjab Gramin Bank balance check number ${bank.missedCall} — आधिकारिक टोल-फ्री नंबर। कॉल करके बैलेंस enquiry करें, तुरंत जानकारी पाएं। मुफ़्त, 24×7।`,
+    description: `Punjab Gramin Bank balance check number ${bank.missedCall} — टोल-फ्री नंबर पर कॉल करके बैलेंस enquiry करें, तुरंत जानकारी पाएं। मुफ़्त, 24×7।`,
   },
   // 1,461 impr @ pos 8.9 (0.27% CTR) on 'idbi bank balance check number' —
   // English query, so the title switches from the Hindi default template to
   // the exact English phrase the demand uses.
   idbi: {
     title: `IDBI Bank Balance Check Number ${bank.missedCall} | Missed Call`,
-    description: `IDBI Bank balance check number ${bank.missedCall} — आधिकारिक मिस्ड कॉल सेवा। मिस्ड कॉल दें, SMS में तुरंत बैलेंस और मिनी स्टेटमेंट पाएं। मुफ़्त, 24×7।`,
+    description: `IDBI Bank balance check number ${bank.missedCall} — आधिकारिक मिस्ड कॉल सेवा। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
   },
 };
 

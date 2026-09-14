@@ -720,7 +720,7 @@ const bankData: BankInput[] = [
     customerCare: '1800-180-7777',
     website: 'https://pgb.bank.in',
     verified: true,
-    notes: 'Official pgb.bank.in returns 468 (bot protection). codeforbanks.com states \'no missed call facility, dial toll-free 18001807777\'. indiacustomercare.com lists 1800-202-3005 as missed-call number. balanceMode may need review — currently set as missed-call but may be toll-free IVR.',
+    notes: 'Official pgb.bank.in returns 468 (bot protection). codeforbanks.com states \'no missed call facility, dial toll-free 18001807777\'. indiacustomercare.com lists 1800-202-3005 as missed-call number. balanceMode derives to customer-care (same digits for both fields); snippets must not claim missed-call or आधिकारिक until the official site is readable.',
     verificationSource: "pgb.bank.in/customer-care (official, bot-blocked 468) + loansjagat.com + codeforbanks.com + wealthquint.com + indmoney.com (18001807777 confirmed by 4 aggregators, 2026-07-20)",
     lastVerified: '2026-07-20',
   },
@@ -854,6 +854,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-180-7777',
     website: 'https://bgb.bank.in',
     notes: 'Toll-free number used for both balance enquiry and customer care',
+    verificationSource: "bgb.bank.in/welcome/contact (official; 'TOLL FREE NO 18001807777' on the contact page, 2026-09-14) + indiacustomercare.com",
+    lastVerified: '2026-09-14',
     verified: true,
   },
   {
