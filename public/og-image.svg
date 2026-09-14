@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Design source for public/og-image.png (1200x630 raster, rendered via headless Chromium).
-     Social crawlers (WhatsApp, Facebook, X) do not render SVG og:images — keep the PNG in sync. -->
+<!-- Design source for public/og-image.jpg (1200x630 JPEG q90, rendered via scripts/render-og-image.mjs).
+     Social crawlers (WhatsApp, Facebook, X) do not render SVG og:images — keep the JPG in sync. -->
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">

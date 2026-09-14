@@ -37,7 +37,7 @@ Rules:
 ## Brand assets
 
 - `public/favicon.svg` — blue rounded square + ₹ (60×60 approximates the header mark).
-- `public/og-image.svg` — 1200×1200 share image, referenced by `Layout.astro` (`ogImage` prop, default `/og-image.svg`). Pass a per-page override via `<Layout ogImage="...">` where a page-specific image exists.
+- `public/og-image.svg` — 1200×630 **design source only**; the served share image is the raster `public/og-image.jpg` (rendered from the SVG via `scripts/render-og-image.mjs`). `Layout.astro` defaults `ogImage` to `/og-image.jpg` — social crawlers (WhatsApp/FB/X) do not render SVG. Pass a per-page override via `<Layout ogImage="...">` only with a raster file.
 - Header logo mark = ₹ in `bg-gradient-to-br from-brand-600 to-brand-700` rounded-lg square — do not duplicate this pattern in page content; the SiteHeader/SiteFooter components own it.
 
 ## Layout contract
