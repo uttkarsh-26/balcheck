@@ -16,6 +16,12 @@ const services = [
   { href: 'mobile-number-registration', icon: '📲', label: 'Mobile Registration' },
   { href: 'aadhaar-link', icon: '🪪', label: 'Aadhaar Link' },
   { href: 'atm-pin', icon: '🔐', label: 'ATM PIN' },
+  // Conditional entries: only link a service the bank's data actually supports.
+  // balanceMode drives the missed-call page (see src/pages/missed-call/[slug].astro);
+  // banks whose balance number is their customer-care/IVR line get no such page.
+  ...(bank.balanceMode === 'missed-call'
+    ? [{ href: 'missed-call', icon: '📞', label: 'Missed Call Balance' }]
+    : []),
   ...(isTrueTollFreeNumber(bank.customerCare)
     ? [{ href: 'toll-free-number', icon: '☎️', label: 'Toll-Free Customer Care' }]
     : []),

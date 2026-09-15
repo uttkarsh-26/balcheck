@@ -182,7 +182,7 @@ const collectionSchema = {
                         कॉपी
                       </button>
                       <a
-                        href={`/balance-enquiry/${bank.slug}/`}
+                        href={isMissedCall(bank) ? `/missed-call/${bank.slug}/` : `/balance-enquiry/${bank.slug}/`}
                         class="inline-flex items-center justify-center text-xs font-medium text-brand-700 border border-brand-200 px-3 py-2 rounded-lg hover:bg-brand-50 transition-colors min-h-[40px]"
                       >
                         Details

@@ -1,0 +1,521 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import MoreServices from '../../components/MoreServices.astro';
+import { banks, categoryHindi } from '../../data/banks';
+import type { Bank } from '../../data/banks';
+import { mergers } from '../../data/mergers';
+
+// Scope: only banks whose balance number is a dedicated missed-call facility —
+// the same predicate the /missed-call/ hub uses (see src/pages/missed-call/index.astro).
+// Banks that store one number for both balance enquiry and customer care are
+// deliberately excluded: the site never presents an IVR/toll-free line as a
+// missed-call service (see the derivation comment in src/data/banks.ts).
+export function getStaticPaths() {
+  return banks
+    .filter((bank: Bank) => bank.balanceMode === 'missed-call')
+    .map((bank: Bank) => ({
+      params: { slug: bank.slug },
+      props: { bank },
+    }));
+}
+
+interface Props {
+  bank: Bank;
+}
+
+const { bank } = Astro.props;
+
+const siteUrl = 'https://balcheck.in';
+const canonicalUrl = `${siteUrl}/missed-call/${bank.slug}/`;
+const hubUrl = `${siteUrl}/missed-call/`;
+
+const digits = (value: string) => value.replace(/\D/g, '');
+const sharedNumber = digits(bank.missedCall) === digits(bank.customerCare);
+
+// Scannable grouping for voice/dialling, derived from bank.missedCall only —
+// never invented: 11 digits are 0 + 5 + 5 (e.g. 0 92237 66666), 10 digits are
+// 5 + 5 (e.g. 99864 54440).
+const spacedNumber = (value: string) => {
+  const d = digits(value);
+  if (d.length === 11) return `${d.slice(0, 1)} ${d.slice(1, 6)} ${d.slice(6)}`;
+  if (d.length === 10) return `${d.slice(0, 5)} ${d.slice(5)}`;
+  return value;
+};
+const missedCallSpaced = spacedNumber(bank.missedCall);
+
+// Both lists are derived from banks.ts — never hand-maintained, so the page can
+// never drift from the hub or from /bank/[slug]/.
+const missedCallBankCount = banks.filter(b => b.balanceMode === 'missed-call').length;
+const ivrOnlyBanks = banks.filter(b => b.balanceMode !== 'missed-call');
+
+// Provenance rendered from real fields: a source line only when the record has
+// one, a verification date only when lastVerified is set. No invented dates or
+// "official" claims — where the field is absent the page says so.
+const sourceUrl = bank.verificationSource?.match(/https?:\/\/[^\s)]+/)?.[0];
+const lastVerified = bank.lastVerified;
+const legacyRecords = mergers.filter(
+  (m) => m.successorSlug === bank.slug || m.oldSlug === bank.slug,
+);
+
+const title = `${bank.shortName} Missed Call Number ${bank.missedCall} — ${bank.nameHindi} बैलेंस चेक SMS | BalCheck`;
+const description = `${bank.name} (${bank.shortName}) का missed call balance check number ${bank.missedCall} (${missedCallSpaced})। Registered mobile से मिस्ड कॉल दें और SMS में बैलेंस पाएं — बिना ऐप, बिना नेट बैंकिंग। अन्य तरीकों से तुलना और SMS न आने पर क्या करें।`;
+
+const faqs = [
+  {
+    q: `${bank.shortName} का missed call balance check number क्या है?`,
+    a: `${bank.name} का missed call balance check number ${bank.missedCall} (${missedCallSpaced}) है। इसे उसी मोबाइल से डायल करें जो आपके बैंक खाते में registered है — कॉल 2-3 ring के बाद अपने आप कट जाती है और बैलेंस SMS में आ जाता है।`,
+  },
+  {
+    q: `मिस्ड कॉल देने के बाद बैलेंस कैसे आता है?`,
+    a: `कॉल जवाब में नहीं जुड़ती। जिस number से आपने ${bank.missedCall} पर कॉल किया, बैंक उसी number और attached खाते को पहचानता है और उसी number पर SMS में available balance भेज देता है। इसलिए कोई menu दबाना, OTP डालना या password बताना कभी ज़रूरी नहीं होता।`,
+  },
+  {
+    q: `${bank.shortName} में इस नंबर से mini statement मिलता है?`,
+    a: `${bank.missedCall} पर मिलने वाला SMS आम तौर पर सिर्फ़ account balance बताता है — last 5 transactions नहीं। पिछले transactions के लिए ${bank.shortName} की mini statement सेवा देखें।`,
+  },
+  {
+    q: `क्या इस नंबर से कार्ड block, शिकायत या खाता बंद कराया जा सकता है?`,
+    a: `नहीं। यह केवल balance enquiry का नंबर है — ATM/debit card block, PIN reset, खाता बंद करना, नया खाता खोलना, मोबाइल नंबर बदलना या शिकायत दर्ज कराना इससे नहीं होता। ऐसे कामों के लिए ${bank.shortName} के customer care ${bank.customerCare} पर call करें या शाखा जाएं।`,
+  },
+  {
+    q: `क्या ${bank.shortName} missed call balance check फ्री है?`,
+    a: `Missed-call सेवा में कॉल आम तौर पर जवाब में नहीं जुड़ती, इसलिए अधिकांश बैंकों में इस पर कॉल शुल्क नहीं लगता। लेकिन हर बैंक और telecom operator की शर्तें अलग हो सकती हैं — अगर कॉल जुड़ जाए या आप customer care/IVR लाइन पर पहुंच जाएं तो सामान्य कॉल शुल्क लागू हो सकते हैं। बैंक की website ${bank.website} पर एक बार जांच लें।`,
+  },
+  {
+    q: `क्या मिस्ड कॉल के लिए mobile app या net banking ज़रूरी है?`,
+    a: `नहीं। मिस्ड-कॉल balance check के लिए न बैंक की mobile app चाहिए, न net banking का login, न internet data pack और न ATM card। ज़रूरी सिर्फ़ इतना है कि आपका mobile number बैंक खाते में registered हो और फ़ोन में mobile network हो।`,
+  },
+  {
+    q: `${bank.missedCall} पर कॉल करने के बाद SMS नहीं आया तो?`,
+    a: `सबसे पहले जांचें कि आपका नंबर बैंक में registered है और नंबर सही डायल हुआ है। फिर SMS inbox/spam फ़ोल्डर देखें, 5-10 मिनट के अंतर से दोबारा कोशिश करें, और ऑपरेटर से SMS सेवा चालू है या नहीं पुष्टि करें। फिर भी SMS न आए तो customer care ${bank.customerCare} पर call करें, net banking से login करें, ATM से balance देखें या शाखा जाएं।`,
+  },
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "HowTo",
+      "name": `${bank.shortName} को मिस्ड कॉल कैसे दें (${bank.missedCall} पर)`,
+      "description": `${bank.name} के registered mobile से ${bank.missedCall} पर मिस्ड कॉल देकर SMS में बैलेंस पाने की विधि`,
+      "step": [
+        { "@type": "HowToStep", "position": 1, "name": "Registered mobile निकालें", "text": `वही mobile number इस्तेमाल करें जो ${bank.name} खाते में registered है — दूसरे नंबर से SMS नहीं आएगा।` },
+        { "@type": "HowToStep", "position": 2, "name": `${bank.missedCall} डायल करें`, "text": `यह नंबर डायल करें और 2-3 ring तक छोड़ दें — कोई menu या IVR option नहीं आता।` },
+        { "@type": "HowToStep", "position": 3, "name": "कॉल अपने आप कटने दें", "text": `कॉल जवाब में नहीं जुड़ती — फ़ोन कान से हटाकर कुछ सेकंड फ़ोन पास रखें।` },
+        { "@type": "HowToStep", "position": 4, "name": "SMS में बैलेंस पढ़ें", "text": `कुछ सेकंड से लेकर कुछ मिनट में SMS में खाते का available balance आ जाता है।` },
+        { "@type": "HowToStep", "position": 5, "name": "SMS न आए तो दोबारा कोशिश करें", "text": `5-10 मिनट बाद दोबारा ${bank.missedCall} पर कॉल करें, और registered number होने की पुष्टि करें।` },
+      ],
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(f => ({
+        "@type": "Question",
+        "name": f.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": f.a,
+        },
+      })),
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": `${siteUrl}/` },
+        { "@type": "ListItem", "position": 2, "name": "Missed Call Numbers", "item": hubUrl },
+        { "@type": "ListItem", "position": 3, "name": bank.shortName, "item": canonicalUrl },
+      ],
+    },
+    {
+      "@type": "WebPage",
+      "url": canonicalUrl,
+      "name": title,
+      "description": description,
+      "inLanguage": "hi-IN",
+      "isPartOf": { "@type": "WebSite", "name": "BalCheck.in", "url": siteUrl },
+      ...(lastVerified ? { "dateModified": `${lastVerified}T00:00:00+05:30` } : {}),
+    },
+  ],
+};
+---
+<Layout title={title} description={description} canonical={canonicalUrl}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+  <div class="max-w-3xl mx-auto px-4 py-6">
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-500 mb-4">
+      <a href="/" class="hover:text-brand-600">Home</a>
+      <span class="mx-1">›</span>
+      <a href="/missed-call/" class="hover:text-brand-600">Missed Call Numbers</a>
+      <span class="mx-1">›</span>
+      <span class="text-gray-700">{bank.shortName}</span>
+    </nav>
+
+    <!-- Header -->
+    <div data-testid="missed-call-hero" class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-4">
+      <h1 class="text-2xl font-bold mb-2">{bank.shortName} Missed Call Balance Check Number {bank.missedCall}</h1>
+      <p class="text-brand-100 text-sm leading-relaxed">
+        {bank.nameHindi} ({bank.name}) का missed call balance check number <strong class="text-white">{missedCallSpaced}</strong>
+        — यानी {bank.missedCall} है। इसे उसी मोबाइल से डायल करें जो आपके खाते में registered है; कॉल जवाब में जुड़ती नहीं
+        और balance SMS में आ जाता है।
+      </p>
+      <p class="mt-3 flex flex-wrap items-center gap-2 text-xs font-medium">
+        <span class="rounded-full bg-white/15 px-3 py-1">{categoryHindi[bank.category] ?? bank.category} · {bank.category}</span>
+        <span data-testid="freshness-chip" class="rounded-full bg-white/15 px-3 py-1">
+          {lastVerified ? `अंतिम सत्यापन: ${lastVerified}` : 'सत्यापन तिथि दर्ज नहीं — बैंक की website पर जांचें'}
+        </span>
+      </p>
+    </div>
+
+    <!-- The number -->
+    <div data-testid="missed-call-service" class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">📞 {bank.shortName} का मिस्ड कॉल नंबर</h2>
+      <p class="text-gray-600 text-sm mb-4">
+        बिना space वाला नंबर: <strong class="text-gray-900">{bank.missedCall}</strong> · स्कैन करके डायल करने के लिए:
+        <strong class="text-gray-900">{missedCallSpaced}</strong>
+      </p>
+      <a href={`tel:${bank.missedCall}`}
+         class="inline-flex items-center gap-2 bg-brand-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-brand-700 transition-colors">
+        <span>📞 {bank.missedCall}</span>
+      </a>
+      {bank.missedCallAlt && (
+        <p class="text-xs text-gray-500 mt-3">
+          इस बैंक के लिए डेटा में दूसरा नंबर भी दर्ज है:
+          <a href={`tel:${bank.missedCallAlt}`} class="text-brand-700 font-medium">{bank.missedCallAlt} ({spacedNumber(bank.missedCallAlt)})</a>
+          — यह किस सेवा के लिए है, इसे बैंक की website पर देखें।
+        </p>
+      )}
+      <ul class="mt-4 space-y-2 text-sm text-gray-700">
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> registered mobile से ही कॉल करें — दूसरे नंबर से SMS नहीं आएगा</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> 2-3 ring के बाद कॉल अपने आप कटेगी; IVR menu नहीं आएगा</li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span> OTP, PIN, CVV या password कभी नहीं मांगा जाएगा</li>
+      </ul>
+    </div>
+
+    <!-- Scope: what this number does NOT do -->
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">🚫 यह नंबर क्या-क्या नहीं करता</h2>
+      <p class="text-gray-600 text-sm mb-3">
+        {bank.missedCall} कोई सब-काम करने वाला नंबर नहीं है — यह सिर्फ़ account balance बताता है। नीचे दिए कामों के लिए
+        दूसरा रास्ता चुनें, वरना कॉल बेकार जाएगी:
+      </p>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex gap-2"><span class="text-gray-500">•</span> <span>पिछले transactions (mini statement) नहीं मिलेंगे —
+          <a href={`/mini-statement/${bank.slug}/`} class="text-brand-700 font-medium">mini statement के तरीके</a> देखें</span></li>
+        <li class="flex gap-2"><span class="text-gray-500">•</span> <span>ATM/debit card block, PIN reset या नया card नहीं मिलेगा —
+          <a href={`/customer-care/${bank.slug}/`} class="text-brand-700 font-medium">{bank.shortName} customer care</a> पर call करें</span></li>
+        <li class="flex gap-2"><span class="text-gray-500">•</span> <span>नया खाता खोलना, खाता बंद करना या शिकायत दर्ज नहीं होगी —
+          शाखा जाएं या customer care {bank.customerCare}</span></li>
+        <li class="flex gap-2"><span class="text-gray-500">•</span> <span>passbook print, चेक बुक, नाम/पता बदलना, KYC अपडेट नहीं होगा — शाखा के काम हैं</span></li>
+        <li class="flex gap-2"><span class="text-gray-500">•</span> <span>नंबर बदलना/registered mobile बदलना इससे नहीं होता —
+          <a href={`/mobile-number-registration/${bank.slug}/`} class="text-brand-700 font-medium">मोबाइल रजिस्ट्रेशन</a> का पेज देखें</span></li>
+      </ul>
+    </div>
+
+    <!-- Steps + what happens after the dial -->
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">📝 {bank.missedCall} पर मिस्ड कॉल देना — step by step</h2>
+      <ol class="space-y-3 text-sm text-gray-700">
+        <li class="flex gap-3">
+          <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">1</span>
+          <span>वही mobile निकालें जिसका नंबर {bank.name} खाते में registered है — दूसरे नंबर से कॉल करने पर सिस्टम आपका खाता नहीं पहचान पाएगा</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">2</span>
+          <span>{bank.missedCall} ({missedCallSpaced}) डायल करें और 2-3 ring तक छोड़ दें</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">3</span>
+          <span>कॉल अपने आप कट जाएगी — कोई IVR, कोई option दबाने का झंझट नहीं। फ़ोन कुछ सेकंड हाथ में रखें</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">4</span>
+          <span>SMS में खाते का available balance आ जाएगा — कुछ सेकंड लगेंगे, भीड़ के समय कुछ मिनट भी लग सकते हैं</span>
+        </li>
+      </ol>
+      <div class="mt-4 bg-brand-50 rounded-xl border border-brand-100 p-4">
+        <h3 class="font-semibold text-gray-900 text-sm mb-2">📶 कॉल कटने के बाद असल में होता क्या है?</h3>
+        <p class="text-sm text-gray-700 leading-relaxed">
+          बैंक का सिस्टम कॉल करने वाले नंबर (CLI) को पहचानता है, उसे आपके खाते से जोड़ता है और SMS गेटवे से balance भेज देता है।
+          यही वजह है कि registered मोबाइल ज़रूरी है और OTP/PIN की ज़रूरत नहीं पड़ती। अगर आप गलत नंबर से कॉल करते हैं, तो
+          सिस्टम को खाता नहीं मिलेगा और कोई SMS नहीं आएगा — नंबर फिर भी सही डायल हुआ होगा, समस्या registration की होगी।
+        </p>
+      </div>
+    </div>
+
+    <!-- Comparison table -->
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">📊 मिस्ड कॉल बनाम दूसरे तरीके — {bank.shortName} के लिए</h2>
+      <p class="text-gray-600 text-sm mb-4">
+        हर तरीका हर काम के लिए नहीं है। नीचे देखें कि किस काम के लिए कौन-सा रास्ता ठीक रहेगा:
+      </p>
+      <div class="overflow-x-auto scrollbar-hide">
+        <table class="w-full text-sm border-collapse">
+          <thead>
+            <tr class="bg-gray-50 text-gray-900">
+              <th class="text-left font-semibold px-3 py-2 border border-gray-200">तरीका</th>
+              <th class="text-left font-semibold px-3 py-2 border border-gray-200">क्या तैयारी चाहिए</th>
+              <th class="text-left font-semibold px-3 py-2 border border-gray-200">क्या मिलता है</th>
+              <th class="text-left font-semibold px-3 py-2 border border-gray-200">कब चुनें</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <tr>
+              <td class="px-3 py-2 border border-gray-200 font-medium">मिस्ड कॉल<br /><span class="text-gray-600">{bank.missedCall}</span></td>
+              <td class="px-3 py-2 border border-gray-200">registered mobile + network</td>
+              <td class="px-3 py-2 border border-gray-200">SMS में account balance</td>
+              <td class="px-3 py-2 border border-gray-200">रोज़ का काम — सबसे कम मेहनत, ऐप/net banking की ज़रूरत नहीं</td>
+            </tr>
+            <tr class="bg-gray-50">
+              <td class="px-3 py-2 border border-gray-200 font-medium"><a href={`/sms-banking/${bank.slug}/`} class="text-brand-700">SMS banking</a></td>
+              <td class="px-3 py-2 border border-gray-200">SMS banking सेवा active + बैंक का SMS format</td>
+              <td class="px-3 py-2 border border-gray-200">SMS भेजकर balance या और जानकारी (बैंक पर निर्भर)</td>
+              <td class="px-3 py-2 border border-gray-200">जब मिस्ड कॉल सेवा band हो या आप SMS भेजना चाहें</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2 border border-gray-200 font-medium"><a href={`/net-banking/${bank.slug}/`} class="text-brand-700">मोबाइल ऐप / net banking</a></td>
+              <td class="px-3 py-2 border border-gray-200">smartphone+ऐप या user ID+password+internet</td>
+              <td class="px-3 py-2 border border-gray-200">statement, transactions, transfer, और सेवाएं</td>
+              <td class="px-3 py-2 border border-gray-200">जब सिर्फ़ balance नहीं, पूरी जानकारी या भुगतान करना हो</td>
+            </tr>
+            <tr class="bg-gray-50">
+              <td class="px-3 py-2 border border-gray-200 font-medium"><a href={`/atm-pin/${bank.slug}/`} class="text-brand-700">ATM</a></td>
+              <td class="px-3 py-2 border border-gray-200">debit card + PIN + पास का ATM</td>
+              <td class="px-3 py-2 border border-gray-200">balance enquiry, mini statement, cash निकालना</td>
+              <td class="px-3 py-2 border border-gray-200">जब ATM पास हो और कैश भी निकालना हो</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2 border border-gray-200 font-medium"><a href={`/customer-care/${bank.slug}/`} class="text-brand-700">शाखा / customer care</a></td>
+              <td class="px-3 py-2 border border-gray-200">passbook या ID, काम के घंटे</td>
+              <td class="px-3 py-2 border border-gray-200">हर तरह का काम, शिकायत का हल</td>
+              <td class="px-3 py-2 border border-gray-200">जब बाक़ी सब तरीके काम न करें या विवाद हो</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Troubleshooting: each cause with its corrective action -->
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">⚠️ मिस्ड कॉल के बाद SMS नहीं आया — कारण और हल</h2>
+      <p class="text-gray-600 text-sm mb-4">
+        SMS न आने के कुछ ही वजहें होती हैं। नीचे हर वजह के साथ क्या करना है, वह भी दिया है — एक-एक करके देखें:
+      </p>
+      <ol class="space-y-4 text-sm text-gray-700">
+        <li class="flex gap-3">
+          <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">1</span>
+          <span><strong>वजह:</strong> आपका मोबाइल नंबर {bank.name} खाते में registered नहीं है।
+            <br /><strong>हल:</strong> पहले नंबर registered कराएं —
+            <a href={`/mobile-number-registration/${bank.slug}/`} class="text-brand-700 font-medium">registration के तरीके</a> देखें या customer care {bank.customerCare} से पूछें। किसी दूसरे के नंबर से कॉल करने पर SMS कभी नहीं आएगा।</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">2</span>
+          <span><strong>वजह:</strong> नंबर गलत या अधूरा डायल हुआ (हर बैंक का नंबर अलग होता है)।
+            <br /><strong>हल:</strong> सही नंबर {bank.missedCall} ({missedCallSpaced}) डायल करें{bank.missedCallAlt ? <>; बैंक के लिए दर्ज दूसरा नंबर {bank.missedCallAlt} भी आज़मा सकते हैं</> : <></>}।</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">3</span>
+          <span><strong>वजह:</strong> आपके नंबर पर SMS सेवा या DND/operator सेटिंग के कारण bank SMS रुका हुआ है।
+            <br /><strong>हल:</strong> ऑपरेटर के ग्राहक सेवा से SMS चालू कराएं और किसी दूसरे को SMS भेजकर देखें कि आपके नंबर पर SMS आ रहे हैं या नहीं। यह बहुत बार ऑपरेटर-स्तर की सेटिंग की वजह से होता है।</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">4</span>
+          <span><strong>वजह:</strong> फ़ोन की SMS memory भरी है या balance SMS "spam"/Blocked फ़ोल्डर में चला गया।
+            <br /><strong>हल:</strong> पुराने SMS हटाकर जगह बनाएं और स्पैम/Blocked/Archive फ़ोल्डर भी देखें — कई फ़ोन bank SMS को यहीं रख देते हैं।</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">5</span>
+          <span><strong>वजह:</strong> prepaid नंबर पर balance या validity खत्म (कुछ ऑपरेटरों में incoming SMS भी बंद हो जाते हैं)।
+            <br /><strong>हल:</strong> नंबर recharge करके validity चालू करें और दोबारा {bank.missedCall} पर कॉल करें।</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">6</span>
+          <span><strong>वजह:</strong> बैंक की missed-call सेवा में अस्थायी रुकावट या network की भीड़।
+            <br /><strong>हल:</strong> 5-10 मिनट का अंतर रखकर 2-3 बार कोशिश करें। फिर भी SMS न आए तो customer care {bank.customerCare} पर call करें,
+            <a href={bank.website} target="_blank" rel="noopener noreferrer" class="text-brand-700 font-medium">net banking</a> में login करें, ATM से balance देखें या शाखा जाएं।</span>
+        </li>
+      </ol>
+      <p class="text-sm text-gray-600 mt-3">
+        SMS से balance पाने के बारे में और जानकारी
+        <a href={`/sms-banking/${bank.slug}/`} class="text-brand-700 font-medium">SMS banking पेज</a> पर है।
+      </p>
+    </div>
+
+    <!-- Which banks offer it -->
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">🏦 कौन-कौन से बैंक मिस्ड कॉल सेवा देते हैं?</h2>
+      <p class="text-gray-600 text-sm mb-3 leading-relaxed">
+        हर बैंक अलग missed-call number नहीं देता। इस समय BalCheck की सूची में
+        <strong>{missedCallBankCount} बैंकों</strong> का balance number एक dedicated missed-call facility के रूप में दर्ज है।
+        {bank.name} उन्हीं बैंकों में से एक है — इसका number <strong>{bank.missedCall}</strong> है
+        {sharedNumber
+          ? <> और इस बैंक के लिए यही नंबर customer care के लिए भी दर्ज है, यानी अलग missed-call number मौजूद नहीं है।</>
+          : <> और इसका customer care number अलग है ({bank.customerCare})।</>}
+      </p>
+      <p class="text-gray-600 text-sm mb-3 leading-relaxed">
+        बाक़ी {ivrOnlyBanks.length} बैंकों का number customer care/IVR लाइन है। ऐसी लाइनों पर आपको IVR menu से गुज़रना पड़ता है
+        और normal call charges लागू हो सकते हैं — इसलिए उन्हें missed-call number के रूप में नहीं दिखाया जाता।
+      </p>
+      <details class="bg-gray-50 rounded-lg border border-gray-200 p-4">
+        <summary class="font-medium text-gray-900 text-sm cursor-pointer">जिन बैंकों का balance number customer care/IVR लाइन है ({ivrOnlyBanks.length}) देखें</summary>
+        <ul class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700">
+          {ivrOnlyBanks.map(b => (
+            <li class="flex gap-2">
+              <span class="text-gray-500">•</span>
+              <a href={`/balance-enquiry/${b.slug}/`} class="text-brand-700 hover:underline">{b.nameHindi} ({b.shortName})</a>
+            </li>
+          ))}
+        </ul>
+      </details>
+      <p class="text-sm text-gray-600 mt-3">
+        सभी बैंकों के missed-call numbers की पूरी सूची
+        <a href="/missed-call/" class="text-brand-700 font-medium">Missed Call Numbers पेज</a> पर देखें।
+      </p>
+    </div>
+
+    <!-- Charges honesty -->
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">💸 कॉल चार्ज और शुल्क — क्या सच है?</h2>
+      <ul class="space-y-2 text-sm text-gray-700">
+        <li class="flex gap-2">
+          <span class="text-brand-600">•</span>
+          <span>Missed call जवाब में नहीं जुड़ती, इसलिए <strong>अधिकांश बैंकों में</strong> इस पर कोई कॉल शुल्क नहीं लगता — यही इसका सबसे बड़ा फ़ायदा है।</span>
+        </li>
+        <li class="flex gap-2">
+          <span class="text-brand-600">•</span>
+          <span>लेकिन शर्तें हर बैंक और हर telecom operator के लिए अलग हो सकती हैं। अगर कॉल जुड़ जाए या आप customer care/IVR लाइन पर पहुंचें तो <strong>सामान्य कॉल शुल्क लागू हो सकते हैं</strong>।</span>
+        </li>
+        <li class="flex gap-2">
+          <span class="text-brand-600">•</span>
+          <span>Balance SMS पर क्या शुल्क है, यह भी आपके बैंक और operator की नीति पर निर्भर करता है — किसी भी बैंक के लिए "हमेशा बिल्कुल मुफ़्त" जैसा दावा इस पेज पर नहीं किया गया है।</span>
+        </li>
+        <li class="flex gap-2">
+          <span class="text-brand-600">•</span>
+          <span>नंबर या शुल्क की शर्तें कभी भी बदल सकती हैं — अपने बैंक की current जानकारी उसकी website {bank.website} पर जांच लें।</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Data provenance, freshness, legacy names -->
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">🔎 डेटा स्रोत, अंतिम सत्यापन और पुराने नाम</h2>
+      <dl class="space-y-3 text-sm text-gray-700">
+        <div>
+          <dt class="font-medium text-gray-900">इस रिकॉर्ड का नंबर</dt>
+          <dd>{bank.missedCall} · {missedCallSpaced} · bank record: <a href={`/bank/${bank.slug}/`} class="text-brand-700 font-medium">{bank.shortName} पेज</a></dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-900">अंतिम सत्यापन (last verified)</dt>
+          <dd data-testid="last-verified">
+            {lastVerified
+              ? <>{lastVerified} — इसी तारीख़ को इस रिकॉर्ड का नंबर जांचा गया था।</>
+              : <>इस रिकॉर्ड के लिए सत्यापन तिथि दर्ज नहीं है — नंबर इस्तेमाल से पहले बैंक की website {bank.website} पर जांच लें।</>}
+          </dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-900">सत्यापन स्रोत (verification source)</dt>
+          <dd data-testid="verification-source">
+            {bank.verificationSource
+              ? <>
+                  {bank.verificationSource}
+                  {sourceUrl && <> · <a href={sourceUrl} target="_blank" rel="noopener noreferrer" class="text-brand-700 font-medium">स्रोत लिंक खोलें</a></>}
+                </>
+              : <>इस रिकॉर्ड के लिए अलग स्रोत लाइन दर्ज नहीं है — BalCheck केवल अपने डेटा में मौजूद नंबर दिखाता है और किसी बैंक का आधिकारिक प्रतिनिधि नहीं है।</>}
+          </dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-900">बैंक की website</dt>
+          <dd><a href={bank.website} target="_blank" rel="noopener noreferrer" class="text-brand-700 font-medium">{bank.website}</a> — नंबर, शुल्क और शर्तें यहीं जांचें</dd>
+        </div>
+        <div>
+          <dt class="font-medium text-gray-900">श्रेणी और क्षेत्र</dt>
+          <dd>{categoryHindi[bank.category] ?? bank.category} ({bank.category}) · हिंदी नाम: {bank.nameHindi} · short name: {bank.shortName}</dd>
+        </div>
+        {legacyRecords.length > 0 && (
+          <div>
+            <dt class="font-medium text-gray-900">पुराने नाम और अमलगमेशन</dt>
+            <dd>
+              <ul class="space-y-1">
+                {legacyRecords.map(m => (
+                  <li>
+                    <a href={`/merged-banks/${m.oldSlug}/`} class="text-brand-700 font-medium">{m.oldNameHindi}</a>
+                    <span class="text-gray-600"> ({m.oldName})</span>
+                  </li>
+                ))}
+              </ul>
+              <p class="text-gray-600 mt-1">
+                पुराने नाम से भी लोग यही नंबर खोजते हैं — मर्जर का पूरा ब्यौरा और स्रोत
+                <a href="/merged-banks/" class="text-brand-700 font-medium">मर्ज्ड बैंक पेजों</a> पर दर्ज है।
+              </p>
+            </dd>
+          </div>
+        )}
+      </dl>
+      {bank.notes && (
+        <p class="mt-4 text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-lg p-3 leading-relaxed">
+          ️ डेटा नोट: {bank.notes}
+        </p>
+      )}
+    </div>
+
+    <!-- Safety -->
+    <div class="bg-red-50 rounded-xl border border-red-200 p-4 mb-6">
+      <p class="text-sm text-red-800 leading-relaxed">
+        🔒 सुरक्षा: असली balance enquiry में बैंक कभी OTP, PIN, CVV या password नहीं मांगता। अगर कोई कॉल, SMS या WhatsApp पर ये
+        मांगे तो वह फ्रॉड है — कुछ भी साझा न करें और नंबर ब्लॉक करें। {bank.missedCall} जैसा नंबर सिर्फ़ balance SMS भेजता है;
+        वह कभी OTP या PIN नहीं मांगता।
+      </p>
+    </div>
+
+    <!-- FAQ -->
+    <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">❓ अक्सर पूछे जाने वाले प्रश्न</h2>
+      <div class="space-y-4">
+        {faqs.map(faq => (
+          <div class="border-b border-gray-100 pb-4 last:border-0">
+            <h3 class="font-medium text-gray-900 text-sm mb-2">{faq.q}</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">{faq.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Related Links -->
+    <div class="grid grid-cols-2 gap-3 mb-3">
+      <a href={`/bank/${bank.slug}/`}
+         class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
+        <p class="text-xs text-gray-500 mb-1">📞 बैंक का पूरा record</p>
+        <p class="text-sm font-medium text-brand-700">{bank.shortName} Details →</p>
+      </a>
+      <a href={`/balance-enquiry/${bank.slug}/`}
+         class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
+        <p class="text-xs text-gray-500 mb-1">💰 Balance enquiry के सभी तरीके</p>
+        <p class="text-sm font-medium text-brand-700">{bank.shortName} Balance Enquiry →</p>
+      </a>
+    </div>
+    <div class="grid grid-cols-2 gap-3 mb-6">
+      <a href={`/sms-banking/${bank.slug}/`}
+         class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
+        <p class="text-xs text-gray-500 mb-1">📱 SMS Banking</p>
+        <p class="text-sm font-medium text-brand-700">{bank.shortName} SMS Services →</p>
+      </a>
+      <a href={`/mini-statement/${bank.slug}/`}
+         class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
+        <p class="text-xs text-gray-500 mb-1">🧾 Mini Statement</p>
+        <p class="text-sm font-medium text-brand-700">{bank.shortName} Last 5 Txns →</p>
+      </a>
+    </div>
+
+    <!-- Customer Care -->
+    <div class="bg-white rounded-xl border border-gray-200 p-4">
+      <p class="text-xs text-gray-500 font-medium mb-1">🎧 सहायता के लिए Customer Care</p>
+      <a href={`tel:${bank.customerCare}`} class="text-lg font-semibold text-brand-700">{bank.customerCare}</a>
+    </div>
+
+    <p class="text-xs text-gray-500 mt-4 leading-relaxed">
+      BalCheck.in किसी भी बैंक का आधिकारिक प्रतिनिधि नहीं है। नंबर bank websites और cross-check sources से संकलित किए जाते हैं
+      और बदल सकते हैं। इस्तेमाल से पहले अपने बैंक की website पर current details सत्यापित करें।
+    </p>
+
+    <MoreServices bank={bank} />
+  </div>
+</Layout>

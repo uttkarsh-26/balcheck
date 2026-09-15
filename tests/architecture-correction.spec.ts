@@ -108,10 +108,19 @@ test.describe('truthful service architecture', () => {
   });
 
   test('adds the reusable more-services block to every service detail family', async ({ page }) => {
+    const bank = banks.find(item => item.slug === 'sbi')!;
+    // serviceOrder entries + the data-driven extras MoreServices appends:
+    // missed-call (only when balanceMode === 'missed-call') and toll-free
+    // (only for a real 1800 customer-care number).
+    const expectedLinks =
+      serviceOrder.length +
+      (bank.balanceMode === 'missed-call' ? 1 : 0) +
+      (isTrueTollFreeNumber(bank.customerCare) ? 1 : 0);
+
     for (const family of detailFamilies) {
       await page.goto(`/${family}/sbi/`);
       await expect(page.locator('[data-testid="more-services"]')).toBeVisible();
-      await expect(page.locator('[data-testid="more-services"] a')).toHaveCount(9);
+      await expect(page.locator('[data-testid="more-services"] a')).toHaveCount(expectedLinks);
     }
   });
 

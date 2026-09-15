@@ -81,7 +81,7 @@ test.describe('homepage', () => {
     const serviceHubs = [
       'customer-care', 'net-banking', 'sms-banking', 'mini-statement',
       'balance-enquiry', 'toll-free-number', 'mobile-number-registration',
-      'aadhaar-link', 'atm-pin',
+      'aadhaar-link', 'atm-pin', 'missed-call',
     ];
 
     for (const hub of serviceHubs) {

@@ -18,8 +18,11 @@ const VERTICAL_HUBS = [
   '/toll-free-number/',
 ];
 
-// Standalone hub (not a per-bank vertical): missed-call number directory
+// Standalone hub + per-bank pages for the missed-call directory. Only banks
+// whose balance number is a dedicated missed-call facility get a page — the
+// same predicate the hub and src/pages/missed-call/[slug].astro apply.
 const MISSED_CALL_HUB = '/missed-call/';
+const MISSED_CALL_BANKS = banks.filter((bank) => bank.balanceMode === 'missed-call');
 
 const MERGED_BANKS_HUB = '/merged-banks/';
 
@@ -42,7 +45,8 @@ function expectedSitemapUrlCount(): number {
     VERTICAL_HUBS.length * (banks.length + 1) + // per vertical: hub + one page per bank
     articleCount + // /article/[slug]/
     (1 + mergers.length) + // /merged-banks/ hub + one page per merger record
-    1 - // /missed-call/ hub
+    1 + // /missed-call/ hub
+    MISSED_CALL_BANKS.length - // /missed-call/[slug]/ (one page per missed-call bank)
     // Legacy /toll-free-number/<bank>/ routes whose bank has no real 1800 number
     // are kept live but excluded from the sitemap, because those pages declare
     // /customer-care/<slug>/ as canonical (see astro.config.mjs).
@@ -101,11 +105,26 @@ test.describe('sitemap', () => {
     }
   });
 
-  test('sitemap contains the missed-call hub', async ({ request }) => {
+  test('sitemap contains the missed-call hub and every missed-call bank page', async ({ request }) => {
     const response = await request.get('/sitemap-0.xml');
     expect(response.status()).toBe(200);
     const text = await response.text();
     expect(text).toContain(`https://balcheck.in${MISSED_CALL_HUB}`);
+
+    for (const bank of MISSED_CALL_BANKS) {
+      expect(text, `${bank.slug} has a dedicated missed-call number, so its page must be submitted`)
+        .toContain(`https://balcheck.in/missed-call/${bank.slug}/`);
+    }
+
+    // Banks whose balance number is their customer-care/IVR line have no page
+    // here — submitting a 404 would be worse than omitting it.
+    const ivrOnlySlugs = banks
+      .filter((bank) => bank.balanceMode !== 'missed-call')
+      .map((bank) => bank.slug);
+    for (const slug of ivrOnlySlugs) {
+      expect(text, `${slug} has no dedicated missed-call number, so no page exists to submit`)
+        .not.toContain(`https://balcheck.in/missed-call/${slug}/`);
+    }
   });
 
   test('sitemap URL count matches the exact route inventory derived from current data', async ({ request }) => {
