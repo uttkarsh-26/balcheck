@@ -4,7 +4,9 @@ import { categorySlug, getJsonLdScripts, findSchema } from './utils';
 
 const ctrTitles: Record<string, string> = {
   boi: 'BOI बैलेंस चेक नंबर 9811255430 | Missed Call',
-  bandhan: 'बंधन बैंक बैलेंस चेक नंबर 9223008666 | Bandhan Bank',
+  bandhan: 'Bandhan Bank Balance Check Number 9223008666 | Missed Call',
+  hdfc: 'HDFC Bank Balance Check Number 18002703333 | Missed Call',
+  'uco-bank': 'UCO Bank Balance Check Number 8334001234 | Missed Call',
   sbi: 'SBI बैलेंस चेक नंबर 09223766666 | मिस्ड कॉल सेवा',
   'baroda-up-gramin': 'Baroda UP Gramin Bank Balance Check Number 9986454440',
   'idfc-first': 'IDFC FIRST बैलेंस चेक नंबर 18002700720 | Missed Call',
@@ -14,7 +16,7 @@ const ctrTitles: Record<string, string> = {
   icici: 'ICICI Bank Balance Check Number 9594612612',
   axis: 'Axis Bank Balance Enquiry Number 18004195959 | Missed Call',
   'up-gramin': 'Uttar Pradesh Gramin Bank Balance Check Number 9986454440',
-  psb: 'PSB Balance Check Number 7039035156 | Punjab & Sind Bank',
+  psb: 'Punjab & Sind Bank Balance Check Number 7039035156 | PSB',
   iob: 'Indian Overseas Bank Balance Check Number 9210622122',
   'central-bank': 'सेंट्रल बैंक बैलेंस चेक नंबर 9555244442 | Missed Call',
   'mp-gramin': 'MPGB Balance Check Number 8010968293 | Missed Call',
@@ -29,6 +31,15 @@ const ctrTitles: Record<string, string> = {
 const sprint3Banks = new Set(['canara', 'psb', 'boi']);
 const englishAnswerTitleBanks = new Set(['up-gramin', 'psb']);
 const exactQueryTitleBanks = new Set(['axis']);
+
+// Scalable-default contract: the missed-call template must still render for a
+// bank with NO override, so resolve the carrier dynamically — hard-coding a
+// slug here fails CI the moment that page earns its own CTR override.
+const defaultTemplateBank = banks.find(
+  bank => bank.balanceMode === 'missed-call' &&
+    !ctrTitles[bank.slug] &&
+    `${bank.nameHindi} बैलेंस चेक नंबर ${bank.missedCall} | ${bank.shortName} Missed Call`.length <= 60
+);
 
 for (const bank of banks) {
   test.describe(`/bank/${bank.slug}`, () => {
@@ -68,8 +79,8 @@ for (const bank of banks) {
     });
 
     // Scalable-default contract: a missed-call bank with no GSC override still
-    // renders the generic template (canara now has an override).
-    if (bank.slug === 'uco-bank') {
+    // renders the generic template (canara/uco-bank now have overrides).
+    if (defaultTemplateBank && bank.slug === defaultTemplateBank.slug) {
       test('uses the scalable default title template', async ({ page }) => {
         await expect(page).toHaveTitle(
           `${bank.nameHindi} बैलेंस चेक नंबर ${bank.missedCall} | ${bank.shortName} Missed Call`

@@ -142,9 +142,13 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
     title: `BOI बैलेंस चेक नंबर ${bank.missedCall} | Missed Call`,
     description: `बैंक ऑफ इंडिया (BOI) बैलेंस चेक नंबर: ${bank.missedCall}। आधिकारिक मिस्ड कॉल सेवा — SMS में तुरंत बैलेंस पाएं। मिनी स्टेटमेंट: ${bank.missedCallAlt}। मुफ़्त, 24×7।`,
   },
+  // 4,568 impressions: 93% Latin queries @ 0.77% CTR vs 6% Devanagari @ 2.69%.
+  // The Devanagari-first title never bold-matched 'bandhan bank balance enquiry
+  // number' (985 impressions @ 1 click). Latin query phrase leads; the Hindi
+  // brand name stays in the H1 and body.
   bandhan: {
-    title: `बंधन बैंक बैलेंस चेक नंबर ${bank.missedCall} | Bandhan Bank`,
-    description: `बंधन बैंक का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत खाता बैलेंस पाएं। मुफ़्त, 24×7।`,
+    title: `Bandhan Bank Balance Check Number ${bank.missedCall} | Missed Call`,
+    description: `Bandhan Bank balance check number ${bank.missedCall} — आधिकारिक मिस्ड कॉल सेवा। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत खाता बैलेंस पाएं। मुफ़्त, 24×7।`,
   },
   sbi: {
     title: `SBI बैलेंस चेक नंबर ${bank.missedCall} | मिस्ड कॉल सेवा`,
@@ -185,9 +189,30 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
   'up-gramin': {
     title: `Uttar Pradesh Gramin Bank Balance Check Number ${bank.missedCall}`,
   },
+  // 25,424 impressions, 93% Latin queries @ 0.07% CTR — the worst CTR of any
+  // page with volume on the site — while the 6% Devanagari impressions convert
+  // at 1.11%. Top queries use the FULL name ('punjab and sind bank balance
+  // check number' 4,430 @ 0.05%, 'punjab sind bank...' 1,029 @ 0%), but the
+  // title led with the 'PSB' abbreviation and buried the brand after the
+  // number. Full name first, abbreviation as the tail token.
   psb: {
-    title: `PSB Balance Check Number ${bank.missedCall} | Punjab & Sind Bank`,
+    title: `Punjab & Sind Bank Balance Check Number ${bank.missedCall} | PSB`,
     description: `Punjab & Sind Bank (PSB) का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। Registered mobile से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
+  },
+  // 1,582 impressions, 85% Latin queries @ 0.07% CTR ('hdfc balance check
+  // number' 578 @ pos 6.0, 'hdfc bank balance check number' 208) while the
+  // 13% Devanagari impressions get 0%. Devanagari-first default title never
+  // matched the Latin query; Latin phrase leads, number and hook kept.
+  hdfc: {
+    title: `HDFC Bank Balance Check Number ${bank.missedCall} | Missed Call`,
+    description: `HDFC Bank balance check number ${bank.missedCall} — आधिकारिक मिस्ड कॉल सेवा। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
+  },
+  // 2,563 impressions, 68% Latin queries @ 0.40% CTR vs 27% Devanagari @ 0.14%;
+  // top query 'uco bank balance enquiry number mini statement' (592 @ 3 clicks,
+  // pos 7.2) is Latin while the default template led with 'यूको बैंक'.
+  'uco-bank': {
+    title: `UCO Bank Balance Check Number ${bank.missedCall} | Missed Call`,
+    description: `UCO Bank balance check number ${bank.missedCall} — आधिकारिक मिस्ड कॉल सेवा। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
   },
   'central-bank': {
     title: `सेंट्रल बैंक बैलेंस चेक नंबर ${bank.missedCall} | Missed Call`,

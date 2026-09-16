@@ -55,12 +55,23 @@ const collectionSchema = {
 };
 
 const isCooperative = category === 'Cooperative Bank';
-const pageTitle = isCooperative
+// Latin-query override: /banks/payments-bank/ carries 96% Latin impressions
+// ('airtel payment bank balance check number' 1,446 @ 0.29% CTR,
+// 'airtel payment bank missed call balance check sms' 776) while the default
+// Devanagari-first hub title never matched them (DEV slice converts at 2.79%).
+const categoryTitles: Record<string, { title: string; description: string }> = {
+  'Payments Bank': {
+    title: `Airtel & Jio Payments Bank Missed Call Balance Numbers`,
+    description: `Payments Bank missed call balance numbers — Airtel, IPPB और Jio Payments Bank के balance check numbers एक जगह, official source के साथ।`,
+  },
+};
+const categoryOverride = categoryTitles[category];
+const pageTitle = categoryOverride?.title ?? (isCooperative
   ? `Cooperative Bank Balance Check Number — सहकारी बैंकों की enquiry guide | BalCheck.in`
-  : `${hindiName} ${categoryMethodLabel} — ${catBanks.length} बैंक | BalCheck.in`;
-const pageDesc = isCooperative
+  : `${hindiName} ${categoryMethodLabel} — ${catBanks.length} बैंक | BalCheck.in`);
+const pageDesc = categoryOverride?.description ?? (isCooperative
   ? `सहकारी बैंकों के balance enquiry methods। ${catBanks.length} records में missed call, customer care और IVR details को अलग-अलग label के साथ देखें।`
-  : `${hindiName} के ${categoryMethodLabel.toLowerCase()} एक जगह। ${catBanks.length} बैंकों में ${missedCallCount} missed-call और ${alternateMethodCount} customer-care/IVR या अन्य records।`;
+  : `${hindiName} के ${categoryMethodLabel.toLowerCase()} एक जगह। ${catBanks.length} बैंकों में ${missedCallCount} missed-call और ${alternateMethodCount} customer-care/IVR या अन्य records।`);
 ---
 
 <Layout title={pageTitle} description={pageDesc}>
