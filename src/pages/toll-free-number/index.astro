@@ -6,13 +6,13 @@ import { isTrueTollFreeNumber } from '../../lib/phone';
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = `${siteUrl}/toll-free-number/`;
 const tollFreeCount = banks.filter(bank => isTrueTollFreeNumber(bank.customerCare)).length;
-const title = `Bank Customer Care Numbers India — ${banks.length} बैंक helpline | BalCheck.in`;
-const description = `${banks.length} बैंकों के customer care numbers एक जगह। ${tollFreeCount} records में 1800 toll-free number हैं; बाकी को customer-care number के रूप में सही label किया गया है।`;
+const title = `Bank Toll-Free Numbers India — ${tollFreeCount} बैंक 1800 number | BalCheck.in`;
+const description = `${tollFreeCount} बैंकों के 1800 toll-free numbers की verified list। जानें कौन सा bank number असली toll-free है और 1860/regular numbers कैसे पहचानें।`;
 
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
-  name: 'Bank Customer Care Numbers India',
+  name: 'Bank Toll-Free Numbers India (1800)',
   description,
   url: canonicalUrl,
   mainEntity: {
@@ -41,9 +41,12 @@ const schema = {
       <a href="/" class="hover:text-brand-600">Home</a><span class="mx-1">›</span><span class="text-gray-700">Customer Care</span>
     </nav>
     <section class="rounded-2xl bg-gradient-to-br from-brand-600 to-brand-800 p-6 text-white">
-      <h1 class="text-2xl font-bold sm:text-3xl">Bank Customer Care Numbers India</h1>
-      <p class="mt-2 text-sm text-brand-100">{banks.length} बैंकों के customer care numbers — {tollFreeCount} verified 1800 toll-free records और बाकी regular/other customer-care numbers</p>
+      <h1 class="text-2xl font-bold sm:text-3xl">Bank Toll-Free Numbers India (1800)</h1>
+      <p class="mt-2 text-sm text-brand-100">{tollFreeCount} verified 1800 toll-free bank numbers — बाकी customer-care numbers के साथ सही label किए गए हैं</p>
     </section>
+    <div class="my-6 rounded-2xl border border-brand-200 bg-brand-50 p-5">
+      <p class="text-sm leading-relaxed text-brand-800">सभी {banks.length} बैंकों के customer care numbers चाहिए? <a href="/customer-care/" class="font-medium underline hover:text-brand-700">Customer Care hub देखें →</a></p>
+    </div>
     <div class="my-6 rounded-2xl border border-amber-200 bg-amber-50 p-5">
       <h2 class="mb-2 text-lg font-bold text-amber-900">Safety first</h2>
       <p class="text-sm leading-relaxed text-amber-800">Customer care call पर OTP, PIN, CVV, UPI PIN या password कभी न बताएं। 1860 या अन्य non-1800 numbers को toll-free न मानें।</p>

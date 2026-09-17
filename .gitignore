@@ -16,3 +16,9 @@ dist/
 
 # Hermes working files
 .hermes/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+.dev.vars
