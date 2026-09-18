@@ -46,11 +46,12 @@ function expectedSitemapUrlCount(): number {
     articleCount + // /article/[slug]/
     (1 + mergers.length) + // /merged-banks/ hub + one page per merger record
     1 + // /missed-call/ hub
-    MISSED_CALL_BANKS.length - // /missed-call/[slug]/ (one page per missed-call bank)
+    MISSED_CALL_BANKS.length + // /missed-call/[slug]/ (one page per missed-call bank)
+    1 + // /number-lookup/ standalone tool page
     // Legacy /toll-free-number/<bank>/ routes whose bank has no real 1800 number
     // are kept live but excluded from the sitemap, because those pages declare
     // /customer-care/<slug>/ as canonical (see astro.config.mjs).
-    banks.filter((bank) => !isTrueTollFreeNumber(bank.customerCare)).length
+    -banks.filter((bank) => !isTrueTollFreeNumber(bank.customerCare)).length
   );
 }
 

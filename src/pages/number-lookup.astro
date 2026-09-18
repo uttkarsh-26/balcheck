@@ -1,0 +1,388 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { banks } from '../data/banks';
+import type { Bank } from '../data/banks';
+
+// Number → bank lookup tool. The index is derived ONLY from existing
+// src/data/banks.ts fields (missedCall, missedCallAlt, customerCare) and their
+// normalized digit keys — no new phone numbers, no scraped data. Line types are
+// stated honestly from balanceMode: banks whose "balance" number is the same
+// digits as their customer-care line are labelled customer care/IVR, never
+// missed-call (see the derivation comment in src/data/banks.ts).
+
+const digits = (value: string) => value.replace(/\D/g, '');
+// Match key: last 10 digits after stripping +91 / leading 0. '09223766666',
+// '+91 92237 66666' and '9223766666' all collapse to '9223766666'.
+const lookupKey = (value: string) => {
+  let d = digits(value);
+  if (d.length > 10 && d.startsWith('91')) d = d.slice(2);
+  if (d.length === 11 && d.startsWith('0')) d = d.slice(1);
+  return d;
+};
+
+type LineKind = 'balance' | 'customer-care' | 'alt';
+interface IndexEntry {
+  key: string;
+  slug: string;
+  name: string;
+  nameHindi: string;
+  shortName: string;
+  kind: LineKind;
+  number: string;
+  missedCallMode: boolean;
+}
+
+const index: IndexEntry[] = [];
+for (const bank of banks as Bank[]) {
+  index.push({
+    key: lookupKey(bank.missedCall),
+    slug: bank.slug,
+    name: bank.name,
+    nameHindi: bank.nameHindi,
+    shortName: bank.shortName,
+    kind: 'balance',
+    number: bank.missedCall,
+    missedCallMode: bank.balanceMode === 'missed-call',
+  });
+  if (bank.missedCallAlt && lookupKey(bank.missedCallAlt) !== lookupKey(bank.missedCall)) {
+    index.push({
+      key: lookupKey(bank.missedCallAlt),
+      slug: bank.slug,
+      name: bank.name,
+      nameHindi: bank.nameHindi,
+      shortName: bank.shortName,
+      kind: 'alt',
+      number: bank.missedCallAlt,
+      missedCallMode: bank.balanceMode === 'missed-call',
+    });
+  }
+  if (lookupKey(bank.customerCare) !== lookupKey(bank.missedCall)) {
+    index.push({
+      key: lookupKey(bank.customerCare),
+      slug: bank.slug,
+      name: bank.name,
+      nameHindi: bank.nameHindi,
+      shortName: bank.shortName,
+      kind: 'customer-care',
+      number: bank.customerCare,
+      missedCallMode: false,
+    });
+  }
+}
+
+const numberCount = new Set(index.map(e => e.key)).size;
+
+// Server-rendered rows for the most-searched numbers (GSC demand): the tool
+// page must confirm number → bank in crawlable HTML, not only after JS runs.
+const popularSlugs = [
+  { slug: 'sbi', kind: 'balance' as LineKind },
+  { slug: 'pnb', kind: 'balance' as LineKind },
+  { slug: 'pnb', kind: 'customer-care' as LineKind },
+  { slug: 'punjab-gramin', kind: 'balance' as LineKind },
+  { slug: 'axis', kind: 'balance' as LineKind },
+  { slug: 'jio-payments', kind: 'balance' as LineKind },
+  { slug: 'hdfc', kind: 'balance' as LineKind },
+  { slug: 'icici', kind: 'balance' as LineKind },
+  { slug: 'bob', kind: 'balance' as LineKind },
+  { slug: 'canara', kind: 'balance' as LineKind },
+  { slug: 'ubi', kind: 'balance' as LineKind },
+  { slug: 'mp-gramin', kind: 'balance' as LineKind },
+];
+const popularRows = popularSlugs
+  .map(({ slug, kind }) => ({ bank: (banks as Bank[]).find(b => b.slug === slug)!, kind }))
+  .filter(({ bank }) => Boolean(bank))
+  .map(({ bank, kind }) => ({
+    bank,
+    kind,
+    number: kind === 'customer-care' ? bank.customerCare : bank.missedCall,
+  }));
+
+const siteUrl = 'https://balcheck.in';
+const canonicalUrl = `${siteUrl}/number-lookup/`;
+
+const title = 'Bank Number Lookup — फ़ोन नंबर से बैंक और लाइन पहचानें | BalCheck.in';
+const description = `किसी भी bank phone number (toll-free, missed-call balance line, customer care/IVR) को टाइप या पेस्ट करें और जानें वह किस बैंक का है और किस काम का — ${banks.length} बैंकों के ${numberCount} नंबर।`;
+
+const faqs = [
+  {
+    q: 'Bank number lookup कैसे काम करता है?',
+    a: `ऊपर search box में toll-free, missed-call या customer care नंबर टाइप या पेस्ट करें। नंबर से spaces, dashes और +91/0 prefix हटाकर ${banks.length} बैंकों के recorded numbers से match किया जाता है। Result में बैंक का नाम, लाइन का प्रकार और बैंक का page link आता है।`,
+  },
+  {
+    q: 'Missed-call लाइन और customer care/IVR लाइन में क्या फ़र्क है?',
+    a: 'Missed-call लाइन पर registered mobile से कॉल देने पर कॉल 2-3 ring के बाद कटती है और balance SMS में आता है। Customer care/IVR लाइन पर कॉल जुड़ सकती है — menu, wait और सामान्य call charges लागू हो सकते हैं। Result में हर नंबर का प्रकार साफ़ बताया जाता है।',
+  },
+  {
+    q: 'मेरा डाला नंबर नहीं मिला तो क्या करें?',
+    a: 'पूरा नंबर (कम से कम 10 digits) डालें और फिर कोशिश करें। नंबर सिर्फ़ तब मिलेगा जब वह हमारी directory के किसी बैंक record में दर्ज हो — नंबर बदल सकते हैं, इसलिए अपने बैंक की official website पर भी जांच लें।',
+  },
+  {
+    q: 'क्या इस नंबर पर कॉल करना सुरक्षित है?',
+    a: 'यह page सिर्फ़ पहचान बताता है। किसी भी bank call में OTP, PIN, CVV या password कभी साझा न करें — बैंक कभी नहीं मांगता। नंबर समय के साथ बदल सकते हैं; कॉल करने से पहले बैंक की official website से पुष्टि करें।',
+  },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      url: canonicalUrl,
+      name: title,
+      description,
+      inLanguage: 'hi-IN',
+      isPartOf: { '@type': 'WebSite', name: 'BalCheck.in', url: siteUrl },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+        { '@type': 'ListItem', position: 2, name: 'Bank Number Lookup', item: canonicalUrl },
+      ],
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faqs.map(f => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+
+const lineLabel = (entry: { kind: LineKind; missedCallMode: boolean }) => {
+  if (entry.kind === 'customer-care') return 'Customer care / IVR line';
+  if (entry.kind === 'alt') return 'वैकल्पिक balance नंबर (bank record)';
+  return entry.missedCallMode ? 'Missed-call balance line' : 'Customer care / IVR line';
+};
+---
+
+<Layout title={title} description={description} canonical={canonicalUrl}>
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+  <div class="max-w-3xl mx-auto px-4 py-6">
+    <!-- Breadcrumb -->
+    <nav class="text-sm text-gray-500 mb-4">
+      <a href="/" class="hover:text-brand-600">Home</a>
+      <span class="mx-1">›</span>
+      <span class="text-gray-700">Bank Number Lookup</span>
+    </nav>
+
+    <!-- Header -->
+    <section class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-6">
+      <h1 class="text-2xl font-bold mb-2">Bank Number Lookup</h1>
+      <p class="text-brand-100 text-sm leading-relaxed">
+        Toll-free, missed-call balance line या customer care/IVR — कोई भी bank phone number
+        टाइप या पेस्ट करें और जानें वह <strong class="text-white">किस बैंक</strong> का है और
+        <strong class="text-white">किस काम</strong> का। {banks.length} बैंकों के {numberCount} नंबर।
+      </p>
+    </section>
+
+    <!-- Lookup tool -->
+    <section class="bg-white rounded-xl border border-gray-200 p-5 mb-6" data-testid="number-lookup-tool">
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">🔍 नंबर डालें या पेस्ट करें</h2>
+      <input
+        id="number-input"
+        type="search"
+        inputmode="numeric"
+        enterkeyhint="search"
+        autocomplete="off"
+        placeholder="जैसे 09223766666 या 1800-180-2223"
+        aria-label="Bank phone number डालें"
+        class="w-full px-5 py-3.5 text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent shadow-sm"
+      />
+      <p id="input-hint" class="hidden mt-2 text-sm text-gray-600"></p>
+
+      <div id="lookup-results" class="mt-4" data-testid="lookup-results"></div>
+    </section>
+
+    <!-- Server-rendered popular numbers: crawlable number → bank answers -->
+    <section class="bg-white rounded-xl border border-gray-200 p-5 mb-6" data-testid="popular-numbers">
+      <h2 class="text-lg font-semibold text-gray-900 mb-1">📋 ज़्यादा सर्च होने वाले bank numbers</h2>
+      <p class="text-sm text-gray-600 mb-4">ये नंबर सबसे ज़्यादा Google पर search होते हैं — हर लाइन का प्रकार साफ़ लिखा है:</p>
+      <div class="overflow-x-auto scrollbar-hide">
+        <table class="w-full text-sm border-collapse">
+          <thead>
+            <tr class="bg-gray-50 text-gray-900">
+              <th class="text-left font-semibold px-3 py-2 border border-gray-200">नंबर</th>
+              <th class="text-left font-semibold px-3 py-2 border border-gray-200">बैंक</th>
+              <th class="text-left font-semibold px-3 py-2 border border-gray-200">लाइन का प्रकार</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            {popularRows.map(({ bank, number, kind }) => (
+              <tr>
+                <td class="px-3 py-2 border border-gray-200">
+                  <a href={`tel:${number}`} class="font-bold text-brand-700 whitespace-nowrap">{number}</a>
+                </td>
+                <td class="px-3 py-2 border border-gray-200">
+                  <a href={`/bank/${bank.slug}/`} class="text-brand-700 font-medium">{bank.nameHindi}</a>
+                  <span class="block text-xs text-gray-500">{bank.name}</span>
+                </td>
+                <td class="px-3 py-2 border border-gray-200">
+                  {kind === 'customer-care'
+                    ? 'Customer care / IVR'
+                    : bank.balanceMode === 'missed-call'
+                      ? 'Missed-call balance line'
+                      : 'Customer care / IVR line'}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Honest line-type explainer -->
+    <section class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">ℹ️ लाइन का प्रकार — result में क्या मतलब है</h2>
+      <ul class="space-y-3 text-sm text-gray-700">
+        <li class="flex gap-2"><span class="text-brand-600">✓</span>
+          <span><strong>Missed-call balance line:</strong> खाते में registered mobile से कॉल दें; कॉल 2-3 ring के बाद कटती है और balance SMS में आता है।
+            <a href="/missed-call/" class="text-brand-700 font-medium">पूरी missed-call directory</a></span></li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span>
+          <span><strong>Customer care / IVR line:</strong> कॉल जुड़ सकती है — IVR menu, wait और सामान्य call charges लागू हो सकते हैं; कुछ बैंक इसी लाइन पर balance भी बताते हैं।
+            <a href="/customer-care/" class="text-brand-700 font-medium">Customer care directory</a></span></li>
+        <li class="flex gap-2"><span class="text-brand-600">✓</span>
+          <span><strong>वैकल्पिक नंबर:</strong> बैंक record में दर्ज दूसरा balance नंबर — इसका सटीक उद्देश्य बैंक के page पर दिया है।</span></li>
+      </ul>
+    </section>
+
+    <!-- Safety -->
+    <section class="bg-amber-50 rounded-xl border border-amber-200 p-5 mb-6">
+      <h2 class="text-base font-bold text-amber-900 mb-2">⚠️ सुरक्षा नोट</h2>
+      <p class="text-sm text-amber-900 leading-relaxed">
+        नंबर bank websites और cross-check sources से संकलित हैं और बदल सकते हैं। BalCheck.in किसी बैंक का आधिकारिक प्रतिनिधि नहीं है।
+        किसी भी कॉल में OTP, PIN, CVV या password साझा न करें — बैंक कभी नहीं मांगता।
+      </p>
+    </section>
+
+    <!-- FAQ -->
+    <section class="bg-gray-50 rounded-xl border border-gray-200 p-5 mb-2">
+      <h2 class="text-xl font-bold text-gray-900 mb-4">अक्सर पूछे जाने वाले प्रश्न</h2>
+      <div class="space-y-3">
+        {faqs.map(f => (
+          <details class="bg-white rounded-lg border border-gray-200 p-4 group">
+            <summary class="font-medium text-gray-900 cursor-pointer list-none flex justify-between items-center">
+              {f.q}
+              <svg class="w-5 h-5 text-gray-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <p class="mt-3 text-sm text-gray-600">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  <!-- Build-time number index: derived only from src/data/banks.ts fields -->
+  <script type="application/json" id="number-index" set:html={JSON.stringify(index)} />
+</Layout>
+
+<script>
+  interface IndexEntry {
+    key: string;
+    slug: string;
+    name: string;
+    nameHindi: string;
+    shortName: string;
+    kind: 'balance' | 'customer-care' | 'alt';
+    number: string;
+    missedCallMode: boolean;
+  }
+
+  const input = document.getElementById('number-input') as HTMLInputElement | null;
+  const results = document.getElementById('lookup-results');
+  const hint = document.getElementById('input-hint');
+  const indexEl = document.getElementById('number-index');
+
+  const lineLabel = (e: IndexEntry) => {
+    if (e.kind === 'customer-care') return 'Customer care / IVR line';
+    if (e.kind === 'alt') return 'वैकल्पिक balance नंबर (bank record)';
+    return e.missedCallMode ? 'Missed-call balance line' : 'Customer care / IVR line';
+  };
+
+  const lineClass = (e: IndexEntry) =>
+    e.kind === 'customer-care' || (e.kind === 'balance' && !e.missedCallMode)
+      ? 'bg-amber-50 text-amber-800 border-amber-200'
+      : 'bg-brand-50 text-brand-700 border-brand-100';
+
+  // Same normalization as the build-time keys: strip non-digits, drop a +91
+  // country prefix and a leading 0, then compare on the remaining digits.
+  function normalizeKey(value: string): string {
+    let d = value.replace(/\D/g, '');
+    if (d.length > 10 && d.startsWith('91')) d = d.slice(2);
+    if (d.length === 11 && d.startsWith('0')) d = d.slice(1);
+    return d;
+  }
+
+  function escapeHtml(text: string): string {
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function render() {
+    if (!input || !results || !hint || !indexEl) return;
+    const entries: IndexEntry[] = JSON.parse(indexEl.textContent || '[]');
+    const key = normalizeKey(input.value);
+
+    results.innerHTML = '';
+    if (key.length === 0) {
+      hint.classList.add('hidden');
+      return;
+    }
+    if (key.length < 10) {
+      hint.textContent = 'पूरा नंबर डालें — कम से कम 10 digits (spaces और dashes हट जाएंगे)।';
+      hint.classList.remove('hidden');
+      return;
+    }
+    hint.classList.add('hidden');
+
+    const matches = entries.filter(e => e.key === key);
+
+    if (matches.length === 0) {
+      results.innerHTML = `
+        <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700" data-testid="no-match">
+          <p class="font-medium text-gray-900">यह नंबर हमारी directory में नहीं मिला।</p>
+          <p class="mt-1">पूरा नंबर (10 digits) डालकर दोबारा कोशिश करें। नंबर सिर्फ़ तब मिलेगा जब वह किसी बैंक record में दर्ज हो — नंबर बदल सकते हैं, इसलिए बैंक की official website भी जांचें।</p>
+          <a href="/banks/" class="mt-3 inline-block text-brand-700 font-medium">सभी बैंकों की directory देखें →</a>
+        </div>`;
+      return;
+    }
+
+    // One number can belong to several banks (shared RRB toll-free lines) —
+    // render every match; same-bank duplicates are impossible by construction.
+    // innerHTML is safe here: every interpolated value comes from the
+    // build-time JSON index (bank data committed in the repo), never from user
+    // input — the typed value is only used as a match key. String fields are
+    // additionally passed through escapeHtml() as defense in depth.
+    const cards = matches.map(e => `
+      <div class="rounded-xl border border-gray-200 p-4 mb-3" data-testid="match-card">
+        <div class="flex items-start justify-between gap-3 mb-2">
+          <div>
+            <p class="font-bold text-gray-900 text-base leading-tight">${escapeHtml(e.nameHindi)}</p>
+            <p class="text-xs text-gray-500 mt-0.5">${escapeHtml(e.name)}</p>
+          </div>
+          <span class="shrink-0 text-xs font-medium rounded-full border px-2.5 py-1 ${lineClass(e)}">${lineLabel(e)}</span>
+        </div>
+        <a href="tel:${e.number}" class="inline-flex items-center gap-2 bg-brand-600 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-brand-700 transition-colors my-2">
+          📞 ${escapeHtml(e.number)}
+        </a>
+        <div class="flex flex-wrap gap-2 text-sm">
+          <a href="/bank/${e.slug}/" class="text-brand-700 font-medium hover:underline">${escapeHtml(e.shortName)} bank page →</a>
+          ${e.missedCallMode && e.kind === 'balance' ? `<a href="/missed-call/${e.slug}/" class="text-brand-700 font-medium hover:underline">Missed-call तरीका →</a>` : ''}
+          <a href="/customer-care/${e.slug}/" class="text-brand-700 font-medium hover:underline">Customer care →</a>
+        </div>
+      </div>`).join('');
+
+    results.innerHTML = `
+      <p class="text-sm text-gray-600 mb-2">${matches.length === 1 ? 'यह नंबर इस बैंक का है:' : `यह नंबर ${matches.length} बैंकों में shared है:`}</p>
+      ${cards}`;
+  }
+
+  input?.addEventListener('input', render);
+  render();
+</script>

@@ -10,6 +10,7 @@ const privateCount = banks.filter(b => b.category === 'Private Sector').length;
 const sfbCount = banks.filter(b => b.category === 'Small Finance Bank').length;
 const siteUrl = 'https://balcheck.in';
 const bankingServices = [
+  { href: '/number-lookup/', icon: '🔎', title: 'Number Lookup', description: 'फ़ोन नंबर डालें, बैंक और लाइन जानें' },
   { href: '/missed-call/', icon: '📞', title: 'Missed Call Numbers', description: 'सभी बैंकों के missed call balance numbers' },
   { href: '/balance-enquiry/', icon: '💰', title: 'Balance Enquiry', description: 'बैलेंस enquiry के सभी तरीके' },
   { href: '/mini-statement/', icon: '🧾', title: 'Mini Statement', description: 'आखिरी transactions की जानकारी' },
@@ -143,6 +144,10 @@ const popularBanks = ['sbi', 'bob', 'canara', 'ubi', 'pnb', 'boi', 'indian-bank'
   <div id="no-results" class="hidden py-12 text-center">
     <p class="text-lg text-gray-500">कोई बैंक नहीं मिला।</p>
     <p class="mt-1 text-sm text-gray-600">कृपया अलग नाम से खोजें।</p>
+    <p class="mt-3 text-sm hidden" data-testid="number-hint">
+      बैंक का नाम नहीं, <a href="/number-lookup/" class="font-medium text-brand-700 hover:underline">फ़ोन नंबर</a> डाला है?
+      <a href="/number-lookup/" class="font-medium text-brand-700 hover:underline">Number Lookup tool से जानें यह नंबर किस बैंक का है →</a>
+    </p>
   </div>
 
   <!-- Category directory comes after the primary bank answer -->
@@ -309,6 +314,12 @@ const popularBanks = ['sbi', 'bob', 'canara', 'ubi', 'pnb', 'boi', 'indian-bank'
     // Multi-word queries ("sbi bank", "union बैंक") must match in any order:
     // require every token to appear, not the whole phrase as one substring.
     const tokens = query.split(/\s+/).filter(Boolean);
+    // A mostly-digit query is a phone number, not a bank name — surface the
+    // number-lookup tool instead of a bare "कोई बैंक नहीं मिला".
+    const digitsOnly = query.replace(/\D/g, '');
+    const stripped = query.replace(/[\d\s+\-()]/g, '');
+    const looksLikeNumber = digitsOnly.length >= 6 && stripped.length === 0;
+    document.querySelector<HTMLElement>('[data-testid="number-hint"]')?.classList.toggle('hidden', !looksLikeNumber);
     let visible = 0;
     
     grid.querySelectorAll<HTMLElement>('.bank-card').forEach(card => {
