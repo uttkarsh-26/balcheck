@@ -15,7 +15,7 @@ const ctrTitles: Record<string, string> = {
   maharashtra: 'Bank of Maharashtra Balance Check Number 9833335555',
   icici: 'ICICI Bank Balance Check Number 9594612612',
   axis: 'Axis Bank Balance Enquiry Number 18004195959 | Missed Call',
-  'up-gramin': 'Uttar Pradesh Gramin Bank Balance Check Number 9986454440',
+  'up-gramin': 'Uttar Pradesh Gramin Bank WhatsApp Number नहीं | 9986454440',
   psb: 'Punjab & Sind Bank Balance Check Number 7039035156 | PSB',
   iob: 'Indian Overseas Bank Balance Check Number 9210622122',
   'central-bank': 'सेंट्रल बैंक बैलेंस चेक नंबर 9555244442 | Missed Call',
@@ -29,7 +29,10 @@ const ctrTitles: Record<string, string> = {
 };
 
 const sprint3Banks = new Set(['canara', 'psb', 'boi']);
-const englishAnswerTitleBanks = new Set(['up-gramin', 'psb']);
+// up-gramin left this set 2026-09-18: its top query cluster is the WhatsApp
+// intent (2,705 impr, pos 8.3, ~0 clicks), so the title now leads with the
+// WhatsApp answer + missed-call number instead of the generic English phrase.
+const englishAnswerTitleBanks = new Set(['psb']);
 const exactQueryTitleBanks = new Set(['axis']);
 
 // Scalable-default contract: the missed-call template must still render for a
@@ -218,5 +221,45 @@ for (const bank of banks) {
       const categoryLink = page.locator(`nav[aria-label="Breadcrumb"] a[href="/banks/${categorySlug(bank.category)}/"]`);
       await expect(categoryLink).toBeVisible();
     });
+
+    // WhatsApp-banking section renders ONLY for banks whose official site was
+    // checked (whatsappBanking field). Other banks must not hint at a channel
+    // they never published.
+    if (bank.whatsappBanking) {
+      const wa = bank.whatsappBanking;
+      test('renders the WhatsApp-banking answer with the official-source link', async ({ page }) => {
+        const section = page.getByTestId('whatsapp-banking');
+        await expect(section).toBeVisible();
+        await expect(section).toContainText('WhatsApp बैंकिंग');
+        await expect(section).toContainText('नहीं');
+        await expect(section).toContainText(wa.checkedOn);
+        await expect(section.locator(`a[href="${wa.sourceUrl}"]`)).toBeVisible();
+        await expect(section.locator('a[target="_blank"]')).toHaveAttribute('rel', /noopener noreferrer/);
+        await expect(section).toContainText(bank.missedCall);
+        await expect(section).toContainText('मिस्ड कॉल');
+        // Third-party disclaimer is mandatory whenever the snippet could be
+        // read as endorsing any non-official channel.
+        await expect(section).toContainText('आधिकारिक नहीं');
+      });
+
+      test('extends the existing FAQPage schema with the WhatsApp question', async ({ page }) => {
+        const scripts = await getJsonLdScripts(page);
+        const faqSchema = findSchema(scripts, 'FAQPage') as Record<string, unknown> | undefined;
+        expect(faqSchema).toBeDefined();
+        const questions = Array.isArray(faqSchema?.mainEntity)
+          ? (faqSchema.mainEntity as Array<{ name?: string }>).map(q => q.name ?? '')
+          : [];
+        expect(questions.some(q => q.includes('WhatsApp बैंकिंग नंबर'))).toBe(true);
+        // Exactly one FAQPage block — the WhatsApp Q&A must extend it, not fork it.
+        const faqBlocks = scripts.filter(
+          s => typeof s === 'object' && s !== null && (s as Record<string, unknown>)['@type'] === 'FAQPage'
+        );
+        expect(faqBlocks.length).toBe(1);
+      });
+    } else {
+      test('renders no WhatsApp-banking section when the field is absent', async ({ page }) => {
+        await expect(page.getByTestId('whatsapp-banking')).toHaveCount(0);
+      });
+    }
   });
 }

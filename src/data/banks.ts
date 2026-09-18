@@ -30,6 +30,17 @@ export interface Bank {
   verified?: boolean; // true = confirmed from official source, false/undefined = unverified
   verificationSource?: string; // official URL or aggregator list used to confirm the number
   lastVerified?: string; // ISO date (YYYY-MM-DD) of last verification
+  // Optional per-bank WhatsApp-banking channel check. Populated ONLY after a
+  // direct read of the bank's official site on `checkedOn` — never from
+  // aggregators, and never for a bank whose official pages were not actually
+  // checked. `available: false` is itself a publishable, source-backed answer:
+  // the page must say the channel is absent, not invent a number.
+  whatsappBanking?: {
+    available: boolean;
+    checkedOn: string; // ISO date (YYYY-MM-DD) of the official-site check
+    sourceUrl: string; // exact official URL checked
+    note: string; // what the official site offers instead (missed call, app, IVR…)
+  };
 }
 
 type BankInput = Omit<Bank, 'balanceMode'> & { balanceMode?: Bank['balanceMode'] };
@@ -938,6 +949,18 @@ const bankData: BankInput[] = [
     customerCare: '1800-180-0225',
     website: 'https://upgb.bank.in',
     verified: true,
+    // Official-site check 2026-09-18: upgb.bank.in homepage, /contact_upgb.php,
+    // /social_banking.php and /mobile-banking.php list NO WhatsApp banking
+    // channel. Digital channels listed: M-Tarang mobile banking, Internet
+    // Banking, RuPay card, UPI, AEPS, SMS alerts; toll-free 1800-180-0225 and
+    // 1800-102-0304. Never publish a WhatsApp number for UPGB from an
+    // aggregator — the official site is the source of truth here.
+    whatsappBanking: {
+      available: false,
+      checkedOn: '2026-09-18',
+      sourceUrl: 'https://upgb.bank.in/contact_upgb.php',
+      note: 'upgb.bank.in पर WhatsApp बैंकिंग चैनल नहीं दिया गया है (homepage, contact, social banking और mobile banking पेज जांचे गए, 2026-09-18)। बैलेंस के लिए मिस्ड कॉल 9986454440 या M-Tarang मोबाइल ऐप; toll-free customer care 1800-180-0225 / 1800-102-0304।',
+    },
   },
   {
     slug: 'uttarakhand-gramin',

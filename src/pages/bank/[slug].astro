@@ -65,6 +65,21 @@ if (bank.notes) {
   });
 }
 
+// WhatsApp-banking answer — rendered ONLY for banks whose official site was
+// actually checked (bank.whatsappBanking set). Never derived from aggregators;
+// the section states what the official site offers instead of inventing a
+// number for a channel the bank does not publish.
+const waCheck = bank.whatsappBanking;
+const waFaqs = waCheck ? [
+  {
+    q: `${bank.shortName} का WhatsApp बैंकिंग नंबर क्या है?`,
+    a: `${bank.name} की आधिकारिक वेबसाइट ${waCheck.sourceUrl.replace('https://', '')} पर WhatsApp बैंकिंग का कोई नंबर नहीं दिया गया है (${waCheck.checkedOn} को जांचा गया)। बैलेंस जानने के लिए ${bank.missedCall} पर मिस्ड कॉल दें या ${bank.customerCare} पर customer care से बात करें। किसी भी तीसरे वेबसाइट पर दिया गया "WhatsApp नंबर" आधिकारिक नहीं है — उस पर अपनी जानकारी या पैसे का जोखिम न लें।`,
+  },
+] : [];
+if (waFaqs.length > 0) {
+  faqs.push(...waFaqs);
+}
+
 // PSB full-name cluster: GSC shows 'punjab and sind bank balance check number',
 // 'psb balance check number' and 'punjab and sind' spellings as the top demand.
 // Make the H1 own both spellings and add full-name FAQs.
@@ -186,8 +201,14 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
     title: `Indian Overseas Bank Balance Check Number ${bank.missedCall}`,
     description: `IOB balance check number ${bank.missedCall}. आधिकारिक missed call service: registered mobile से call करें, SMS में तुरंत बैलेंस पाएं। मुफ़्त 24×7।`,
   },
+  // 2,705 impressions/30d on 'uttar pradesh gramin bank balance enquiry
+  // whatsapp number' variants (plus 148 on the MP variant) at pos 8.3 with ~0
+  // clicks — the snippet promised a number but the page never answered the
+  // WhatsApp intent. Title now names the WhatsApp reality and keeps the
+  // missed-call number; description carries the checked date.
   'up-gramin': {
-    title: `Uttar Pradesh Gramin Bank Balance Check Number ${bank.missedCall}`,
+    title: `Uttar Pradesh Gramin Bank WhatsApp Number नहीं | ${bank.missedCall}`,
+    description: `UPGB की आधिकारिक वेबसाइट पर WhatsApp बैंकिंग नहीं है (18-09-2026 जांचा)। बैलेंस के लिए ${bank.missedCall} पर मिस्ड कॉल दें — SMS में तुरंत बैलेंस।`,
   },
   // 25,424 impressions, 93% Latin queries @ 0.07% CTR — the worst CTR of any
   // page with volume on the site — while the 6% Devanagari impressions convert
@@ -422,6 +443,27 @@ const pageDesc = !isMissedCall
     </a>
   </div>
 </section>
+
+<!-- WhatsApp Banking — honest channel answer, only for banks with a checked official site -->
+{waCheck && (
+  <section data-testid="whatsapp-banking" class="bg-white border-t border-gray-100">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+      <h2 class="text-xl font-bold text-gray-900 mb-3">{bank.nameHindi} — WhatsApp बैंकिंग नंबर</h2>
+      <div class="bg-amber-50 rounded-xl border border-amber-200 p-4">
+        <p class="text-sm text-gray-800 leading-relaxed">
+          <strong>नहीं</strong> — {bank.name} की आधिकारिक वेबसाइट (<a href={waCheck.sourceUrl} target="_blank" rel="noopener noreferrer" class="text-brand-700 underline break-all">{waCheck.sourceUrl.replace('https://', '')}</a>) पर WhatsApp बैंकिंग का कोई नंबर नहीं दिया गया है ({waCheck.checkedOn} को जांचा गया)।
+        </p>
+        <p class="text-sm text-gray-800 leading-relaxed mt-2">
+          बैलेंस जानने के लिए <a href={`tel:${bank.missedCall}`} class="text-brand-700 font-bold underline">{bank.missedCall}</a> पर रजिस्टर्ड मोबाइल से <strong>मिस्ड कॉल</strong> दें — कॉल 2-3 ring के बाद कटेगी और SMS में तुरंत बैलेंस आ जाएगा। इसके अलावा <strong>M-Tarang</strong> मोबाइल ऐप या toll-free customer care <a href={`tel:${bank.customerCare}`} class="text-brand-700 underline">{bank.customerCare}</a> भी इस्तेमाल कर सकते हैं।
+        </p>
+        <p class="text-xs text-gray-700 leading-relaxed mt-2">
+          ⚠️ सावधानी: Google या किसी ब्लॉग/एग्रीगेटर पर दिखने वाला कोई भी "{bank.shortName} WhatsApp नंबर" आधिकारिक नहीं है — ऐसे नंबर पर मैसेज न भेजें, न कोई OTP/जानकारी साझा करें। बैंक की ओर से अभी तक WhatsApp बैंकिंग शुरू होने पर ही इस पेज पर नंबर दिखाया जाएगा।
+        </p>
+      </div>
+      <p class="text-xs text-gray-500 mt-3">स्रोत: {bank.name} official website, जांच तिथि {waCheck.checkedOn}</p>
+    </div>
+  </section>
+)}
 
 <!-- How It Works -->
 <section class="bg-white border-t border-gray-100">
