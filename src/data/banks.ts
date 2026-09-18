@@ -9,6 +9,15 @@
 //     18004195959 confirmed on official page + cleartax + wishfin + bankbazaar).
 //   - Remaining 59 banks: last full verification 2026-06-20 via SearXNG + aggregators.
 //
+// Verification status (2026-09-18 audit — docs/audits/bank-number-authenticity-2026-09-18.md):
+//   - All 79 records now carry provenance (verificationSource + lastVerified). The 57 records that
+//     had none were backfilled from that report's per-record ("section 2") verdict table: the
+//     evidence is the official page URL the audit matched, the aggregator hosts it captured, or
+//     the report path itself where the site was unreachable / had no support. No URL is invented.
+//   - 2 live-corrected numbers (FIX-P3-1): idfc-first customerCare 1800-108-8222 → 1800-10-888
+//     (live https://www.idfcfirst.bank.in/customer-care, href tel:180010888); hsbc missedCall +
+//     customerCare 1800-108-8222 → 1800-267-3456 (live https://www.hsbc.bank.in/help/contact/).
+//
 // Provenance fields (on audited records):
 //   verificationSource — official URL or aggregator list used to confirm the number
 //   lastVerified       — ISO date of last verification
@@ -84,6 +93,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-258-4435',
     website: 'https://bankofbaroda.bank.in',
     verified: true,
+    verificationSource: 'https://bankofbaroda.bank.in/digital-products/other-digital-services/phone-banking/missed-call-service + https://bankofbaroda.bank.in/contact-us (official page carries missedCall + missedCallAlt; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'canara',
@@ -108,6 +119,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-208-2244',
     website: 'https://www.unionbankofindia.bank.in',
     verified: true,
+    verificationSource: 'https://www.unionbankofindia.bank.in/en/common/contact-us (official page carries customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'boi',
@@ -134,6 +147,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-4250-0000',
     website: 'https://www.indianbank.in',
     verified: true,
+    verificationSource: 'https://indianbank.bank.in/en/ (official page carries missedCall; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'central-bank',
@@ -145,6 +160,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-200-1911',
     website: 'https://www.centralbankofindia.co.in',
     verified: true,
+    verificationSource: 'aggregator-only, no official on-page hit (3 third-party sources: bankbazaar.com, codeforbanks.com, paisabazaar.com) (audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'uco-bank',
@@ -156,6 +173,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-103-0123',
     website: 'https://www.ucobank.com',
     verified: true,
+    verificationSource: 'aggregator-only, no official on-page hit (4 third-party sources: bankbazaar.com, paisabazaar.com, policybazaar.com, upstox.com) (audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'maharashtra',
@@ -197,6 +216,8 @@ const bankData: BankInput[] = [
     website: 'https://www.iob.in',
     verified: true,
     notes: 'Balance enquiry missed call: 9210622122 (Source: iob.in Grievances_Redressal_mechanism). Customer care: 1800-425-4445 (Source: iob.bank.in/en/contact-us). No dedicated mini-statement missed-call number verified.',
+    verificationSource: 'https://www.iob.bank.in/en/ (official page carries customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'idbi',
@@ -208,6 +229,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-209-4321',
     website: 'https://www.idbibank.in',
     verified: true,
+    verificationSource: 'aggregator-only, no official on-page hit (2 third-party sources: bankbazaar.com, paisabazaar.com) (audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
 
   // === Private Sector Banks ===
@@ -221,6 +244,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-202-6161',
     website: 'https://www.hdfcbank.com',
     verified: true,
+    verificationSource: 'aggregator-only, no official on-page hit (3 third-party sources: bankbazaar.com, moneyview.in, paisabazaar.com) (audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'icici',
@@ -259,6 +284,8 @@ const bankData: BankInput[] = [
     customerCare: '1860-266-2666',
     website: 'https://www.kotak.com',
     verified: true,
+    verificationSource: 'aggregator-only, no official on-page hit (2 third-party sources: codeforbanks.com, youtube.com) (audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'yes-bank',
@@ -280,11 +307,11 @@ const bankData: BankInput[] = [
     shortName: 'IDFC FIRST',
     category: 'Private Sector',
     missedCall: '18002700720',
-    customerCare: '1800-108-8222',
+    customerCare: '1800-10-888',
     website: 'https://www.idfcfirstbank.com',
     verified: true,
-    verificationSource: "https://www.idfcfirst.bank.in/customer-care-sr/account-balance-enquiry (official .bank.in page) + gadgets360.com + codeforbanks.com + cleartax.in (18002700720 confirmed, 2026-07-20)",
-    lastVerified: '2026-07-20',
+    verificationSource: 'https://www.idfcfirst.bank.in/customer-care (official: Customer Care 1800 10 888 / tel:180010888, live re-check 2026-09-18) + https://www.idfcfirst.bank.in/customer-care-sr/account-balance-enquiry (missed call 18002700720 confirmed, 2026-07-20) + gadgets360.com + codeforbanks.com + cleartax.in | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'federal',
@@ -296,6 +323,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-420-1199',
     website: 'https://www.federalbank.co.in',
     verified: true,
+    verificationSource: 'https://www.federal.bank.in/missed-call-balance-enquiry + https://www.federal.bank.in/ (official page carries missedCall + customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'rbl',
@@ -333,6 +362,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-419-3401',
     website: 'https://www.dbs.com/in',
     verified: true,
+    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured, 2026-09-18)',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'dcb',
@@ -344,6 +375,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-209-9830',
     website: 'https://www.dcbbank.com',
     verified: true,
+    verificationSource: 'https://www.dcb.bank.in/ways-to-bank/dcb-missed-call-facility (official page carries missedCall; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'jk-bank',
@@ -356,6 +389,8 @@ const bankData: BankInput[] = [
     website: 'https://www.jkbank.com',
     verified: true,
     notes: 'J&K Bank missed call balance: 1800-180-0234 (Source: jkbank.com contact page).',
+    verificationSource: 'https://jkb.bank.in/ (official page carries customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'karnataka-bank',
@@ -367,6 +402,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-425-1445',
     website: 'https://www.karnatakabank.com',
     verified: true,
+    verificationSource: 'aggregator-only, no official on-page hit (1 third-party sources: moneyview.in) (audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'kvb',
@@ -392,6 +429,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-102-9405',
     website: 'https://www.southindianbank.com',
     verified: true,
+    verificationSource: 'https://www.southindianbank.bank.in/personal/other-services/sib-missed-call-service (official page carries missedCall; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'tmb',
@@ -405,6 +444,8 @@ const bankData: BankInput[] = [
     website: 'https://www.tmb.in',
     verified: true,
     notes: 'Balance: 09211937373; Mini statement (last 5 transactions): 09211947474 (Source: tmb.bank.in Missed-call-facility page.)',
+    verificationSource: 'aggregator-only, no official on-page hit (3 third-party sources: bankbazaar.com, paisabazaar.com, policybazaar.com) (audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'csb',
@@ -417,6 +458,8 @@ const bankData: BankInput[] = [
     website: 'https://www.csbbank.com',
     verified: true,
     notes: 'Missed call balance: 8828800900 (Source: csbbank.com contact page.)',
+    verificationSource: 'aggregator-only, no official on-page hit (3 third-party sources: bankbazaar.com, codeforbanks.com, policybazaar.com) (audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'cub',
@@ -428,6 +471,8 @@ const bankData: BankInput[] = [
     customerCare: '044-7122-5300',
     website: 'https://www.cityunionbank.com',
     verified: true,
+    verificationSource: 'aggregator-only, no official on-page hit (2 third-party sources: bankbazaar.com, upstox.com) (audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'dhanlaxmi',
@@ -439,6 +484,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-425-1747',
     website: 'https://www.dhan.bank.in',
     verified: true,
+    verificationSource: 'https://www.dhan.bank.in/customer-care/ + https://www.dhan.bank.in/grievance-redressal/ (official page carries missedCall + customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'nainital',
@@ -450,6 +497,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-345-4500',
     website: 'https://www.nainitalbank.co.in',
     verified: true,
+    verificationSource: 'https://www.nainitalbank.bank.in/english/home.aspx (official page carries missedCall; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
 
   // === Small Finance Banks ===
@@ -464,6 +513,8 @@ const bankData: BankInput[] = [
     website: 'https://www.aubank.in',
     verified: true,
     notes: 'Balance missed call: 1800-121-2586; Mini statement: 1800-121-2585 (Source: au.bank.in support).',
+    verificationSource: 'https://www.au.bank.in/personal-banking/digital-banking/au-0101/au-0101-netbanking (official page carries missedCall + customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'ujjivan',
@@ -476,6 +527,8 @@ const bankData: BankInput[] = [
     website: 'https://www.ujjivansfb.in',
     verified: true,
     notes: 'Missed call balance: 9243232121; Mini statement: 9243212121 (Source: ujjivansfb.in).',
+    verificationSource: 'https://www.ujjivansfb.bank.in/ (official page carries customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'equitas',
@@ -488,6 +541,8 @@ const bankData: BankInput[] = [
     website: 'https://www.equitasbank.com',
     verified: true,
     notes: 'Equitas SFB does not publish a dedicated missed-call balance number; use customer care 1800-303-1500 or Equitas mobile banking.',
+    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured, 2026-09-18)',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'jana',
@@ -500,6 +555,8 @@ const bankData: BankInput[] = [
     website: 'https://www.janabank.com',
     verified: true,
     notes: 'Jana SFB does not publish a dedicated missed-call balance number; use customer care 1800-210-5656 or Jana mobile banking.',
+    verificationSource: 'aggregator-only, no official on-page hit (1 third-party sources: bankbazaar.com) (audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'suryoday',
@@ -512,6 +569,8 @@ const bankData: BankInput[] = [
     website: 'https://www.suryodaybank.com',
     verified: true,
     notes: 'Balance missed call: 1800-266-7711; customer care: 1800-266-6611 (Source: suryodaybank.com contact page).',
+    verificationSource: 'site unreachable to automation (host www.suryodaybank.co, SSLError) - no official on-page evidence 2026-09-18; third-party hosts: bankbazaar.com, codeforbanks.com, paisabazaar.com | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'esaf',
@@ -524,6 +583,8 @@ const bankData: BankInput[] = [
     website: 'https://www.esafbank.com',
     verified: true,
     notes: 'Balance: 8592866639; Mini statement: 8593866639 (Source: esaf.bank.in/support).',
+    verificationSource: 'site unreachable to automation (site unreachable to automation (non-200 responses)) - no official on-page evidence 2026-09-18; third-party hosts: paisabazaar.com | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'fincare',
@@ -536,6 +597,8 @@ const bankData: BankInput[] = [
     website: 'https://www.fincarebank.com',
     verified: true,
     notes: 'Fincare merged into AU SFB; balance/customer care: 1800-120-1200 / 1800-26-66677 (Source: au.bank.in merger page).',
+    verificationSource: 'site unreachable to automation (host www.fincareb, ConnectionError) - no official on-page evidence 2026-09-18; third-party hosts: bankbazaar.com | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'ne-sfb',
@@ -548,6 +611,8 @@ const bankData: BankInput[] = [
     website: 'https://www.nesfb.com',
     verified: true,
     notes: 'NE SFB merged into Slice SFB; contact 1800-121-1905 or use Slice app.',
+    verificationSource: 'https://slice.bank.in/ (official page carries missedCall; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
 
   // === Payments Banks ===
@@ -562,6 +627,8 @@ const bankData: BankInput[] = [
     website: 'https://www.ippbonline.com',
     notes: 'IPPB account balance missed call: 7799022509; registration missed call: 8424054994 (Source: ippbonline.com notifications).',
     verified: true,
+    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured, 2026-09-18)',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'airtel-payments',
@@ -588,6 +655,8 @@ const bankData: BankInput[] = [
     website: 'https://www.jiopaymentsbank.com',
     verified: true,
     notes: 'Jio Payments Bank does not publish a missed-call balance number; customer care: 1800-890-7070 (Source: jiopaymentsbank.com).',
+    verificationSource: 'site unreachable to automation (host www.jiopaymen, ConnectTimeout) - no official on-page evidence 2026-09-18 | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
 
   // === Foreign Banks ===
@@ -597,11 +666,16 @@ const bankData: BankInput[] = [
     nameHindi: 'एचएसबीसी इंडिया',
     shortName: 'HSBC',
     category: 'Foreign Bank',
-    missedCall: '18001088222',
-    customerCare: '1800-108-8222',
+    missedCall: '1800-267-3456',
+    customerCare: '1800-267-3456',
     website: 'https://www.hsbc.co.in',
     verified: true,
-    notes: 'HSBC India does not offer a missed-call balance service; contact PhoneBanking: 1800-108-8222 / 1800-266-3456 (Source: hsbc.co.in/help/contact).',
+    // No dedicated missed-call balance facility: the same PhoneBanking line is stored in both
+    // fields so balanceMode derives to 'customer-care' (the file convention for no-missed-call
+    // records, e.g. standard-chartered). 1800-108-8222 appears on neither live HSBC page.
+    notes: 'HSBC India does not offer a missed-call balance service; contact PhoneBanking: 1800-266-3456 / 1800-267-3456 (Source: https://www.hsbc.bank.in/help/contact/). The earlier 1800-108-8222 line is absent from the live contact page and was removed 2026-09-18.',
+    verificationSource: 'https://www.hsbc.bank.in/help/contact/ (official: PhoneBanking 1800 266 3456 Premier / 1800 267 3456 personal banking + credit cards, live re-check 2026-09-18; 18001088222 absent) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'standard-chartered',
@@ -614,6 +688,8 @@ const bankData: BankInput[] = [
     website: 'https://www.sc.com/in',
     verified: true,
     notes: 'Standard Chartered India does not offer a missed-call balance service; contact PhoneBanking: 1800-12-20040 (Source: sc.com/in).',
+    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured, 2026-09-18)',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'deutsche',
@@ -626,6 +702,8 @@ const bankData: BankInput[] = [
     website: 'https://www.db.com/india',
     verified: true,
     notes: 'PhoneBanking / balance: 1800-123-6601 or 1860-266-6601 (Source: db.com/india contact).',
+    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured, 2026-09-18)',
+    lastVerified: '2026-09-18',
   },
 
   // === Cooperative Banks ===
@@ -640,6 +718,8 @@ const bankData: BankInput[] = [
     website: 'https://www.saraswatbank.com',
     verified: true,
     notes: 'Balance: 9022211100; Mini statement: 9223501111 (Source: saraswatbank.com).',
+    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured, 2026-09-18)',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'cosmos',
@@ -695,6 +775,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-123-6235',
     website: 'https://www.apgb.co.in',
     verified: true,
+    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured, 2026-09-18)',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'kvgb',
@@ -706,6 +788,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-425-1100',
     website: 'https://www.kvgbank.com',
     verified: true,
+    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured, 2026-09-18)',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'baroda-up-gramin',
@@ -746,6 +830,8 @@ const bankData: BankInput[] = [
     customerCare: '033-69026902',
     website: 'https://odishabank.bank.in',
     verified: true,
+    verificationSource: 'https://odishabank.bank.in/erstwhile-ogb-missed-call-alert-services (official page carries missedCall; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'chhattisgarh-rajya',
@@ -757,6 +843,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-233-2300',
     website: 'https://www.cgbank.in',
     verified: true,
+    verificationSource: 'https://cgb.bank.in/ (official page carries missedCall + customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'puduvai-bharathiar',
@@ -768,6 +856,8 @@ const bankData: BankInput[] = [
     customerCare: '0413-2227851',
     website: 'https://pygb.bank.in',
     verified: true,
+    verificationSource: 'https://pygb.bank.in/contact-us (official page carries customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'pragathi-krishna',
@@ -779,6 +869,8 @@ const bankData: BankInput[] = [
     customerCare: '08392-236444',
     website: 'https://pragathikrishnabank.com',
     verified: true,
+    verificationSource: 'site unreachable to automation (host pragathikris, ConnectionError) - no official on-page evidence 2026-09-18 | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'baroda-rajasthan',
@@ -806,6 +898,8 @@ const bankData: BankInput[] = [
     website: 'https://www.capital.bank.in',
     notes: 'No separate missed-call balance service; contact customer care for balance enquiry',
     verified: true,
+    verificationSource: 'https://www.capital.bank.in/ (official page carries missedCall + customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   // === Additional Regional Rural Banks (medium confidence) ===
   {
@@ -819,6 +913,8 @@ const bankData: BankInput[] = [
     website: 'https://jrgbank.bank.in',
     notes: 'Customer care confirmed; missed-call service not officially published separately',
     verified: true,
+    verificationSource: 'https://jrgbank.bank.in/complaint_form (official page carries missedCall + customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'himachal-pradesh-gramin',
@@ -831,6 +927,8 @@ const bankData: BankInput[] = [
     website: 'https://www.hpgb.bank.in',
     notes: 'Customer care confirmed; no dedicated missed-call number published',
     verified: true,
+    verificationSource: 'https://www.hpgb.bank.in/ (official page carries missedCall + customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'arunachal-pradesh-rural',
@@ -842,6 +940,8 @@ const bankData: BankInput[] = [
     customerCare: '0360-2230051',
     website: 'https://aprb.bank.in',
     verified: true,
+    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured, 2026-09-18)',
+    lastVerified: '2026-09-18',
   },
   // === New RRBs — verified from official bank websites (2026-07-10) ===
   {
@@ -854,6 +954,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-202-3006',
     website: 'https://agvb.bank.in',
     verified: true,
+    verificationSource: 'https://agvb.bank.in/sub-content/banking-product/digital-and-online-banking/missed-call-banking (official page carries missedCall + customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'bihar-gramin',
@@ -879,6 +981,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-180-7777',
     website: 'https://hgb.bank.in',
     verified: true,
+    verificationSource: 'https://hgb.bank.in/ (official page carries customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'mp-gramin',
@@ -905,6 +1009,8 @@ const bankData: BankInput[] = [
     customerCare: '9549224443',
     website: 'https://www.mahagramin.bank.in',
     verified: true,
+    verificationSource: 'https://www.mahagramin.bank.in/ (official page carries missedCall + customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'mizoram-rural',
@@ -916,6 +1022,8 @@ const bankData: BankInput[] = [
     customerCare: '0389-2333024',
     website: 'https://mizoramruralbank.in',
     verified: true,
+    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured, 2026-09-18)',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'telangana-grameena',
@@ -927,6 +1035,8 @@ const bankData: BankInput[] = [
     customerCare: '9997779901',
     website: 'https://tgb.bank.in',
     verified: true,
+    verificationSource: 'https://tgb.bank.in/digital-banking/missed-call-alert + https://tgb.bank.in/ (official page carries missedCall + customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'tamil-nadu-grama',
@@ -938,6 +1048,8 @@ const bankData: BankInput[] = [
     customerCare: '9289202222',
     website: 'https://tngb.bank.in',
     verified: true,
+    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured, 2026-09-18)',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'up-gramin',
@@ -961,6 +1073,8 @@ const bankData: BankInput[] = [
       sourceUrl: 'https://upgb.bank.in/contact_upgb.php',
       note: 'upgb.bank.in पर WhatsApp बैंकिंग चैनल नहीं दिया गया है (homepage, contact, social banking और mobile banking पेज जांचे गए, 2026-09-18)। बैलेंस के लिए मिस्ड कॉल 9986454440 या M-Tarang मोबाइल ऐप; toll-free customer care 1800-180-0225 / 1800-102-0304।',
     },
+    verificationSource: 'https://upgb.bank.in/ (official page carries missedCall + customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'uttarakhand-gramin',
@@ -972,6 +1086,8 @@ const bankData: BankInput[] = [
     customerCare: '1800-532-7444',
     website: 'https://ukgb.bank.in',
     verified: true,
+    verificationSource: 'https://ukgb.bank.in/services/missed-call-alerts + https://ukgb.bank.in/contact (official page carries missedCall + customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   // === Post-merger RRBs (added Jul 12 2026, verified on official .bank.in sites) ===
   {
@@ -985,6 +1101,8 @@ const bankData: BankInput[] = [
     customerCare: '18004256708',
     website: 'https://apgb.bank.in',
     verified: true,
+    verificationSource: 'https://apgb.bank.in/ (official page carries missedCall + missedCallAlt; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'gujarat-gramin',
@@ -996,6 +1114,8 @@ const bankData: BankInput[] = [
     customerCare: '07968271260',
     website: 'https://ggb.bank.in',
     verified: true,
+    verificationSource: 'https://www.ggb.bank.in/ (official page carries customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'kerala-grameena',
@@ -1007,6 +1127,8 @@ const bankData: BankInput[] = [
     customerCare: '18004254000',
     website: 'https://kgb.bank.in',
     verified: true,
+    verificationSource: 'https://kgb.bank.in/services/missed-call-balance + https://kgb.bank.in/ (official page carries missedCall + customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'karnataka-grameena',
@@ -1018,6 +1140,8 @@ const bankData: BankInput[] = [
     customerCare: '18001025250',
     website: 'https://karnatakagb.bank.in',
     verified: true,
+    verificationSource: 'https://karnatakagb.bank.in/ebanking-services/balance-enquiry + https://karnatakagb.bank.in/ (official page carries missedCall + customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
   {
     slug: 'rajasthan-gramin',
@@ -1029,6 +1153,8 @@ const bankData: BankInput[] = [
     customerCare: '18005327444',
     website: 'https://rgb.bank.in',
     verified: true,
+    verificationSource: 'https://rgb.bank.in/ (official page carries missedCall + customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    lastVerified: '2026-09-18',
   },
 ];
 

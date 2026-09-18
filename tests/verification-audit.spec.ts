@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+import { readFileSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { banks } from '../src/data/banks';
 
 /**
@@ -111,5 +113,171 @@ test.describe('2026-07-20 verification audit regression', () => {
     expect(pgb).toBeDefined();
     expect(pgb!.website).toBe('https://pgb.bank.in');
     expect(pgb!.verificationSource).toContain('pgb.bank.in');
+  });
+});
+
+/**
+ * 2026-09-18 full-dataset number audit regression gate.
+ *
+ * Receipt: docs/audits/bank-number-authenticity-2026-09-18.md (79-bank verdict table).
+ * Re-runnable checker: scripts/audit-number-authenticity.mjs (checks 1-4 are re-implemented
+ * here as hard assertions so the data cannot drift from the report without CI failing).
+ *
+ *   1. every verified:true record carries non-empty verificationSource + lastVerified
+ *   2. no cross-bank digit-identical missedCall/customerCare outside the §3 sponsor-line allowlist
+ *   3. every stored number passes the shape rules of audit check 1
+ *   4. FIX-P3-1 old → new expected numbers for idfc-first and hsbc, plus the rendered pages
+ */
+
+const digitsOf = (value: string | undefined) => String(value ?? '').replace(/\D/g, '');
+
+/** Canonical equality form — same rule as scripts/audit-number-authenticity.mjs. */
+const canonOf = (value: string | undefined) => {
+  let d = digitsOf(value).replace(/^0+/, '');
+  if (d.length > 10 && d.startsWith('91')) d = d.slice(2);
+  return d;
+};
+
+/** Shape table copied verbatim from scripts/audit-number-authenticity.mjs (check 1). */
+const NUMBER_SHAPES: { name: string; re: RegExp }[] = [
+  { name: 'mobile10', re: /^[6-9]\d{9}$/ },
+  { name: 'mobile11-0prefix', re: /^0[6-9]\d{9}$/ },
+  { name: 'tollfree-1800', re: /^1800\d{4,9}$/ },
+  { name: 'tollfree-1860', re: /^1860\d{4,9}$/ },
+  { name: 'tollfree-180x', re: /^180\d{7,9}$/ },
+  { name: 'landline-std', re: /^0\d{2,4}\d{6,8}$/ },
+  { name: 'short-code', re: /^18\d{2,4}$/ },
+];
+
+/**
+ * Cross-bank digit-identical numbers that the audit confirms are real shared
+ * sponsor lines, not copy-paste errors — report §3.2 `9015800700` (pragathi-krishna,
+ * karnataka-grameena), §3.3 `9986454440` (baroda-up-gramin, up-gramin), §3.4
+ * `18001807777` (punjab-gramin, himachal-pradesh-gramin, bihar-gramin, haryana-gramin),
+ * §3.5 `18005327444` (jharkhand-gramin, uttarakhand-gramin, rajasthan-gramin).
+ * `18001088222` is deliberately absent: FIX-P3-1 removed that duplicate from both
+ * idfc-first and hsbc, so it must never reappear here.
+ */
+const SHARED_NUMBER_ALLOWLIST = ['9015800700', '9986454440', '18001807777', '18005327444'];
+
+/** FIX-P3-1 — old → new, verified live on 2026-09-18. */
+const FIX_P3_1_EXPECTED: Record<string, { field: 'missedCall' | 'customerCare'; was: string; now: string }[]> = {
+  // live https://www.idfcfirst.bank.in/customer-care renders "1800 10 888" with href tel:180010888
+  'idfc-first': [{ field: 'customerCare', was: '1800-108-8222', now: '1800-10-888' }],
+  // live https://www.hsbc.bank.in/help/contact/ carries 1800 266 3456 / 1800 267 3456 only
+  hsbc: [
+    { field: 'missedCall', was: '18001088222', now: '1800-267-3456' },
+    { field: 'customerCare', was: '1800-108-8222', now: '1800-267-3456' },
+  ],
+};
+
+test.describe('2026-09-18 number audit regression gate', () => {
+  test('every verified record carries verificationSource + lastVerified', () => {
+    const missing = banks
+      .filter(bank => bank.verified)
+      .filter(bank => !bank.verificationSource?.trim() || !bank.lastVerified?.trim())
+      .map(bank => bank.slug);
+    expect(missing, `verified records missing provenance: ${missing.join(', ')}`).toEqual([]);
+    for (const bank of banks) {
+      if (!bank.lastVerified) continue;
+      expect(bank.lastVerified, `${bank.slug} lastVerified is not an ISO date`).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    }
+  });
+
+  test('no cross-bank duplicate numbers outside the §3 sponsor-line allowlist', () => {
+    const byValue = new Map<string, Set<string>>();
+    for (const bank of banks) {
+      for (const field of ['missedCall', 'customerCare'] as const) {
+        const value = bank[field];
+        if (!value) continue;
+        const key = canonOf(value);
+        if (!byValue.has(key)) byValue.set(key, new Set());
+        byValue.get(key)!.add(bank.slug);
+      }
+    }
+    const offenders = [...byValue.entries()]
+      .filter(([value, slugs]) => slugs.size > 1 && !SHARED_NUMBER_ALLOWLIST.includes(value))
+      .map(([value, slugs]) => `${value} shared by ${[...slugs].sort().join(', ')}`);
+    expect(offenders, `duplicate numbers need an audit receipt: ${offenders.join(' | ')}`).toEqual([]);
+  });
+
+  test('every stored number passes the audit check-1 shape rules', () => {
+    const unrecognized: string[] = [];
+    for (const bank of banks) {
+      for (const field of ['missedCall', 'missedCallAlt', 'customerCare'] as const) {
+        const raw = bank[field];
+        if (!raw) continue;
+        const d = digitsOf(raw);
+        if (!NUMBER_SHAPES.some(shape => shape.re.test(d))) {
+          unrecognized.push(`${bank.slug}.${field}='${raw}' (${d.length} digits)`);
+        }
+      }
+    }
+    expect(unrecognized, `unrecognized number shapes: ${unrecognized.join(' | ')}`).toEqual([]);
+  });
+
+  test('FIX-P3-1 old → new numbers are applied and the old duplicate is gone', () => {
+    for (const [slug, changes] of Object.entries(FIX_P3_1_EXPECTED)) {
+      const bank = banks.find(b => b.slug === slug);
+      expect(bank, `missing record ${slug}`).toBeDefined();
+      for (const change of changes) {
+        expect(bank![change.field], `${slug}.${change.field} regression`).toBe(change.now);
+        expect(digitsOf(bank![change.field]), `${slug}.${change.field} digits`).toBe(digitsOf(change.now));
+      }
+      // The withdrawn value must not survive anywhere in the record.
+      for (const change of changes) {
+        for (const field of ['missedCall', 'missedCallAlt', 'customerCare'] as const) {
+          expect(bank![field], `${slug}.${field} still carries the withdrawn ${change.was}`).not.toBe(change.was);
+        }
+      }
+    }
+
+    // 18001088222 was stored twice (idfc-first customerCare + hsbc both fields) — it is now
+    // on neither record, so no record may hold it in any field.
+    const NUMBER_FIELDS = ['missedCall', 'missedCallAlt', 'customerCare'] as const;
+    const holders = banks
+      .filter(bank => NUMBER_FIELDS.some(f => digitsOf(bank[f]) === '18001088222'))
+      .map(bank => bank.slug);
+    expect(holders, `18001088222 must not be stored anywhere: ${holders.join(', ')}`).toEqual([]);
+
+    // HSBC publishes no missed-call facility: both fields must normalize identically so
+    // balanceMode derives to 'customer-care' and no /missed-call/hsbc/ page is generated.
+    const hsbc = banks.find(b => b.slug === 'hsbc')!;
+    expect(hsbc.balanceMode).toBe('customer-care');
+    expect(hsbc.notes).toContain('1800-266-3456');
+    expect(hsbc.notes).toContain('1800-267-3456');
+    expect(hsbc.verificationSource).toContain('https://www.hsbc.bank.in/help/contact/');
+
+    const idfc = banks.find(b => b.slug === 'idfc-first')!;
+    expect(idfc.verificationSource).toContain('https://www.idfcfirst.bank.in/customer-care');
+  });
+
+  test('FIX-P3-1 numbers are rendered with matching tap-to-call hrefs in dist/', () => {
+    const rendered: Record<string, { page: string; digits: string[] }> = {
+      'idfc-first': { page: join('bank', 'idfc-first', 'index.html'), digits: ['180010888'] },
+      hsbc: { page: join('bank', 'hsbc', 'index.html'), digits: ['18002673456'] },
+    };
+    for (const [slug, spec] of Object.entries(rendered)) {
+      const file = join(process.cwd(), 'dist', spec.page);
+      expect(existsSync(file), `dist/${spec.page} missing — run npm run build`).toBe(true);
+      const html = readFileSync(file, 'utf8');
+      const bare = digitsOf(html);
+      for (const d of spec.digits) {
+        expect(bare, `${slug} page does not render ${d}`).toContain(d);
+      }
+      // tap-to-call targets must be the stored numbers
+      for (const bank of banks.filter(b => b.slug === slug)) {
+        for (const field of ['missedCall', 'customerCare'] as const) {
+          const d = digitsOf(bank[field]);
+          expect(d.length, `${slug}.${field} is empty`).toBeGreaterThan(0);
+          expect(bare, `${slug} page does not render ${field} ${d}`).toContain(d);
+        }
+      }
+    }
+
+    // HSBC's removed duplicate must not be linkable, and no missed-call page may exist for it.
+    const hsbcHtml = digitsOf(readFileSync(join(process.cwd(), 'dist', 'bank', 'hsbc', 'index.html'), 'utf8'));
+    expect(hsbcHtml).toContain('18002673456');
+    expect(existsSync(join(process.cwd(), 'dist', 'missed-call', 'hsbc', 'index.html'))).toBe(false);
   });
 });
