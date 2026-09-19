@@ -562,3 +562,33 @@ external fetch tiers: 3 stubs documented above (phase1 / browser / tier3 not exe
 
 Reading of those counts: check 2's 6 failures are the collision clusters in §3; check 3's 17 failures are the `missedCall == customerCare` set in §4 (16 legitimate by construction, 1 mode contradiction); check 4's 57 failures are the no-provenance records in §5; check 5's 79 passes mean every record's `/bank/` page exists and renders both of its numbers with the expected `/missed-call/` route presence.
 
+## 12. Post-Phase-3 remediation (2026-09-19)
+
+Phase 3 shipped the FIX-P3-1 number corrections, the FIX-P3-7 provenance backfill (§5) and a CI gate.
+Reviewing that commit surfaced one honest-by-construction gap and two method corrections:
+
+- **A receipt is not a verification.** The §5 backfill gave all 57 no-provenance records a
+  `verificationSource` + `lastVerified: 2026-09-18`, including the 17 whose verdict here was
+  NO_SUPPORT (12) or SITE_BLOCKED (5) — i.e. records where no tier found the number at all. Those
+  records kept `verified: true`, and 16 of them rendered "last reviewed 2026-09-18" / a
+  `dateModified` of 2026-09-18 on a live `/missed-call/`, `/mini-statement/` or `/sms-banking/` page.
+  Fixed: those 16 are now `verified: false` with **no** `lastVerified` (their pages print "no
+  verification date recorded — check the bank's website") and keep the receipt, rewritten to read as
+  an attempt ("number NOT officially confirmed"). 63 records remain `verified: true`.
+  `tests/verification-audit.spec.ts` pins the 16-slug no-evidence class and the 63-record count.
+- **`hsbc` moved the other way.** Its verdict here was NO_SUPPORT, but the live
+  `https://www.hsbc.bank.in/help/contact/` was read directly on 2026-09-18 and carries
+  `tel:18002673456` (personal banking + cards) and `tel:18002663456` (Premier) with `18001088222`
+  absent — so `hsbc` is a genuine CONFIRMED_OFFICIAL case and keeps `verified: true`. Re-read the
+  official page before treating any row in §2 as final: this audit's tiers could not read every host.
+- **`1800 10 888` is 9 digits (`180010888`).** §3.1's parenthetical "i.e. `1800108888`" was an
+  off-by-one transcription; the live page's `href="tel:180010888"` is the authority and `banks.ts`
+  ships `1800-10-888`.
+- **Check 4 semantics.** `scripts/audit-number-authenticity.mjs` treated `verified: false` as a
+  problem ("verified is not true"), which pushes future runs to stamp dates on unconfirmed records.
+  It now counts `verified:false` **with** a receipt as the expected documented-unverified state and
+  only fails a record that is unverified with no receipt, or claims verified without provenance.
+  §11 above is the frozen output of the original check set; re-run the script for the current numbers.
+
+Known shared/duplicate numbers left open by design (they are real sponsor lines, not errors) are
+listed in §3.2–§3.6; the CI gate allowlists exactly those four values.

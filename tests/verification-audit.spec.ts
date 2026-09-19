@@ -160,6 +160,30 @@ const NUMBER_SHAPES: { name: string; re: RegExp }[] = [
  */
 const SHARED_NUMBER_ALLOWLIST = ['9015800700', '9986454440', '18001807777', '18005327444'];
 
+/**
+ * The 2026-09-18 audit found no evidence at all for these records (verdict
+ * NO_SUPPORT / SITE_BLOCKED): no official page carried the number and no
+ * aggregator corroborated it. They stay `verified:false` with no `lastVerified`,
+ * so their pages print "no verification date recorded" instead of a date nobody
+ * earned — the receipt in `verificationSource` documents the failed attempt.
+ * Getting one of these to `verified:true` requires an actual official page read:
+ * hsbc is deliberately NOT in this list, because its live
+ * https://www.hsbc.bank.in/help/contact/ was read on 2026-09-18 and carries
+ * tel:18002673456 / tel:18002663456 (18001088222 absent).
+ */
+const UNCONFIRMED_NO_EVIDENCE = [
+  'apgb', 'arunachal-pradesh-rural', 'dbs', 'deutsche', 'equitas', 'esaf',
+  'fincare', 'ippb', 'jio-payments', 'kvgb', 'mizoram-rural',
+  'pragathi-krishna', 'saraswat', 'standard-chartered', 'suryoday',
+  'tamil-nadu-grama',
+].sort();
+
+/** Receipt wording that marks a record as "checked, nothing found". */
+const NO_EVIDENCE_RECEIPT_MARKERS = [
+  'no on-page, index or third-party evidence captured',
+  'site unreachable to automation',
+];
+
 /** FIX-P3-1 — old → new, verified live on 2026-09-18. */
 const FIX_P3_1_EXPECTED: Record<string, { field: 'missedCall' | 'customerCare'; was: string; now: string }[]> = {
   // live https://www.idfcfirst.bank.in/customer-care renders "1800 10 888" with href tel:180010888
@@ -182,6 +206,23 @@ test.describe('2026-09-18 number audit regression gate', () => {
       if (!bank.lastVerified) continue;
       expect(bank.lastVerified, `${bank.slug} lastVerified is not an ISO date`).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     }
+  });
+
+  test('records with no audit evidence stay verified:false and print no verification date', () => {
+    // A receipt is not a verification: these records may not claim one.
+    const marked = banks
+      .filter(bank => NO_EVIDENCE_RECEIPT_MARKERS.some(m => bank.verificationSource?.includes(m)))
+      .map(bank => bank.slug)
+      .sort();
+    expect(marked, 'the no-evidence receipt class drifted from the audit report').toEqual(UNCONFIRMED_NO_EVIDENCE);
+
+    for (const bank of banks.filter(b => marked.includes(b.slug))) {
+      expect(bank.verified, `${bank.slug} claims verified:true with no official evidence`).toBe(false);
+      expect(bank.lastVerified, `${bank.slug} would print a verification date it never earned`).toBeUndefined();
+    }
+
+    const verifiedSlugs = banks.filter(b => b.verified).map(b => b.slug).sort();
+    expect(verifiedSlugs.length, 'verified:true count moved — re-derive it from the audit report').toBe(63);
   });
 
   test('no cross-bank duplicate numbers outside the §3 sponsor-line allowlist', () => {

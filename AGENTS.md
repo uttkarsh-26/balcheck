@@ -16,6 +16,7 @@ Stack: Astro 7, TypeScript, Tailwind CSS 4, Cloudflare Workers
 - The bank search matches every whitespace token of the query (`tokens.every(...)`) — reverting to a single `includes(query)` substring breaks natural multi-word queries like "sbi bank"; fix: keep token matching and add the query shape to tests/homepage.spec.ts.
 - The 9-page snippet experiment cohort (central-bank, mp-gramin, indian-bank, airtel-payments, maharashtra, iob, ippb, gujarat-gramin, jio-payments) is read by the BALCHECK_CTR_69896FB_28D_CLOSEOUT cron — editing those pages' title/description while the measurement window is open confounds the matched GSC readout; fix: check that closeout job's status before touching their metadata.
 - Three pinned counters must move together when a route family is added or its page count changes, or CI fails far from the edit: `tests/sitemap.spec.ts` → `expectedSitemapUrlCount()` (exact `<loc>` count), `tests/architecture-correction.spec.ts` → the `[data-testid="more-services"] a` link count, and `scripts/test-ci-runtime-contract.mjs` → the `Fresh-build baseline: N generated pages` regex that pins AGENTS.md; fix: update all three in the same commit and re-derive the numbers from `dist/`.
+- `verified: true` in `src/data/banks.ts` is a claim about evidence, not about having a receipt: a record whose 2026-09-18 audit verdict was NO_SUPPORT / SITE_BLOCKED must stay `verified: false` with no `lastVerified`, otherwise its `/missed-call/`, `/mini-statement/` and `/sms-banking/` pages print a verification date nobody earned; fix: do an actual official page read (the way hsbc's live `hsbc.bank.in/help/contact/` was read) and flip the flag + date together — `tests/verification-audit.spec.ts` pins the 16-slug no-evidence class and the 63-record `verified:true` count.
 
 ## Commands
 ```bash
@@ -71,6 +72,11 @@ Bank missed-call numbers sourced from:
 - RBI financial education materials
 - Public domain banking directories
 Last verified: 2026-09-18
+
+`verified: true` means an official page read or the multi-aggregator corroboration the 2026-07-20
+audit used (63 of 79 records). The 16 records whose 2026-09-18 verdict was NO_SUPPORT / SITE_BLOCKED
+stay `verified: false` with no `lastVerified` and a receipt documenting the attempt — see the
+landmine above before flipping one.
 
 ## Local Testing
 Playwright's `webServer` reuses an existing server on port 4321 (`reuseExistingServer: !CI`): a manually started `serve dist` makes a local test run skip `npm run build` and assert against a stale `dist/`. Stop the manual server (or rebuild `dist/`) before running `npx playwright test` locally.

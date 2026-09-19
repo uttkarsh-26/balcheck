@@ -42,9 +42,20 @@ test.describe('missed-call route inventory', () => {
     }
   });
 
-  test('every missed-call bank carries a verification flag in the data', () => {
+  test('every missed-call bank carries a provenance decision in the data', () => {
+    // A page exists for every bank whose balance number is a dedicated missed-call
+    // line (balanceMode drives the route family), but the page may only *claim*
+    // verification when the record has the evidence for it: verified:true with a
+    // source + date, or verified:false with a receipt documenting the failed audit
+    // attempt and no date at all (the page then prints "तिथि दर्ज नहीं").
+    // Stamping a verification date on a record nobody verified is the failure mode.
     for (const bank of missedCallBanks) {
-      expect(bank.verified, `${bank.slug} must be verified before it gets a page`).toBe(true);
+      expect(bank.verificationSource, `${bank.slug}: no provenance recorded`).toBeTruthy();
+      if (bank.verified) {
+        expect(bank.lastVerified, `${bank.slug}: verified but no ISO date`).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      } else {
+        expect(bank.lastVerified, `${bank.slug}: unverified record carries a verification date`).toBeUndefined();
+      }
     }
   });
 });

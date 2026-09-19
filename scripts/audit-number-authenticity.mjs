@@ -219,14 +219,30 @@ function checkMissedCallEqualsCare(banks) {
 function checkProvenance(banks) {
   const warns = [];
   let ok = 0;
+  let documentedUnverified = 0;
+  let failed = 0;
   let missingSource = 0;
   let stale = 0;
   const ref = new Date(`${AUDIT_DATE}T00:00:00Z`);
   for (const b of banks) {
+    const hasReceipt = Boolean(b.verificationSource);
+    // A receipt is not a verification. A record whose audit verdict found no
+    // evidence (NO_SUPPORT / SITE_BLOCKED) is expected to be verified:false and
+    // to carry NO lastVerified — its receipt documents the failed attempt, and
+    // its pages must not print a verification date. Counting that honest state
+    // as a problem ("verified is not true") would push future runs to stamp a
+    // verification date on records nobody verified.
+    if (b.verified !== true) {
+      if (hasReceipt) documentedUnverified += 1;
+      else {
+        failed += 1;
+        warns.push(`${b.slug}: verified is not true and no verificationSource documents the attempt`);
+      }
+      continue;
+    }
     const problems = [];
-    if (b.verified && !b.verificationSource) problems.push('verified:true but no verificationSource');
-    if (b.verified && !b.lastVerified) problems.push('verified:true but no lastVerified');
-    if (!b.verified) problems.push('verified is not true');
+    if (!hasReceipt) problems.push('verified:true but no verificationSource');
+    if (!b.lastVerified) problems.push('verified:true but no lastVerified');
     if (b.lastVerified) {
       const days = Math.round((ref - new Date(`${b.lastVerified}T00:00:00Z`)) / 86400000);
       if (Number.isFinite(days) && days > STALE_DAYS) {
@@ -234,16 +250,18 @@ function checkProvenance(banks) {
         stale += 1;
       }
     }
-    if (b.verificationSource && b.lastVerified && b.verified) {
-      ok += 1;
-    } else if (problems.length) {
+    if (problems.length) {
+      failed += 1;
       if (!b.verificationSource) missingSource += 1;
       warns.push(`${b.slug}: ${problems.join('; ')}`);
+    } else {
+      ok += 1;
     }
   }
-  record('4', 'provenance-and-staleness', ok, banks.length - ok, warns.slice(0, 12).concat(warns.length > 12 ? [`... +${warns.length - 12} more`] : []), [
+  record('4', 'provenance-and-staleness', ok + documentedUnverified, failed, warns.slice(0, 12).concat(warns.length > 12 ? [`... +${warns.length - 12} more`] : []), [
+    `${documentedUnverified} records are verified:false with a receipt documenting the audit attempt (NO_SUPPORT / SITE_BLOCKED) — a receipt is not a verification`,
     `${missingSource} records claim verified:true with no verificationSource; ${stale} records older than ${STALE_DAYS} days`,
-    `lastVerified present on ${banks.filter((b) => b.lastVerified).length}/${banks.length} records`,
+    `lastVerified present on ${banks.filter((b) => b.lastVerified).length}/${banks.length} records; verified:true on ${banks.filter((b) => b.verified === true).length}/${banks.length}`,
   ]);
 }
 
