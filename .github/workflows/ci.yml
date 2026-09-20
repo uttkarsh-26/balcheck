@@ -64,6 +64,9 @@ jobs:
       - name: Verify sitemap URLs self-canonicalise
         run: node scripts/verify-sitemap-canonical.mjs
 
+      - name: Verify legacy redirect map
+        run: node scripts/test-legacy-redirects.mjs
+
       - name: Run tests
         run: npx playwright test --project=chromium
 

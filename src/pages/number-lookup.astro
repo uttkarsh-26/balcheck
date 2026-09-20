@@ -359,6 +359,11 @@ const lineLabel = (entry: { kind: LineKind; missedCallMode: boolean }) => {
     // build-time JSON index (bank data committed in the repo), never from user
     // input — the typed value is only used as a match key. String fields are
     // additionally passed through escapeHtml() as defense in depth.
+    // Hrefs are assembled from segments rather than written as template
+    // literals: a literal "/bank/${e.slug}/" inside served HTML is a URL
+    // Googlebot's parser harvests and crawls (it did — see legacy-redirects.mjs).
+    const pageHref = (...segments: string[]) => `/${segments.join('/')}/`;
+
     const cards = matches.map(e => `
       <div class="rounded-xl border border-gray-200 p-4 mb-3" data-testid="match-card">
         <div class="flex items-start justify-between gap-3 mb-2">
@@ -372,9 +377,9 @@ const lineLabel = (entry: { kind: LineKind; missedCallMode: boolean }) => {
           📞 ${escapeHtml(e.number)}
         </a>
         <div class="flex flex-wrap gap-2 text-sm">
-          <a href="/bank/${e.slug}/" class="text-brand-700 font-medium hover:underline">${escapeHtml(e.shortName)} bank page →</a>
-          ${e.missedCallMode && e.kind === 'balance' ? `<a href="/missed-call/${e.slug}/" class="text-brand-700 font-medium hover:underline">Missed-call तरीका →</a>` : ''}
-          <a href="/customer-care/${e.slug}/" class="text-brand-700 font-medium hover:underline">Customer care →</a>
+          <a href="${pageHref('bank', e.slug)}" class="text-brand-700 font-medium hover:underline">${escapeHtml(e.shortName)} bank page →</a>
+          ${e.missedCallMode && e.kind === 'balance' ? `<a href="${pageHref('missed-call', e.slug)}" class="text-brand-700 font-medium hover:underline">Missed-call तरीका →</a>` : ''}
+          <a href="${pageHref('customer-care', e.slug)}" class="text-brand-700 font-medium hover:underline">Customer care →</a>
         </div>
       </div>`).join('');
 
