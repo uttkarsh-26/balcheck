@@ -97,7 +97,8 @@ test.describe('2026-07-20 verification audit regression', () => {
     expect(axis!.missedCall).toBe('18004195959');
     expect(axis!.missedCall).not.toBe('8422992272');
     // The old wrong number must not appear anywhere in the axis record
-    expect(axis!.notes).toContain('CORRECTED');
+    expect(axis!.notes).not.toContain('8422992272');
+    expect(axis!.notes).toContain('axis.bank.in');
   });
 
   test('Punjab & Sind Bank uses the current official customer-care number', () => {

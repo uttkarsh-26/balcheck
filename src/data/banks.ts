@@ -276,7 +276,7 @@ const bankData: BankInput[] = [
     customerCare: '1800-209-5577',
     website: 'https://www.axisbank.com',
     verified: true,
-    notes: 'CORRECTED 2026-07-20: Previous number 8422992272 does NOT appear on official axis.bank.in missed-call page. Official balance enquiry: 18004195959 (English) / 18004195858 (Hindi). Mini statement: 18004196969 (English) / 18004196868 (Hindi). Confirmed by cleartax.in + wishfin.com + bankbazaar.com.',
+    notes: 'Axis Bank balance enquiry number: 18004195959 (English) / 18004195858 (Hindi). Mini statement: 18004196969 (English) / 18004196868 (Hindi). Source: axis.bank.in/bank-smart/missed-call-service (official page, 2026-07-20).',
     verificationSource: "https://www.axis.bank.in/bank-smart/missed-call-service (official page: 'Dial 1800 419 5959 to get your Account Balance', 2026-07-20)",
     lastVerified: '2026-07-20',
   },
