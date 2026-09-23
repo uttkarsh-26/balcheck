@@ -51,9 +51,14 @@ for (const bank of banks) {
     });
 
     test('renders bank name and balance-enquiry number', async ({ page }) => {
-      const expectedH1 = bank.slug === 'psb'
-        ? 'Punjab & Sind Bank (PSB) बैलेंस चेक नंबर'
-        : bank.nameHindi;
+      // Demand-matched H1 overrides live in src/pages/bank/[slug].astro (h1Overrides);
+      // keep this map in step with them — a new override without a matching entry
+      // here fails CI on the wrong assertion.
+      const h1Overrides: Record<string, string> = {
+        psb: 'Punjab & Sind Bank (PSB) बैलेंस चेक नंबर',
+        axis: `Axis Bank Balance Enquiry Number ${bank.missedCall}`,
+      };
+      const expectedH1 = h1Overrides[bank.slug] ?? bank.nameHindi;
       await expect(page.getByRole('heading', { level: 1, name: expectedH1 })).toBeVisible();
       await expect(page.locator('body')).toContainText(bank.missedCall);
     });
