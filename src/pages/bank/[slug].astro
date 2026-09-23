@@ -209,14 +209,18 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
     title: `Indian Overseas Bank Balance Check Number ${bank.missedCall}`,
     description: `IOB balance check number ${bank.missedCall}. आधिकारिक missed call service: registered mobile से call करें, SMS में तुरंत बैलेंस पाएं। मुफ़्त 24×7।`,
   },
-  // 2,705 impressions/30d on 'uttar pradesh gramin bank balance enquiry
-  // whatsapp number' variants (plus 148 on the MP variant) at pos 8.3 with ~0
-  // clicks — the snippet promised a number but the page never answered the
-  // WhatsApp intent. Title now names the WhatsApp reality and keeps the
-  // missed-call number; description carries the checked date.
+  // 28d sc-domain pull: /bank/up-gramin/ is the highest-impression page on the
+  // site (142,664 imp @ pos 6.3, 1,227 clicks, 0.86% CTR) and its dominant
+  // cluster is the balance-check intent — 'uttar pradesh gramin bank balance
+  // check number' 17,208 imp / 81 clicks (0.47%) and 'up gramin bank balance
+  // check number' 11,418 / 38 (0.33%), both pos 5.8-6.2 — while the 2026-09-18
+  // title answered only the 3,143-impression WhatsApp side cluster, so the
+  // snippet never carried the words the majority query is written in. The
+  // missed-call number is CONFIRMED_OFFICIAL (upgb.bank.in, audit 2026-09-18);
+  // the WhatsApp fact stays in the description tail and the on-page FAQ.
   'up-gramin': {
-    title: `Uttar Pradesh Gramin Bank WhatsApp Number नहीं | ${bank.missedCall}`,
-    description: `UPGB की आधिकारिक वेबसाइट पर WhatsApp बैंकिंग नहीं है (18-09-2026 जांचा)। बैलेंस के लिए ${bank.missedCall} पर मिस्ड कॉल दें — SMS में तुरंत बैलेंस।`,
+    title: `Uttar Pradesh Gramin Bank Balance Check Number ${bank.missedCall}`,
+    description: `UPGB (उत्तर प्रदेश ग्रामीण बैंक) का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} — मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। WhatsApp बैंकिंग उपलब्ध नहीं।`,
   },
   // 25,424 impressions, 93% Latin queries @ 0.07% CTR — the worst CTR of any
   // page with volume on the site — while the 6% Devanagari impressions convert

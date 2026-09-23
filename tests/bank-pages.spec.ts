@@ -15,7 +15,7 @@ const ctrTitles: Record<string, string> = {
   maharashtra: 'Bank of Maharashtra Balance Check Number 9833335555',
   icici: 'ICICI Bank Balance Check Number 9594612612',
   axis: 'Axis Bank Balance Enquiry Number 18004195959 | Missed Call',
-  'up-gramin': 'Uttar Pradesh Gramin Bank WhatsApp Number नहीं | 9986454440',
+  'up-gramin': 'Uttar Pradesh Gramin Bank Balance Check Number 9986454440',
   psb: 'Punjab & Sind Bank Balance Check Number 7039035156 | PSB',
   iob: 'Indian Overseas Bank Balance Check Number 9210622122',
   'central-bank': 'सेंट्रल बैंक बैलेंस चेक नंबर 9555244442 | Missed Call',
@@ -29,10 +29,11 @@ const ctrTitles: Record<string, string> = {
 };
 
 const sprint3Banks = new Set(['canara', 'psb', 'boi']);
-// up-gramin left this set 2026-09-18: its top query cluster is the WhatsApp
-// intent (2,705 impr, pos 8.3, ~0 clicks), so the title now leads with the
-// WhatsApp answer + missed-call number instead of the generic English phrase.
-const englishAnswerTitleBanks = new Set(['psb']);
+// up-gramin rejoined this set 2026-09-24: its dominant cluster is the balance
+// check intent ('uttar pradesh gramin bank balance check number' 17,208 imp /
+// 81 clicks, 'up gramin bank balance check number' 11,418 / 38), far larger
+// than the 3,143-impression WhatsApp side cluster the 09-18 title served.
+const englishAnswerTitleBanks = new Set(['psb', 'up-gramin']);
 const exactQueryTitleBanks = new Set(['axis']);
 
 // Scalable-default contract: the missed-call template must still render for a
