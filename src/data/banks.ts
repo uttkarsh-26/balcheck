@@ -783,7 +783,7 @@ const bankData: BankInput[] = [
     customerCare: '1800-10-25250',
     website: 'https://www.kvgbank.com',
     verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
-    verificationSource: 'Official re-check 2026-09-26: read https://www.kvgbank.com/contact-us, which 302-redirects to https://karnatakagb.bank.in/contact-us and then to the successor site\'s /404 page (live 200); that official page labels 1800 10 25250 as Helpline and prints it as the footer Toll Free Number; the missed call number is not published there; customerCare was 1800-425-1100, corrected to 1800-10-25250 | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
+    verificationSource: 'Official re-check 2026-09-26: KVGB has no site of its own - https://www.kvgbank.com/ 302-redirects to the successor https://karnatakagb.bank.in/ (Gazette S.O. 1629(E), amalgamated w.e.f. 2025-05-01) and kvgbank.com/contact-us lands on the successor 404 page; read https://karnatakagb.bank.in/contact (live 200), where 1800 10 25250 appears as the site header Helpline, under Toll free number, and as the footer Toll Free Number (same digits as the listed Customer support number 1800 102 5250); the missed call number is not published on any official page and the withdrawn 1800-425-1100 never appeared on the KVGB contact page in any archived snapshot; customerCare was 1800-425-1100, corrected to 1800-10-25250',
   },
   {
     slug: 'baroda-up-gramin',

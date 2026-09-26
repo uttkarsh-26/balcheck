@@ -24,7 +24,7 @@ remain an open product decision.
 | --- | --- | --- |
 | `apgb` | OBSOLETE_ENTITY + OFFICIAL_CONTRADICTS | https://apgb.bank.in/ (successor Andhra Pradesh Grameena Bank; live 200) |
 | `pragathi-krishna` | OBSOLETE_ENTITY | https://apgb.bank.in/ (successor of the amalgamated bank; live 200) |
-| `kvgb` | OFFICIAL_CONTRADICTS | https://www.kvgbank.com/contact-us → 302 → https://karnatakagb.bank.in/contact-us → successor's /404 page (live 200), which labels `1800 10 25250` "Helpline" and prints it as the footer "Toll Free Number" |
+| `kvgb` | OFFICIAL_CONTRADICTS | KVGB has no site of its own (`www.kvgbank.com` → 302 → successor `karnatakagb.bank.in`; `/contact-us` → successor `/404`). Read https://karnatakagb.bank.in/contact (live 200): `1800 10 25250` is the site header Helpline, the `Toll free number`, and the footer `Toll Free Number` — the same digits as the listed Customer support number `1800 102 5250`. Gazette S.O. 1629(E) confirms the amalgamation w.e.f. 2025-05-01. `1800-425-1100` appears on no live page and in no archived KVGB contact snapshot |
 | `fincare` | OBSOLETE_ENTITY | https://www.au.bank.in/au-small-finance-bank-and-fincare-small-finance-bank-merger |
 | `tamil-nadu-grama` | NO_EVIDENCE | https://tngb.bank.in/contact + https://tngb.bank.in/ (live 200) |
 | `equitas` | NO_EVIDENCE | https://www.equitasbank.com/ (contact routes answer 404, no toll-free digits on-page) |

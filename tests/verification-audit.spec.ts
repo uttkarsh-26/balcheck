@@ -160,8 +160,9 @@ const NUMBER_SHAPES: { name: string; re: RegExp }[] = [
  * idfc-first and hsbc, so it must never reappear here.
  */
 // 18001025250 is shared by kvgb + karnataka-grameena on purpose: Karnataka Vikas Grameena Bank
-// amalgamated into Karnataka Gramin Bank (mergers.ts oldSlug 'karnataka-vikas'), and
-// kvgbank.com/contact-us publishes that same official Helpline — see
+// amalgamated into Karnataka Grameena Bank (mergers.ts oldSlug 'karnataka-vikas', Gazette
+// S.O. 1629(E)), so kvgb now carries the successor's own published helpline; the digits are
+// read at https://karnatakagb.bank.in/contact (kvgbank.com only 302-redirects there) — see
 // docs/audits/bank-number-recheck-2026-09-26.md.
 const SHARED_NUMBER_ALLOWLIST = ['9015800700', '9986454440', '18001807777', '18005327444', '18001025250'];
 
