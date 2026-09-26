@@ -368,7 +368,7 @@ const bankData: BankInput[] = [
     customerCare: '1800-419-3401',
     website: 'https://www.dbs.com/in',
     verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
-    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured; number NOT officially confirmed, 2026-09-18)',
+    verificationSource: 'Official re-check 2026-09-26: read https://www.dbs.com/in/ (contact routes 404; no matching digits on-page); recorded number not published there | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
   },
   {
     slug: 'dcb',
@@ -546,7 +546,7 @@ const bankData: BankInput[] = [
     website: 'https://www.equitasbank.com',
     verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
     notes: 'Equitas SFB does not publish a dedicated missed-call balance number; use customer care 1800-303-1500 or Equitas mobile banking.',
-    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured; number NOT officially confirmed, 2026-09-18)',
+    verificationSource: 'Official re-check 2026-09-26: read https://www.equitasbank.com/ (contact routes answer 404, no toll-free digits on-page); recorded number not published there | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
   },
   {
     slug: 'jana',
@@ -573,7 +573,7 @@ const bankData: BankInput[] = [
     website: 'https://www.suryodaybank.com',
     verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
     notes: 'Balance missed call: 1800-266-7711; customer care: 1800-266-6611 (Source: suryodaybank.com contact page).',
-    verificationSource: 'site unreachable to automation (SSLError on www.suryodaybank.com, audit 2026-09-18); third-party hosts: bankbazaar.com, codeforbanks.com, paisabazaar.com - no official on-page evidence, number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    verificationSource: 'Official re-check 2026-09-26: read site unreachable to automation (TLS handshake fails: unsafe legacy renegotiation disabled); recorded number not published there | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
   },
   {
     slug: 'esaf',
@@ -586,7 +586,7 @@ const bankData: BankInput[] = [
     website: 'https://www.esafbank.com',
     verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
     notes: 'Balance: 8592866639; Mini statement: 8593866639 (Source: esaf.bank.in/support).',
-    verificationSource: 'site unreachable to automation (non-200 responses on www.esafbank.com, audit 2026-09-18); third-party hosts: paisabazaar.com - no official on-page evidence, number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    verificationSource: 'Official re-check 2026-09-26: read https://www.esafbank.com/contact-us (live 200); recorded number not published there | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
   },
   {
     slug: 'fincare',
@@ -596,10 +596,10 @@ const bankData: BankInput[] = [
     category: 'Small Finance Bank',
     missedCall: '18001201200',
     customerCare: '1800-309-9001',
-    website: 'https://www.fincarebank.com',
+    website: 'https://www.au.bank.in',
     verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
     notes: 'Fincare merged into AU SFB; balance/customer care: 1800-120-1200 / 1800-26-66677 (Source: au.bank.in merger page).',
-    verificationSource: 'site unreachable to automation (ConnectionError on www.fincarebank.com, audit 2026-09-18); third-party hosts: bankbazaar.com - no official on-page evidence, number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    verificationSource: 'Official re-check 2026-09-26: read https://www.au.bank.in/au-small-finance-bank-and-fincare-small-finance-bank-merger; recorded number not published there | ENTITY DEFUNCT: Fincare SFB amalgamated into AU Small Finance Bank w.e.f. 2024-04-01 (RBI press release 57445); the recorded website domain no longer resolves. | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
   },
   {
     slug: 'ne-sfb',
@@ -687,7 +687,7 @@ const bankData: BankInput[] = [
     website: 'https://www.sc.com/in',
     verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
     notes: 'Standard Chartered India does not offer a missed-call balance service; contact PhoneBanking: 1800-12-20040 (Source: sc.com/in).',
-    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured; number NOT officially confirmed, 2026-09-18)',
+    verificationSource: 'Official re-check 2026-09-26: read https://www.sc.com/in/bank-with-us/phone-banking/ (live 200); recorded number not published there | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
   },
   {
     slug: 'deutsche',
@@ -700,7 +700,7 @@ const bankData: BankInput[] = [
     website: 'https://www.db.com/india',
     verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
     notes: 'PhoneBanking / balance: 1800-123-6601 or 1860-266-6601 (Source: db.com/india contact).',
-    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured; number NOT officially confirmed, 2026-09-18)',
+    verificationSource: 'Official re-check 2026-09-26: read https://www.db.com/india/en/contact.htm (live 200, carries no phone numbers); recorded number not published there | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
   },
 
   // === Cooperative Banks ===
@@ -715,7 +715,7 @@ const bankData: BankInput[] = [
     website: 'https://www.saraswatbank.com',
     verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
     notes: 'Balance: 9022211100; Mini statement: 9223501111 (Source: saraswatbank.com).',
-    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured; number NOT officially confirmed, 2026-09-18)',
+    verificationSource: 'Official re-check 2026-09-26: read https://www.saraswatbank.com/ (contact route 404/empty); recorded number not published there | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
   },
   {
     slug: 'cosmos',
@@ -769,9 +769,9 @@ const bankData: BankInput[] = [
     category: 'Regional Rural Bank',
     missedCall: '9289222024',
     customerCare: '1800-123-6235',
-    website: 'https://www.apgb.co.in',
+    website: 'https://apgb.bank.in',
     verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
-    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured; number NOT officially confirmed, 2026-09-18)',
+    verificationSource: 'Official re-check 2026-09-26: read https://apgb.bank.in/ (successor Andhra Pradesh Grameena Bank; live 200); recorded number not published there | ENTITY DEFUNCT: APGVB was amalgamated into Andhra Pradesh Grameena Bank w.e.f. 2025-05-01 (Gazette S.O. 1625(E)); successor publishes missed-call 9090290912 and toll-free 1800 425 6708. | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
   },
   {
     slug: 'kvgb',
@@ -783,7 +783,7 @@ const bankData: BankInput[] = [
     customerCare: '1800-425-1100',
     website: 'https://www.kvgbank.com',
     verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
-    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured; number NOT officially confirmed, 2026-09-18)',
+    verificationSource: 'Official re-check 2026-09-26: read https://www.kvgbank.com/contact-us (live 200); recorded number not published there | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
   },
   {
     slug: 'baroda-up-gramin',
@@ -861,9 +861,9 @@ const bankData: BankInput[] = [
     category: 'Regional Rural Bank',
     missedCall: '9015800700',
     customerCare: '08392-236444',
-    website: 'https://pragathikrishnabank.com',
+    website: 'https://apgb.bank.in',
     verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
-    verificationSource: 'site unreachable to automation (ConnectionError on pragathikrishnabank.com, audit 2026-09-18) - no official on-page evidence, number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
+    verificationSource: 'Official re-check 2026-09-26: read https://apgb.bank.in/ (successor of the amalgamated bank; live 200); recorded number not published there | ENTITY DEFUNCT: amalgamated into Andhra Pradesh Grameena Bank w.e.f. 2025-05-01 (Gazette S.O. 1625(E)); the recorded website domain no longer resolves. | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
   },
   {
     slug: 'baroda-rajasthan',
@@ -933,7 +933,7 @@ const bankData: BankInput[] = [
     customerCare: '0360-2230051',
     website: 'https://aprb.bank.in',
     verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
-    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured; number NOT officially confirmed, 2026-09-18)',
+    verificationSource: 'Official re-check 2026-09-26: read https://aprb.bank.in/contact (live 200); recorded number not published there | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
   },
   // === New RRBs — verified from official bank websites (2026-07-10) ===
   {
@@ -1014,7 +1014,7 @@ const bankData: BankInput[] = [
     customerCare: '0389-2333024',
     website: 'https://mizoramruralbank.in',
     verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
-    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured; number NOT officially confirmed, 2026-09-18)',
+    verificationSource: 'Official re-check 2026-09-26: read https://mizoramruralbank.in/ (live 200, no numbers; /contact-us 404); recorded number not published there | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
   },
   {
     slug: 'telangana-grameena',
@@ -1039,7 +1039,7 @@ const bankData: BankInput[] = [
     customerCare: '9289202222',
     website: 'https://tngb.bank.in',
     verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
-    verificationSource: 'docs/audits/bank-number-authenticity-2026-09-18.md (audit section 2 verdict NO_SUPPORT - no on-page, index or third-party evidence captured; number NOT officially confirmed, 2026-09-18)',
+    verificationSource: 'Official re-check 2026-09-26: read https://tngb.bank.in/contact + https://tngb.bank.in/ (live 200); recorded number not published there | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
   },
   {
     slug: 'up-gramin',

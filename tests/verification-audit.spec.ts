@@ -181,6 +181,7 @@ const UNCONFIRMED_NO_EVIDENCE = [
 
 /** Receipt wording that marks a record as "checked, nothing found". */
 const NO_EVIDENCE_RECEIPT_MARKERS = [
+  'Official re-check 2026-09-26',
   'no on-page, index or third-party evidence captured',
   'site unreachable to automation',
 ];
