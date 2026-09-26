@@ -24,12 +24,12 @@ remain an open product decision.
 | --- | --- | --- |
 | `apgb` | OBSOLETE_ENTITY + OFFICIAL_CONTRADICTS | https://apgb.bank.in/ (successor Andhra Pradesh Grameena Bank; live 200) |
 | `pragathi-krishna` | OBSOLETE_ENTITY | https://apgb.bank.in/ (successor of the amalgamated bank; live 200) |
-| `kvgb` | OFFICIAL_CONTRADICTS | https://www.kvgbank.com/contact-us (live 200) |
+| `kvgb` | OFFICIAL_CONTRADICTS | https://www.kvgbank.com/contact-us → 302 → https://karnatakagb.bank.in/contact-us → successor's /404 page (live 200), which labels `1800 10 25250` "Helpline" and prints it as the footer "Toll Free Number" |
 | `fincare` | OBSOLETE_ENTITY | https://www.au.bank.in/au-small-finance-bank-and-fincare-small-finance-bank-merger |
 | `tamil-nadu-grama` | NO_EVIDENCE | https://tngb.bank.in/contact + https://tngb.bank.in/ (live 200) |
 | `equitas` | NO_EVIDENCE | https://www.equitasbank.com/ (contact routes answer 404, no toll-free digits on-page) |
 | `ippb` | OFFICIAL_CONTRADICTS | https://www.ippbonline.com/ (official help lines differ from the recorded number) |
-| `esaf` | OFFICIAL_CONTRADICTS | https://www.esafbank.com/contact-us (live 200) |
+| `esaf` | OFFICIAL_CONTRADICTS | https://www.esafbank.com/contact-us → 302 → https://www.esaf.bank.in/contact-us/ (live 200), CONTACT CENTRE block |
 | `standard-chartered` | NO_EVIDENCE | https://www.sc.com/in/bank-with-us/phone-banking/ (live 200) |
 | `dbs` | NO_EVIDENCE | https://www.dbs.com/in/ (contact routes 404; no matching digits on-page) |
 | `deutsche` | NO_EVIDENCE | https://www.db.com/india/en/contact.htm (live 200, carries no phone numbers) |
@@ -55,6 +55,6 @@ remain an open product decision.
 | record | published here | official page carries |
 | --- | --- | --- |
 | apgb | customerCare `1800-123-6235` | left unchanged: the only near match, `1800 123 6230`, is labelled **ATM card** on the successor's page, not customer care — the successor's real support lines (toll-free `1800 425 6708`, missed call `9090290912`) are the ones the receipt now publishes |
-| kvgb | customerCare `1800-425-1100` | **CORRECTED 2026-09-26 → `1800-10-25250`** (official "Helpline" / "Toll Free Number"); ATM `1800 103 8210` |
+| kvgb | customerCare `1800-425-1100` | **CORRECTED 2026-09-26 → `1800-10-25250`** — the successor's own page labels it "Helpline" and footer "Toll Free Number"; also `1800 102 5250` / `1800 103 8210` as Customer Support Numbers, `1800 425 97777` as the SLBC scheme helpline (neither is customer care). `www.kvgbank.com` itself 302-redirects to the successor's domain, so the old domain no longer serves a contact page of its own |
 | ippb | customerCare `1800-425-8900` | left unchanged: the portal publishes `155299` / `033-22029000` ("call us") and `1800 8899 860` (fraud line only), so no confidently-labelled customer-care replacement exists |
-| esaf | customerCare `1800-303-1201` | **CORRECTED 2026-09-26 → `1800-103-3723`** (official "CONTACT CENTRE"); also `080-4552-0100` |
+| esaf | customerCare `1800-303-1201` | **CORRECTED 2026-09-26 → `1800-103-3723`** — official CONTACT CENTRE block reads "1-800-103-3723 which is (1-800-103 - ESAF) - Toll free"; `080-4552-0100` is labelled a paid line for NRI customers. The site moved to `www.esaf.bank.in` and the old domain 302-redirects |

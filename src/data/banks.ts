@@ -586,7 +586,7 @@ const bankData: BankInput[] = [
     website: 'https://www.esafbank.com',
     verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
     notes: 'Balance: 8592866639; Mini statement: 8593866639 (Source: esaf.bank.in/support).',
-    verificationSource: 'Official re-check 2026-09-26: read https://www.esafbank.com/contact-us (live 200); missed call number not published there; customerCare was 1800-303-1201, corrected to 1800-103-3723 (official CONTACT CENTRE) | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
+    verificationSource: 'Official re-check 2026-09-26: read https://www.esafbank.com/contact-us, which 302-redirects to https://www.esaf.bank.in/contact-us/ (live 200); that page\'s CONTACT CENTRE block lists 1-800-103-3723 (labelled 1-800-103 - ESAF, toll free); the missed call number is not published there; customerCare was 1800-303-1201, corrected to 1800-103-3723 | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
   },
   {
     slug: 'fincare',
@@ -783,7 +783,7 @@ const bankData: BankInput[] = [
     customerCare: '1800-10-25250',
     website: 'https://www.kvgbank.com',
     verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
-    verificationSource: 'Official re-check 2026-09-26: read https://www.kvgbank.com/contact-us (live 200); missed call number not published there; customerCare was 1800-425-1100, corrected to 1800-10-25250 (official Helpline) | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
+    verificationSource: 'Official re-check 2026-09-26: read https://www.kvgbank.com/contact-us, which 302-redirects to https://karnatakagb.bank.in/contact-us and then to the successor site\'s /404 page (live 200); that official page labels 1800 10 25250 as Helpline and prints it as the footer Toll Free Number; the missed call number is not published there; customerCare was 1800-425-1100, corrected to 1800-10-25250 | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
   },
   {
     slug: 'baroda-up-gramin',
