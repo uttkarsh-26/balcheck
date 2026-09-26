@@ -159,7 +159,11 @@ const NUMBER_SHAPES: { name: string; re: RegExp }[] = [
  * `18001088222` is deliberately absent: FIX-P3-1 removed that duplicate from both
  * idfc-first and hsbc, so it must never reappear here.
  */
-const SHARED_NUMBER_ALLOWLIST = ['9015800700', '9986454440', '18001807777', '18005327444'];
+// 18001025250 is shared by kvgb + karnataka-grameena on purpose: Karnataka Vikas Grameena Bank
+// amalgamated into Karnataka Gramin Bank (mergers.ts oldSlug 'karnataka-vikas'), and
+// kvgbank.com/contact-us publishes that same official Helpline — see
+// docs/audits/bank-number-recheck-2026-09-26.md.
+const SHARED_NUMBER_ALLOWLIST = ['9015800700', '9986454440', '18001807777', '18005327444', '18001025250'];
 
 /**
  * The 2026-09-18 audit found no evidence at all for these records (verdict

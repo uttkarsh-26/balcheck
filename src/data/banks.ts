@@ -582,11 +582,11 @@ const bankData: BankInput[] = [
     shortName: 'ESAF',
     category: 'Small Finance Bank',
     missedCall: '8592866639',
-    customerCare: '1800-303-1201',
+    customerCare: '1800-103-3723',
     website: 'https://www.esafbank.com',
     verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
     notes: 'Balance: 8592866639; Mini statement: 8593866639 (Source: esaf.bank.in/support).',
-    verificationSource: 'Official re-check 2026-09-26: read https://www.esafbank.com/contact-us (live 200); recorded number not published there | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
+    verificationSource: 'Official re-check 2026-09-26: read https://www.esafbank.com/contact-us (live 200); missed call number not published there; customerCare was 1800-303-1201, corrected to 1800-103-3723 (official CONTACT CENTRE) | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
   },
   {
     slug: 'fincare',
@@ -780,10 +780,10 @@ const bankData: BankInput[] = [
     shortName: 'KVGB',
     category: 'Regional Rural Bank',
     missedCall: '09278700859',
-    customerCare: '1800-425-1100',
+    customerCare: '1800-10-25250',
     website: 'https://www.kvgbank.com',
     verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
-    verificationSource: 'Official re-check 2026-09-26: read https://www.kvgbank.com/contact-us (live 200); recorded number not published there | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
+    verificationSource: 'Official re-check 2026-09-26: read https://www.kvgbank.com/contact-us (live 200); missed call number not published there; customerCare was 1800-425-1100, corrected to 1800-10-25250 (official Helpline) | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
   },
   {
     slug: 'baroda-up-gramin',
