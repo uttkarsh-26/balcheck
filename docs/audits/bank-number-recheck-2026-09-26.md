@@ -13,8 +13,12 @@ Corrections made: `kvgb` customerCare → `1800-10-25250`, `esaf` customerCare �
 
 `kvgb.customerCare` is now `1800-10-25250`, the same value `karnataka-grameena.customerCare` already carries. This is a real sponsor-line duplicate, not a copy error: Karnataka Vikas Grameena Bank amalgamated into Karnataka Gramin Bank (already modelled in `mergers.ts` as `karnataka-vikas` → `karnataka-grameena`), and the successor's own contact page publishes that Helpline. The duplicate is therefore declared in `SHARED_NUMBER_ALLOWLIST` in `tests/verification-audit.spec.ts`. Side effect: the number-lookup index drops from 139 to 138 distinct keys, because the two records collapse onto one line. The `/number-lookup/` page derives that count from the data, so it renders the new value.
 
-No new page was created and no route changed by this work. Four records publish a number that the
-official page contradicts, and three records describe entities that no longer exist.
+No new page was created and no route changed by this work. Of the four records whose number the
+official page contradicts, two are corrected below (`kvgb`, `esaf`) and two are deliberately left as
+they are (`apgb`, `ippb`) because no confidently-labelled official replacement exists — the receipt on
+each page now carries the successor's or the bank's real lines instead. Three records describe
+entities that no longer exist; their website links are repaired but the missing `mergers.ts` records
+remain an open product decision.
 
 | record | verdict | official evidence (read 2026-09-26) |
 | --- | --- | --- |
