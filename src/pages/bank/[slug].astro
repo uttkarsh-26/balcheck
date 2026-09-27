@@ -91,6 +91,10 @@ const h1Overrides: Partial<Record<string, string>> = {
   // (plus 445 @ 6.0 on 'axis bank balance check sms'); the H1 was only the
   // Hindi bank name, so no heading used the words the query is written in.
   axis: `Axis Bank Balance Enquiry Number ${bank.missedCall}`,
+  // 1,936 impr / 7 clicks @ pos 8.4 (28d) on the Airtel Payments Bank cluster;
+  // the H1 was Hindi-only while ~93% of the query demand is Latin — same fix
+  // as axis, applied to the query the users actually type.
+  'airtel-payments': `Airtel Payments Bank Balance Check Number ${bank.missedCall}`,
 };
 if (bank.slug === 'psb') {
   faqs.push(
@@ -295,6 +299,15 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
   idbi: {
     title: `IDBI Bank Balance Check Number ${bank.missedCall} | Missed Call`,
     description: `IDBI Bank balance check number ${bank.missedCall} — आधिकारिक मिस्ड कॉल सेवा। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
+  },
+  // 1,936 impr / 7 clicks (0.36% CTR) @ pos 8.4 on the airtel cluster in 28d
+  // ('airtel payment bank balance check number' 1,052 + 'airtel payments bank
+  // balance check number' 432 + 'airtel bank balance check number' 90 ...) —
+  // ~93% Latin queries while the default title was Devanagari-only, so the
+  // snippet never carried the words the query is written in. Latin phrase leads.
+  'airtel-payments': {
+    title: `Airtel Payments Bank Balance Check Number ${bank.missedCall}`,
+    description: `Airtel Payments Bank balance check number ${bank.missedCall} — आधिकारिक मिस्ड कॉल सेवा। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त।`,
   },
 };
 
