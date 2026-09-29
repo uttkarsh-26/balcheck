@@ -61,5 +61,10 @@ document responses in a real headless Chromium, waits for ads/analytics, and lis
 blocked host:
 
 ```bash
-NODE_PATH=<site>/node_modules node csp-dryrun.js   # scratch harness; prints blocked[] per path
+# The harness lives with the Hermes tooling (one copy, not per-repo):
+#   ~/.hermes/scripts/csp_dryrun.js
+# It needs a repo's Playwright, so point NODE_PATH at any local install:
+cd ~/repos/<this repo> && NODE_PATH=$PWD/node_modules node ~/.hermes/scripts/csp_dryrun.js
 ```
+It prints `blocked[]` per path (directive + blocked URI); iterate the policy until it is empty
+before promoting any enforcing CSP.
