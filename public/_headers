@@ -1,3 +1,25 @@
+# Response security headers for every path on the site.
+#
+# Scope is the subset that cannot break ad delivery or analytics:
+#   - frame-ancestors 'self' / X-Frame-Options: who may frame US (clickjacking).
+#     It does not restrict the ad iframes we embed, so AdSense/Monetag are unaffected.
+#   - object-src 'none', base-uri 'self', form-action 'self': plugin content,
+#     <base> injection, form hijack. No page posts to a third-party origin
+#     (verified against live HTML).
+#   - upgrade-insecure-requests: every asset is already https.
+# A full content CSP (script-src/style-src/connect-src allowlist) is deliberately
+# NOT set: the ad network rotates hosts at runtime (Monetag loaded from 6opo.com
+# while its tag domain is quge5.com; AdSense pulls ep2.adtrafficquality.google),
+# so an enforced allowlist silently kills ad revenue. Verified host inventory for a
+# future rollout: docs/security-headers.md.
+# HSTS is set by the zone-level header rule, not here (one owner per header).
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests
+
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
 
