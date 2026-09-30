@@ -99,3 +99,23 @@ test.describe('balance-enquiry hub page', () => {
     expect(collectionSchema).toBeDefined();
   });
 });
+
+// CTR experiment 2026-10-01: /balance-enquiry/baroda-up-gramin/ is the
+// highest-impression URL on this template (25,970 imp @ pos 7.5, 0.49% CTR,
+// 28d) and its top queries are 'baroda up gramin bank balance enquiry number'
+// (1,671 imp) + 'baroda up gramin bank balance check' (1,644 imp). The title and
+// H1 must carry that exact phrasing; the default shortName-only wording did not.
+test.describe('balance-enquiry CTR snippet contract (baroda-up-gramin)', () => {
+  test('title + H1 lead with the ranking query phrase', async ({ page }) => {
+    await page.goto('/balance-enquiry/baroda-up-gramin/');
+    await expect(page).toHaveTitle(/^Baroda UP Gramin Bank Balance Enquiry Number 9986454440 \| Balance Check/);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'Baroda UP Gramin Bank Balance Enquiry Number'
+    );
+  });
+
+  test('untouched sibling keeps the default template title', async ({ page }) => {
+    await page.goto('/balance-enquiry/up-gramin/');
+    await expect(page).toHaveTitle(/^UPGB Balance Enquiry Number —/);
+  });
+});

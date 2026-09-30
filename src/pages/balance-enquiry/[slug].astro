@@ -23,7 +23,24 @@ const serviceInstruction = isMissedCall
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = `${siteUrl}/balance-enquiry/${bank.slug}/`;
 
-const title = `${bank.shortName} Balance Enquiry Number — ${bank.nameHindi} बैलेंस चेक | BalCheck`;
+// CTR experiment 2026-10-01 (14d kill): /balance-enquiry/baroda-up-gramin/ is the
+// highest-impression URL on this template — 25,970 imp @ pos 7.5, 0.49% CTR (28d
+// sc-domain) — and its top queries are 'baroda up gramin bank balance enquiry
+// number' (1,671 imp) and 'baroda up gramin bank balance check' (1,644 imp), but
+// the default title/H1 said only "Baroda UP", so no heading carried the words
+// 'Gramin Bank' / 'balance check' the query is written in. Same fix as the
+// axis / airtel-payments /bank overrides: the Latin query phrase leads.
+// Number is the successor UPGB's CONFIRMED_OFFICIAL missed-call line
+// (docs/audits/bank-number-authenticity-2026-09-18.md §3.3).
+const seoOverrides: Partial<Record<string, { title: string; h1: string }>> = {
+  'baroda-up-gramin': {
+    title: `Baroda UP Gramin Bank Balance Enquiry Number ${bank.missedCall} | Balance Check`,
+    h1: 'Baroda UP Gramin Bank Balance Enquiry Number',
+  },
+};
+const seoOverride = seoOverrides[bank.slug];
+
+const title = seoOverride?.title ?? `${bank.shortName} Balance Enquiry Number — ${bank.nameHindi} बैलेंस चेक | BalCheck`;
 const description = `${bank.name} (${bank.shortName}) balance enquiry number ${bank.missedCall}। ${serviceInstruction}`;
 
 const faqs = [
@@ -103,7 +120,7 @@ const schema = {
 
     <!-- Header -->
     <div data-testid="balance-enquiry-hero" class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-6">
-      <h1 class="text-2xl font-bold mb-1">{bank.shortName} Balance Enquiry</h1>
+      <h1 class="text-2xl font-bold mb-1">{seoOverride?.h1 ?? `${bank.shortName} Balance Enquiry`}</h1>
       <p class="text-brand-100 text-sm">{bank.nameHindi} — {isMissedCall ? 'मिस्ड कॉल से बैलेंस चेक करें' : 'Customer Care / IVR से बैलेंस पूछें'}</p>
     </div>
 
