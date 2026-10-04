@@ -60,6 +60,7 @@ for (const bank of banks) {
         psb: 'Punjab & Sind Bank (PSB) बैलेंस चेक नंबर',
         axis: `Axis Bank Balance Enquiry Number ${bank.missedCall}`,
         'airtel-payments': `Airtel Payments Bank Balance Check Number ${bank.missedCall}`,
+        maharashtra: `Bank of Maharashtra Balance Check Number ${bank.missedCall}`,
       };
       const expectedH1 = h1Overrides[bank.slug] ?? bank.nameHindi;
       await expect(page.getByRole('heading', { level: 1, name: expectedH1 })).toBeVisible();

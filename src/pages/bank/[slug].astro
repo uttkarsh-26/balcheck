@@ -95,6 +95,13 @@ const h1Overrides: Partial<Record<string, string>> = {
   // the H1 was Hindi-only while ~93% of the query demand is Latin — same fix
   // as axis, applied to the query the users actually type.
   'airtel-payments': `Airtel Payments Bank Balance Check Number ${bank.missedCall}`,
+  // 12,007 imp / 30 clicks @ pos 8.4 (28d) on 'bank of maharashtra balance
+  // check number' (+3,527 @ 9.8 on '...balance check', +2,202 @ 9.1 on
+  // 'maharashtra bank balance check number') — 0.24% CTR over 29,790 page
+  // impressions. The title already leads with the Latin query phrase, but the
+  // H1 was the Hindi brand name only, so no heading used the words the query
+  // is written in. Same fix as axis/airtel-payments.
+  maharashtra: `Bank of Maharashtra Balance Check Number ${bank.missedCall}`,
 };
 if (bank.slug === 'psb') {
   faqs.push(
