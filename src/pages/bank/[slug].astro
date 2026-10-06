@@ -95,6 +95,10 @@ const h1Overrides: Partial<Record<string, string>> = {
   // the H1 was Hindi-only while ~93% of the query demand is Latin — same fix
   // as axis, applied to the query the users actually type.
   'airtel-payments': `Airtel Payments Bank Balance Check Number ${bank.missedCall}`,
+  // Same 28d evidence as the seoOverride below: 20,564 Latin imp @ 0.40% vs
+  // 6,354 Devanagari @ 1.45% — the H1 was the Hindi bank name only, so no
+  // heading carried the words the majority query is written in.
+  ubi: `Union Bank Balance Check Number ${bank.missedCall}`,
   // 12,007 imp / 30 clicks @ pos 8.4 (28d) on 'bank of maharashtra balance
   // check number' (+3,527 @ 9.8 on '...balance check', +2,202 @ 9.1 on
   // 'maharashtra bank balance check number') — 0.24% CTR over 29,790 page
@@ -315,6 +319,19 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
   'airtel-payments': {
     title: `Airtel Payments Bank Balance Check Number ${bank.missedCall}`,
     description: `Airtel Payments Bank balance check number ${bank.missedCall} — आधिकारिक मिस्ड कॉल सेवा। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त।`,
+  },
+  // 28d pull (2026-09-08..10-04): 39,880 imp @ pos 7.0, 0.85% CTR. The split is
+  // the whole story — Latin 20,564 imp @ 0.40% vs Devanagari 6,354 @ 1.45%,
+  // i.e. the Devanagari default title bold-matched only the smaller slice. Its
+  // own-language slice converts 3.6x better from a WORSE position, so the
+  // snippet is what the Latin slice is missing: 'union bank balance check
+  // number' 6,296 imp @ 0.11% (pos 6.9) and 'ubi balance check number' 1,947 @
+  // 0.10% (pos 6.4) never matched a title word. Latin query phrase leads; the
+  // missed-call mechanism stays as the tail hook. (Number is the 2026-09-18
+  // official-page read in banks.ts; balanceMode derives missed-call.)
+  ubi: {
+    title: `Union Bank Balance Check Number ${bank.missedCall} | Missed Call`,
+    description: `Union Bank balance check number ${bank.missedCall} — आधिकारिक मिस्ड कॉल सेवा। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
   },
 };
 
