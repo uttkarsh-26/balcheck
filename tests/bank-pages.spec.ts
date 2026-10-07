@@ -59,7 +59,6 @@ for (const bank of banks) {
       // here fails CI on the wrong assertion.
       const h1Overrides: Record<string, string> = {
         psb: 'Punjab & Sind Bank (PSB) बैलेंस चेक नंबर',
-        axis: `Axis Bank Balance Enquiry Number ${bank.missedCall}`,
         'airtel-payments': `Airtel Payments Bank Balance Check Number ${bank.missedCall}`,
         ubi: `Union Bank Balance Check Number ${bank.missedCall}`,
         maharashtra: `Bank of Maharashtra Balance Check Number ${bank.missedCall}`,

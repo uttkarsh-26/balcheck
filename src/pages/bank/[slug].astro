@@ -87,10 +87,6 @@ if (waFaqs.length > 0) {
 // own words. Everything else keeps the scalable Hindi-brand H1.
 const h1Overrides: Partial<Record<string, string>> = {
   psb: 'Punjab & Sind Bank (PSB) बैलेंस चेक नंबर',
-  // 557 imp / 0 clicks @ pos 5.9 (28d) on 'axis bank balance enquiry number'
-  // (plus 445 @ 6.0 on 'axis bank balance check sms'); the H1 was only the
-  // Hindi bank name, so no heading used the words the query is written in.
-  axis: `Axis Bank Balance Enquiry Number ${bank.missedCall}`,
   // 1,936 impr / 7 clicks @ pos 8.4 (28d) on the Airtel Payments Bank cluster;
   // the H1 was Hindi-only while ~93% of the query demand is Latin — same fix
   // as axis, applied to the query the users actually type.
