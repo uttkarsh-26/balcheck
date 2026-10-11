@@ -26,7 +26,6 @@ const ctrTitles: Record<string, string> = {
   'bihar-gramin': 'Bihar Gramin Bank Balance Check Number 1800-180-7777',
   'punjab-gramin': 'Punjab Gramin Bank Balance Check Number 18001807777',
   idbi: 'IDBI Bank Balance Check Number 18008431122 | Missed Call',
-  'airtel-payments': 'Airtel Payments Bank Balance Check Number 8800688006',
   ubi: 'Union Bank Balance Check Number 09223008586 | Missed Call',
 };
 
@@ -35,7 +34,7 @@ const sprint3Banks = new Set(['canara', 'psb', 'boi']);
 // check intent ('uttar pradesh gramin bank balance check number' 17,208 imp /
 // 81 clicks, 'up gramin bank balance check number' 11,418 / 38), far larger
 // than the 3,143-impression WhatsApp side cluster the 09-18 title served.
-const englishAnswerTitleBanks = new Set(['psb', 'up-gramin', 'airtel-payments', 'ubi']);
+const englishAnswerTitleBanks = new Set(['psb', 'up-gramin', 'ubi']);
 const exactQueryTitleBanks = new Set(['axis']);
 
 // Scalable-default contract: the missed-call template must still render for a
@@ -59,7 +58,6 @@ for (const bank of banks) {
       // here fails CI on the wrong assertion.
       const h1Overrides: Record<string, string> = {
         psb: 'Punjab & Sind Bank (PSB) बैलेंस चेक नंबर',
-        'airtel-payments': `Airtel Payments Bank Balance Check Number ${bank.missedCall}`,
         ubi: `Union Bank Balance Check Number ${bank.missedCall}`,
         maharashtra: `Bank of Maharashtra Balance Check Number ${bank.missedCall}`,
       };

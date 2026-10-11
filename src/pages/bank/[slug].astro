@@ -87,10 +87,6 @@ if (waFaqs.length > 0) {
 // own words. Everything else keeps the scalable Hindi-brand H1.
 const h1Overrides: Partial<Record<string, string>> = {
   psb: 'Punjab & Sind Bank (PSB) बैलेंस चेक नंबर',
-  // 1,936 impr / 7 clicks @ pos 8.4 (28d) on the Airtel Payments Bank cluster;
-  // the H1 was Hindi-only while ~93% of the query demand is Latin — same fix
-  // as axis, applied to the query the users actually type.
-  'airtel-payments': `Airtel Payments Bank Balance Check Number ${bank.missedCall}`,
   // Same 28d evidence as the seoOverride below: 20,564 Latin imp @ 0.40% vs
   // 6,354 Devanagari @ 1.45% — the H1 was the Hindi bank name only, so no
   // heading carried the words the majority query is written in.
@@ -306,15 +302,6 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
   idbi: {
     title: `IDBI Bank Balance Check Number ${bank.missedCall} | Missed Call`,
     description: `IDBI Bank balance check number ${bank.missedCall} — आधिकारिक मिस्ड कॉल सेवा। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
-  },
-  // 1,936 impr / 7 clicks (0.36% CTR) @ pos 8.4 on the airtel cluster in 28d
-  // ('airtel payment bank balance check number' 1,052 + 'airtel payments bank
-  // balance check number' 432 + 'airtel bank balance check number' 90 ...) —
-  // ~93% Latin queries while the default title was Devanagari-only, so the
-  // snippet never carried the words the query is written in. Latin phrase leads.
-  'airtel-payments': {
-    title: `Airtel Payments Bank Balance Check Number ${bank.missedCall}`,
-    description: `Airtel Payments Bank balance check number ${bank.missedCall} — आधिकारिक मिस्ड कॉल सेवा। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त।`,
   },
   // 28d pull (2026-09-08..10-04): 39,880 imp @ pos 7.0, 0.85% CTR. The split is
   // the whole story — Latin 20,564 imp @ 0.40% vs Devanagari 6,354 @ 1.45%,
