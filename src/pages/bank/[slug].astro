@@ -98,6 +98,12 @@ const h1Overrides: Partial<Record<string, string>> = {
   // H1 was the Hindi brand name only, so no heading used the words the query
   // is written in. Same fix as axis/airtel-payments.
   maharashtra: `Bank of Maharashtra Balance Check Number ${bank.missedCall}`,
+  // 30d pull 2026-10-09: 'uttar pradesh gramin bank balance check number'
+  // 17,244 impr @ 0.73% CTR pos 4.5 and 'up gramin bank balance check number'
+  // 11,866 @ 0.50% pos 4.7 — 60,012 impr across the cluster at pos ~5.9. The
+  // title override already leads with the Latin phrase, but the H1 was the
+  // Devanagari name, so the heading never bold-matched the query.
+  'up-gramin': `Uttar Pradesh Gramin Bank Balance Check Number ${bank.missedCall}`,
 };
 if (bank.slug === 'psb') {
   faqs.push(
