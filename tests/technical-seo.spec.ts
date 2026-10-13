@@ -14,6 +14,57 @@ test('TMB net-banking page targets login and netbanking variants', async ({ page
   await expect(page.locator('h1')).toContainText('TMB Net Banking');
 });
 
+// GSC-driven net-banking overrides: each one leads the snippet with the Latin
+// query phrase its cluster is actually searched in (the default title led with
+// the Devanagari bank name, so the snippet never bold-matched the query) and
+// must stay inside the site's 155-char meta-description contract.
+const netBankingOverrideContracts: Array<{
+  slug: string;
+  title: RegExp[];
+  lead: string;
+  host: string;
+}> = [
+  {
+    slug: 'tmb',
+    title: [/TMB Net Banking Login/i, /TMB Netbanking/i],
+    lead: 'TMB net banking login',
+    host: 'tmb.in',
+  },
+  // 30d pull 2026-10-09: 'mpgb net banking' 2,785 impr @ 2.73% CTR pos 5.0,
+  // 'mpgb internet banking' 244 @ 3.28%, '...registration' 220, '...login' 151.
+  {
+    slug: 'mp-gramin',
+    title: [/MPGB Net Banking Login/i, /Madhya Pradesh Gramin Bank Netbanking/i],
+    lead: 'MPGB net banking login',
+    host: 'mpgb.bank.in',
+  },
+  {
+    slug: 'sib',
+    title: [/SIB Net Banking Login/i, /SIBnet/i],
+    lead: 'SIB net banking login',
+    host: 'southindianbank.com',
+  },
+  {
+    slug: 'nainital',
+    title: [/Nainital Bank Net Banking Login/i],
+    lead: 'Nainital Bank net banking login',
+    host: 'nainitalbank.co.in',
+  },
+];
+
+for (const { slug, title, lead, host } of netBankingOverrideContracts) {
+  test(`net-banking ${slug} override leads with the Latin query phrase`, async ({ page }) => {
+    await page.goto(`/net-banking/${slug}/`);
+    for (const pattern of title) {
+      await expect(page).toHaveTitle(pattern);
+    }
+    const description = await page.locator('meta[name="description"]').getAttribute('content');
+    expect(description).toContain(lead);
+    expect(description).toContain(host);
+    expect(description!.length).toBeLessThanOrEqual(155);
+  });
+}
+
 test('Punjab Gramin SMS page targets balance-check-number demand', async ({ page }) => {
   await page.goto('/sms-banking/punjab-gramin/');
   await expect(page).toHaveTitle(/Punjab Gramin Bank Balance Check Number/i);
