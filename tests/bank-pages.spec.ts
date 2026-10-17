@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { banks } from '../src/data/banks';
+import { banks, type Bank } from '../src/data/banks';
 import { categorySlug, getJsonLdScripts, findSchema } from './utils';
 
 const ctrTitles: Record<string, string> = {
@@ -46,26 +46,45 @@ const defaultTemplateBank = banks.find(
     `${bank.nameHindi} बैलेंस चेक नंबर ${bank.missedCall} | ${bank.shortName} Missed Call`.length <= 60
 );
 
+/**
+ * Demand-matched H1 overrides, mirrored from the `h1Overrides` map in
+ * src/pages/bank/[slug].astro (the known landmine in AGENTS.md). Single source
+ * of truth for the override contract: the per-bank H1 assertion below reads it,
+ * and the coverage guard at the foot of this file pins its key set, so dropping
+ * an override fails CI instead of silently retiring that page's H1 contract.
+ */
+const h1Overrides: Record<string, (bank: Bank) => string> = {
+  psb: () => 'Punjab & Sind Bank (PSB) बैलेंस चेक नंबर',
+  ubi: bank => `Union Bank Balance Check Number ${bank.missedCall}`,
+  maharashtra: bank => `Bank of Maharashtra Balance Check Number ${bank.missedCall}`,
+  'up-gramin': bank => `Uttar Pradesh Gramin Bank Balance Check Number ${bank.missedCall}`,
+  canara: bank => `Canara Bank Balance Check Number ${bank.missedCall}`,
+  idbi: bank => `IDBI Bank Balance Check Number ${bank.missedCall}`,
+  boi: bank => `Bank of India Balance Check Number ${bank.missedCall}`,
+};
+
+// The banks this file actually walks, recorded as the describes are generated.
+// The coverage guard compares it against the registry, so a future slice/filter
+// in the loop below fails CI instead of silently dropping a bank.
+const sweptBankSlugs: string[] = [];
+
 for (const bank of banks) {
+  sweptBankSlugs.push(bank.slug);
   test.describe(`/bank/${bank.slug}`, () => {
+    // `page.goto` defaults to waitUntil: 'load', which blocks on the page's
+    // third-party resources: the ad/analytics scripts, and the video poster that
+    // src/pages/bank/[slug].astro points at the production domain — so even a
+    // localhost test fetches it over the network. That wait is charged to this
+    // test's 30s budget and is at the mercy of the runner's network, so a slow
+    // runner can time a test out with zero assertion failures. Every assertion
+    // here reads static, server-rendered DOM, so stop at DOMContentLoaded:
+    // local-only and bounded (measured ~20ms against ~500ms for 'load').
     test.beforeEach(async ({ page }) => {
-      await page.goto(`/bank/${bank.slug}`);
+      await page.goto(`/bank/${bank.slug}`, { waitUntil: 'domcontentloaded' });
     });
 
     test('renders bank name and balance-enquiry number', async ({ page }) => {
-      // Demand-matched H1 overrides live in src/pages/bank/[slug].astro (h1Overrides);
-      // keep this map in step with them — a new override without a matching entry
-      // here fails CI on the wrong assertion.
-      const h1Overrides: Record<string, string> = {
-        psb: 'Punjab & Sind Bank (PSB) बैलेंस चेक नंबर',
-        ubi: `Union Bank Balance Check Number ${bank.missedCall}`,
-        maharashtra: `Bank of Maharashtra Balance Check Number ${bank.missedCall}`,
-        'up-gramin': `Uttar Pradesh Gramin Bank Balance Check Number ${bank.missedCall}`,
-        canara: `Canara Bank Balance Check Number ${bank.missedCall}`,
-        idbi: `IDBI Bank Balance Check Number ${bank.missedCall}`,
-        boi: `Bank of India Balance Check Number ${bank.missedCall}`,
-      };
-      const expectedH1 = h1Overrides[bank.slug] ?? bank.nameHindi;
+      const expectedH1 = h1Overrides[bank.slug]?.(bank) ?? bank.nameHindi;
       await expect(page.getByRole('heading', { level: 1, name: expectedH1 })).toBeVisible();
       await expect(page.locator('body')).toContainText(bank.missedCall);
     });
@@ -275,3 +294,20 @@ for (const bank of banks) {
     }
   });
 }
+
+// Coverage guards. The per-bank describes above are generated from `banks` and
+// from `h1Overrides`; pin both against their sources so a future refactor that
+// slices the loop or drops an override fails here rather than silently retiring
+// the coverage it removed.
+test.describe('bank page coverage', () => {
+  test('walks every bank in the registry', () => {
+    expect(sweptBankSlugs).toEqual(banks.map(bank => bank.slug));
+  });
+
+  test('asserts the H1 override contract for every overridden bank', () => {
+    const expectedOverrideSlugs = ['boi', 'canara', 'idbi', 'maharashtra', 'psb', 'ubi', 'up-gramin'];
+    expect(Object.keys(h1Overrides).sort()).toEqual(expectedOverrideSlugs);
+    // An override naming an unknown slug would never be asserted on any page.
+    expect(expectedOverrideSlugs.every(slug => banks.some(bank => bank.slug === slug))).toBe(true);
+  });
+});
