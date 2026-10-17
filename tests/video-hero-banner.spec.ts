@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { gotoDom } from './utils';
 
 const route = '/net-banking/sbi/';
 const viewports = [
@@ -10,7 +11,7 @@ test.describe('VideoHeroBanner mobile contract', () => {
   for (const viewport of viewports) {
     test(`${viewport.width}px keeps the video hero compact and separated`, async ({ page }) => {
       await page.setViewportSize(viewport);
-      await page.goto(route, { waitUntil: 'domcontentloaded' });
+      await gotoDom(page, route);
 
       const video = page.locator('video[src*="balcheck-netbanking-hero"]');
       const hero = video.locator('xpath=ancestor::section[1]');
@@ -52,7 +53,7 @@ test.describe('VideoHeroBanner mobile contract', () => {
 
   test('reduced-motion users keep the static poster - no autoplay', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto(route, { waitUntil: 'domcontentloaded' });
+    await gotoDom(page, route);
 
     const video = page.locator('video[src*="balcheck-netbanking-hero"]');
     await video.scrollIntoViewIfNeeded();

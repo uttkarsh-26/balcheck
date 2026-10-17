@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { gotoDom } from './utils';
 
 /**
  * Brand / visual-system regression tests (docs/brand-tokens.md contract).
@@ -14,7 +15,7 @@ const PAGES = ['/', '/bank/sbi/', '/banks/public-sector/', '/customer-care/', '/
 test.describe('social meta contract (sitewide)', () => {
   for (const path of PAGES) {
     test(`og:image + twitter:card on ${path}`, async ({ page }) => {
-      await page.goto(path);
+      await gotoDom(page, path);
       const ogImage = page.locator('meta[property="og:image"]');
       await expect(ogImage).toHaveCount(1);
       const content = await ogImage.getAttribute('content');
@@ -33,7 +34,7 @@ test.describe('social meta contract (sitewide)', () => {
 
 test.describe('video hero schema hygiene', () => {
   test('VideoObject has no embedUrl / embedUrl not a same-site video file', async ({ page }) => {
-    await page.goto('/bank/sbi/');
+    await gotoDom(page, '/bank/sbi/');
     const schemas = await page.locator('script[type="application/ld+json"]').allTextContents();
     const videoSchemas = schemas
       .map(s => JSON.parse(s))
@@ -53,14 +54,14 @@ test.describe('video hero schema hygiene', () => {
 test.describe('header visual system', () => {
   for (const path of ['/', '/bank/sbi/'] as const) {
     test(`service rail is scroll affordance-styled on ${path}`, async ({ page }) => {
-      await page.goto(path);
+      await gotoDom(page, path);
       const nav = page.locator('[data-testid="service-nav"]');
       const rail = nav.locator('.scrollbar-hide.scroll-fade');
       await expect(rail).toHaveCount(1);
     });
 
     test(`header is sticky on ${path}`, async ({ page }) => {
-      await page.goto(path);
+      await gotoDom(page, path);
       const header = page.locator('[data-testid="global-header"]');
       await expect(header).toHaveClass(/sticky/);
     });
@@ -69,7 +70,7 @@ test.describe('header visual system', () => {
 
 test.describe('homepage footer dedupe', () => {
   test('exactly one footer element', async ({ page }) => {
-    await page.goto('/');
+    await gotoDom(page, '/');
     await expect(page.locator('footer')).toHaveCount(1);
     // AdSense-required policy links stay reachable from the footer
     for (const href of ['/privacy/', '/about/', '/contact/']) {

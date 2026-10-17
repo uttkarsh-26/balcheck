@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { gotoDom } from './utils';
 import { readFileSync } from 'node:fs';
 
 /**
@@ -29,19 +30,19 @@ test.describe('AdSense monetization regression', () => {
   });
 
   test('Monetag script is absent on homepage', async ({ page }) => {
-    await page.goto('/');
+    await gotoDom(page, '/');
     const monetagScript = await page.locator('script[src*="quge5.com"]').count();
     expect(monetagScript).toBe(0);
   });
 
   test('Monetag script is absent on bank detail pages', async ({ page }) => {
-    await page.goto('/bank/sbi');
+    await gotoDom(page, '/bank/sbi');
     const monetagScript = await page.locator('script[src*="quge5.com"]').count();
     expect(monetagScript).toBe(0);
   });
 
   test('runtime page includes the AdSense loader only', async ({ page }) => {
-    await page.goto('/');
+    await gotoDom(page, '/');
 
     const adsenseLoader = page.locator(
       'head script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]'

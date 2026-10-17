@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { banks, categoryHindi } from '../src/data/banks';
 import type { Bank } from '../src/data/banks';
 import { mergers } from '../src/data/mergers';
-import { getJsonLdScripts, findSchema } from './utils';
+import { gotoDom, getJsonLdScripts, findSchema } from './utils';
 
 // /missed-call/<slug>/ covers banks whose balance number is a dedicated
 // missed-call facility. The predicate must stay identical to the hub
@@ -67,11 +67,11 @@ for (const bank of sampleBanks) {
 
   test.describe(`/missed-call/${bank.slug}`, () => {
     test.beforeEach(async ({ page }) => {
-      await page.goto(`/missed-call/${bank.slug}/`);
+      await gotoDom(page, `/missed-call/${bank.slug}/`);
     });
 
     test('serves a 200 page', async ({ page }) => {
-      const response = await page.goto(`/missed-call/${bank.slug}/`);
+      const response = await gotoDom(page, `/missed-call/${bank.slug}/`);
       expect(response?.status()).toBe(200);
     });
 
@@ -88,7 +88,7 @@ for (const bank of sampleBanks) {
 
     test('heading stays disjoint from the balance-enquiry page', async ({ page }) => {
       const h1 = (await page.locator('h1').innerText()).trim();
-      await page.goto(`/balance-enquiry/${bank.slug}/`);
+      await gotoDom(page, `/balance-enquiry/${bank.slug}/`);
       const otherH1 = (await page.locator('h1').innerText()).trim();
       expect(h1).not.toBe(otherH1);
       expect(h1).not.toContain('Balance Enquiry');
@@ -259,27 +259,27 @@ test.describe('missed-call discovery links', () => {
   // which has its own link grid) — that is where the conditional entry shows.
   test('sibling vertical pages link to the missed-call page when the data supports it', async ({ page }) => {
     for (const bank of sampleBanks) {
-      await page.goto(`/balance-enquiry/${bank.slug}/`);
+      await gotoDom(page, `/balance-enquiry/${bank.slug}/`);
       await expect(page.locator(`a[href="/missed-call/${bank.slug}/"]`).first()).toBeVisible();
     }
   });
 
   test('banks without a missed-call number never link to a missed-call page', async ({ page }) => {
     for (const bank of ivrOnlyBanks.slice(0, 3)) {
-      await page.goto(`/balance-enquiry/${bank.slug}/`);
+      await gotoDom(page, `/balance-enquiry/${bank.slug}/`);
       await expect(page.locator(`a[href="/missed-call/${bank.slug}/"]`)).toHaveCount(0);
     }
   });
 
   test('the missed-call page itself keeps a self-link in its services block', async ({ page }) => {
     const bank = sampleBanks[0];
-    await page.goto(`/missed-call/${bank.slug}/`);
+    await gotoDom(page, `/missed-call/${bank.slug}/`);
     await expect(page.getByTestId('more-services')).toBeVisible();
     await expect(page.locator(`a[href="/missed-call/${bank.slug}/"]`).first()).toBeVisible();
   });
 
   test('hub rows point missed-call banks at the missed-call page', async ({ page }) => {
-    await page.goto('/missed-call/');
+    await gotoDom(page, '/missed-call/');
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 
     for (const bank of sampleBanks) {
@@ -292,7 +292,7 @@ test.describe('missed-call discovery links', () => {
   });
 
   test('hub keeps CollectionPage and FAQPage JSON-LD', async ({ page }) => {
-    await page.goto('/missed-call/');
+    await gotoDom(page, '/missed-call/');
     const scripts = await getJsonLdScripts(page);
     expect(findSchema(scripts, 'CollectionPage')).toBeDefined();
     expect(findSchema(scripts, 'FAQPage')).toBeDefined();

@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
 import { banks } from '../src/data/banks';
-import { getJsonLdScripts, findSchema } from './utils';
+import { gotoDom, getJsonLdScripts, findSchema } from './utils';
 
 const cases = ['sbi', 'uco-bank', 'ippb'].map(slug => banks.find(bank => bank.slug === slug)!);
 
 for (const bank of cases) {
   test(`${bank.slug}: mobile-registration page contract`, async ({ page }) => {
-    await page.goto(`/mobile-number-registration/${bank.slug}/`);
+    await gotoDom(page, `/mobile-number-registration/${bank.slug}/`);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       'href', `https://balcheck.in/mobile-number-registration/${bank.slug}/`,
     );
@@ -28,7 +28,7 @@ for (const bank of cases) {
 
 test('UCO targets online-link intent while recommending verified channels', async ({ page }) => {
   const bank = banks.find(item => item.slug === 'uco-bank')!;
-  await page.goto('/mobile-number-registration/uco-bank/');
+  await gotoDom(page, '/mobile-number-registration/uco-bank/');
   await expect(page).toHaveTitle(/UCO Bank Mobile Number Link Online/);
   await expect(page.locator('h1')).toContainText('UCO Bank Mobile Number Link Online');
   const answer = page.locator('[data-testid="quick-answer"]');
@@ -39,7 +39,7 @@ test('UCO targets online-link intent while recommending verified channels', asyn
 
 test('IPPB targets online-link intent without claiming online completion', async ({ page }) => {
   const bank = banks.find(item => item.slug === 'ippb')!;
-  await page.goto('/mobile-number-registration/ippb/');
+  await gotoDom(page, '/mobile-number-registration/ippb/');
   await expect(page).toHaveTitle(/IPPB Mobile Number Link Online/);
   await expect(page.locator('h1')).toContainText('IPPB Mobile Number Link Online');
   const answer = page.locator('[data-testid="quick-answer"]');
@@ -51,7 +51,7 @@ test('IPPB targets online-link intent without claiming online completion', async
 test('every mobile-reg page carries bank-type context (anti-template differentiation)', async ({ page }) => {
   for (const slug of ['sbi', 'uco-bank', 'jnk-gramin', 'equitas', 'ippb'].filter(s => banks.some(b => b.slug === s))) {
     const bank = banks.find(item => item.slug === slug)!;
-    await page.goto(`/mobile-number-registration/${slug}/`);
+    await gotoDom(page, `/mobile-number-registration/${slug}/`);
     const ctx = page.locator('[data-testid="category-context"]');
     await expect(ctx).toBeVisible();
     await expect(ctx).toContainText(bank.name);

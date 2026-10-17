@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { banks, categories, categoryHindi } from '../src/data/banks';
-import { categorySlug, getJsonLdScripts, findSchema } from './utils';
+import { gotoDom, categorySlug, getJsonLdScripts, findSchema } from './utils';
 
 for (const category of categories) {
   const slug = categorySlug(category);
@@ -8,7 +8,7 @@ for (const category of categories) {
 
   test.describe(`/banks/${slug}`, () => {
     test.beforeEach(async ({ page }) => {
-      await page.goto(`/banks/${slug}`);
+      await gotoDom(page, `/banks/${slug}`);
     });
 
     test('renders category heading and count', async ({ page }) => {

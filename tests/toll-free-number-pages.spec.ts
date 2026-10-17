@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { banks } from '../src/data/banks';
-import { getJsonLdScripts, findSchema } from './utils';
+import { gotoDom, getJsonLdScripts, findSchema } from './utils';
 
 const sampleBanks = [
   banks.find(b => b.slug === 'sbi')!,
@@ -16,7 +16,7 @@ const sampleBanks = [
 for (const bank of sampleBanks) {
   test.describe(`/toll-free-number/${bank.slug}`, () => {
     test.beforeEach(async ({ page }) => {
-      await page.goto(`/toll-free-number/${bank.slug}/`);
+      await gotoDom(page, `/toll-free-number/${bank.slug}/`);
     });
 
     test('renders heading with bank short name', async ({ page }) => {
@@ -80,7 +80,7 @@ for (const bank of sampleBanks) {
 
 test.describe('toll-free-number hub page', () => {
   test('lists all banks', async ({ page }) => {
-    await page.goto('/toll-free-number/');
+    await gotoDom(page, '/toll-free-number/');
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     for (const bank of sampleBanks) {
       const link = page.locator(`a[href="/toll-free-number/${bank.slug}/"]`);
@@ -89,14 +89,14 @@ test.describe('toll-free-number hub page', () => {
   });
 
   test('has CollectionPage JSON-LD', async ({ page }) => {
-    await page.goto('/toll-free-number/');
+    await gotoDom(page, '/toll-free-number/');
     const scripts = await getJsonLdScripts(page);
     const collectionSchema = findSchema(scripts, 'CollectionPage') as Record<string, unknown> | undefined;
     expect(collectionSchema).toBeDefined();
   });
 
   test('shows safety note', async ({ page }) => {
-    await page.goto('/toll-free-number/');
+    await gotoDom(page, '/toll-free-number/');
     await expect(page.locator('body')).toContainText('OTP');
   });
 });

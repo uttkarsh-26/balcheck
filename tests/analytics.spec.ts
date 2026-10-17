@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { gotoDom } from './utils';
 import { readFileSync } from 'node:fs';
 
 const layoutSource = readFileSync(new URL('../src/layouts/Layout.astro', import.meta.url), 'utf8');
@@ -16,7 +17,7 @@ test('localhost does not initialize or request GA4', async ({ page }) => {
     if (request.url().includes('googletagmanager.com/gtag')) analyticsRequests.push(request.url());
   });
 
-  await page.goto('/');
+  await gotoDom(page, '/');
   await page.waitForTimeout(250);
 
   expect(analyticsRequests).toEqual([]);

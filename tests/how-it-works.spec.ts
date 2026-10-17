@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { banks } from '../src/data/banks';
-import { getJsonLdScripts, findSchema } from './utils';
+import { gotoDom, getJsonLdScripts, findSchema } from './utils';
 
 test.describe('/how-it-works', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/how-it-works');
+    await gotoDom(page, '/how-it-works');
   });
 
   test('renders guide heading and overview', async ({ page }) => {

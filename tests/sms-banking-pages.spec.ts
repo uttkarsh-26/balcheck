@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { banks } from '../src/data/banks';
-import { bankSweepChunks, BANK_SWEEP_TIMEOUT_MS } from './utils';
+import { gotoDom, bankSweepChunks, BANK_SWEEP_TIMEOUT_MS } from './utils';
 
 // GSC-driven sms-banking title overrides (28d GSC 2026-07-05..08-01):
 // - punjab-gramin: 3,515 imp, top query "punjab gramin bank balance check number" (913 imp)
@@ -20,7 +20,7 @@ for (const { slug, expectMissedCallClaim } of overrideCases) {
   const bank = banks.find(b => b.slug === slug)!;
 
   test(`${slug}: sms-banking title targets balance-check query within 60 chars`, async ({ page }) => {
-    await page.goto(`/sms-banking/${slug}/`);
+    await gotoDom(page, `/sms-banking/${slug}/`);
     const title = await page.title();
 
     expect(title.length).toBeLessThanOrEqual(60);
@@ -38,7 +38,7 @@ for (const { slug, expectMissedCallClaim } of overrideCases) {
   });
 
   test(`${slug}: sms-banking description within 155 chars and honest about mode`, async ({ page }) => {
-    await page.goto(`/sms-banking/${slug}/`);
+    await gotoDom(page, `/sms-banking/${slug}/`);
     const desc = await page.locator('meta[name="description"]').getAttribute('content');
     expect(desc).not.toBeNull();
     expect(desc!.length).toBeLessThanOrEqual(155);
@@ -51,7 +51,7 @@ for (const { slug, expectMissedCallClaim } of overrideCases) {
 }
 
 test('non-overridden sms-banking pages keep the generic template title', async ({ page }) => {
-  await page.goto('/sms-banking/sbi/');
+  await gotoDom(page, '/sms-banking/sbi/');
   const title = await page.title();
   expect(title).toContain('SBI SMS Banking');
   expect(title).toContain('Official Registration & Balance Methods');
@@ -72,7 +72,7 @@ for (const { label, banks: chunkBanks } of smsBankingSweep) {
     { timeout: BANK_SWEEP_TIMEOUT_MS },
     async ({ page }) => {
       for (const bank of chunkBanks) {
-        await page.goto(`/sms-banking/${bank.slug}/`);
+        await gotoDom(page, `/sms-banking/${bank.slug}/`);
 
         const guide = page.getByTestId('sms-banking-guide');
         await expect(guide, `${bank.slug}: missing substantive SMS guide`).toHaveCount(1);

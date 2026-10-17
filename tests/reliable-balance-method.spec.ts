@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { gotoDom } from './utils';
 import { banks } from '../src/data/banks';
 
 const normalize = (value: string) => value.replace(/\D/g, '');
@@ -20,12 +21,12 @@ test('overloaded balance/customer-care numbers stay conservative unless official
 
 test('fallback bank and balance pages never present customer care as missed call', async ({ page }) => {
   for (const slug of ['rbl', 'indusind', 'punjab-gramin']) {
-    await page.goto(`/bank/${slug}/`);
+    await gotoDom(page, `/bank/${slug}/`);
     const primary = page.locator('[data-testid="primary-balance-service"]');
     await expect(primary).toContainText(/Customer Care|IVR/);
     await expect(primary).not.toContainText(/missed call/i);
 
-    await page.goto(`/balance-enquiry/${slug}/`);
+    await gotoDom(page, `/balance-enquiry/${slug}/`);
     const section = page.getByTestId('balance-enquiry-service');
     await expect(section).toContainText('Customer Care / IVR');
     await expect(section).not.toContainText(/missed call/i);
@@ -34,7 +35,7 @@ test('fallback bank and balance pages never present customer care as missed call
     await expect(hero).not.toContainText(/missed call|मिस्ड कॉल/i);
 
     for (const route of ['customer-care', 'toll-free-number']) {
-      await page.goto(`/${route}/${slug}/`);
+      await gotoDom(page, `/${route}/${slug}/`);
       await expect(page.locator('body')).not.toContainText('Missed call balance SMS नहीं आया');
       await expect(page.locator('body')).toContainText(/Balance enquiry या IVR में सहायता चाहिए/i);
     }
@@ -42,19 +43,19 @@ test('fallback bank and balance pages never present customer care as missed call
 });
 
 test('officially verified same-number MPGB service keeps missed-call flow', async ({ page }) => {
-  await page.goto('/bank/mp-gramin/');
+  await gotoDom(page, '/bank/mp-gramin/');
   const primary = page.locator('[data-testid="primary-balance-service"]');
   await expect(primary).toContainText(/missed call|मिस्ड कॉल/i);
   await expect(primary).not.toContainText('Customer Care / IVR');
 
-  await page.goto('/balance-enquiry/mp-gramin/');
+  await gotoDom(page, '/balance-enquiry/mp-gramin/');
   const section = page.getByTestId('balance-enquiry-service');
   await expect(section).toContainText(/missed call|मिस्ड कॉल/i);
   await expect(section).not.toContainText('Customer Care / IVR');
 });
 
 test('verified dedicated missed-call bank keeps its original service flow', async ({ page }) => {
-  await page.goto('/bank/sbi/');
+  await gotoDom(page, '/bank/sbi/');
   const primary = page.locator('[data-testid="primary-balance-service"]');
   await expect(primary).toContainText('मिस्ड कॉल');
   await expect(primary).not.toContainText('Customer Care / IVR');

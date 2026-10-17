@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { getMerger, mergers } from '../src/data/mergers';
 import { banks } from '../src/data/banks';
-import { getJsonLdScripts, findSchema } from './utils';
+import { gotoDom, getJsonLdScripts, findSchema } from './utils';
 
 // Research-backed lineage expectations (verified 2026-08-10 against gazette/RBI/
 // DICGC/official .bank.in sources — see delegation research receipts):
@@ -108,7 +108,7 @@ test.describe('merged-banks data integrity', () => {
 
 test.describe('merged-banks hub', () => {
   test('hub lists all 11 records with detail and successor links', async ({ page }) => {
-    await page.goto('/merged-banks/');
+    await gotoDom(page, '/merged-banks/');
     await expect(page).toHaveTitle(/विलय/);
     await expect(page.locator('h1')).toHaveCount(1);
 
@@ -123,7 +123,7 @@ test.describe('merged-banks hub', () => {
   });
 
   test('hub emits CollectionPage JSON-LD with an ItemList of all records', async ({ page }) => {
-    await page.goto('/merged-banks/');
+    await gotoDom(page, '/merged-banks/');
     const scripts = await getJsonLdScripts(page);
     const collection = findSchema(scripts, 'CollectionPage');
     expect(collection).toBeDefined();
@@ -138,7 +138,7 @@ test.describe('merged-banks hub', () => {
   });
 
   test('hub does not claim every legacy number is definitively closed', async ({ page }) => {
-    await page.goto('/merged-banks/');
+    await gotoDom(page, '/merged-banks/');
     const body = await page.locator('body').textContent();
     expect(body).not.toContain('अब काम नहीं करते');
     expect(body).not.toContain('बंद हो चुके हैं');
@@ -148,7 +148,7 @@ test.describe('merged-banks hub', () => {
 test.describe('merged-banks detail pages', () => {
   for (const m of mergers) {
     test(`${m.oldSlug}: single-intent H1 with old RRB name + balance check intent, successor explained`, async ({ page }) => {
-      await page.goto(`/merged-banks/${m.oldSlug}/`);
+      await gotoDom(page, `/merged-banks/${m.oldSlug}/`);
       await expect(page.locator('h1')).toHaveCount(1);
 
       const h1 = page.locator('h1').first();
@@ -164,7 +164,7 @@ test.describe('merged-banks detail pages', () => {
     });
 
     test(`${m.oldSlug}: title, canonical self URL, successor number; no forbidden stale number`, async ({ page }) => {
-      await page.goto(`/merged-banks/${m.oldSlug}/`);
+      await gotoDom(page, `/merged-banks/${m.oldSlug}/`);
       const successor = banks.find((b) => b.slug === m.successorSlug)!;
 
       await expect(page).toHaveTitle(new RegExp(m.oldName));
@@ -188,7 +188,7 @@ test.describe('merged-banks detail pages', () => {
     });
 
     test(`${m.oldSlug}: JSON-LD has BankOrCreditUnion + FAQPage + BreadcrumbList, no HowTo`, async ({ page }) => {
-      await page.goto(`/merged-banks/${m.oldSlug}/`);
+      await gotoDom(page, `/merged-banks/${m.oldSlug}/`);
       const scripts = await getJsonLdScripts(page);
 
       const bank = findSchema(scripts, 'BankOrCreditUnion') as Record<string, unknown> | undefined;
@@ -205,14 +205,14 @@ test.describe('merged-banks detail pages', () => {
     });
 
     test(`${m.oldSlug}: avoids unsupported claims that every old number is closed`, async ({ page }) => {
-      await page.goto(`/merged-banks/${m.oldSlug}/`);
+      await gotoDom(page, `/merged-banks/${m.oldSlug}/`);
       const body = await page.locator('body').textContent();
       expect(body).not.toContain('बंद हो चुके हैं');
       expect(body).not.toContain('अब काम नहीं करते');
     });
 
     test(`${m.oldSlug}: visible official citations, successor page link, hub link, slash-terminated internal links`, async ({ page }) => {
-      await page.goto(`/merged-banks/${m.oldSlug}/`);
+      await gotoDom(page, `/merged-banks/${m.oldSlug}/`);
 
       const notice = page.getByTestId('merger-notice');
       await expect(notice).toBeVisible();
@@ -244,7 +244,7 @@ test.describe('cross-links from existing bank pages', () => {
     };
     for (const [bankSlug, oldSlug] of Object.entries(legacyBankPages)) {
       const merger = mergers.find((m) => m.oldSlug === oldSlug)!;
-      await page.goto(`/bank/${bankSlug}/`);
+      await gotoDom(page, `/bank/${bankSlug}/`);
       const bannerLink = page.locator(`a[href="/merged-banks/${oldSlug}/"]`);
       await expect(bannerLink).toBeVisible();
       const banner = bannerLink.locator('..');
@@ -262,7 +262,7 @@ test.describe('cross-links from existing bank pages', () => {
       'rajasthan-gramin': ['baroda-rajasthan'],
     };
     for (const [slug, oldSlugs] of Object.entries(expected)) {
-      await page.goto(`/bank/${slug}/`);
+      await gotoDom(page, `/bank/${slug}/`);
       await expect(page.locator('h2', { hasText: 'पूर्व बैंक' })).toBeVisible();
       for (const oldSlug of oldSlugs) {
         await expect(page.locator(`a[href="/merged-banks/${oldSlug}/"]`)).toBeVisible();
@@ -271,13 +271,13 @@ test.describe('cross-links from existing bank pages', () => {
   });
 
   test('non-merger bank pages are untouched (no banner, no पूर्व बैंक section)', async ({ page }) => {
-    await page.goto('/bank/sbi/');
+    await gotoDom(page, '/bank/sbi/');
     await expect(page.locator('a[href^="/merged-banks/"]')).toHaveCount(0);
     await expect(page.locator('h2', { hasText: 'पूर्व बैंक' })).toHaveCount(0);
   });
 
   test('homepage links to the merged-banks hub', async ({ page }) => {
-    await page.goto('/');
+    await gotoDom(page, '/');
     await expect(page.locator('a[href="/merged-banks/"]').first()).toBeVisible();
   });
 });

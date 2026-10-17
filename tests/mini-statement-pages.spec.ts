@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
 import { banks } from '../src/data/banks';
-import { getJsonLdScripts, findSchema, bankSweepChunks, BANK_SWEEP_TIMEOUT_MS } from './utils';
+import { gotoDom, getJsonLdScripts, findSchema, bankSweepChunks, BANK_SWEEP_TIMEOUT_MS } from './utils';
 
 const cases = ['sbi', 'boi', 'axis'].map(slug => banks.find(bank => bank.slug === slug)!);
 
 for (const bank of cases) {
   test(`${bank.slug}: mini-statement page contract`, async ({ page }) => {
-    await page.goto(`/mini-statement/${bank.slug}/`);
+    await gotoDom(page, `/mini-statement/${bank.slug}/`);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       'href', `https://balcheck.in/mini-statement/${bank.slug}/`,
     );
@@ -26,7 +26,7 @@ for (const bank of cases) {
 
 test('BOI targets its verified dedicated mini-statement number', async ({ page }) => {
   const boi = banks.find(bank => bank.slug === 'boi')!;
-  await page.goto('/mini-statement/boi/');
+  await gotoDom(page, '/mini-statement/boi/');
   await expect(page).toHaveTitle(/^BOI Mini Statement Number/);
   await expect(page).toHaveTitle(new RegExp(boi.missedCallAlt!));
   await expect(page.locator('h1')).toHaveText('BOI Mini Statement Number');
@@ -35,7 +35,7 @@ test('BOI targets its verified dedicated mini-statement number', async ({ page }
 
 test('Axis answers demand without mislabelling its balance number', async ({ page }) => {
   const axis = banks.find(bank => bank.slug === 'axis')!;
-  await page.goto('/mini-statement/axis/');
+  await gotoDom(page, '/mini-statement/axis/');
   await expect(page).toHaveTitle(/^Axis Bank Mini Statement/);
   await expect(page).not.toHaveTitle(new RegExp(axis.missedCall));
   await expect(page.locator('h1')).toHaveText('Axis Bank Mini Statement');
@@ -47,7 +47,7 @@ test('Axis answers demand without mislabelling its balance number', async ({ pag
 test('TMB uses its official dedicated last-five-transactions number', async ({ page }) => {
   const tmb = banks.find(bank => bank.slug === 'tmb')!;
   expect(tmb.missedCallAlt).toBe('09211947474');
-  await page.goto('/mini-statement/tmb/');
+  await gotoDom(page, '/mini-statement/tmb/');
   await expect(page.locator('h1')).toHaveText('TMB Mini Statement Number');
   await expect(page).toHaveTitle(/^TMB Mini Statement Number/);
   await expect(page).toHaveTitle(new RegExp(tmb.missedCallAlt!));
@@ -58,7 +58,7 @@ test('TMB uses its official dedicated last-five-transactions number', async ({ p
 test('KVB shows its verified dedicated mini-statement number (last 3 transactions)', async ({ page }) => {
   const kvb = banks.find(bank => bank.slug === 'kvb')!;
   expect(kvb.missedCallAlt).toBe('09266292665');
-  await page.goto('/mini-statement/kvb/');
+  await gotoDom(page, '/mini-statement/kvb/');
   await expect(page).toHaveTitle(/^KVB Mini Statement Number/);
   await expect(page).toHaveTitle(new RegExp(kvb.missedCallAlt!));
   await expect(page.locator('h1')).toHaveText('KVB Mini Statement Number');
@@ -70,7 +70,7 @@ test('KVB shows its verified dedicated mini-statement number (last 3 transaction
 
 test('Federal mini-statement page does not claim balance number gives mini statement', async ({ page }) => {
   const federal = banks.find(bank => bank.slug === 'federal')!;
-  await page.goto('/mini-statement/federal/');
+  await gotoDom(page, '/mini-statement/federal/');
   await expect(page).toHaveTitle(/^Federal Bank Mini Statement/);
   await expect(page.locator('h1')).toHaveText('Federal Bank Mini Statement');
   // Must NOT claim the balance number is a mini-statement number
@@ -88,9 +88,9 @@ test('KVB data has separate balance and mini-statement numbers', () => {
 });
 
 test('Net-banking pages have GSC-matched titles for SIB and Nainital', async ({ page }) => {
-  await page.goto('/net-banking/sib/');
+  await gotoDom(page, '/net-banking/sib/');
   await expect(page).toHaveTitle(/^SIB Net Banking Login/);
-  await page.goto('/net-banking/nainital/');
+  await gotoDom(page, '/net-banking/nainital/');
   await expect(page).toHaveTitle(/^Nainital Bank Net Banking Login/);
 });
 
@@ -106,7 +106,7 @@ test('IOB data has verified official numbers from iob.in', () => {
 
 
 test('IOB bank page has GSC-matched title', async ({ page }) => {
-  await page.goto('/bank/iob/');
+  await gotoDom(page, '/bank/iob/');
   await expect(page).toHaveTitle(/^Indian Overseas Bank/);
   const iob = banks.find(bank => bank.slug === 'iob')!;
   await expect(page).toHaveTitle(new RegExp(iob.missedCall));
@@ -114,7 +114,7 @@ test('IOB bank page has GSC-matched title', async ({ page }) => {
 
 test('IOB mini-statement page does not claim balance number gives mini statement', async ({ page }) => {
   const iob = banks.find(bank => bank.slug === 'iob')!;
-  await page.goto('/mini-statement/iob/');
+  await gotoDom(page, '/mini-statement/iob/');
   await expect(page).toHaveTitle(/^IOB Mini Statement/);
   await expect(page.locator('h1')).toHaveText('IOB Mini Statement');
   // Must NOT claim the balance number is a mini-statement number in the title
@@ -139,7 +139,7 @@ for (const { label, banks: chunkBanks } of miniStatementSweep) {
     { timeout: BANK_SWEEP_TIMEOUT_MS },
     async ({ page }) => {
       for (const bank of chunkBanks) {
-        await page.goto(`/mini-statement/${bank.slug}/`);
+        await gotoDom(page, `/mini-statement/${bank.slug}/`);
 
         const guide = page.getByTestId('mini-statement-guide');
         await expect(guide, `${bank.slug}: missing substantive mini-statement guide`).toHaveCount(1);

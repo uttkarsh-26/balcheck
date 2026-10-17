@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { banks } from '../src/data/banks';
-import { getJsonLdScripts, findSchema } from './utils';
+import { gotoDom, getJsonLdScripts, findSchema } from './utils';
 
 // Test a representative sample of banks (not all 64 to keep CI fast)
 const sampleBanks = [
@@ -17,7 +17,7 @@ const sampleBanks = [
 for (const bank of sampleBanks) {
   test.describe(`/balance-enquiry/${bank.slug}`, () => {
     test.beforeEach(async ({ page }) => {
-      await page.goto(`/balance-enquiry/${bank.slug}/`);
+      await gotoDom(page, `/balance-enquiry/${bank.slug}/`);
     });
 
     test('renders heading with bank short name', async ({ page }) => {
@@ -84,7 +84,7 @@ for (const bank of sampleBanks) {
 
 test.describe('balance-enquiry hub page', () => {
   test('lists all banks', async ({ page }) => {
-    await page.goto('/balance-enquiry/');
+    await gotoDom(page, '/balance-enquiry/');
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     for (const bank of sampleBanks) {
       const link = page.locator(`a[href="/balance-enquiry/${bank.slug}/"]`);
@@ -93,7 +93,7 @@ test.describe('balance-enquiry hub page', () => {
   });
 
   test('has CollectionPage JSON-LD', async ({ page }) => {
-    await page.goto('/balance-enquiry/');
+    await gotoDom(page, '/balance-enquiry/');
     const scripts = await getJsonLdScripts(page);
     const collectionSchema = findSchema(scripts, 'CollectionPage') as Record<string, unknown> | undefined;
     expect(collectionSchema).toBeDefined();

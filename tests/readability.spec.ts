@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { gotoDom } from './utils';
 
 /**
  * Readability contract: Hindi body copy must stay legible on cheap phones.
@@ -12,7 +13,7 @@ const PAGES = ['/', '/missed-call/', '/bank/sbi/', '/banks/public-sector/', '/cu
 
 for (const path of PAGES) {
   test(`readability contract holds on ${path}`, async ({ page }) => {
-    await page.goto(path);
+    await gotoDom(page, path);
 
     const violations = await page.evaluate(() => {
       const lowContrast: string[] = [];

@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { banks, categories } from '../src/data/banks';
 import { isTrueTollFreeNumber } from '../src/lib/phone';
 import { mergers } from '../src/data/mergers';
-import { categorySlug } from './utils';
+import { gotoDom, categorySlug } from './utils';
 
 const VERTICAL_HUBS = [
   '/customer-care/',
@@ -167,7 +167,7 @@ test.describe('sitemap', () => {
   });
 
   test('bank pages have cross-links to new verticals', async ({ page }) => {
-    await page.goto('/bank/sbi/');
+    await gotoDom(page, '/bank/sbi/');
     const balanceEnquiryLink = page.locator(`a[href="/balance-enquiry/sbi/"]`);
     const tollFreeLink = page.locator(`a[href="/toll-free-number/sbi/"]`);
     await expect(balanceEnquiryLink).toBeVisible();

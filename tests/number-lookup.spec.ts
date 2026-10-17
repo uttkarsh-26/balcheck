@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { gotoDom } from './utils';
 import { banks } from '../src/data/banks';
 
 // /number-lookup/ — static tool page. The build-time index must derive ONLY
@@ -35,7 +36,7 @@ const absentNumbers = ['9999999999', '18001800111', '09876543210'] as const;
 
 test.describe('/number-lookup', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/number-lookup/');
+    await gotoDom(page, '/number-lookup/');
   });
 
   test('renders with real title, H1 and tool', async ({ page }) => {
@@ -162,14 +163,14 @@ test.describe('/number-lookup', () => {
     // The service tile carries the tool's title text; the hidden number-hint
     // link (only shown for digit queries) must not be matched.
     await expect(page.locator('footer a[href="/number-lookup/"]')).toHaveCount(1);
-    await page.goto('/');
+    await gotoDom(page, '/');
     await expect(
       page.locator('a[href="/number-lookup/"]:has(h3)', { hasText: 'Number Lookup' }).first()
     ).toBeVisible();
   });
 
   test('homepage search detects a bare number and routes to the lookup tool', async ({ page }) => {
-    await page.goto('/');
+    await gotoDom(page, '/');
     await page.locator('#search').fill('09223766666');
     const hint = page.locator('[data-testid="number-hint"]');
     await expect(hint).toBeVisible();

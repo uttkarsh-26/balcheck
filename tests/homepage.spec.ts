@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { banks, categories, categoryHindi } from '../src/data/banks';
-import { categorySlug, getJsonLdScripts, findSchema } from './utils';
+import { gotoDom, categorySlug, getJsonLdScripts, findSchema } from './utils';
 
 test.describe('homepage', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await gotoDom(page, '/');
   });
 
   test('renders demand-led hero without unsupported universal claims', async ({ page }) => {

@@ -1,5 +1,30 @@
-import type { Page } from '@playwright/test';
+import type { Page, Response } from '@playwright/test';
 import { banks, type Bank } from '../src/data/banks';
+
+/**
+ * Open a page and stop at DOMContentLoaded — the single source of truth for how
+ * this suite navigates.
+ *
+ * `page.goto` defaults to `waitUntil: 'load'`, which blocks until every
+ * third-party resource the page pulls has settled: the AdSense and GA4 loaders,
+ * and the hero-video poster that `src/pages/bank/[slug].astro` and
+ * `src/pages/net-banking/[slug].astro` point at their production URL — so even a
+ * localhost run fetches it over the network. That wait is unbounded and depends
+ * on the runner's network (measured ~488ms average and 6.5s worst across 16 bank
+ * pages, against ~19ms for DOMContentLoaded), so it is charged to every test's
+ * 30s budget and a slow runner can time a test out with zero assertion failures.
+ *
+ * Every assertion in this suite reads static, server-rendered DOM (headings,
+ * links, meta, JSON-LD) or client state that Astro's deferred module scripts
+ * have already attached before DOMContentLoaded, so DOMContentLoaded is both
+ * sufficient and bounded. Call `page.goto(url, { waitUntil: 'load' })` directly
+ * only when a test needs a resource that arrives after DOMContentLoaded — the
+ * sole such case today is `tests/video-hero-banner.spec.ts` asserting that the
+ * hero video actually plays.
+ */
+export function gotoDom(page: Page, path: string): Promise<Response | null> {
+  return page.goto(path, { waitUntil: 'domcontentloaded' });
+}
 
 export function categorySlug(category: string): string {
   return category.toLowerCase().replace(/\s+/g, '-');

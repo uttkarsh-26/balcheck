@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { banks, type Bank } from '../src/data/banks';
-import { categorySlug, getJsonLdScripts, findSchema } from './utils';
+import { categorySlug, getJsonLdScripts, findSchema, gotoDom } from './utils';
 
 const ctrTitles: Record<string, string> = {
   boi: 'BOI बैलेंस चेक नंबर 9811255430 | Missed Call',
@@ -71,16 +71,9 @@ const sweptBankSlugs: string[] = [];
 for (const bank of banks) {
   sweptBankSlugs.push(bank.slug);
   test.describe(`/bank/${bank.slug}`, () => {
-    // `page.goto` defaults to waitUntil: 'load', which blocks on the page's
-    // third-party resources: the ad/analytics scripts, and the video poster that
-    // src/pages/bank/[slug].astro points at the production domain — so even a
-    // localhost test fetches it over the network. That wait is charged to this
-    // test's 30s budget and is at the mercy of the runner's network, so a slow
-    // runner can time a test out with zero assertion failures. Every assertion
-    // here reads static, server-rendered DOM, so stop at DOMContentLoaded:
-    // local-only and bounded (measured ~20ms against ~500ms for 'load').
+    // Every assertion here reads static, server-rendered DOM — see gotoDom().
     test.beforeEach(async ({ page }) => {
-      await page.goto(`/bank/${bank.slug}`, { waitUntil: 'domcontentloaded' });
+      await gotoDom(page, `/bank/${bank.slug}`);
     });
 
     test('renders bank name and balance-enquiry number', async ({ page }) => {

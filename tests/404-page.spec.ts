@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
+import { gotoDom } from './utils';
 
 // Unknown URLs used to return a blank 0-byte page (Workers assets default).
 // The recovery page must keep a 404 status, stay out of the index, and lead somewhere.
 test.describe('404 page', () => {
   test('unknown URLs return a helpful 404 with recovery links', async ({ page }) => {
-    const response = await page.goto('/yeh-page-maujood-nahi-hai-xyz/');
+    const response = await gotoDom(page, '/yeh-page-maujood-nahi-hai-xyz/');
 
     expect(response?.status()).toBe(404);
     await expect(page.getByRole('heading', { name: 'पेज नहीं मिला' })).toBeVisible();

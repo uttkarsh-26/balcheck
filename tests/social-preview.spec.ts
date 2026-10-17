@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { gotoDom } from './utils';
 
 // Parse JPEG dimensions from the SOF marker (covers baseline + progressive).
 function jpegSize(buf: Buffer): { width: number; height: number } {
@@ -18,7 +19,7 @@ function jpegSize(buf: Buffer): { width: number; height: number } {
 // Social crawlers (WhatsApp, Facebook, X) do not render SVG og:images, so the
 // preview must be a raster with real dimensions.
 test('og:image is a 1200x630 raster with declared size', async ({ page, request }) => {
-  await page.goto('/');
+  await gotoDom(page, '/');
 
   const url = await page.locator('meta[property="og:image"]').getAttribute('content');
   expect(url).toBeTruthy();
