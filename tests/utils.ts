@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test';
+import { banks, type Bank } from '../src/data/banks';
 
 export function categorySlug(category: string): string {
   return category.toLowerCase().replace(/\s+/g, '-');
@@ -43,4 +44,50 @@ export function findSchema(scripts: unknown[], type: string): unknown | undefine
     }
   }
   return undefined;
+}
+
+/**
+ * Banks walked by one sweep test.
+ *
+ * A monolithic walk of all 79 bank pages costs ~26s locally and ~29s on a CI
+ * runner — no headroom under the 30s default test timeout, so a single slow
+ * navigation fails the deploy. Splitting the sweep into bounded chunks bounds
+ * each test's wall clock instead of hoping the runner keeps up.
+ */
+export const BANKS_PER_CHUNK = 8;
+
+/**
+ * Budgeted cost of one bank page inside a sweep chunk. Measured cost is ~0.33s
+ * per page (26s for all 79 banks locally, ~29s on CI), so 5s leaves every
+ * chunk an order of magnitude under its bound.
+ */
+export const BANK_SWEEP_PAGE_BUDGET_MS = 5_000;
+
+/** Explicit per-test bound for one sweep chunk of BANKS_PER_CHUNK bank pages. */
+export const BANK_SWEEP_TIMEOUT_MS = BANKS_PER_CHUNK * BANK_SWEEP_PAGE_BUDGET_MS;
+
+export interface BankSweepChunk {
+  /** Test-title suffix naming the chunk, e.g. `1/10: sbi..axis`. */
+  label: string;
+  /** The banks this chunk sweeps, in registry order. */
+  banks: Bank[];
+}
+
+/**
+ * Split the bank registry into bounded chunks for per-page sweep specs.
+ *
+ * Chunking is the single source of truth for the sweep policy: every chunk
+ * walks at most BANKS_PER_CHUNK banks, and the union of all chunks is still the
+ * whole registry, so coverage is unchanged. Each spec asserts that union
+ * against `banks`, so a future chunking change cannot silently drop a bank.
+ */
+export function bankSweepChunks(): BankSweepChunk[] {
+  const groups: Bank[][] = [];
+  for (let start = 0; start < banks.length; start += BANKS_PER_CHUNK) {
+    groups.push(banks.slice(start, start + BANKS_PER_CHUNK));
+  }
+  return groups.map((group, index) => ({
+    label: `${index + 1}/${groups.length}: ${group[0].slug}..${group[group.length - 1].slug}`,
+    banks: group,
+  }));
 }

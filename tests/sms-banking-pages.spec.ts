@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { banks } from '../src/data/banks';
+import { bankSweepChunks, BANK_SWEEP_TIMEOUT_MS } from './utils';
 
 // GSC-driven sms-banking title overrides (28d GSC 2026-07-05..08-01):
 // - punjab-gramin: 3,515 imp, top query "punjab gramin bank balance check number" (913 imp)
@@ -57,43 +58,57 @@ test('non-overridden sms-banking pages keep the generic template title', async (
   expect(title.length).toBeLessThanOrEqual(60);
 });
 
-test('all sms-banking pages provide substantial bank-specific guidance', async ({ page }) => {
-  for (const bank of banks) {
-    await page.goto(`/sms-banking/${bank.slug}/`);
+const smsBankingSweep = bankSweepChunks();
 
-    const guide = page.getByTestId('sms-banking-guide');
-    await expect(guide, `${bank.slug}: missing substantive SMS guide`).toHaveCount(1);
-
-    const text = (await guide.innerText()).replace(/\s+/g, ' ').trim();
-    const words = text.match(/[A-Za-z0-9\u0900-\u097F]+/g) ?? [];
-
-    expect(words.length, `${bank.slug}: SMS guide is thin (${words.length} words)`).toBeGreaterThanOrEqual(320);
-    expect(text, `${bank.slug}: missing full bank name`).toContain(bank.name);
-    expect(text, `${bank.slug}: missing Hindi bank name`).toContain(bank.nameHindi);
-    expect(text, `${bank.slug}: missing balance-service number`).toContain(bank.missedCall);
-    expect(text, `${bank.slug}: missing customer-care fallback`).toContain(bank.customerCare);
-    expect(text, `${bank.slug}: missing bank category context`).toContain(bank.category);
-    expect(text, `${bank.slug}: missing official website`).toContain(bank.website);
-
-    const evidence = guide.getByTestId('service-evidence');
-    await expect(evidence, `${bank.slug}: missing evidence status`).toHaveCount(1);
-    if (bank.verificationSource && bank.lastVerified) {
-      await expect(evidence, `${bank.slug}: missing review date`).toContainText(bank.lastVerified);
-    } else {
-      await expect(evidence, `${bank.slug}: undocumented evidence is not disclosed`).toContainText('detailed source citation और review date stored नहीं है');
-      expect(text, `${bank.slug}: undocumented record is presented as verified`).not.toContain('verified balance number');
-      expect(text, `${bank.slug}: undocumented service mode is presented as verified`).not.toContain('verified mode');
-    }
-
-    if (bank.missedCallAlt) {
-      expect(text, `${bank.slug}: missing dedicated mini-statement number`).toContain(bank.missedCallAlt);
-      await expect(guide.locator(`a[href="/mini-statement/${bank.slug}/"]`)).toHaveCount(1);
-    }
-
-    if (bank.balanceMode === 'missed-call') {
-      expect(text, `${bank.slug}: missed-call flow is not explicit`).toContain('registered mobile');
-    } else {
-      expect(text, `${bank.slug}: IVR/customer-care flow is not explicit`).toContain('dedicated missed-call service verified नहीं है');
-    }
-  }
+// Chunking must never drop a bank: the union of every chunk is the whole
+// registry, and the sweep below still asserts every bank exactly once.
+test('sms-banking sweep covers every bank exactly once', () => {
+  expect(smsBankingSweep.flatMap(chunk => chunk.banks)).toEqual(banks);
 });
+
+for (const { label, banks: chunkBanks } of smsBankingSweep) {
+  test(
+    `all sms-banking pages provide substantial bank-specific guidance [${label}]`,
+    { timeout: BANK_SWEEP_TIMEOUT_MS },
+    async ({ page }) => {
+      for (const bank of chunkBanks) {
+        await page.goto(`/sms-banking/${bank.slug}/`);
+
+        const guide = page.getByTestId('sms-banking-guide');
+        await expect(guide, `${bank.slug}: missing substantive SMS guide`).toHaveCount(1);
+
+        const text = (await guide.innerText()).replace(/\s+/g, ' ').trim();
+        const words = text.match(/[A-Za-z0-9\u0900-\u097F]+/g) ?? [];
+
+        expect(words.length, `${bank.slug}: SMS guide is thin (${words.length} words)`).toBeGreaterThanOrEqual(320);
+        expect(text, `${bank.slug}: missing full bank name`).toContain(bank.name);
+        expect(text, `${bank.slug}: missing Hindi bank name`).toContain(bank.nameHindi);
+        expect(text, `${bank.slug}: missing balance-service number`).toContain(bank.missedCall);
+        expect(text, `${bank.slug}: missing customer-care fallback`).toContain(bank.customerCare);
+        expect(text, `${bank.slug}: missing bank category context`).toContain(bank.category);
+        expect(text, `${bank.slug}: missing official website`).toContain(bank.website);
+
+        const evidence = guide.getByTestId('service-evidence');
+        await expect(evidence, `${bank.slug}: missing evidence status`).toHaveCount(1);
+        if (bank.verificationSource && bank.lastVerified) {
+          await expect(evidence, `${bank.slug}: missing review date`).toContainText(bank.lastVerified);
+        } else {
+          await expect(evidence, `${bank.slug}: undocumented evidence is not disclosed`).toContainText('detailed source citation और review date stored नहीं है');
+          expect(text, `${bank.slug}: undocumented record is presented as verified`).not.toContain('verified balance number');
+          expect(text, `${bank.slug}: undocumented service mode is presented as verified`).not.toContain('verified mode');
+        }
+
+        if (bank.missedCallAlt) {
+          expect(text, `${bank.slug}: missing dedicated mini-statement number`).toContain(bank.missedCallAlt);
+          await expect(guide.locator(`a[href="/mini-statement/${bank.slug}/"]`)).toHaveCount(1);
+        }
+
+        if (bank.balanceMode === 'missed-call') {
+          expect(text, `${bank.slug}: missed-call flow is not explicit`).toContain('registered mobile');
+        } else {
+          expect(text, `${bank.slug}: IVR/customer-care flow is not explicit`).toContain('dedicated missed-call service verified नहीं है');
+        }
+      }
+    },
+  );
+}
