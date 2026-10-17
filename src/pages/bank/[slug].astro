@@ -104,6 +104,17 @@ const h1Overrides: Partial<Record<string, string>> = {
   // title override already leads with the Latin phrase, but the H1 was the
   // Devanagari name, so the heading never bold-matched the query.
   'up-gramin': `Uttar Pradesh Gramin Bank Balance Check Number ${bank.missedCall}`,
+  // 28d pull 2026-10-16: 'canara bank balance check number' 5,621 impr @ 0.39%
+  // CTR pos 6.0 — the H1 was the Devanagari name only, so no heading carried the
+  // Latin words the query is written in. Same fix as ubi/maharashtra.
+  canara: `Canara Bank Balance Check Number ${bank.missedCall}`,
+  // 28d pull 2026-10-16: 'idbi bank balance check number' 4,406 impr @ 0.27% pos
+  // 7.9 (+3,681 @ 0.24% pos 8.0 on 'idbi bank balance check') — one override
+  // covers both spellings; the H1 was the Devanagari name only.
+  idbi: `IDBI Bank Balance Check Number ${bank.missedCall}`,
+  // 28d pull 2026-10-16: 'bank of india balance check number' 5,168 impr @ 0.77%
+  // pos 7.6 — the H1 led with 'बैंक ऑफ इंडिया', never the Latin name the query uses.
+  boi: `Bank of India Balance Check Number ${bank.missedCall}`,
 };
 if (bank.slug === 'psb') {
   faqs.push(

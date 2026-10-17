@@ -61,6 +61,9 @@ for (const bank of banks) {
         ubi: `Union Bank Balance Check Number ${bank.missedCall}`,
         maharashtra: `Bank of Maharashtra Balance Check Number ${bank.missedCall}`,
         'up-gramin': `Uttar Pradesh Gramin Bank Balance Check Number ${bank.missedCall}`,
+        canara: `Canara Bank Balance Check Number ${bank.missedCall}`,
+        idbi: `IDBI Bank Balance Check Number ${bank.missedCall}`,
+        boi: `Bank of India Balance Check Number ${bank.missedCall}`,
       };
       const expectedH1 = h1Overrides[bank.slug] ?? bank.nameHindi;
       await expect(page.getByRole('heading', { level: 1, name: expectedH1 })).toBeVisible();
