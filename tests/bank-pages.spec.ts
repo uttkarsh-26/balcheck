@@ -297,7 +297,7 @@ test.describe('bank page coverage', () => {
   });
 
   test('asserts the H1 override contract for every overridden bank', () => {
-    const expectedOverrideSlugs = ['boi', 'canara', 'idbi', 'maharashtra', 'psb', 'ubi', 'up-gramin'];
+    const expectedOverrideSlugs = ['boi', 'canara', 'idbi', 'psb', 'ubi', 'up-gramin'];
     expect(Object.keys(h1Overrides).sort()).toEqual(expectedOverrideSlugs);
     // An override naming an unknown slug would never be asserted on any page.
     expect(expectedOverrideSlugs.every(slug => banks.some(bank => bank.slug === slug))).toBe(true);
