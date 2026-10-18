@@ -158,26 +158,21 @@ for (const bank of sampleBanks) {
       await expect(body).not.toContainText('बिल्कुल मुफ़्त है');
     });
 
-    test('shows an auditable source line or says it is missing', async ({ page }) => {
-      const source = page.getByTestId('verification-source');
-      await expect(source).toBeVisible();
-      if (bank.verificationSource) {
-        await expect(source).toContainText(bank.verificationSource);
+    test('cites the record through the shared RecordEvidence block', async ({ page }) => {
+      const block = page.getByTestId('record-evidence');
+      const hasEvidence = Boolean(bank.verificationSource?.trim() && bank.lastVerified);
+      if (hasEvidence) {
+        await expect(block).toBeVisible();
+        await expect(block.getByTestId('record-evidence-source')).toContainText(
+          bank.verificationSource!.slice(0, 40),
+        );
+        await expect(block.getByTestId('record-evidence-date')).toHaveAttribute('datetime', bank.lastVerified!);
       } else {
-        await expect(source).toContainText('स्रोत लाइन दर्ज नहीं');
+        // Undocumented record: the shared component renders nothing, not a placeholder.
+        await expect(block).toHaveCount(0);
       }
       const website = page.locator(`a[href="${bank.website}"]`).first();
       await expect(website).toBeVisible();
-    });
-
-    test('shows the last-verified date from the data', async ({ page }) => {
-      const verified = page.getByTestId('last-verified');
-      await expect(verified).toBeVisible();
-      if (bank.lastVerified) {
-        await expect(verified).toContainText(bank.lastVerified);
-      } else {
-        await expect(verified).toContainText('तिथि दर्ज नहीं');
-      }
     });
 
     test('emits dateModified only when the record has a verification date', async ({ page }) => {

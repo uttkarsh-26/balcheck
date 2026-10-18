@@ -1,6 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import MoreServices from '../../components/MoreServices.astro';
+import RecordEvidence from '../../components/RecordEvidence.astro';
+import { hasDocumentedEvidence } from '../../lib/evidence';
 import { banks } from '../../data/banks';
 import type { Bank } from '../../data/banks';
 
@@ -36,7 +38,6 @@ const balanceText = isMissedCall
   ? `${bank.name} में registered mobile से recorded balance number ${bank.missedCall} पर missed call दें। Bank की service active होने पर balance SMS मिल सकता है।`
   : `${bank.missedCall} Customer Care / IVR number है; dedicated missed-call service verified नहीं है। Call करके balance enquiry विकल्प चुनें और IVR के निर्देश पूरे करें।`;
 const websiteHost = bank.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
-const hasDocumentedEvidence = Boolean(bank.verificationSource && bank.lastVerified);
 const serviceModeLabel = isMissedCall ? 'Missed-call balance flow' : 'Customer Care / IVR balance flow';
 const serviceSteps = isMissedCall ? [
   `अपना वही mobile उपयोग करें जो ${bank.name} account में registered है।`,
@@ -156,8 +157,13 @@ const schema = {
 
     <section data-testid="service-evidence" class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
       <h2 class="text-h2 font-semibold text-amber-950 mb-2">Source और verification status</h2>
-      {hasDocumentedEvidence ? (
-        <p class="text-sm text-amber-900 leading-relaxed">इस {bank.shortName} record की supporting source details saved हैं और इसे <strong>{bank.lastVerified}</strong> को last reviewed किया गया था। Bank service बदल सकती है; current SMS command और availability के लिए <a href={bank.website} target="_blank" rel="noopener noreferrer" class="font-semibold underline">{bank.website}</a> फिर भी final authority है।</p>
+      <RecordEvidence
+        source={bank.verificationSource}
+        lastVerified={bank.lastVerified}
+        scope={`${bank.shortName} SMS banking`}
+      />
+      {hasDocumentedEvidence(bank) ? (
+        <p class="text-sm text-amber-900 leading-relaxed">Bank service बदल सकती है; current SMS command और availability के लिए <a href={bank.website} target="_blank" rel="noopener noreferrer" class="font-semibold underline">{bank.website}</a> फिर भी final authority है।</p>
       ) : (
         <p class="text-sm text-amber-900 leading-relaxed">इस {bank.shortName} record में official website और contact numbers मौजूद हैं, लेकिन detailed source citation और review date stored नहीं है। इसलिए हम कोई exact SMS keyword, free/24×7 promise या instant-response guarantee नहीं देते। उपयोग से पहले <a href={bank.website} target="_blank" rel="noopener noreferrer" class="font-semibold underline">{bank.website}</a> या {bank.customerCare} से latest process confirm करें।</p>
       )}

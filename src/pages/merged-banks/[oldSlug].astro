@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import FaqAccordion from '../../components/FaqAccordion.astro';
+import RecordEvidence from '../../components/RecordEvidence.astro';
 import { mergers } from '../../data/mergers';
 import { banks } from '../../data/banks';
 
@@ -148,6 +149,12 @@ const displayDate = (iso: string) => {
       {successor.nameHindi} की पूरी जानकारी देखें →
     </a>
   </div>
+
+  <RecordEvidence
+    source={successor.verificationSource}
+    lastVerified={successor.lastVerified}
+    scope={`${successor.shortName} balance check`}
+  />
 
   <!-- Official merger timeline -->
   <section class="mt-6 bg-white rounded-xl border border-gray-200 p-5">

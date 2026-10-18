@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import type { Page } from '@playwright/test';
 import { banks } from '../src/data/banks';
+import { mergers } from '../src/data/mergers';
 import { gotoDom } from './utils';
 
 /**
@@ -16,7 +17,13 @@ import { gotoDom } from './utils';
  *  4. `/balance-enquiry/[slug]/`, `/aadhaar-link/[slug]/`, `/mini-statement/`
  *     and `/number-lookup/` published bank numbers with no visible source and
  *     no last-verified date, while `banks.ts` carries `verificationSource` and
- *     `lastVerified` for every documented record.
+ *     `lastVerified` for every documented record. The follow-up sweep found the
+ *     same defect on every remaining number-publishing template: `/bank/[slug]/`,
+ *     `/missed-call/[slug]/`, `/customer-care/[slug]/`, `/toll-free-number/[slug]/`,
+ *     `/atm-pin/[slug]/`, `/mobile-number-registration/[slug]/`, `/net-banking/[slug]/`,
+ *     `/sms-banking/[slug]/`, the homepage and the directory hubs
+ *     (`/missed-call/`, `/customer-care/`, `/toll-free-number/`, `/banks/[category]/`,
+ *     `/merged-banks/`, `/merged-banks/[oldSlug]/`).
  *
  * Every assertion is computed from the rendered DOM: bounding boxes, computed
  * styles and the text of the citation block. No snapshots, no source reading.
@@ -38,13 +45,43 @@ const EVIDENCE_PAGES = [
   { path: '/balance-enquiry/sbi/', slug: 'sbi' },
   { path: '/aadhaar-link/sbi/', slug: 'sbi' },
   { path: '/mini-statement/sbi/', slug: 'sbi' },
+  { path: '/missed-call/sbi/', slug: 'sbi' },
+  { path: '/bank/sbi/', slug: 'sbi' },
+  { path: '/customer-care/sbi/', slug: 'sbi' },
+  { path: '/toll-free-number/sbi/', slug: 'sbi' },
+  { path: '/atm-pin/sbi/', slug: 'sbi' },
+  { path: '/mobile-number-registration/sbi/', slug: 'sbi' },
+  { path: '/net-banking/sbi/', slug: 'sbi' },
+  { path: '/sms-banking/sbi/', slug: 'sbi' },
 ] as const;
 
 /** Directory templates: no single record, an aggregate of the whole registry. */
-const EVIDENCE_DIRECTORY_PAGES = ['/mini-statement/', '/number-lookup/'] as const;
+const EVIDENCE_DIRECTORY_PAGES = [
+  '/mini-statement/',
+  '/number-lookup/',
+  '/',
+  '/missed-call/',
+  '/customer-care/',
+  '/toll-free-number/',
+  '/banks/public-sector/',
+  '/merged-banks/',
+] as const;
 
 /** Templates that publish a number for every record, including undocumented ones. */
-const RECORD_TEMPLATES = ['/balance-enquiry', '/aadhaar-link'] as const;
+const RECORD_TEMPLATES = [
+  '/balance-enquiry',
+  '/aadhaar-link',
+  '/bank',
+  '/customer-care',
+  '/sms-banking',
+  '/atm-pin',
+  '/mobile-number-registration',
+  '/net-banking',
+  '/toll-free-number',
+] as const;
+
+/** Templates that exist for every bank, used to prove the citation is not hardcoded. */
+const ALL_BANK_TEMPLATES = ['/bank', '/customer-care', '/sms-banking'] as const;
 
 /** FAQ accordions across template families, each with at least one summary. */
 const FAQ_PAGES = [
@@ -282,20 +319,53 @@ test.describe('P1 11: pages that publish a number cite its source and review dat
     });
   }
 
+  test('the undocumented /missed-call/ page renders no citation instead of a fake one', async ({ page }) => {
+    // /missed-call/[slug] pages exist for every missed-call-mode record, including
+    // the ones that only carry an audit receipt and no date. The shared component
+    // must render nothing there, and the page must not print a date nobody earned.
+    const target = banks.find(
+      (bank) => bank.balanceMode === 'missed-call' && (!bank.verificationSource?.trim() || !bank.lastVerified),
+    );
+    if (!target) throw new Error('no undocumented missed-call record left in the registry');
+    await gotoDom(page, `/missed-call/${target.slug}/`);
+    await expect(page.locator('[data-testid="record-evidence"]')).toHaveCount(0);
+    await expect(page.locator('main time[datetime]')).toHaveCount(0);
+  });
+
+  test('merged-banks pages cite the successor record exactly when it has evidence', async ({ page }) => {
+    expect(mergers.length, 'merger records exist').toBeGreaterThan(0);
+    for (const merger of mergers) {
+      await gotoDom(page, `/merged-banks/${merger.oldSlug}/`);
+      const block = page.locator('[data-testid="record-evidence"]');
+      const successor = bankBySlug(merger.successorSlug);
+      if (successor.verificationSource?.trim() && successor.lastVerified) {
+        await expect(block, `${merger.oldSlug}: citation block`).toBeVisible();
+        await expect(block.locator('[data-testid="record-evidence-date"]')).toHaveAttribute(
+          'datetime',
+          successor.lastVerified,
+        );
+      } else {
+        await expect(block, `${merger.oldSlug}: no citation for an undocumented successor`).toHaveCount(0);
+      }
+    }
+  });
+
   test('the citation is not a copy of the record data: every bank page with evidence cites it', async ({ page }) => {
-    // Two more records, so one template cannot pass by hardcoding the SBI block.
+    // More records and more templates, so no template can pass by hardcoding the SBI block.
     for (const slug of ['pnb', 'axis']) {
       const bank = bankBySlug(slug);
-      await gotoDom(page, `/balance-enquiry/${slug}/`);
-      const block = page.locator('[data-testid="record-evidence"]');
-      await expect(block, `${slug}: citation block`).toBeVisible();
-      expect(normalized((await block.innerText()) ?? ''), `${slug}: wrong record cited`).toContain(
-        normalized(bank.verificationSource!).slice(0, 40),
-      );
-      await expect(block.locator('[data-testid="record-evidence-date"]')).toHaveAttribute(
-        'datetime',
-        bank.lastVerified!,
-      );
+      for (const template of ALL_BANK_TEMPLATES) {
+        await gotoDom(page, `${template}/${slug}/`);
+        const block = page.locator('[data-testid="record-evidence"]');
+        await expect(block, `${template}/${slug}: citation block`).toBeVisible();
+        expect(normalized((await block.innerText()) ?? ''), `${template}/${slug}: wrong record cited`).toContain(
+          normalized(bank.verificationSource!).slice(0, 40),
+        );
+        await expect(block.locator('[data-testid="record-evidence-date"]')).toHaveAttribute(
+          'datetime',
+          bank.lastVerified!,
+        );
+      }
     }
   });
 
