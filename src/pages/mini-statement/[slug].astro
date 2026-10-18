@@ -1,7 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import MoreServices from '../../components/MoreServices.astro';
+import RecordEvidence from '../../components/RecordEvidence.astro';
 import { banks } from '../../data/banks';
+import { hasDocumentedEvidence } from '../../lib/evidence';
 import type { Bank } from '../../data/banks';
 
 export function getStaticPaths() {
@@ -18,8 +20,8 @@ const displayName = ({ axis: 'Axis Bank', federal: 'Federal Bank' } as Record<st
 const title = hasDedicatedNumber
   ? `${bank.shortName} Mini Statement Number ${bank.missedCallAlt} | BalCheck`
   : `${displayName} Mini Statement — Official Methods | BalCheck`;
-const hasDocumentedEvidence = Boolean(bank.verificationSource && bank.lastVerified);
-const documentedTransactionCount = hasDedicatedNumber && hasDocumentedEvidence ? transactionCount : null;
+// A record only claims a documented transaction count when it has citable evidence.
+const documentedTransactionCount = hasDedicatedNumber && hasDocumentedEvidence(bank) ? transactionCount : null;
 const description = hasDedicatedNumber
   ? documentedTransactionCount
     ? `${bank.name} verified mini statement number ${bank.missedCallAlt}. Registered mobile से missed call देकर last ${documentedTransactionCount} transactions पाएं।`
@@ -191,14 +193,11 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
       </ol>
     </section>
 
-    <section data-testid="mini-statement-evidence" class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
-      <h2 class="text-lg font-semibold text-amber-950 mb-2">Source और verification status</h2>
-      {hasDocumentedEvidence ? (
-        <p class="text-sm text-amber-900 leading-relaxed">इस {bank.shortName} record की supporting source details stored हैं और इसे <strong>{bank.lastVerified}</strong> को last reviewed किया गया था। Service बदल सकती है; current number और method के लिए <a href={bank.website} target="_blank" rel="noopener noreferrer" class="font-semibold underline">{bank.website}</a> final authority है।</p>
-      ) : (
-        <p class="text-sm text-amber-900 leading-relaxed">इस {bank.shortName} record में official website और contact numbers मौजूद हैं, लेकिन detailed source citation और review date stored नहीं है। इसलिए unsupported mini-statement number, exact response time या guaranteed transaction count का दावा नहीं किया गया। Latest process <a href={bank.website} target="_blank" rel="noopener noreferrer" class="font-semibold underline">{bank.website}</a> या {bank.customerCare} से confirm करें।</p>
-      )}
-    </section>
+    <RecordEvidence
+      source={bank.verificationSource}
+      lastVerified={bank.lastVerified}
+      scope={`${bank.shortName} mini statement`}
+    />
 
     <section class="bg-red-50 border border-red-200 rounded-xl p-5 mb-6">
       <h2 class="text-lg font-semibold mb-3">सुरक्षित तरीके</h2>

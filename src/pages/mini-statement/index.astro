@@ -1,8 +1,11 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import RecordEvidence from '../../components/RecordEvidence.astro';
 import { banks, categories, categoryHindi } from '../../data/banks';
+import { directoryEvidence } from '../../lib/evidence';
 
 const siteUrl = 'https://balcheck.in';
+const registryEvidence = directoryEvidence();
 const canonicalUrl = `${siteUrl}/mini-statement/`;
 
 const title = 'Bank Mini Statement Number — भारतीय बैंकों के Last 5 Transactions';
@@ -47,6 +50,14 @@ const schema = {
       अपने बैंक का mini statement number नीचे खोजें। Missed call देकर SMS में last 5 transactions की जानकारी पाएं।
       यह सेवा मुफ़्त है और 24×7 उपलब्ध है।
     </p>
+
+    {registryEvidence && (
+      <RecordEvidence
+        source={registryEvidence.source}
+        lastVerified={registryEvidence.lastVerified}
+        scope="इस directory के bank records"
+      />
+    )}
 
     {categories.map(cat => {
       const catBanks = banks.filter(b => b.category === cat);

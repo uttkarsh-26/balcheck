@@ -153,7 +153,16 @@ for (const { label, banks: chunkBanks } of miniStatementSweep) {
         expect(text, `${bank.slug}: missing customer-care fallback`).toContain(bank.customerCare);
         expect(text, `${bank.slug}: missing bank category context`).toContain(bank.category);
         expect(text, `${bank.slug}: missing official website`).toContain(bank.website);
-        await expect(guide.getByTestId('mini-statement-evidence'), `${bank.slug}: missing evidence status`).toHaveCount(1);
+        // Documented records cite their source and ISO review date; a record with
+        // no documented evidence renders no citation at all rather than a placeholder.
+        const hasEvidence = Boolean(bank.verificationSource && bank.lastVerified);
+        await expect(
+          guide.getByTestId('record-evidence'),
+          `${bank.slug}: evidence citation`,
+        ).toHaveCount(hasEvidence ? 1 : 0);
+        if (hasEvidence) {
+          await expect(guide.getByTestId('record-evidence-date')).toHaveAttribute('datetime', bank.lastVerified!);
+        }
 
         if (bank.missedCallAlt) {
           expect(text, `${bank.slug}: missing dedicated mini-statement number`).toContain(bank.missedCallAlt);

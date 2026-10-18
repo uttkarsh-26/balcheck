@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import MoreServices from '../../components/MoreServices.astro';
+import RecordEvidence from '../../components/RecordEvidence.astro';
 import { banks } from '../../data/banks';
 import type { Bank } from '../../data/banks';
 
@@ -158,6 +159,12 @@ const schema = {
         <li class="flex gap-2"><span class="text-brand-600">✓</span> SMS banking — अगर SMS banking सेवा active है तो SMS करके बैलेंस पाएं</li>
       </ul>
     </div>
+
+    <RecordEvidence
+      source={bank.verificationSource}
+      lastVerified={bank.lastVerified}
+      scope={`${bank.shortName} balance enquiry`}
+    />
 
     <!-- FAQ -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">

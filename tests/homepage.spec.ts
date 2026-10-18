@@ -84,8 +84,10 @@ test.describe('homepage', () => {
       'aadhaar-link', 'atm-pin', 'missed-call',
     ];
 
+    // Scoped to the page body: the header rail is collapsed behind a disclosure
+    // on mobile (see SiteHeader), so chrome links are not the surface under test.
     for (const hub of serviceHubs) {
-      await expect(page.locator(`a[href="/${hub}/"]`).first()).toBeVisible();
+      await expect(page.locator(`main a[href="/${hub}/"]`).first()).toBeVisible();
     }
   });
 
@@ -98,7 +100,7 @@ test.describe('homepage', () => {
   });
 
   test('navigates to how-it-works page', async ({ page }) => {
-    await page.locator('a[href="/how-it-works/"]').first().click();
+    await page.locator('main a[href="/how-it-works/"]').first().click();
     await expect(page).toHaveURL('/how-it-works/');
     await expect(page.getByRole('heading', { level: 1, name: 'मिस्ड कॉल से बैंक बैलेंस कैसे चेक करें' })).toBeVisible();
   });

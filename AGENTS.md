@@ -53,6 +53,9 @@ public/
 - Brand tokens + component rules: `docs/brand-tokens.md` (implemented in `src/styles/global.css` @theme).
 - Global utilities `scrollbar-hide` and `scroll-fade` live in `global.css` — use them for ALL horizontal scroll rails; do not redefine them in page <style> blocks.
 - Sitewide footer links live only in `SiteFooter.astro`; never add inline page footers.
+- Every FAQ accordion renders through `src/components/FaqAccordion.astro` (one `summary` implementation, one 44px tap-target floor). Never hand-write `details`/`summary` FAQ markup in a page.
+- Every page that publishes a bank number cites it through `src/components/RecordEvidence.astro` with that record's `verificationSource` + `lastVerified`; directory templates pass `directoryEvidence()` from `src/lib/evidence.ts`. A record with neither field renders no citation rather than a placeholder.
+- The sticky header collapses to one ~61px bar below `sm` (`src/components/SiteHeader.astro`): the service rail sits behind the `service-nav-toggle` disclosure. Desktop keeps the two-row layout, so any header change must be re-measured at 390px AND 1280px.
 
 ## PSEO Pages
 - **79 bank pages** at `/bank/[slug]` — each with BankOrCreditUnion, FAQPage, HowTo, BreadcrumbList schema
