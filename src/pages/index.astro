@@ -94,12 +94,12 @@ const popularBanks = ['sbi', 'bob', 'canara', 'ubi', 'pnb', 'boi', 'indian-bank'
           <!-- Bank Name -->
           <div class="flex items-start justify-between mb-3">
             <div>
-              <a href={`/bank/${bank.slug}/`}>
-                <h3 class="font-bold text-gray-900 text-base leading-tight hover:text-brand-600 transition-colors">{bank.nameHindi}</h3>
+              <a href={`/bank/${bank.slug}/`} class="inline-flex items-center min-h-[44px]">
+                <h3 class="font-bold text-gray-900 text-base leading-normal hover:text-brand-600 transition-colors">{bank.nameHindi}</h3>
               </a>
-              <p class="text-xs text-gray-500 mt-0.5">{bank.name}</p>
+              <p class="text-sm text-gray-600 mt-0.5">{bank.name}</p>
             </div>
-            <span class="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded shrink-0">
+            <span class="text-sm font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded shrink-0">
               {bank.shortName}
             </span>
           </div>
@@ -107,7 +107,7 @@ const popularBanks = ['sbi', 'bob', 'canara', 'ubi', 'pnb', 'boi', 'indian-bank'
           <!-- Missed Call Number -->
           <a href={`tel:${bank.missedCall}`} class="block">
             <div class="bg-brand-50 rounded-lg p-3 mb-3 hover:bg-brand-100 transition-colors">
-              <p class="text-xs text-brand-700 font-medium mb-1">📞 {bank.balanceMode === 'missed-call' ? 'मिस्ड कॉल नंबर' : 'Customer Care / IVR'}</p>
+              <p class="text-sm text-brand-700 font-medium mb-1">📞 {bank.balanceMode === 'missed-call' ? 'मिस्ड कॉल नंबर' : 'Customer Care / IVR'}</p>
               <span class="text-xl font-bold text-brand-700 tracking-wide">{bank.missedCall}</span>
             </div>
           </a>
@@ -133,7 +133,7 @@ const popularBanks = ['sbi', 'bob', 'canara', 'ubi', 'pnb', 'boi', 'indian-bank'
           </div>
           
           {bank.notes && (
-            <p class="text-xs text-gray-600 mt-2">⚠️ {bank.notes}</p>
+            <p class="text-sm text-gray-600 mt-2">⚠️ {bank.notes}</p>
           )}
         </div>
       </div>
@@ -172,7 +172,7 @@ const popularBanks = ['sbi', 'bob', 'canara', 'ubi', 'pnb', 'boi', 'indian-bank'
         <h2 class="text-sm font-bold text-amber-900">विलय हुई बैंकें — पुराने बैंक का नया नंबर</h2>
         <p class="text-xs text-amber-800 mt-0.5">RRB विलय (2019–2025) के बाद पुराने बैंक किस नए बैंक में गए और नया balance check number क्या है।</p>
       </div>
-      <a href="/merged-banks/" class="shrink-0 inline-flex items-center justify-center min-h-[44px] rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold px-5 transition-colors">
+      <a href="/merged-banks/" class="shrink-0 inline-flex items-center justify-center min-h-[44px] rounded-lg bg-amber-700 hover:bg-amber-800 text-white text-sm font-semibold px-5 transition-colors">
         सूची देखें →
       </a>
     </div>
@@ -193,7 +193,7 @@ const popularBanks = ['sbi', 'bob', 'canara', 'ubi', 'pnb', 'boi', 'indian-bank'
       <div class="text-5xl sm:text-6xl shrink-0">📄</div>
       <div class="flex-1">
         <h2 class="text-lg sm:text-xl font-bold text-white mb-1">सभी बैंक नंबर एक PDF में डाउनलोड करें</h2>
-        <p class="text-sm text-brand-100">{bankCount} बैंकों के missed-call balance, mini statement और customer care नंबर — ऑफलाइन रखें, प्रिंट करें</p>
+        <p class="text-sm text-white">{bankCount} बैंकों के missed-call balance, mini statement और customer care नंबर — ऑफलाइन रखें, प्रिंट करें</p>
       </div>
       <a href="https://upseva.in/tools/bank-cheatsheet/" target="_blank" rel="noopener" class="shrink-0 inline-flex items-center gap-2 bg-white text-brand-700 font-bold text-sm px-6 py-3 rounded-xl hover:bg-brand-50 transition-colors shadow-lg whitespace-nowrap">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>

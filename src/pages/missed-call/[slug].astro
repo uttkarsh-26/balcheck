@@ -153,14 +153,14 @@ const schema = {
     <!-- Header -->
     <div data-testid="missed-call-hero" class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-4">
       <h1 class="text-2xl font-bold mb-2">{bank.shortName} Missed Call Balance Check Number {bank.missedCall}</h1>
-      <p class="text-brand-100 text-sm leading-relaxed">
+      <p class="text-white text-sm leading-relaxed">
         {bank.nameHindi} ({bank.name}) का missed call balance check number <strong class="text-white">{missedCallSpaced}</strong>
         — यानी {bank.missedCall} है। इसे उसी मोबाइल से डायल करें जो आपके खाते में registered है; कॉल जवाब में जुड़ती नहीं
         और balance SMS में आ जाता है।
       </p>
       <p class="mt-3 flex flex-wrap items-center gap-2 text-xs font-medium">
-        <span class="rounded-full bg-white/15 px-3 py-1">{categoryHindi[bank.category] ?? bank.category} · {bank.category}</span>
-        <span data-testid="freshness-chip" class="rounded-full bg-white/15 px-3 py-1">
+        <span class="rounded-full bg-brand-900/40 px-3 py-1">{categoryHindi[bank.category] ?? bank.category} · {bank.category}</span>
+        <span data-testid="freshness-chip" class="rounded-full bg-brand-900/40 px-3 py-1">
           {lastVerified ? `अंतिम सत्यापन: ${lastVerified}` : 'सत्यापन तिथि दर्ज नहीं — बैंक की website पर जांचें'}
         </span>
       </p>
