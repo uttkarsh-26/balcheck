@@ -4,8 +4,12 @@ import FaqAccordion from '../components/FaqAccordion.astro';
 import SchemaOrg from '../components/SchemaOrg.astro';
 import Chip from '../components/Chip.astro';
 import PhoneNumber from '../components/PhoneNumber.astro';
+import RecordEvidence from '../components/RecordEvidence.astro';
 import { banks, categories, categoryHindi } from '../data/banks';
 import { searchAliases } from '../lib/search-aliases';
+import { directoryEvidence } from '../lib/evidence';
+
+const registryEvidence = directoryEvidence();
 
 const bankCount = banks.length;
 const publicCount = banks.filter(b => b.category === 'Public Sector').length;
@@ -199,6 +203,12 @@ const faqs = [
       <a href="/number-lookup/" class="font-medium text-brand-700 hover:underline">Number Lookup tool से जानें यह नंबर किस बैंक का है →</a>
     </p>
   </div>
+
+  <RecordEvidence
+    source={registryEvidence?.source}
+    lastVerified={registryEvidence?.lastVerified}
+    scope="पूरे registry"
+  />
 
   <!-- Category directory comes after the primary bank answer -->
   <section class="mt-10 border-t border-gray-100 pt-8">

@@ -2,6 +2,10 @@
 import Layout from '../../layouts/Layout.astro';
 import { banks, categories, categoryHindi } from '../../data/banks';
 import { isTrueTollFreeNumber } from '../../lib/phone';
+import RecordEvidence from '../../components/RecordEvidence.astro';
+import { directoryEvidence } from '../../lib/evidence';
+
+const registryEvidence = directoryEvidence();
 
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = `${siteUrl}/toll-free-number/`;
@@ -78,5 +82,11 @@ const schema = {
         );
       })}
     </div>
+
+    <RecordEvidence
+      source={registryEvidence?.source}
+      lastVerified={registryEvidence?.lastVerified}
+      scope="पूरे registry"
+    />
   </div>
 </Layout>

@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import PhoneNumber from '../../components/PhoneNumber.astro';
 import MoreServices from '../../components/MoreServices.astro';
+import RecordEvidence from '../../components/RecordEvidence.astro';
 import { banks, categoryHindi } from '../../data/banks';
 import type { Bank } from '../../data/banks';
 import { mergers } from '../../data/mergers';
@@ -49,9 +50,11 @@ const missedCallSpaced = spacedNumber(bank.missedCall);
 const missedCallBankCount = banks.filter(b => b.balanceMode === 'missed-call').length;
 const ivrOnlyBanks = banks.filter(b => b.balanceMode !== 'missed-call');
 
-// Provenance rendered from real fields: a source line only when the record has
-// one, a verification date only when lastVerified is set. No invented dates or
-// "official" claims — where the field is absent the page says so.
+// Provenance rendered from real fields: the shared RecordEvidence block cites
+// source + date only when BOTH exist. Records with a receipt but no date (the
+// 2026-09-18 NO_SUPPORT/SITE_BLOCKED class) render no citation, and the data
+// section below prints what is absent instead of inventing it.
+const hasEvidence = Boolean(bank.verificationSource?.trim() && bank.lastVerified);
 const sourceUrl = bank.verificationSource?.match(/https?:\/\/[^\s)]+/)?.[0];
 const lastVerified = bank.lastVerified;
 const legacyRecords = mergers.filter(
@@ -191,6 +194,12 @@ const schema = {
         <li class="flex gap-2"><span class="text-brand-600">✓</span> OTP, PIN, CVV या password कभी नहीं मांगा जाएगा</li>
       </ul>
     </div>
+
+    <RecordEvidence
+      source={bank.verificationSource}
+      lastVerified={bank.lastVerified}
+      scope={`${bank.shortName} missed call`}
+    />
 
     <!-- Scope: what this number does NOT do -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
@@ -398,31 +407,35 @@ const schema = {
 
     <!-- Data provenance, freshness, legacy names -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-h2 font-semibold text-gray-900 mb-3">🔎 डेटा स्रोत, अंतिम सत्यापन और पुराने नाम</h2>
+      <h2 class="text-h2 font-semibold text-gray-900 mb-3">🔎 रिकॉर्ड ब्यौरा, सत्यापन स्थिति और पुराने नाम</h2>
       <dl class="space-y-3 text-sm text-gray-700">
         <div>
           <dt class="font-medium text-gray-900">इस रिकॉर्ड का नंबर</dt>
           <dd>{bank.missedCall} · {missedCallSpaced} · bank record: <a href={`/bank/${bank.slug}/`} class="text-brand-700 font-medium">{bank.shortName} पेज</a></dd>
         </div>
-        <div>
-          <dt class="font-medium text-gray-900">अंतिम सत्यापन (last verified)</dt>
-          <dd data-testid="last-verified">
-            {lastVerified
-              ? <>{lastVerified} — इसी तारीख़ को इस रिकॉर्ड का नंबर जांचा गया था।</>
-              : <>इस रिकॉर्ड के लिए सत्यापन तिथि दर्ज नहीं है — नंबर इस्तेमाल से पहले बैंक की website {bank.website} पर जांच लें।</>}
-          </dd>
-        </div>
-        <div>
-          <dt class="font-medium text-gray-900">सत्यापन स्रोत (verification source)</dt>
-          <dd data-testid="verification-source">
-            {bank.verificationSource
-              ? <>
-                  {bank.verificationSource}
-                  {sourceUrl && <> · <a href={sourceUrl} target="_blank" rel="noopener noreferrer" class="text-brand-700 font-medium">स्रोत लिंक खोलें</a></>}
-                </>
-              : <>इस रिकॉर्ड के लिए अलग स्रोत लाइन दर्ज नहीं है — BalCheck केवल अपने डेटा में मौजूद नंबर दिखाता है और किसी बैंक का आधिकारिक प्रतिनिधि नहीं है।</>}
-          </dd>
-        </div>
+        {!hasEvidence && (
+          <>
+            <div>
+              <dt class="font-medium text-gray-900">अंतिम सत्यापन (last verified)</dt>
+              <dd data-testid="last-verified">
+                {lastVerified
+                  ? <>{lastVerified} — इसी तारीख़ को इस रिकॉर्ड का नंबर जांचा गया था।</>
+                  : <>इस रिकॉर्ड के लिए सत्यापन तिथि दर्ज नहीं है — नंबर इस्तेमाल से पहले बैंक की website {bank.website} पर जांच लें।</>}
+              </dd>
+            </div>
+            <div>
+              <dt class="font-medium text-gray-900">सत्यापन स्रोत (verification source)</dt>
+              <dd data-testid="verification-source">
+                {bank.verificationSource
+                  ? <>
+                      {bank.verificationSource}
+                      {sourceUrl && <> · <a href={sourceUrl} target="_blank" rel="noopener noreferrer" class="text-brand-700 font-medium">स्रोत लिंक खोलें</a></>}
+                    </>
+                  : <>इस रिकॉर्ड के लिए अलग स्रोत लाइन दर्ज नहीं है — BalCheck केवल अपने डेटा में मौजूद नंबर दिखाता है और किसी बैंक का आधिकारिक प्रतिनिधि नहीं है।</>}
+              </dd>
+            </div>
+          </>
+        )}
         <div>
           <dt class="font-medium text-gray-900">बैंक की website</dt>
           <dd><a href={bank.website} target="_blank" rel="noopener noreferrer" class="text-brand-700 font-medium">{bank.website}</a> — नंबर, शुल्क और शर्तें यहीं जांचें</dd>

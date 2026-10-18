@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import PhoneNumber from '../../components/PhoneNumber.astro';
 import MoreServices from '../../components/MoreServices.astro';
+import RecordEvidence from '../../components/RecordEvidence.astro';
 import { banks } from '../../data/banks';
 import type { Bank } from '../../data/banks';
 
@@ -189,6 +190,13 @@ const schema = {
       <p class="text-xs text-gray-500 font-medium mb-1">🎧 सहायता के लिए Customer Care</p>
       <a href={`tel:${bank.customerCare}`}><PhoneNumber variant="inline" number={bank.customerCare} /></a>
     </div>
+
+    <RecordEvidence
+      source={bank.verificationSource}
+      lastVerified={bank.lastVerified}
+      scope={`${bank.shortName} customer care`}
+    />
+
     <MoreServices bank={bank} />
   </div>
 </Layout>

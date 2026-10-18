@@ -1,6 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { banks, categories, categoryHindi } from '../../data/banks';
+import RecordEvidence from '../../components/RecordEvidence.astro';
+import { directoryEvidence } from '../../lib/evidence';
+
+const registryEvidence = directoryEvidence();
 
 const siteUrl = 'https://balcheck.in';
 
@@ -133,6 +137,12 @@ const pageDesc = categoryOverride?.description ?? (isCooperative
       <p>Cooperative bank balance check number की verified लिस्ट ऊपर दी गई है। अपने registered mobile से संबंधित सहकारी बैंक के missed-call number पर कॉल करें; कॉल कटने के बाद SMS में balance मिलता है। ऊपर बैंक कार्ड पर “कॉल करें” बटन दबाएं या नंबर सीधे dial करें।</p>
     </div>
   )}
+
+  <RecordEvidence
+    source={registryEvidence?.source}
+    lastVerified={registryEvidence?.lastVerified}
+    scope="पूरे registry"
+  />
 </div>
 
 <!-- Category Links -->

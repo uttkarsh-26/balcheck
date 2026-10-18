@@ -2,6 +2,10 @@
 import Layout from '../../layouts/Layout.astro';
 import { mergers } from '../../data/mergers';
 import { banks } from '../../data/banks';
+import RecordEvidence from '../../components/RecordEvidence.astro';
+import { directoryEvidence } from '../../lib/evidence';
+
+const registryEvidence = directoryEvidence();
 
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = `${siteUrl}/merged-banks/`;
@@ -96,6 +100,12 @@ const pageDesc = `${mergers.length} ग्रामीण बैंक विल
       </div>
     ))}
   </div>
+
+  <RecordEvidence
+    source={registryEvidence?.source}
+    lastVerified={registryEvidence?.lastVerified}
+    scope="पूरे registry"
+  />
 
   <!-- Note -->
   <div class="mt-8 bg-amber-50 rounded-xl border border-amber-200 p-4">
