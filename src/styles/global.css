@@ -16,8 +16,32 @@
   --color-saffron-400: #fb923c;
   --color-saffron-500: #f97316;
   --color-saffron-600: #ea580c;
-  --font-hindi: "Noto Sans Devanagari", "Mangal", system-ui, sans-serif;
+  /* Latin-first stack (desktop audit): Latin letters and digit runs (phone
+     numbers, "Balance Enquiry") render in system-ui's Latin glyphs, Devanagari
+     falls through to Noto Sans Devanagari. Phone numbers additionally get
+     tabular numerals via the PhoneNumber component. */
+  --font-hindi: var(--font-sans), "Noto Sans Devanagari", "Mangal", sans-serif;
   --font-sans: system-ui, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography scale (desktop audit): ONE H1 step and ONE H2 step for every
+     template. text-h1 is fluid 24px (mobile) -> 36px (desktop); text-h2 is a
+     fixed 20px section step that always outranks the 16px card h3. No page may
+     override these with ad-hoc text-* size utilities on h1/h2. */
+  --text-h1: clamp(1.5rem, 1.207rem + 1.304vw, 2.25rem);
+  --text-h1--line-height: 1.25;
+  --text-h2: 1.25rem;
+  --text-h2--line-height: 1.35;
+
+  /* Display step: reserved for the VideoHeroBanner poster headline (an h2 in
+     markup, visually a hero title). The only sanctioned exception to text-h2. */
+  --text-display: clamp(1.5rem, 1.2rem + 2vw, 3rem);
+  --text-display--line-height: 1.2;
+
+  /* Content measures (desktop audit): exactly two container widths.
+     max-w-copy (48rem) = prose, hero, CTA, legal, FAQ, detail content.
+     max-w-wide (72rem) = directory grids, header and footer. */
+  --container-copy: 48rem;
+  --container-wide: 72rem;
 }
 
 /* Brand utility: hide the native scrollbar on horizontal chip rails.
@@ -35,4 +59,19 @@
    so a clipped chip reads as "scrolls for more", not "broken layout". */
 @utility scroll-fade {
   mask-image: linear-gradient(to right, black 0, black calc(100% - 28px), transparent 100%);
+}
+
+/* AdSense Auto ads may inject a .google-auto-placed block anywhere, including
+   inside the vertical pages' link-card grids. Policy-safe containment (the ad
+   is never hidden, resized or overlapped — it keeps its natural height):
+   - align-items: start keeps an ad-inflated card from stretching its siblings;
+   - an ad injected as a direct grid child takes its own full-width row instead
+     of being squeezed into one card cell.
+   Applied via the `ads-resilient` class on the link-card grids. */
+.ads-resilient {
+  align-items: start;
+
+  & > .google-auto-placed {
+    grid-column: 1 / -1;
+  }
 }
