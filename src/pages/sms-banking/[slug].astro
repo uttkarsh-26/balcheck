@@ -71,23 +71,23 @@ const schema = {
 ---
 <Layout title={title} description={description} canonical={canonicalUrl}>
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
-  <div data-testid="sms-banking-guide" class="max-w-3xl mx-auto px-4 py-6">
+  <div data-testid="sms-banking-guide" class="max-w-copy mx-auto px-4 py-6">
     <nav class="text-sm text-gray-500 mb-4"><a href="/">Home</a><span class="mx-1">›</span><a href="/sms-banking/">SMS Banking</a><span class="mx-1">›</span><span>{bank.shortName}</span></nav>
 
     <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-6">
-      <h1 class="text-2xl font-bold mb-1">{h1Text}</h1>
+      <h1 class="text-h1 font-bold mb-1">{h1Text}</h1>
       <p class="text-white text-sm">{bank.nameHindi} — recorded balance method, SMS result और safe fallback</p>
     </div>
 
     <section class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-6">
-      <h2 class="text-lg font-semibold text-blue-950 mb-2">सीधा जवाब</h2>
+      <h2 class="text-h2 font-semibold text-blue-950 mb-2">सीधा जवाब</h2>
       <p class="text-sm text-blue-900 leading-relaxed">{balanceText}</p>
       <a href={`tel:${bank.missedCall}`} class="mt-4 inline-flex bg-brand-600 text-white px-5 py-2.5 rounded-lg font-medium">📞 {bank.missedCall}</a>
       {!isMissedCall && <p class="text-xs text-blue-800 mt-3">यह number call/IVR के लिए है। केवल call cut होने से balance SMS आने का दावा नहीं किया जा सकता।</p>}
     </section>
 
     <section class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold mb-4">{bank.shortName} service snapshot</h2>
+      <h2 class="text-h2 font-semibold mb-4">{bank.shortName} service snapshot</h2>
       <dl class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
         <div class="rounded-lg bg-gray-50 p-3"><dt class="text-gray-500">Bank</dt><dd class="font-medium text-gray-900">{bank.name} · {bank.nameHindi}</dd></div>
         <div class="rounded-lg bg-gray-50 p-3"><dt class="text-gray-500">Category</dt><dd class="font-medium text-gray-900">{bank.category}</dd></div>
@@ -99,7 +99,7 @@ const schema = {
     </section>
 
     <section class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold mb-4">Balance response SMS पाने के steps</h2>
+      <h2 class="text-h2 font-semibold mb-4">Balance response SMS पाने के steps</h2>
       <ol class="space-y-3 text-sm text-gray-700">
         {serviceSteps.map((step, index) => (
           <li class="flex gap-3">
@@ -111,7 +111,7 @@ const schema = {
     </section>
 
     <section class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold mb-3">Balance SMS, mini statement और SMS command में फर्क</h2>
+      <h2 class="text-h2 font-semibold mb-3">Balance SMS, mini statement और SMS command में फर्क</h2>
       <div class="space-y-4 text-sm text-gray-700 leading-relaxed">
         <div>
           <h3 class="font-semibold text-gray-900">Balance response</h3>
@@ -133,7 +133,7 @@ const schema = {
     </section>
 
     <section class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold mb-3">Call करने से पहले checklist</h2>
+      <h2 class="text-h2 font-semibold mb-3">Call करने से पहले checklist</h2>
       <ul class="space-y-2 text-sm text-gray-700">
         <li>✓ वही mobile number उपयोग करें जो {bank.name} account में registered है।</li>
         <li>✓ Phone में outgoing call और incoming SMS चालू हों; dual-SIM phone में registered SIM चुनें।</li>
@@ -144,7 +144,7 @@ const schema = {
     </section>
 
     <section class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold mb-3">SMS नहीं आया तो क्या check करें?</h2>
+      <h2 class="text-h2 font-semibold mb-3">SMS नहीं आया तो क्या check करें?</h2>
       <ol class="space-y-2 text-sm text-gray-700 leading-relaxed">
         <li><strong>1. Mobile registration:</strong> branch, ATM या customer care {bank.customerCare} से confirm करें कि यही number account में active है।</li>
         <li><strong>2. Service mode:</strong> {isMissedCall ? 'यह missed-call flow है; call को bank द्वारा disconnect होने दें।' : 'यह IVR/customer-care flow है; menu पूरा किए बिना SMS जरूरी नहीं आएगा।'}</li>
@@ -155,7 +155,7 @@ const schema = {
     </section>
 
     <section data-testid="service-evidence" class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
-      <h2 class="text-lg font-semibold text-amber-950 mb-2">Source और verification status</h2>
+      <h2 class="text-h2 font-semibold text-amber-950 mb-2">Source और verification status</h2>
       {hasDocumentedEvidence ? (
         <p class="text-sm text-amber-900 leading-relaxed">इस {bank.shortName} record की supporting source details saved हैं और इसे <strong>{bank.lastVerified}</strong> को last reviewed किया गया था। Bank service बदल सकती है; current SMS command और availability के लिए <a href={bank.website} target="_blank" rel="noopener noreferrer" class="font-semibold underline">{bank.website}</a> फिर भी final authority है।</p>
       ) : (
@@ -164,17 +164,17 @@ const schema = {
     </section>
 
     <section class="bg-red-50 border border-red-200 rounded-xl p-5 mb-6">
-      <h2 class="text-lg font-semibold text-red-950 mb-2">Security rule</h2>
+      <h2 class="text-h2 font-semibold text-red-950 mb-2">Security rule</h2>
       <p class="text-sm text-red-900 leading-relaxed">Balance या statement पाने के लिए OTP, ATM PIN, UPI PIN, CVV या net-banking password किसी call, SMS reply या link पर share न करें। {bank.name} representative भी ये secrets नहीं मांगना चाहिए। Fraud लगे तो call बंद करके {bank.customerCare} या official website से दोबारा contact करें।</p>
     </section>
 
     <section class="bg-white rounded-xl border border-gray-200 p-5">
-      <h2 class="text-lg font-semibold mb-4">FAQ</h2>
+      <h2 class="text-h2 font-semibold mb-4">FAQ</h2>
       <div class="space-y-4">{faqs.map(f => <div><h3 class="font-medium text-sm mb-1">{f.q}</h3><p class="text-gray-600 text-sm leading-relaxed">{f.a}</p></div>)}</div>
     </section>
   </div>
 
-  <div class="max-w-3xl mx-auto px-4 pb-6">
+  <div class="max-w-copy mx-auto px-4 pb-6">
     <MoreServices bank={bank} />
   </div>
 </Layout>

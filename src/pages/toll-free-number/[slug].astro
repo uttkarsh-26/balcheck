@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import PhoneNumber from '../../components/PhoneNumber.astro';
 import { banks } from '../../data/banks';
 import type { Bank } from '../../data/banks';
 import MoreServices from '../../components/MoreServices.astro';
@@ -97,7 +98,7 @@ const schema = {
 <Layout title={title} description={description} canonical={canonicalUrl}>
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
 
-  <div class="max-w-3xl mx-auto px-4 py-6">
+  <div class="max-w-copy mx-auto px-4 py-6">
     <!-- Breadcrumb -->
     <nav class="text-sm text-gray-500 mb-4">
       <a href="/" class="hover:text-brand-600">Home</a>
@@ -109,7 +110,7 @@ const schema = {
 
     <!-- Header -->
     <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-6">
-      <h1 class="text-2xl font-bold mb-1">{bank.shortName} {isTollFree ? 'Toll Free Number' : 'Customer Care Number'}</h1>
+      <h1 class="text-h1 font-bold mb-1">{bank.shortName} {isTollFree ? 'Toll Free Number' : 'Customer Care Number'}</h1>
       <p class="text-white text-sm">{bank.nameHindi} — {isTollFree ? '1800 customer care helpline' : 'customer care helpline (not toll-free)'}</p>
     </div>
 
@@ -117,7 +118,7 @@ const schema = {
     <div class="bg-white rounded-xl border-2 border-brand-200 p-5 shadow-sm mb-6">
       <p data-testid="toll-free-label" class="text-sm text-brand-700 font-medium mb-1">🎧 {isTollFree ? 'Toll-Free Customer Care Number' : 'Customer Care Number'}</p>
       <a href={`tel:${bank.customerCare}`} class="block">
-        <span class="text-3xl sm:text-4xl font-bold text-brand-700 tracking-wide">{bank.customerCare}</span>
+        <span class="text-3xl sm:text-4xl font-bold text-brand-700 tracking-wide"><PhoneNumber variant="display" number={bank.customerCare} /></span>
       </a>
       <a href={`tel:${bank.customerCare}`}
          class="mt-4 w-full flex items-center justify-center gap-2 bg-brand-600 text-white px-5 py-3.5 rounded-xl font-medium hover:bg-brand-700 transition-colors text-base min-h-[48px]">
@@ -127,7 +128,7 @@ const schema = {
 
     <!-- When to Call -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 mb-3">{bank.shortName} {isTollFree ? 'toll-free customer care' : 'customer care'} पर कब कॉल करें?</h2>
+      <h2 class="text-h2 font-semibold text-gray-900 mb-3">{bank.shortName} {isTollFree ? 'toll-free customer care' : 'customer care'} पर कब कॉल करें?</h2>
       <ul class="space-y-2 text-sm text-gray-700">
         <li class="flex gap-2"><span class="text-brand-600">✓</span> {isMissedCall ? 'Missed call balance SMS नहीं आया' : 'Balance enquiry या IVR में सहायता चाहिए'}</li>
         <li class="flex gap-2"><span class="text-brand-600">✓</span> मोबाइल नंबर बैंक खाते से लिंक या update करना है</li>
@@ -139,13 +140,13 @@ const schema = {
 
     <!-- Safety Note -->
     <div class="bg-amber-50 rounded-xl border border-amber-200 p-5 mb-6">
-      <h2 class="text-lg font-bold text-amber-900 mb-2">⚠️ Safety Note</h2>
+      <h2 class="text-h2 font-bold text-amber-900 mb-2">⚠️ Safety Note</h2>
       <p class="text-sm text-amber-800 leading-relaxed">किसी भी call पर OTP, PIN, CVV, UPI PIN या net banking password न बताएं। Bank कभी भी ये details फोन पर नहीं मांगता।</p>
     </div>
 
     <!-- Balance Check Number -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 mb-3">📞 Balance Check Number</h2>
+      <h2 class="text-h2 font-semibold text-gray-900 mb-3">📞 Balance Check Number</h2>
       <p class="text-gray-600 text-sm mb-3">{bank.shortName} का {isMissedCall ? 'missed call balance number' : 'Customer Care / IVR balance enquiry number'}:</p>
       <a href={`tel:${bank.missedCall}`}
          class="inline-flex items-center gap-2 text-2xl font-bold text-brand-700">
@@ -158,7 +159,7 @@ const schema = {
 
     <!-- FAQ -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 mb-4">❓ अक्सर पूछे जाने वाले प्रश्न</h2>
+      <h2 class="text-h2 font-semibold text-gray-900 mb-4">❓ अक्सर पूछे जाने वाले प्रश्न</h2>
       <div class="space-y-4">
         {faqs.map(faq => (
           <div class="border-b border-gray-100 pb-4 last:border-0">
@@ -170,7 +171,7 @@ const schema = {
     </div>
 
     <!-- Related Links -->
-    <div class="grid grid-cols-2 gap-3 mb-6">
+    <div class="ads-resilient grid grid-cols-2 gap-3 mb-6">
       <a href={`/bank/${bank.slug}/`}
          class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
         <p class="text-xs text-gray-500 mb-1">📞 Balance Check</p>

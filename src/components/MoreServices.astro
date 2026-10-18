@@ -1,6 +1,7 @@
 ---
 import type { Bank } from '../data/banks';
 import { isTrueTollFreeNumber } from '../lib/phone';
+import Chip from './Chip.astro';
 
 interface Props {
   bank: Bank;
@@ -27,14 +28,17 @@ const services = [
     : []),
 ];
 ---
+
 <section data-testid="more-services" class="mt-6 border-t border-gray-100 pt-6">
-  <h2 class="mb-3 text-sm font-bold text-gray-900">{bank.shortName} के लिए और सेवाएं</h2>
-  <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
+  <h2 class="text-h2 mb-3 font-bold text-gray-900">{bank.shortName} के लिए और सेवाएं</h2>
+  {/* 8-10 chips: five per row (10 -> 2 full rows, 9 -> 5+4, 8 -> 5+3) never
+      strands a lone chip the way the old 3-column grid did with 10. */}
+  <div class="grid grid-cols-2 gap-2 sm:grid-cols-5">
     {services.map(service => (
-      <a href={`/${service.href}/${bank.slug}/`} class="flex min-h-[52px] min-w-0 items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-brand-700 transition-colors hover:border-brand-300 hover:bg-brand-50">
+      <Chip href={`/${service.href}/${bank.slug}/`} size="lg" class="border border-gray-200 bg-white px-3 py-2 text-brand-700 transition-colors hover:border-brand-300 hover:bg-brand-50">
         <span aria-hidden="true">{service.icon}</span>
         <span class="min-w-0 break-words leading-normal" data-testid="more-services-label">{service.label}</span>
-      </a>
+      </Chip>
     ))}
   </div>
 </section>

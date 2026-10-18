@@ -79,7 +79,7 @@ const collectionSchema = {
   <script type="application/ld+json" set:html={JSON.stringify(collectionSchema)} />
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
-  <nav class="max-w-4xl mx-auto px-4 pt-4" aria-label="Breadcrumb">
+  <nav class="max-w-copy mx-auto px-4 pt-4" aria-label="Breadcrumb">
     <ol class="flex items-center gap-1.5 text-sm text-gray-500 flex-wrap">
       <li><a href="/" class="inline-block py-1.5 px-2 -ml-2 rounded-lg hover:text-brand-600 hover:bg-gray-100 active:bg-gray-200 transition-colors">होम</a></li>
       <li aria-hidden="true" class="text-gray-400">›</li>
@@ -88,18 +88,18 @@ const collectionSchema = {
   </nav>
 
   <section class="bg-gradient-to-b from-brand-50 to-white border-b border-gray-100">
-    <div class="max-w-4xl mx-auto px-4 py-8">
-      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Bank Missed Call Balance Enquiry Numbers</h1>
+    <div class="max-w-copy mx-auto px-4 py-8">
+      <h1 class="text-h1 font-bold text-gray-900">Bank Missed Call Balance Enquiry Numbers</h1>
       <p class="mt-2 text-gray-600 text-sm sm:text-base leading-relaxed">
         {banks.length} भारतीय बैंकों के balance enquiry नंबर एक जगह — अपने बैंक या नंबर से खोजें, registered mobile से मिस्ड कॉल दें और SMS में तुरंत बैलेंस पाएं।
       </p>
     </div>
   </section>
 
-  <div class="max-w-4xl mx-auto px-4 py-6">
+  <div class="max-w-copy mx-auto px-4 py-6">
     <!-- How missed-call balance enquiry works -->
     <section class="mb-8">
-      <h2 class="text-xl font-bold text-gray-900 mb-3">मिस्ड कॉल से बैलेंस कैसे चेक करें?</h2>
+      <h2 class="text-h2 font-bold text-gray-900 mb-3">मिस्ड कॉल से बैलेंस कैसे चेक करें?</h2>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="flex items-start gap-3">
           <div class="flex items-center justify-center w-10 h-10 rounded-full bg-brand-100 text-brand-600 font-bold shrink-0">1</div>
@@ -139,7 +139,7 @@ const collectionSchema = {
 
     <!-- Bank numbers grouped by category; every number is visible selectable text -->
     <section>
-      <h2 class="text-xl font-bold text-gray-900 mb-4">{banks.length} बैंकों के नंबर</h2>
+      <h2 class="text-h2 font-bold text-gray-900 mb-4">{banks.length} बैंकों के नंबर</h2>
       {categories.map(cat => {
         const catBanks = banks.filter(b => b.category === cat);
         return (
@@ -205,8 +205,8 @@ const collectionSchema = {
 
     <!-- FAQ -->
     <section class="bg-gray-50 border-t border-gray-100 rounded-xl">
-      <div class="max-w-3xl mx-auto px-4 py-8">
-        <h2 class="text-xl font-bold text-gray-900 text-center mb-6">अक्सर पूछे जाने वाले प्रश्न</h2>
+      <div class="max-w-copy mx-auto px-4 py-8">
+        <h2 class="text-h2 font-bold text-gray-900 text-center mb-6">अक्सर पूछे जाने वाले प्रश्न</h2>
         <FaqAccordion items={faqs} />
       </div>
     </section>

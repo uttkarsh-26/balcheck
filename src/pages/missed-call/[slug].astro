@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import PhoneNumber from '../../components/PhoneNumber.astro';
 import MoreServices from '../../components/MoreServices.astro';
 import { banks, categoryHindi } from '../../data/banks';
 import type { Bank } from '../../data/banks';
@@ -140,7 +141,7 @@ const schema = {
 <Layout title={title} description={description} canonical={canonicalUrl}>
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
 
-  <div class="max-w-3xl mx-auto px-4 py-6">
+  <div class="max-w-copy mx-auto px-4 py-6">
     <!-- Breadcrumb -->
     <nav class="text-sm text-gray-500 mb-4">
       <a href="/" class="hover:text-brand-600">Home</a>
@@ -152,7 +153,7 @@ const schema = {
 
     <!-- Header -->
     <div data-testid="missed-call-hero" class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-4">
-      <h1 class="text-2xl font-bold mb-2">{bank.shortName} Missed Call Balance Check Number {bank.missedCall}</h1>
+      <h1 class="text-h1 font-bold mb-2">{bank.shortName} Missed Call Balance Check Number {bank.missedCall}</h1>
       <p class="text-white text-sm leading-relaxed">
         {bank.nameHindi} ({bank.name}) का missed call balance check number <strong class="text-white">{missedCallSpaced}</strong>
         — यानी {bank.missedCall} है। इसे उसी मोबाइल से डायल करें जो आपके खाते में registered है; कॉल जवाब में जुड़ती नहीं
@@ -168,7 +169,7 @@ const schema = {
 
     <!-- The number -->
     <div data-testid="missed-call-service" class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 mb-3">📞 {bank.shortName} का मिस्ड कॉल नंबर</h2>
+      <h2 class="text-h2 font-semibold text-gray-900 mb-3">📞 {bank.shortName} का मिस्ड कॉल नंबर</h2>
       <p class="text-gray-600 text-sm mb-4">
         बिना space वाला नंबर: <strong class="text-gray-900">{bank.missedCall}</strong> · स्कैन करके डायल करने के लिए:
         <strong class="text-gray-900">{missedCallSpaced}</strong>
@@ -193,7 +194,7 @@ const schema = {
 
     <!-- Scope: what this number does NOT do -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 mb-3">🚫 यह नंबर क्या-क्या नहीं करता</h2>
+      <h2 class="text-h2 font-semibold text-gray-900 mb-3">🚫 यह नंबर क्या-क्या नहीं करता</h2>
       <p class="text-gray-600 text-sm mb-3">
         {bank.missedCall} कोई सब-काम करने वाला नंबर नहीं है — यह सिर्फ़ account balance बताता है। नीचे दिए कामों के लिए
         दूसरा रास्ता चुनें, वरना कॉल बेकार जाएगी:
@@ -213,7 +214,7 @@ const schema = {
 
     <!-- Steps + what happens after the dial -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 mb-4">📝 {bank.missedCall} पर मिस्ड कॉल देना — step by step</h2>
+      <h2 class="text-h2 font-semibold text-gray-900 mb-4">📝 {bank.missedCall} पर मिस्ड कॉल देना — step by step</h2>
       <ol class="space-y-3 text-sm text-gray-700">
         <li class="flex gap-3">
           <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">1</span>
@@ -244,7 +245,7 @@ const schema = {
 
     <!-- Comparison table -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 mb-3">📊 मिस्ड कॉल बनाम दूसरे तरीके — {bank.shortName} के लिए</h2>
+      <h2 class="text-h2 font-semibold text-gray-900 mb-3">📊 मिस्ड कॉल बनाम दूसरे तरीके — {bank.shortName} के लिए</h2>
       <p class="text-gray-600 text-sm mb-4">
         हर तरीका हर काम के लिए नहीं है। नीचे देखें कि किस काम के लिए कौन-सा रास्ता ठीक रहेगा:
       </p>
@@ -296,7 +297,7 @@ const schema = {
 
     <!-- Troubleshooting: each cause with its corrective action -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 mb-3">⚠️ मिस्ड कॉल के बाद SMS नहीं आया — कारण और हल</h2>
+      <h2 class="text-h2 font-semibold text-gray-900 mb-3">⚠️ मिस्ड कॉल के बाद SMS नहीं आया — कारण और हल</h2>
       <p class="text-gray-600 text-sm mb-4">
         SMS न आने के कुछ ही वजहें होती हैं। नीचे हर वजह के साथ क्या करना है, वह भी दिया है — एक-एक करके देखें:
       </p>
@@ -342,7 +343,7 @@ const schema = {
 
     <!-- Which banks offer it -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 mb-4">🏦 कौन-कौन से बैंक मिस्ड कॉल सेवा देते हैं?</h2>
+      <h2 class="text-h2 font-semibold text-gray-900 mb-4">🏦 कौन-कौन से बैंक मिस्ड कॉल सेवा देते हैं?</h2>
       <p class="text-gray-600 text-sm mb-3 leading-relaxed">
         हर बैंक अलग missed-call number नहीं देता। इस समय BalCheck की सूची में
         <strong>{missedCallBankCount} बैंकों</strong> का balance number एक dedicated missed-call facility के रूप में दर्ज है।
@@ -374,7 +375,7 @@ const schema = {
 
     <!-- Charges honesty -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 mb-3">💸 कॉल चार्ज और शुल्क — क्या सच है?</h2>
+      <h2 class="text-h2 font-semibold text-gray-900 mb-3">💸 कॉल चार्ज और शुल्क — क्या सच है?</h2>
       <ul class="space-y-2 text-sm text-gray-700">
         <li class="flex gap-2">
           <span class="text-brand-600">•</span>
@@ -397,7 +398,7 @@ const schema = {
 
     <!-- Data provenance, freshness, legacy names -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 mb-3">🔎 डेटा स्रोत, अंतिम सत्यापन और पुराने नाम</h2>
+      <h2 class="text-h2 font-semibold text-gray-900 mb-3">🔎 डेटा स्रोत, अंतिम सत्यापन और पुराने नाम</h2>
       <dl class="space-y-3 text-sm text-gray-700">
         <div>
           <dt class="font-medium text-gray-900">इस रिकॉर्ड का नंबर</dt>
@@ -468,7 +469,7 @@ const schema = {
 
     <!-- FAQ -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 mb-4">❓ अक्सर पूछे जाने वाले प्रश्न</h2>
+      <h2 class="text-h2 font-semibold text-gray-900 mb-4">❓ अक्सर पूछे जाने वाले प्रश्न</h2>
       <div class="space-y-4">
         {faqs.map(faq => (
           <div class="border-b border-gray-100 pb-4 last:border-0">
@@ -480,7 +481,7 @@ const schema = {
     </div>
 
     <!-- Related Links -->
-    <div class="grid grid-cols-2 gap-3 mb-3">
+    <div class="ads-resilient grid grid-cols-2 gap-3 mb-3">
       <a href={`/bank/${bank.slug}/`}
          class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
         <p class="text-xs text-gray-500 mb-1">📞 बैंक का पूरा record</p>
@@ -492,7 +493,7 @@ const schema = {
         <p class="text-sm font-medium text-brand-700">{bank.shortName} Balance Enquiry →</p>
       </a>
     </div>
-    <div class="grid grid-cols-2 gap-3 mb-6">
+    <div class="ads-resilient grid grid-cols-2 gap-3 mb-6">
       <a href={`/sms-banking/${bank.slug}/`}
          class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
         <p class="text-xs text-gray-500 mb-1">📱 SMS Banking</p>
@@ -508,7 +509,7 @@ const schema = {
     <!-- Customer Care -->
     <div class="bg-white rounded-xl border border-gray-200 p-4">
       <p class="text-xs text-gray-500 font-medium mb-1">🎧 सहायता के लिए Customer Care</p>
-      <a href={`tel:${bank.customerCare}`} class="text-lg font-semibold text-brand-700">{bank.customerCare}</a>
+      <a href={`tel:${bank.customerCare}`}><PhoneNumber variant="inline" number={bank.customerCare} /></a>
     </div>
 
     <p class="text-xs text-gray-500 mt-4 leading-relaxed">

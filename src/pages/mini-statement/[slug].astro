@@ -101,23 +101,23 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 ---
 <Layout title={title} description={description} canonical={canonicalUrl}>
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
-  <div data-testid="mini-statement-guide" class="max-w-3xl mx-auto px-4 py-6">
+  <div data-testid="mini-statement-guide" class="max-w-copy mx-auto px-4 py-6">
     <nav class="text-sm text-gray-500 mb-4">
       <a href="/">Home</a><span class="mx-1">›</span><a href="/mini-statement/">Mini Statement</a><span class="mx-1">›</span><span>{bank.shortName}</span>
     </nav>
     <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-6">
-      <h1 class="text-2xl font-bold mb-1">{h1Text}</h1>
+      <h1 class="text-h1 font-bold mb-1">{h1Text}</h1>
       <p class="text-white text-sm">{bank.nameHindi} — हाल के लेन-देन की जानकारी</p>
     </div>
 
     <section class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-6">
-      <h2 class="text-lg font-semibold text-blue-950 mb-2">सीधा जवाब</h2>
+      <h2 class="text-h2 font-semibold text-blue-950 mb-2">सीधा जवाब</h2>
       <p class="text-sm text-blue-900 leading-relaxed">{hasDedicatedNumber ? documentedTransactionCount ? `${bank.name} का documented dedicated mini-statement number ${bank.missedCallAlt} है। Registered mobile से missed call देकर last ${documentedTransactionCount} transactions का SMS पाएं।` : `${bank.name} का recorded mini-statement number ${bank.missedCallAlt} है। Registered mobile से missed call दें; exact transaction count इस record में documented नहीं है।` : `${bank.name} के लिए dedicated mini-statement missed-call number verified नहीं है। Balance number ${bank.missedCall} को mini-statement number न मानें; ATM, official app, net banking या customer care ${bank.customerCare} उपयोग करें।`}</p>
       <a href={`tel:${hasDedicatedNumber ? bank.missedCallAlt : bank.customerCare}`} class="mt-4 inline-flex bg-brand-600 text-white px-5 py-2.5 rounded-lg font-medium">📞 {hasDedicatedNumber ? bank.missedCallAlt : bank.customerCare}</a>
     </section>
 
     <section class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold mb-4">{bank.shortName} mini-statement snapshot</h2>
+      <h2 class="text-h2 font-semibold mb-4">{bank.shortName} mini-statement snapshot</h2>
       <dl class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
         <div class="rounded-lg bg-gray-50 p-3"><dt class="text-gray-500">Bank</dt><dd class="font-medium text-gray-900">{bank.name} · {bank.nameHindi}</dd></div>
         <div class="rounded-lg bg-gray-50 p-3"><dt class="text-gray-500">Category</dt><dd class="font-medium text-gray-900">{bank.category}</dd></div>
@@ -131,13 +131,13 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
     <section class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
       {hasDedicatedNumber ? (
         <>
-          <h2 class="text-lg font-semibold mb-3">{documentedTransactionCount ? 'Verified Mini Statement Number' : 'Recorded Mini Statement Number'}</h2>
+          <h2 class="text-h2 font-semibold mb-3">{documentedTransactionCount ? 'Verified Mini Statement Number' : 'Recorded Mini Statement Number'}</h2>
           <p class="text-gray-700 text-sm mb-4">{bank.name} का {documentedTransactionCount ? 'documented' : 'recorded'} dedicated number <strong>{bank.missedCallAlt}</strong> है। Registered mobile से missed call दें; {documentedTransactionCount ? `SMS में last ${documentedTransactionCount} transactions मिलेंगे।` : 'SMS में recent transactions मिल सकते हैं; exact count official source से confirm करें।'} Balance number {bank.missedCall} को इसके स्थान पर use न करें।</p>
           <a href={`tel:${bank.missedCallAlt}`} class="inline-flex bg-brand-600 text-white px-5 py-2.5 rounded-lg font-medium">📞 {bank.missedCallAlt}</a>
         </>
       ) : (
         <>
-          <h2 class="text-lg font-semibold mb-3">Official Mini Statement Methods</h2>
+          <h2 class="text-h2 font-semibold mb-3">Official Mini Statement Methods</h2>
           <p class="text-gray-700 text-sm mb-3">{bank.name} का dedicated mini-statement missed-call number verified नहीं है। Balance number {bank.missedCall} को mini-statement number न मानें।</p>
           <ul class="space-y-2 text-sm text-gray-700 mb-4">
             <li>✓ Official mobile app या net banking में recent transactions देखें</li>
@@ -150,7 +150,7 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
     </section>
 
     <section class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold mb-4">Mini statement पाने के steps</h2>
+      <h2 class="text-h2 font-semibold mb-4">Mini statement पाने के steps</h2>
       <ol class="space-y-3 text-sm text-gray-700">
         {accessSteps.map((step, index) => (
           <li class="flex gap-3">
@@ -162,7 +162,7 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
     </section>
 
     <section class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold mb-3">Mini statement में क्या check करें?</h2>
+      <h2 class="text-h2 font-semibold mb-3">Mini statement में क्या check करें?</h2>
       <ul class="space-y-2 text-sm text-gray-700 leading-relaxed">
         <li>✓ Recent debit और credit entries की date, amount और transaction type देखें।</li>
         <li>✓ Unknown debit दिखे तो screenshot या SMS सुरक्षित रखें और तुरंत {bank.customerCare} पर report करें।</li>
@@ -173,7 +173,7 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
     </section>
 
     <section class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold mb-3">कौन सा method कब use करें?</h2>
+      <h2 class="text-h2 font-semibold mb-3">कौन सा method कब use करें?</h2>
       <div class="space-y-4 text-sm text-gray-700 leading-relaxed">
         <div><h3 class="font-semibold text-gray-900">Missed-call SMS</h3><p>{hasDedicatedNumber ? `${bank.missedCallAlt} quick recent-transaction summary के लिए उपयोगी है, जब registered mobile active हो।` : `${bank.shortName} के लिए dedicated number verified नहीं है, इसलिए किसी third-party number पर call या SMS न करें।`}</p></div>
         <div><h3 class="font-semibold text-gray-900">ATM</h3><p>Internet या app access न हो तो {bank.shortName} ATM का “Mini Statement” option चुनें। Card और PIN सुरक्षित रखें; printed slip खुले में न छोड़ें।</p></div>
@@ -183,7 +183,7 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
     </section>
 
     <section class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold mb-3">Mini statement नहीं मिला तो troubleshooting</h2>
+      <h2 class="text-h2 font-semibold mb-3">Mini statement नहीं मिला तो troubleshooting</h2>
       <ol class="space-y-2 text-sm text-gray-700 leading-relaxed">
         <li><strong>1. Number purpose:</strong> {hasDedicatedNumber ? `${bank.missedCallAlt} dedicated mini-statement number है; ${bank.missedCall} balance service के लिए है।` : `Dedicated number verified नहीं है; ${bank.missedCall} केवल recorded balance service है।`}</li>
         <li><strong>2. Mobile registration:</strong> SMS service के लिए account-linked mobile active होना चाहिए। Status branch, ATM या {bank.customerCare} से confirm करें।</li>
@@ -200,17 +200,17 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
     />
 
     <section class="bg-red-50 border border-red-200 rounded-xl p-5 mb-6">
-      <h2 class="text-lg font-semibold mb-3">सुरक्षित तरीके</h2>
+      <h2 class="text-h2 font-semibold mb-3">सुरक्षित तरीके</h2>
       <p class="text-sm text-red-900 leading-relaxed">केवल official app, website, ATM और bank customer care का उपयोग करें। OTP, ATM PIN, UPI PIN, CVV या net-banking password कभी share न करें। Fraud लगे तो call बंद करके {bank.customerCare} या official website से दोबारा contact करें।</p>
     </section>
 
     <section class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold mb-4">अक्सर पूछे जाने वाले प्रश्न</h2>
+      <h2 class="text-h2 font-semibold mb-4">अक्सर पूछे जाने वाले प्रश्न</h2>
       <div class="space-y-4">{faqs.map(f => <div><h3 class="font-medium text-sm mb-1">{f.q}</h3><p class="text-gray-600 text-sm leading-relaxed">{f.a}</p></div>)}</div>
     </section>
   </div>
 
-  <div class="max-w-3xl mx-auto px-4 pb-6">
+  <div class="max-w-copy mx-auto px-4 pb-6">
     <MoreServices bank={bank} />
   </div>
 </Layout>

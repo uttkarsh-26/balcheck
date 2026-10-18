@@ -79,7 +79,7 @@ const pageDesc = categoryOverride?.description ?? (isCooperative
 <script type="application/ld+json" set:html={JSON.stringify(collectionSchema)} />
 
 <!-- Breadcrumb -->
-<nav class="max-w-6xl mx-auto px-4 pt-4" aria-label="Breadcrumb">
+<nav class="max-w-wide mx-auto px-4 pt-4" aria-label="Breadcrumb">
   <ol class="flex items-center gap-1.5 text-sm text-gray-500 flex-wrap">
     <li><a href="/" class="inline-block py-1.5 px-2 -ml-2 rounded-lg hover:text-brand-600 hover:bg-gray-100 active:bg-gray-200 transition-colors">होम</a></li>
     <li aria-hidden="true" class="text-gray-400">›</li>
@@ -89,14 +89,14 @@ const pageDesc = categoryOverride?.description ?? (isCooperative
 
 <!-- Header -->
 <section class="bg-gradient-to-b from-brand-50 to-white border-b border-gray-100">
-  <div class="max-w-6xl mx-auto px-4 py-8 text-center">
-    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">{isCooperative ? 'Cooperative Bank Balance Check Number — सहकारी बैंक' : `${hindiName} ${categoryMethodLabel}`}</h1>
+  <div class="max-w-wide mx-auto px-4 py-8 text-center">
+    <h1 class="text-h1 font-bold text-gray-900">{isCooperative ? 'Cooperative Bank Balance Check Number — सहकारी बैंक' : `${hindiName} ${categoryMethodLabel}`}</h1>
     <p class="mt-2 text-gray-600">{isCooperative ? 'Cooperative bank balance check number और enquiry methods' : `${hindiName} के ${categoryMethodLabel.toLowerCase()}`} — {catBanks.length} बैंक; {missedCallCount} missed-call और {alternateMethodCount} customer-care/IVR या अन्य methods</p>
   </div>
 </section>
 
 <!-- Bank Cards -->
-<div class="max-w-6xl mx-auto px-4 py-8">
+<div class="max-w-wide mx-auto px-4 py-8">
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     {catBanks.map(bank => (
       <div class="bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md hover:border-brand-300 transition-all duration-200">
@@ -137,8 +137,8 @@ const pageDesc = categoryOverride?.description ?? (isCooperative
 
 <!-- Category Links -->
 <section class="bg-gray-50 border-t border-gray-100">
-  <div class="max-w-4xl mx-auto px-4 py-8 text-center">
-    <h2 class="text-lg font-bold text-gray-900 mb-4">अन्य बैंक श्रेणियाँ</h2>
+  <div class="max-w-copy mx-auto px-4 py-8 text-center">
+    <h2 class="text-h2 font-bold text-gray-900 mb-4">अन्य बैंक श्रेणियाँ</h2>
     <div class="flex flex-wrap justify-center gap-2">
       {categories.map(cat => (
         <a href={`/banks/${cat.toLowerCase().replace(/\s+/g, '-')}/`} class={`px-4 py-2.5 text-sm font-medium rounded-full transition-colors min-h-[44px] inline-flex items-center ${cat === category ? 'bg-brand-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-200 active:bg-gray-300 border border-gray-200'}`}>

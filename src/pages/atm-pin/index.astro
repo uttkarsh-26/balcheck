@@ -31,7 +31,7 @@ const schema = {
 <Layout title={title} description={description} canonical={canonicalUrl}>
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
 
-  <div class="max-w-4xl mx-auto px-4 py-6">
+  <div class="max-w-copy mx-auto px-4 py-6">
     <nav class="text-sm text-gray-500 mb-4">
       <a href="/" class="hover:text-brand-600">Home</a>
       <span class="mx-1">›</span>
@@ -39,7 +39,7 @@ const schema = {
     </nav>
 
     <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-6">
-      <h1 class="text-2xl font-bold mb-2">ATM PIN Directory</h1>
+      <h1 class="text-h1 font-bold mb-2">ATM PIN Directory</h1>
       <p class="text-white text-sm">भारतीय बैंकों में ATM PIN generate करने के तरीके — {banks.length} बैंकों के लिए गाइड</p>
     </div>
 
@@ -52,7 +52,7 @@ const schema = {
       const catBanks = banks.filter(b => b.category === cat);
       return (
         <div class="mb-6">
-          <h2 class="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+          <h2 class="text-h2 font-semibold text-gray-900 mb-3 flex items-center gap-2">
             {cat}
             <span class="text-sm font-normal text-gray-500">({categoryHindi[cat]})</span>
           </h2>

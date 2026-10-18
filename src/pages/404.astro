@@ -25,9 +25,9 @@ const serviceLinks = [
   noindex
 >
   <section class="bg-gradient-to-b from-brand-50 to-white border-b border-gray-100">
-    <div class="max-w-3xl mx-auto px-4 py-10 text-center">
+    <div class="max-w-copy mx-auto px-4 py-10 text-center">
       <p class="text-5xl font-bold text-brand-600">404</p>
-      <h1 class="mt-3 text-2xl sm:text-3xl font-bold text-gray-900">पेज नहीं मिला</h1>
+      <h1 class="text-h1 mt-3 font-bold text-gray-900">पेज नहीं मिला</h1>
       <p class="mt-3 text-gray-600">
         आप जिस पेज पर आए हैं वह मौजूद नहीं है या हटा दिया गया है। नीचे दिए लिंक से आगे बढ़ें।
       </p>
@@ -44,8 +44,8 @@ const serviceLinks = [
     </div>
   </section>
 
-  <section class="max-w-3xl mx-auto px-4 py-8">
-    <h2 class="text-lg font-bold text-gray-900">लोकप्रिय बैंक</h2>
+  <section class="max-w-copy mx-auto px-4 py-8">
+    <h2 class="text-h2 font-bold text-gray-900">लोकप्रिय बैंक</h2>
     <div class="mt-3 flex flex-wrap gap-2">
       {popularBanks.map((bank) => (
         <a
@@ -57,7 +57,7 @@ const serviceLinks = [
       ))}
     </div>
 
-    <h2 class="mt-8 text-lg font-bold text-gray-900">सेवाएं</h2>
+    <h2 class="text-h2 mt-8 font-bold text-gray-900">सेवाएं</h2>
     <div class="mt-3 flex flex-wrap gap-2">
       {serviceLinks.map((service) => (
         <a

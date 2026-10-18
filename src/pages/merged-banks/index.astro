@@ -48,7 +48,7 @@ const pageDesc = `${mergers.length} ग्रामीण बैंक विल
 <script type="application/ld+json" set:html={JSON.stringify(collectionSchema)} />
 
 <!-- Breadcrumb -->
-<nav class="max-w-4xl mx-auto px-4 pt-4" aria-label="Breadcrumb">
+<nav class="max-w-copy mx-auto px-4 pt-4" aria-label="Breadcrumb">
   <ol class="flex items-center gap-1.5 text-sm text-gray-500 flex-wrap">
     <li><a href="/" class="inline-block py-1.5 px-2 -ml-2 rounded-lg hover:text-brand-600 hover:bg-gray-100 active:bg-gray-200 transition-colors">होम</a></li>
     <li aria-hidden="true" class="text-gray-400">›</li>
@@ -58,15 +58,15 @@ const pageDesc = `${mergers.length} ग्रामीण बैंक विल
 
 <!-- Header -->
 <section class="bg-gradient-to-b from-brand-50 to-white border-b border-gray-100">
-  <div class="max-w-4xl mx-auto px-4 py-8">
-    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">विलय हुई बैंकें — पुराने बैंक का नया balance check number</h1>
+  <div class="max-w-copy mx-auto px-4 py-8">
+    <h1 class="text-h1 font-bold text-gray-900">विलय हुई बैंकें — पुराने बैंक का नया balance check number</h1>
     <p class="mt-2 text-gray-600">
       ये ग्रामीण बैंक (RRB) अब मौजूद नहीं हैं — विलय के बाद अब किस बैंक में गए, कब गए और नया balance check number क्या है, यहाँ देखें। अभी शामिल {mergers.length} बैंकों की सूची।
     </p>
   </div>
 </section>
 
-<div class="max-w-4xl mx-auto px-4 py-8">
+<div class="max-w-copy mx-auto px-4 py-8">
   <div class="space-y-4">
     {withBank.map(m => (
       <div data-old-slug={m.oldSlug} class="bg-white rounded-xl border border-gray-200 p-5 hover:border-brand-300 hover:shadow-sm transition-all">

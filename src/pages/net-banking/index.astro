@@ -31,7 +31,7 @@ const schema = {
 <Layout title={title} description={description} canonical={canonicalUrl}>
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
 
-  <div class="max-w-4xl mx-auto px-4 py-6">
+  <div class="max-w-copy mx-auto px-4 py-6">
     <nav class="text-sm text-gray-500 mb-4">
       <a href="/" class="hover:text-brand-600">Home</a>
       <span class="mx-1">›</span>
@@ -39,7 +39,7 @@ const schema = {
     </nav>
 
     <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-6">
-      <h1 class="text-2xl font-bold mb-2">Net Banking Login Directory</h1>
+      <h1 class="text-h1 font-bold mb-2">Net Banking Login Directory</h1>
       <p class="text-white text-sm">भारतीय बैंकों के internet banking login links — {banks.length} बैंकों की online banking सुविधा</p>
     </div>
 
@@ -52,7 +52,7 @@ const schema = {
       const catBanks = banks.filter(b => b.category === cat);
       return (
         <div class="mb-6">
-          <h2 class="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+          <h2 class="text-h2 font-semibold text-gray-900 mb-3 flex items-center gap-2">
             {cat}
             <span class="text-sm font-normal text-gray-500">({categoryHindi[cat]})</span>
           </h2>
@@ -87,7 +87,7 @@ const schema = {
       <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
         <div class="text-4xl shrink-0">📄</div>
         <div class="flex-1">
-          <h2 class="text-base font-bold text-white mb-0.5">सभी बैंक नंबर एक PDF में डाउनलोड करें</h2>
+          <h2 class="text-h2 font-bold text-white mb-0.5">सभी बैंक नंबर एक PDF में डाउनलोड करें</h2>
           <p class="text-xs text-white">79 बैंकों के missed-call, customer care नंबर — ऑफलाइन रखें</p>
         </div>
         <a href="https://upseva.in/tools/bank-cheatsheet/" target="_blank" rel="noopener" class="shrink-0 inline-flex items-center gap-1.5 bg-white text-brand-700 font-bold text-sm px-5 py-2.5 rounded-lg hover:bg-brand-50 transition-colors shadow whitespace-nowrap">
