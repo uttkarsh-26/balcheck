@@ -56,7 +56,6 @@ const defaultTemplateBank = banks.find(
 const h1Overrides: Record<string, (bank: Bank) => string> = {
   psb: () => 'Punjab & Sind Bank (PSB) बैलेंस चेक नंबर',
   ubi: bank => `Union Bank Balance Check Number ${bank.missedCall}`,
-  maharashtra: bank => `Bank of Maharashtra Balance Check Number ${bank.missedCall}`,
   'up-gramin': bank => `Uttar Pradesh Gramin Bank Balance Check Number ${bank.missedCall}`,
   canara: bank => `Canara Bank Balance Check Number ${bank.missedCall}`,
   idbi: bank => `IDBI Bank Balance Check Number ${bank.missedCall}`,
