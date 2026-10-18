@@ -31,9 +31,9 @@ const services = [
   <h2 class="mb-3 text-sm font-bold text-gray-900">{bank.shortName} के लिए और सेवाएं</h2>
   <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
     {services.map(service => (
-      <a href={`/${service.href}/${bank.slug}/`} class="flex min-h-[52px] min-w-0 items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-brand-700 transition-colors hover:border-brand-300 hover:bg-brand-50">
+      <a href={`/${service.href}/${bank.slug}/`} class="flex min-h-[52px] min-w-0 items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-brand-700 transition-colors hover:border-brand-300 hover:bg-brand-50">
         <span aria-hidden="true">{service.icon}</span>
-        <span class="min-w-0 break-words">{service.label}</span>
+        <span class="min-w-0 break-words leading-normal" data-testid="more-services-label">{service.label}</span>
       </a>
     ))}
   </div>
