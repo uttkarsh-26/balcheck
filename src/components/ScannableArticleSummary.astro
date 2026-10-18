@@ -120,7 +120,7 @@ const hasAction = Boolean(action && ((action.steps?.length ?? 0) > 0 || safeOffi
 
       {details && (
         <details class="rounded-lg border border-gray-200 bg-gray-50 p-4">
-          <summary class="min-w-0 cursor-pointer break-words [overflow-wrap:anywhere] font-semibold text-gray-900 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gray-950 focus-visible:ring-offset-2">
+          <summary class="flex min-h-[44px] min-w-0 cursor-pointer items-center break-words [overflow-wrap:anywhere] font-semibold text-gray-900 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gray-950 focus-visible:ring-offset-2">
             {details.title}
           </summary>
           <p class="mt-3 min-w-0 break-words [overflow-wrap:anywhere] leading-relaxed text-gray-700">{details.body}</p>

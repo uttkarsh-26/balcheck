@@ -1,4 +1,15 @@
 ---
+/**
+ * Sticky header.
+ *
+ * Mobile: one bar (logo, Banks, services disclosure) at ~60px, with the service
+ * rail collapsed behind the disclosure. The audited defect was a permanently
+ * expanded two-row header measuring 117px at 360px and 390px, which ate 13-17%
+ * of the viewport on every page.
+ *
+ * Desktop (>= 640px): unchanged two rows, the rail always visible and the
+ * disclosure hidden.
+ */
 import { banks } from '../data/banks';
 
 const serviceLinks = [
@@ -12,19 +23,37 @@ const serviceLinks = [
   { href: '/atm-pin/', label: 'ATM PIN' },
 ] as const;
 ---
+
 <header data-testid="global-header" class="sticky top-0 z-40 border-b border-gray-200 bg-white/95 shadow-sm backdrop-blur">
-  <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-2 sm:gap-3">
     <a href="/" class="flex min-h-[44px] min-w-0 items-center gap-2" aria-label="BalCheck home">
       <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-brand-700 text-lg font-bold text-white">₹</span>
       <span class="truncate text-xl font-bold text-gray-900">BalCheck<span class="text-brand-600">.in</span></span>
     </a>
     <div class="flex shrink-0 items-center gap-2 text-xs text-gray-600">
       <a href="/banks/" class="inline-flex min-h-[44px] items-center rounded px-2 hover:text-brand-600">Banks</a>
-      <a href="/how-it-works/" class="inline-flex min-h-[44px] items-center rounded px-2 hover:text-brand-600">कैसे?</a>
+      <a href="/how-it-works/" class="hidden min-h-[44px] items-center rounded px-2 hover:text-brand-600 sm:inline-flex">कैसे?</a>
       <span class="hidden sm:inline">{banks.length} बैंक</span>
+      <button
+        type="button"
+        data-testid="service-nav-toggle"
+        aria-controls="service-nav-panel"
+        aria-expanded="false"
+        class="inline-flex min-h-[44px] items-center gap-1 rounded px-2 font-medium text-brand-700 [&[aria-expanded='true']>svg]:rotate-180 sm:hidden"
+      >
+        सेवाएं
+        <svg class="h-4 w-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
     </div>
   </div>
-  <nav data-testid="service-nav" aria-label="Banking services" class="mx-auto max-w-6xl px-4 pb-3">
+  <nav
+    id="service-nav-panel"
+    data-testid="service-nav"
+    aria-label="Banking services"
+    class="mx-auto hidden max-w-6xl px-4 pb-3 sm:block"
+  >
     <div class="scrollbar-hide scroll-fade flex gap-2 overflow-x-auto">
       {serviceLinks.map(service => (
         <a href={service.href} class="inline-flex min-h-[44px] shrink-0 items-center rounded-full bg-brand-50 px-3 py-2 text-sm font-medium text-brand-700 transition-colors hover:bg-brand-100">
@@ -34,3 +63,27 @@ const serviceLinks = [
     </div>
   </nav>
 </header>
+
+<script>
+  // The disclosure only exists on mobile; desktop shows the rail via `sm:block`
+  // regardless of this state, so no resize listener is needed.
+  const toggle = document.querySelector<HTMLButtonElement>('[data-testid="service-nav-toggle"]');
+  const panel = document.getElementById('service-nav-panel');
+
+  if (toggle && panel) {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      panel.classList.toggle('hidden', !open);
+    };
+
+    toggle.addEventListener('click', () => {
+      setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || toggle.getAttribute('aria-expanded') !== 'true') return;
+      setOpen(false);
+      toggle.focus();
+    });
+  }
+</script>

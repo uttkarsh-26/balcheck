@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
 import SchemaOrg from '../components/SchemaOrg.astro';
 import { banks, categories, categoryHindi } from '../data/banks';
 import { searchAliases } from '../lib/search-aliases';
@@ -35,6 +36,29 @@ const popularBanks = ['sbi', 'bob', 'canara', 'ubi', 'pnb', 'boi', 'indian-bank'
 function balanceNumberLabel(bank: (typeof banks)[number]): string {
   return bank.balanceMode === 'missed-call' ? 'मिस्ड कॉल नंबर' : 'Customer Care / IVR';
 }
+const faqs = [
+  {
+    q: 'मिस्ड कॉल से बैलेंस कैसे पता करें?',
+    a: 'अपने बैंक के record में registered mobile से उपलब्ध balance-enquiry number पर कॉल करें। यदि वह missed-call service है तो कॉल अपने आप कट सकती है; customer-care/IVR numbers पर सामान्य call charges या menu लागू हो सकते हैं।',
+  },
+  {
+    q: 'क्या balance enquiry पर charge लगता है?',
+    a: 'Missed-call services आम तौर पर charge-free होती हैं, लेकिन हर bank और customer-care/IVR channel की शर्तें अलग हो सकती हैं। अपने bank की official instructions और telecom plan की जानकारी देखें।',
+  },
+  {
+    q: 'मेरा नंबर बैंक में रजिस्टर्ड नहीं है तो?',
+    a: 'अगर आपका मोबाइल नंबर बैंक खाते से लिंक नहीं है, तो missed call सेवा काम नहीं करेगी। अपनी बैंक शाखा में जाकर या ATM से मोबाइल नंबर रजिस्टर करवाएं। इसके बाद missed call सेवा उपलब्ध हो जाएगी।',
+  },
+  {
+    q: 'SMS नहीं आया तो क्या करें?',
+    a: 'अगर SMS नहीं आता, तो जांचें: (1) आपका नंबर बैंक में रजिस्टर्ड है या नहीं, (2) DND सेवा तो चालू नहीं है, (3) आप सही नंबर पर कॉल कर रहे हैं। फिर भी समस्या हो तो बैंक के customer care से संपर्क करें।',
+  },
+  {
+    q: 'क्या ये नंबर सुरक्षित हैं?',
+    a: 'नंबर bank websites और cross-check sources से संकलित किए जाते हैं, लेकिन वे बदल सकते हैं। इस्तेमाल से पहले official bank website पर current number verify करें और किसी call पर OTP, PIN, CVV या password साझा न करें।',
+  },
+];
+
 ---
 
 <Layout
@@ -277,43 +301,7 @@ function balanceNumberLabel(bank: (typeof banks)[number]): string {
 <section class="bg-gray-50 border-t border-gray-100">
   <div class="max-w-3xl mx-auto px-4 py-10">
     <h2 class="text-xl font-bold text-gray-900 text-center mb-6">अक्सर पूछे जाने वाले प्रश्न</h2>
-    <div class="space-y-3">
-      <details class="bg-white rounded-lg border border-gray-200 p-4 group">
-        <summary class="font-medium text-gray-900 cursor-pointer list-none flex justify-between items-center">
-          मिस्ड कॉल से बैलेंस कैसे पता करें?
-          <svg class="w-5 h-5 text-gray-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-        </summary>
-        <p class="mt-3 text-sm text-gray-600">अपने बैंक के record में registered mobile से उपलब्ध balance-enquiry number पर कॉल करें। यदि वह missed-call service है तो कॉल अपने आप कट सकती है; customer-care/IVR numbers पर सामान्य call charges या menu लागू हो सकते हैं।</p>
-      </details>
-      <details class="bg-white rounded-lg border border-gray-200 p-4 group">
-        <summary class="font-medium text-gray-900 cursor-pointer list-none flex justify-between items-center">
-          क्या balance enquiry पर charge लगता है?
-          <svg class="w-5 h-5 text-gray-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-        </summary>
-        <p class="mt-3 text-sm text-gray-600">Missed-call services आम तौर पर charge-free होती हैं, लेकिन हर bank और customer-care/IVR channel की शर्तें अलग हो सकती हैं। अपने bank की official instructions और telecom plan की जानकारी देखें।</p>
-      </details>
-      <details class="bg-white rounded-lg border border-gray-200 p-4 group">
-        <summary class="font-medium text-gray-900 cursor-pointer list-none flex justify-between items-center">
-          मेरा नंबर बैंक में रजिस्टर्ड नहीं है तो?
-          <svg class="w-5 h-5 text-gray-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-        </summary>
-        <p class="mt-3 text-sm text-gray-600">अगर आपका मोबाइल नंबर बैंक खाते से लिंक नहीं है, तो missed call सेवा काम नहीं करेगी। अपनी बैंक शाखा में जाकर या ATM से मोबाइल नंबर रजिस्टर करवाएं। इसके बाद missed call सेवा उपलब्ध हो जाएगी।</p>
-      </details>
-      <details class="bg-white rounded-lg border border-gray-200 p-4 group">
-        <summary class="font-medium text-gray-900 cursor-pointer list-none flex justify-between items-center">
-          SMS नहीं आया तो क्या करें?
-          <svg class="w-5 h-5 text-gray-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-        </summary>
-        <p class="mt-3 text-sm text-gray-600">अगर SMS नहीं आता, तो जांचें: (1) आपका नंबर बैंक में रजिस्टर्ड है या नहीं, (2) DND सेवा तो चालू नहीं है, (3) आप सही नंबर पर कॉल कर रहे हैं। फिर भी समस्या हो तो बैंक के customer care से संपर्क करें।</p>
-      </details>
-      <details class="bg-white rounded-lg border border-gray-200 p-4 group">
-        <summary class="font-medium text-gray-900 cursor-pointer list-none flex justify-between items-center">
-          क्या ये नंबर सुरक्षित हैं?
-          <svg class="w-5 h-5 text-gray-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-        </summary>
-        <p class="mt-3 text-sm text-gray-600">नंबर bank websites और cross-check sources से संकलित किए जाते हैं, लेकिन वे बदल सकते हैं। इस्तेमाल से पहले official bank website पर current number verify करें और किसी call पर OTP, PIN, CVV या password साझा न करें।</p>
-      </details>
-    </div>
+    <FaqAccordion items={faqs} />
   </div>
 </section>
 

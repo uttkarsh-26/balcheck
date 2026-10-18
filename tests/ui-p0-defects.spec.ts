@@ -30,7 +30,9 @@ import {
  * P1 defects from the same audit (see the P1 blocks at the bottom):
  *
  *  5. Header controls: the eight service chips measured 40px at 12px text, the
- *     Banks/कैसे? links 24px, and the logo anchor 36px.
+ *     Banks/कैसे? links 24px, and the logo anchor 36px. The rail now lives behind
+ *     a mobile disclosure, so this block measures the collapsed bar controls and
+ *     the expanded rail separately.
  *  6. 12px body copy: the 79 mini-statement bank captions and the ten
  *     `MoreServices` labels on an aadhaar-link page.
  *  7. Duplicate accessible names in `#bank-grid`: 79 links named "कॉल करें"
@@ -42,7 +44,6 @@ import {
 const MIN_TAP_TARGET_PX = 44;
 
 /** The header is the sticky band above the fold; it must not eat the viewport. */
-const MAX_HEADER_HEIGHT_PX = 120;
 
 /** Copy smaller than this is unreadable for the site's rural, low-end-phone users. */
 const MIN_BODY_COPY_PX = 14;
@@ -254,13 +255,15 @@ async function accessibleLinkNames(page: Page, selector: string): Promise<string
 test.describe('P1 5: header controls are 44px tap targets at 390px', () => {
   test.use({ viewport: { width: 390, height: 844 } });
 
-  test('service chips, secondary links and the logo anchor are at least 44px tall', async ({ page }) => {
+  test('the collapsed bar keeps the logo, banks link and services disclosure at 44px', async ({ page }) => {
     await gotoDom(page, '/');
     const header = page.locator('[data-testid="global-header"]');
     const groups = [
-      { label: 'service chips', locator: header.locator('[data-testid="service-nav"] a'), expected: 8 },
-      { label: 'secondary links', locator: header.locator('a[href="/banks/"], a[href="/how-it-works/"]'), expected: 2 },
-      { label: 'logo anchor', locator: header.locator('a[href="/"]'), expected: 1 },
+      {
+        label: 'bar controls',
+        locator: header.locator('a[href="/"], a[href="/banks/"], [data-testid="service-nav-toggle"]'),
+        expected: 3,
+      },
     ];
 
     for (const group of groups) {
@@ -288,35 +291,33 @@ test.describe('P1 5: header controls are 44px tap targets at 390px', () => {
     );
   });
 
-  test('the eight chips stay on one horizontally scrollable row', async ({ page }) => {
+  // The rail is collapsed on mobile (see the header-height guard in
+  // tests/ui-p1-mobile-targets-citations.spec.ts), so it is measured open.
+  test('the expanded rail keeps eight 44px chips on one horizontally scrollable row', async ({ page }) => {
     await gotoDom(page, '/');
-    const rail = page.locator('[data-testid="service-nav"] > div');
-    const railStyle = await rail.evaluate((element) => {
+    await page.locator('[data-testid="service-nav-toggle"]').click();
+    await expect(page.locator('[data-testid="service-nav"]')).toBeVisible();
+
+    const chips = page.locator('[data-testid="service-nav"] a');
+    await expect(chips).toHaveCount(8);
+    const heights = await chips.evaluateAll((elements) =>
+      elements.map((element) => Math.round(element.getBoundingClientRect().height)),
+    );
+    expect(heights.filter((height) => height < MIN_TAP_TARGET_PX), `chip heights (${heights.join(', ')}px)`).toEqual([]);
+
+    const railStyle = await page.locator('[data-testid="service-nav"] > div').evaluate((element) => {
       const style = getComputedStyle(element);
       return { overflowX: style.overflowX, flexWrap: style.flexWrap };
     });
     expect(railStyle.overflowX).toBe('auto');
     expect(railStyle.flexWrap).toBe('nowrap');
 
-    const tops = await page
-      .locator('[data-testid="service-nav"] a')
-      .evaluateAll((elements) => elements.map((element) => Math.round(element.getBoundingClientRect().top)));
+    const tops = await chips.evaluateAll((elements) => elements.map((element) => Math.round(element.getBoundingClientRect().top)));
     expect(new Set(tops).size, `chip row tops (${tops.join(', ')})`).toBe(1);
 
     // The rail scrolls; the document must not.
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(overflow, 'document horizontal overflow').toBeLessThanOrEqual(0);
-  });
-
-  test('the header never exceeds 120px tall', async ({ page }) => {
-    for (const path of ['/', '/mini-statement/', '/aadhaar-link/sbi/', '/banks/']) {
-      await gotoDom(page, path);
-      const height = await page
-        .locator('[data-testid="global-header"]')
-        .evaluate((element) => Math.round(element.getBoundingClientRect().height));
-      expect(height, `header height on ${path}`).toBeGreaterThan(0);
-      expect(height, `header height on ${path}`).toBeLessThanOrEqual(MAX_HEADER_HEIGHT_PX);
-    }
   });
 });
 

@@ -11,6 +11,10 @@ const serviceLinks = [
   { href: '/how-it-works/', label: 'कैसे काम करता है' },
 ] as const;
 
+/** 44px tap targets: the audited defect measured these quick links at 28px. */
+const quickLinkClass =
+  'inline-flex w-fit min-h-[44px] items-center rounded px-1 text-sm text-gray-700 hover:text-brand-600 hover:underline';
+
 const infoLinks = [
   { href: '/about/', label: 'हमारे बारे में' },
   { href: '/privacy/', label: 'प्राइवेसी नीति' },
@@ -18,23 +22,23 @@ const infoLinks = [
 ] as const;
 ---
 
-<footer class="mt-12 border-t border-gray-200 bg-white">
+<footer data-testid="site-footer" class="mt-12 border-t border-gray-200 bg-white">
   <div class="mx-auto max-w-6xl px-4 py-8">
     <div class="flex flex-col gap-6 sm:flex-row sm:justify-between">
       <div class="max-w-sm">
         <p class="text-base font-bold text-gray-900">BalCheck<span class="text-brand-600">.in</span></p>
         <p class="mt-1 text-xs leading-relaxed text-gray-600">भारतीय बैंकों के balance enquiry methods और verified contact details एक जगह — आसान हिंदी में।</p>
       </div>
-      <nav aria-label="Services" class="flex flex-col gap-2 text-sm">
+      <nav aria-label="Services" class="flex flex-col text-sm">
         <p class="text-xs font-semibold uppercase tracking-wide text-gray-600">सेवाएं</p>
         {serviceLinks.map((l) => (
-          <a href={l.href} class="w-fit rounded px-1 py-1 text-gray-700 hover:text-brand-600 hover:underline">{l.label}</a>
+          <a href={l.href} class={quickLinkClass} data-testid="footer-quick-link">{l.label}</a>
         ))}
       </nav>
-      <nav aria-label="Information" class="flex flex-col gap-2 text-sm">
+      <nav aria-label="Information" class="flex flex-col text-sm">
         <p class="text-xs font-semibold uppercase tracking-wide text-gray-600">जानकारी</p>
         {infoLinks.map((l) => (
-          <a href={l.href} class="w-fit rounded px-1 py-1 text-gray-700 hover:text-brand-600 hover:underline">{l.label}</a>
+          <a href={l.href} class={quickLinkClass} data-testid="footer-quick-link">{l.label}</a>
         ))}
       </nav>
     </div>
