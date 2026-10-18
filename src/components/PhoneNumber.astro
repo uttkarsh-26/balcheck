@@ -1,0 +1,29 @@
+---
+/**
+ * PhoneNumber — the single phone-number presentation (desktop audit: three
+ * parallel treatments of the same data).
+ *
+ * Variants:
+ *  - boxed:   20px/700 brand-700 on the brand-50 card box (home directory cards).
+ *  - display: 36px/700 brand-700 — a page's primary number block.
+ *  - pill:    16px/500 white — hero CTA pill.
+ *  - inline:  18px/600 brand-700 on white — quick answers and info blocks.
+ *
+ * Every variant renders tabular numerals so digit runs align, and inherits the
+ * Latin-first font stack (--font-hindi) for the numeric run.
+ */
+interface Props {
+  variant: 'boxed' | 'display' | 'pill' | 'inline';
+  number: string;
+  class?: string;
+}
+const { variant, number, class: className = '' } = Astro.props;
+const variants: Record<Props['variant'], string> = {
+  boxed: 'text-xl font-bold text-brand-700 tracking-wide',
+  display: 'text-3xl sm:text-4xl font-bold text-brand-700 tracking-wide',
+  pill: 'text-base font-medium text-white',
+  inline: 'text-lg font-semibold text-brand-700',
+};
+---
+
+<span data-phone={variant} class:list={['tabular-nums', variants[variant], className]}>{number}</span>

@@ -1,0 +1,34 @@
+---
+/**
+ * Chip — the single chip/pill implementation (desktop audit: three parallel
+ * chip markups for one job). Size differences are variants here, never
+ * duplicated markup.
+ *
+ *  - md: 44px tap floor, rounded-full, 14px/500 — filter tabs and header rail.
+ *  - lg: 52px, rounded-lg, 12px/500 — MoreServices service cards.
+ *
+ * Colour and horizontal padding stay in the caller's class so tones keep
+ * their per-surface identity; height, radius and type come from the size.
+ */
+interface Props {
+  href?: string;
+  size?: 'md' | 'lg';
+  class?: string;
+  [key: string]: unknown;
+}
+const { href, size = 'md', class: className = '', ...rest } = Astro.props;
+const sizeClass = size === 'lg'
+  ? 'min-h-[52px] rounded-lg text-sm font-medium'
+  : 'min-h-[44px] rounded-full text-sm font-medium whitespace-nowrap';
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag
+  data-chip={size}
+  href={href}
+  type={href ? undefined : 'button'}
+  class={`inline-flex min-w-0 items-center gap-2 ${sizeClass} ${className}`}
+  {...rest}
+>
+  <slot />
+</Tag>

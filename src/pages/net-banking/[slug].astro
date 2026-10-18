@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import PhoneNumber from '../../components/PhoneNumber.astro';
 import MoreServices from '../../components/MoreServices.astro';
 import { banks } from '../../data/banks';
 import type { Bank } from '../../data/banks';
@@ -113,7 +114,7 @@ const schema = {
 <Layout title={title} description={description} canonical={canonicalUrl} preloadImage="/videos/balcheck-poster.jpg">
   <script type="application/ld+json" set:html={JSON.stringify(schema)} />
 
-  <div class="max-w-3xl mx-auto px-4 py-6">
+  <div class="max-w-copy mx-auto px-4 py-6">
     <!-- Breadcrumb -->
     <nav class="text-sm text-gray-500 mb-4">
       <a href="/" class="hover:text-brand-600">Home</a>
@@ -136,13 +137,13 @@ const schema = {
 
     <!-- Header -->
     <div id="netbanking-content" class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-6">
-      <h1 class="text-2xl font-bold mb-1">{bank.shortName} Net Banking</h1>
+      <h1 class="text-h1 font-bold mb-1">{bank.shortName} Net Banking</h1>
       <p class="text-white text-sm">{bank.nameHindi} — इंटरनेट बैंकिंग सेवाएं</p>
     </div>
 
     <!-- Login CTA -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 mb-3">🔒 Net Banking Login</h2>
+      <h2 class="text-h2 font-semibold text-gray-900 mb-3">🔒 Net Banking Login</h2>
       <p class="text-gray-600 text-sm mb-4">
         {bank.name} की online banking सेवा के लिए नीचे दिए गए link पर click करें।
         अपने user ID और password से login करें।
@@ -161,7 +162,7 @@ const schema = {
 
     <!-- Services -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 mb-3">📋 Net Banking से मिलने वाली सुविधाएं</h2>
+      <h2 class="text-h2 font-semibold text-gray-900 mb-3">📋 Net Banking से मिलने वाली सुविधाएं</h2>
       <ul class="space-y-2 text-sm text-gray-700">
         <li class="flex gap-2"><span class="text-brand-600">✓</span> Balance check और mini statement download</li>
         <li class="flex gap-2"><span class="text-brand-600">✓</span> Fund transfer — NEFT, RTGS, IMPS</li>
@@ -176,7 +177,7 @@ const schema = {
 
     <!-- Registration Steps -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 mb-3">📝 Registration कैसे करें?</h2>
+      <h2 class="text-h2 font-semibold text-gray-900 mb-3">📝 Registration कैसे करें?</h2>
       <ol class="space-y-3 text-sm text-gray-700">
         <li class="flex gap-3">
           <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">1</span>
@@ -203,7 +204,7 @@ const schema = {
 
     <!-- Safety Tips -->
     <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
-      <h2 class="text-lg font-semibold text-amber-900 mb-3">⚠️ Net Banking Safety Tips</h2>
+      <h2 class="text-h2 font-semibold text-amber-900 mb-3">⚠️ Net Banking Safety Tips</h2>
       <ul class="space-y-2 text-sm text-amber-800">
         <li class="flex gap-2"><span>🔒</span> कभी भी OTP, password या ATM PIN किसी को न दें — बैंक भी नहीं मांगता</li>
         <li class="flex gap-2"><span>🔒</span> Public WiFi या cyber café पर login न करें</li>
@@ -215,7 +216,7 @@ const schema = {
 
     <!-- FAQ -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-lg font-semibold text-gray-900 mb-4">❓ अक्सर पूछे जाने वाले प्रश्न</h2>
+      <h2 class="text-h2 font-semibold text-gray-900 mb-4">❓ अक्सर पूछे जाने वाले प्रश्न</h2>
       <div class="space-y-4">
         {faqs.map(faq => (
           <div class="border-b border-gray-100 pb-4 last:border-0">
@@ -227,7 +228,7 @@ const schema = {
     </div>
 
     <!-- Related Links -->
-    <div class="grid grid-cols-2 gap-3 mb-3">
+    <div class="ads-resilient grid grid-cols-2 gap-3 mb-3">
       <a href={`/bank/${bank.slug}/`}
          class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
         <p class="text-xs text-gray-500 mb-1">📞 Missed Call Balance</p>
@@ -239,7 +240,7 @@ const schema = {
         <p class="text-sm font-medium text-brand-700">{bank.shortName} Helpline →</p>
       </a>
     </div>
-    <div class="grid grid-cols-2 gap-3 mb-6">
+    <div class="ads-resilient grid grid-cols-2 gap-3 mb-6">
       <a href={`/sms-banking/${bank.slug}/`}
          class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
         <p class="text-xs text-gray-500 mb-1">📱 SMS Banking</p>
@@ -255,7 +256,7 @@ const schema = {
     <!-- Customer Care -->
     <div class="bg-white rounded-xl border border-gray-200 p-4">
       <p class="text-xs text-gray-500 font-medium mb-1">🎧 सहायता के लिए Customer Care</p>
-      <a href={`tel:${bank.customerCare}`} class="text-lg font-semibold text-brand-700">{bank.customerCare}</a>
+      <a href={`tel:${bank.customerCare}`}><PhoneNumber variant="inline" number={bank.customerCare} /></a>
     </div>
     <MoreServices bank={bank} />
   </div>
