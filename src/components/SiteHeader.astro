@@ -13,21 +13,21 @@ const serviceLinks = [
 ] as const;
 ---
 <header data-testid="global-header" class="sticky top-0 z-40 border-b border-gray-200 bg-white/95 shadow-sm backdrop-blur">
-  <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
-    <a href="/" class="flex min-w-0 items-center gap-2" aria-label="BalCheck home">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2">
+    <a href="/" class="flex min-h-[44px] min-w-0 items-center gap-2" aria-label="BalCheck home">
       <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-brand-600 to-brand-700 text-lg font-bold text-white">₹</span>
       <span class="truncate text-xl font-bold text-gray-900">BalCheck<span class="text-brand-600">.in</span></span>
     </a>
     <div class="flex shrink-0 items-center gap-2 text-xs text-gray-600">
-      <a href="/banks/" class="rounded px-2 py-1 hover:text-brand-600">Banks</a>
-      <a href="/how-it-works/" class="rounded px-2 py-1 hover:text-brand-600">कैसे?</a>
+      <a href="/banks/" class="inline-flex min-h-[44px] items-center rounded px-2 hover:text-brand-600">Banks</a>
+      <a href="/how-it-works/" class="inline-flex min-h-[44px] items-center rounded px-2 hover:text-brand-600">कैसे?</a>
       <span class="hidden sm:inline">{banks.length} बैंक</span>
     </div>
   </div>
   <nav data-testid="service-nav" aria-label="Banking services" class="mx-auto max-w-6xl px-4 pb-3">
     <div class="scrollbar-hide scroll-fade flex gap-2 overflow-x-auto">
       {serviceLinks.map(service => (
-        <a href={service.href} class="inline-flex min-h-[40px] shrink-0 items-center rounded-full bg-brand-50 px-3 py-2 text-xs font-medium text-brand-700 transition-colors hover:bg-brand-100">
+        <a href={service.href} class="inline-flex min-h-[44px] shrink-0 items-center rounded-full bg-brand-50 px-3 py-2 text-sm font-medium text-brand-700 transition-colors hover:bg-brand-100">
           {service.label}
         </a>
       ))}

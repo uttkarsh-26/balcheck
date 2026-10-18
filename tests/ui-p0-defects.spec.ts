@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { banks } from '../src/data/banks';
 import { gotoDom } from './utils';
 import {
@@ -25,10 +26,32 @@ import {
  *
  * Every assertion is computed from the rendered DOM: WCAG ratios come from
  * `tests/contrast.ts`, geometry from bounding boxes. No snapshots.
+ *
+ * P1 defects from the same audit (see the P1 blocks at the bottom):
+ *
+ *  5. Header controls: the eight service chips measured 40px at 12px text, the
+ *     Banks/कैसे? links 24px, and the logo anchor 36px.
+ *  6. 12px body copy: the 79 mini-statement bank captions and the ten
+ *     `MoreServices` labels on an aadhaar-link page.
+ *  7. Duplicate accessible names in `#bank-grid`: 79 links named "कॉल करें"
+ *     and 79 named "WhatsApp पर शेयर करें", plus number links that announced
+ *     their label glued to the number ("मिस्ड कॉल नंबर9986454440").
  */
 
 /** WCAG 2.5.5 / Apple HIG minimum touch target. */
 const MIN_TAP_TARGET_PX = 44;
+
+/** The header is the sticky band above the fold; it must not eat the viewport. */
+const MAX_HEADER_HEIGHT_PX = 120;
+
+/** Copy smaller than this is unreadable for the site's rural, low-end-phone users. */
+const MIN_BODY_COPY_PX = 14;
+
+/** Line-height / font-size floor for the copy clusters this spec guards. */
+const MIN_LEADING_RATIO = 1.4;
+
+/** `MoreServices` renders at least this many labels on the audited page. */
+const MIN_AADHAAR_SERVICE_LABELS = 10;
 
 /** Every template that paints copy on a dark brand fill. */
 const BRAND_FILL_PAGES = [
@@ -193,5 +216,190 @@ test.describe('P0 4: bank-card body copy is legible', () => {
 
     // The short-name chip is the audited pair: #6a7282 on #f3f4f6 was 4.39:1.
     expect(failures.map(describeFailure)).toEqual([]);
+  });
+});
+
+/**
+ * Computed accessible names for every link matching `selector`.
+ *
+ * Reads Chromium's accessibility tree, so the name is the one a screen reader
+ * announces: aria-label, aria-labelledby, title, text content and image alt all
+ * resolve through the same computation the browser performs. Reading attributes
+ * in the test would re-implement that logic and drift from the real output.
+ */
+async function accessibleLinkNames(page: Page, selector: string): Promise<string[]> {
+  const client = await page.context().newCDPSession(page);
+  try {
+    await client.send('DOM.enable');
+    await client.send('Accessibility.enable');
+
+    const { nodes: axNodes } = await client.send('Accessibility.getFullAXTree');
+    const namesByBackendId = new Map<number, string>();
+    for (const node of axNodes) {
+      if (node.backendDOMNodeId === undefined || node.role?.value !== 'link') continue;
+      namesByBackendId.set(node.backendDOMNodeId, (node.name?.value ?? '').trim());
+    }
+
+    const { root } = await client.send('DOM.getDocument');
+    const { nodeIds } = await client.send('DOM.querySelectorAll', { nodeId: root.nodeId, selector });
+    const described = await Promise.all(
+      nodeIds.map((nodeId) => client.send('DOM.describeNode', { nodeId })),
+    );
+    return described.map(({ node }) => namesByBackendId.get(node.backendNodeId) ?? '');
+  } finally {
+    await client.detach();
+  }
+}
+
+test.describe('P1 5: header controls are 44px tap targets at 390px', () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  test('service chips, secondary links and the logo anchor are at least 44px tall', async ({ page }) => {
+    await gotoDom(page, '/');
+    const header = page.locator('[data-testid="global-header"]');
+    const groups = [
+      { label: 'service chips', locator: header.locator('[data-testid="service-nav"] a'), expected: 8 },
+      { label: 'secondary links', locator: header.locator('a[href="/banks/"], a[href="/how-it-works/"]'), expected: 2 },
+      { label: 'logo anchor', locator: header.locator('a[href="/"]'), expected: 1 },
+    ];
+
+    for (const group of groups) {
+      await expect(group.locator, `${group.label} in the header`).toHaveCount(group.expected);
+      const heights = await group.locator.evaluateAll((elements) =>
+        elements.map((element) => Math.round(element.getBoundingClientRect().height)),
+      );
+      const tooShort = heights.filter((height) => height < MIN_TAP_TARGET_PX);
+      expect(
+        tooShort,
+        `${group.label} under ${MIN_TAP_TARGET_PX}px (measured ${heights.join(', ')}px)`,
+      ).toEqual([]);
+    }
+  });
+
+  test('service chips render their labels at 14px', async ({ page }) => {
+    await gotoDom(page, '/');
+    const chips = page.locator('[data-testid="service-nav"] a');
+    await expect(chips).toHaveCount(8);
+    const fontSizes = await chips.evaluateAll((elements) =>
+      elements.map((element) => parseFloat(getComputedStyle(element).fontSize)),
+    );
+    expect(fontSizes, `chip font sizes (${fontSizes.join(', ')}px)`).toEqual(
+      fontSizes.map(() => MIN_BODY_COPY_PX),
+    );
+  });
+
+  test('the eight chips stay on one horizontally scrollable row', async ({ page }) => {
+    await gotoDom(page, '/');
+    const rail = page.locator('[data-testid="service-nav"] > div');
+    const railStyle = await rail.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return { overflowX: style.overflowX, flexWrap: style.flexWrap };
+    });
+    expect(railStyle.overflowX).toBe('auto');
+    expect(railStyle.flexWrap).toBe('nowrap');
+
+    const tops = await page
+      .locator('[data-testid="service-nav"] a')
+      .evaluateAll((elements) => elements.map((element) => Math.round(element.getBoundingClientRect().top)));
+    expect(new Set(tops).size, `chip row tops (${tops.join(', ')})`).toBe(1);
+
+    // The rail scrolls; the document must not.
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    expect(overflow, 'document horizontal overflow').toBeLessThanOrEqual(0);
+  });
+
+  test('the header never exceeds 120px tall', async ({ page }) => {
+    for (const path of ['/', '/mini-statement/', '/aadhaar-link/sbi/', '/banks/']) {
+      await gotoDom(page, path);
+      const height = await page
+        .locator('[data-testid="global-header"]')
+        .evaluate((element) => Math.round(element.getBoundingClientRect().height));
+      expect(height, `header height on ${path}`).toBeGreaterThan(0);
+      expect(height, `header height on ${path}`).toBeLessThanOrEqual(MAX_HEADER_HEIGHT_PX);
+    }
+  });
+});
+
+test.describe('P1 6: 12px body copy is raised to 14px', () => {
+  /** Font size and leading ratio for every match — the two numbers this block guards. */
+  const measureCopy = (page: Page, selector: string) =>
+    page.locator(selector).evaluateAll((elements) =>
+      elements.map((element) => {
+        const style = getComputedStyle(element);
+        const fontSize = parseFloat(style.fontSize);
+        return {
+          text: (element.textContent ?? '').trim().slice(0, 30),
+          fontSize,
+          leading: parseFloat(style.lineHeight) / fontSize,
+        };
+      }),
+    );
+
+  const expectReadable = (samples: Awaited<ReturnType<typeof measureCopy>>, where: string) => {
+    expect(
+      samples.filter((sample) => sample.fontSize < MIN_BODY_COPY_PX).map((sample) => `${sample.fontSize}px "${sample.text}"`),
+      `${where}: copy under ${MIN_BODY_COPY_PX}px`,
+    ).toEqual([]);
+    expect(
+      samples.filter((sample) => !(sample.leading >= MIN_LEADING_RATIO)).map((sample) => `${sample.leading.toFixed(2)} "${sample.text}"`),
+      `${where}: leading under ${MIN_LEADING_RATIO}`,
+    ).toEqual([]);
+  };
+
+  test('the mini-statement bank captions render at 14px with adequate leading', async ({ page }) => {
+    await gotoDom(page, '/mini-statement/');
+    await expect(page.locator('[data-testid="mini-statement-caption"]')).toHaveCount(banks.length);
+    expectReadable(await measureCopy(page, '[data-testid="mini-statement-caption"]'), '/mini-statement/');
+  });
+
+  test('the aadhaar-link service labels render at 14px with adequate leading', async ({ page }) => {
+    await gotoDom(page, '/aadhaar-link/sbi/');
+    const labels = page.locator('[data-testid="more-services-label"]');
+    expect(
+      await labels.count(),
+      'service labels on the audited aadhaar-link page',
+    ).toBeGreaterThanOrEqual(MIN_AADHAAR_SERVICE_LABELS);
+    expectReadable(await measureCopy(page, '[data-testid="more-services-label"]'), '/aadhaar-link/sbi/');
+  });
+});
+
+test.describe('P1 7: bank-grid links have unique accessible names', () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  /** Bank page, balance number, call button, WhatsApp share. */
+  const LINKS_PER_CARD = 4;
+
+  test('no two #bank-grid links share an accessible name', async ({ page }) => {
+    await gotoDom(page, '/');
+    await expect(page.locator('#bank-grid a')).toHaveCount(banks.length * LINKS_PER_CARD);
+
+    const names = await accessibleLinkNames(page, '#bank-grid a');
+    expect(names).toHaveLength(banks.length * LINKS_PER_CARD);
+    expect(names.filter((name) => name === ''), 'links with no accessible name').toEqual([]);
+
+    const counts = new Map<string, number>();
+    for (const name of names) counts.set(name, (counts.get(name) ?? 0) + 1);
+    const duplicates = [...counts.entries()]
+      .filter(([, count]) => count > 1)
+      .map(([name, count]) => `${count}× "${name}"`);
+    expect(duplicates, 'duplicate accessible names inside #bank-grid').toEqual([]);
+  });
+
+  test('every number link announces its bank and keeps the label off the number', async ({ page }) => {
+    await gotoDom(page, '/');
+    const names = await accessibleLinkNames(page, '#bank-grid a[href^="tel:"]');
+    const numberNames = names.filter((name) => /\d/.test(name));
+    expect(numberNames, 'one number-announcing link per bank card').toHaveLength(banks.length);
+
+    // Chromium joins the card's block children into one name, so a number link
+    // has to say which bank it belongs to or a shared number announces twice.
+    const unspecific = numberNames.filter((name, index) => !name.startsWith(banks[index].nameHindi));
+    expect(unspecific, 'number links whose accessible name does not start with the bank name').toEqual([]);
+
+    // The audited defect: "मिस्ड कॉल नंबर9986454440" — a letter running into a digit.
+    expect(
+      numberNames.filter((name) => /\p{L}\d/u.test(name)),
+      'accessible names with a label glued to the number',
+    ).toEqual([]);
   });
 });
