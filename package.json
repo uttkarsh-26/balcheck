@@ -34,5 +34,8 @@
     "hindi",
     "india",
     "banking"
-  ]
+  ],
+  "overrides": {
+    "compression": "^1.8.2"
+  }
 }
