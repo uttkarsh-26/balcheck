@@ -74,7 +74,7 @@ export function findSchema(scripts: unknown[], type: string): unknown | undefine
 /**
  * Banks walked by one sweep test.
  *
- * A monolithic walk of all 79 bank pages costs ~26s locally and ~29s on a CI
+ * A monolithic walk of all 75 bank pages costs ~25s locally and ~28s on a CI
  * runner — no headroom under the 30s default test timeout, so a single slow
  * navigation fails the deploy. Splitting the sweep into bounded chunks bounds
  * each test's wall clock instead of hoping the runner keeps up.
@@ -83,7 +83,7 @@ export const BANKS_PER_CHUNK = 8;
 
 /**
  * Budgeted cost of one bank page inside a sweep chunk. Measured cost is ~0.33s
- * per page (26s for all 79 banks locally, ~29s on CI), so 5s leaves every
+ * per page (25s for all 75 banks locally, ~28s on CI), so 5s leaves every
  * chunk an order of magnitude under its bound.
  */
 export const BANK_SWEEP_PAGE_BUDGET_MS = 5_000;

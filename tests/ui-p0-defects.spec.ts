@@ -19,7 +19,7 @@ import {
  *     measured 4.24:1 against the #2563eb gradient stop — under the 4.5:1 AA
  *     floor for 14px copy.
  *  2. Home amber CTA: white on `bg-amber-600` (#e17100) measured 3.20:1.
- *  3. Bank-card tap targets: the 79 `#bank-grid a[href^="/bank/"]` anchors
+ *  3. Bank-card tap targets: the 75 `#bank-grid a[href^="/bank/"]` anchors
  *     measured 20px tall, and their `leading-tight` h3 ran at a 1.25 ratio.
  *  4. Bank-card body copy at 12px, with the short-name chip at 4.39:1
  *     (#6a7282 on #f3f4f6).
@@ -33,10 +33,10 @@ import {
  *     Banks/कैसे? links 24px, and the logo anchor 36px. The rail now lives behind
  *     a mobile disclosure, so this block measures the collapsed bar controls and
  *     the expanded rail separately.
- *  6. 12px body copy: the 79 mini-statement bank captions and the ten
+ *  6. 12px body copy: the 75 mini-statement bank captions and the ten
  *     `MoreServices` labels on an aadhaar-link page.
- *  7. Duplicate accessible names in `#bank-grid`: 79 links named "कॉल करें"
- *     and 79 named "WhatsApp पर शेयर करें", plus number links that announced
+ *  7. Duplicate accessible names in `#bank-grid`: 75 links named "कॉल करें"
+ *     and 75 named "WhatsApp पर शेयर करें", plus number links that announced
  *     their label glued to the number ("मिस्ड कॉल नंबर9986454440").
  */
 
