@@ -29,7 +29,11 @@ export default defineConfig({
   webServer: {
     command: `npm run build && npm run preview:static`,
     url: BASE_URL,
-    reuseExistingServer: !process.env.CI,
+    env: { ...process.env, PORT: String(PORT) },
+    // Never attach to a server we did not start: another checkout's dev
+    // server on the same port would answer every request and the suite would
+    // pass against the wrong site.
+    reuseExistingServer: false,
     timeout: 300_000,
   },
 });

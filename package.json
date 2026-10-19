@@ -7,7 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "wrangler pages dev dist",
-    "preview:static": "serve dist -l 4321",
+    "preview:static": "serve dist -l ${PORT:-4321}",
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "test:analytics-contract": "node scripts/verify-ga4-social-landing-contract.mjs",
