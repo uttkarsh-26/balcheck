@@ -1,0 +1,134 @@
+---
+/**
+ * One bank card for the homepage directory grid.
+ *
+ * Rendered ~75× per page: every long Tailwind class string lives once in the
+ * scoped <style> below (hoisted via @apply) and both action icons come from
+ * the single sprite defined in index.astro, so each card contributes only
+ * its own content to the served HTML.
+ */
+import PhoneNumber from './PhoneNumber.astro';
+import { searchAliases } from '../lib/search-aliases';
+
+/**
+ * Label for the balance number block on a bank card.
+ *
+ * Single source for the visible label and the number link's accessible name, so
+ * a card can never announce a mode the page does not show.
+ */
+function balanceNumberLabel(bank: { balanceMode: 'missed-call' | 'customer-care' }): string {
+  return bank.balanceMode === 'missed-call' ? 'मिस्ड कॉल नंबर' : 'Customer Care / IVR';
+}
+
+interface Props {
+  bank: {
+    slug: string;
+    name: string;
+    nameHindi: string;
+    shortName: string;
+    category: string;
+    missedCall: string;
+    balanceMode: 'missed-call' | 'customer-care';
+    notes?: string;
+  };
+  siteUrl: string;
+}
+
+const { bank, siteUrl } = Astro.props;
+const numberLabel = balanceNumberLabel(bank);
+const callLabel = `${bank.nameHindi} को कॉल करें`;
+const shareLabel = `${bank.nameHindi} का ${numberLabel} WhatsApp पर शेयर करें`;
+---
+
+<div class="bank-card" data-name={`${bank.name} ${bank.nameHindi} ${bank.shortName} ${searchAliases(bank)}`.toLowerCase()} data-cat={bank.category}>
+  <div class="card-body">
+    <!-- Bank Name -->
+    <div class="flex items-start justify-between mb-3">
+      <div>
+        <a href={`/bank/${bank.slug}/`} class="card-name-link">
+          <h3 class="card-title">{bank.nameHindi}</h3>
+        </a>
+        <p class="card-sub">{bank.name}</p>
+      </div>
+      <span class="card-chip">
+        {bank.shortName}
+      </span>
+    </div>
+
+    <!-- Balance Number -->
+    <a href={`tel:${bank.missedCall}`} class="block" aria-label={`${bank.nameHindi} ${numberLabel} ${bank.missedCall}`}>
+      <div class="card-number-box">
+        <p class="card-number-label">📞 {numberLabel}</p>
+        <span class="tracking-wide"><PhoneNumber variant="boxed" number={bank.missedCall} /></span>
+      </div>
+    </a>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-2">
+      <a
+        href={`tel:${bank.missedCall}`}
+        aria-label={callLabel}
+        class="card-call-btn"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor"><use href="#icon-phone-call" /></svg>
+        कॉल करें
+      </a>
+      <a
+        href={`https://wa.me/?text=${encodeURIComponent(`${bank.nameHindi} का बैलेंस enquiry नंबर: ${bank.missedCall}${bank.balanceMode === 'missed-call' ? ' (missed call)' : ' (customer care/IVR)'} — ${siteUrl}/bank/${bank.slug}/`)}`}
+        target="_blank"
+        rel="noopener"
+        aria-label={shareLabel}
+        title={shareLabel}
+        class="card-share-btn"
+      >
+        <svg class="w-4 h-4" fill="currentColor"><use href="#icon-whatsapp" /></svg>
+      </a>
+    </div>
+
+    {/* Note slot: always present with a fixed 2-line contract so every
+        card shares one height. Long notes clamp to 2 lines; the full
+        text stays accessible via the title attribute. */}
+    <p
+      data-testid="bank-note"
+      title={bank.notes || undefined}
+      class="card-note"
+    >
+      {bank.notes ? `⚠️ ${bank.notes}` : ''}
+    </p>
+  </div>
+</div>
+
+<style>
+  @reference "../styles/global.css";
+
+  .card-body {
+    @apply flex h-full flex-col bg-white rounded-xl border border-gray-200 p-4 hover:shadow-md hover:border-brand-300 transition-all duration-200;
+  }
+  .card-name-link {
+    @apply inline-flex items-center min-h-[44px];
+  }
+  .card-title {
+    @apply font-bold text-gray-900 text-base leading-normal hover:text-brand-600 transition-colors;
+  }
+  .card-sub {
+    @apply text-sm text-gray-600 mt-0.5;
+  }
+  .card-chip {
+    @apply text-sm font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded shrink-0;
+  }
+  .card-number-box {
+    @apply bg-brand-50 rounded-lg p-3 mb-3 hover:bg-brand-100 transition-colors;
+  }
+  .card-number-label {
+    @apply text-sm text-brand-700 font-medium mb-1;
+  }
+  .card-call-btn {
+    @apply flex-1 flex items-center justify-center gap-1.5 bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white text-sm font-medium py-2.5 rounded-lg transition-colors min-h-[44px];
+  }
+  .card-share-btn {
+    @apply flex items-center justify-center w-11 h-11 bg-green-50 hover:bg-green-100 active:bg-green-200 text-green-600 rounded-lg transition-colors shrink-0;
+  }
+  .card-note {
+    @apply mt-auto min-h-[40px] pt-2 text-sm leading-5 text-gray-600 line-clamp-2;
+  }
+</style>
