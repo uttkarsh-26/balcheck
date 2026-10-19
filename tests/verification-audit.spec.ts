@@ -120,7 +120,9 @@ test.describe('2026-07-20 verification audit regression', () => {
 /**
  * 2026-09-18 full-dataset number audit regression gate.
  *
- * Receipt: docs/audits/bank-number-authenticity-2026-09-18.md (79-bank verdict table).
+ * Receipt: docs/audits/bank-number-authenticity-2026-09-18.md (79-bank verdict table;
+ * 4 of its NO_SUPPORT records — apgb, kvgb, pragathi-krishna, fincare — were later retired
+ * into /merged-banks/, leaving the 75-bank registry below).
  * Re-runnable checker: scripts/audit-number-authenticity.mjs (checks 1-4 are re-implemented
  * here as hard assertions so the data cannot drift from the report without CI failing).
  *
@@ -152,19 +154,17 @@ const NUMBER_SHAPES: { name: string; re: RegExp }[] = [
 
 /**
  * Cross-bank digit-identical numbers that the audit confirms are real shared
- * sponsor lines, not copy-paste errors — report §3.2 `9015800700` (pragathi-krishna,
- * karnataka-grameena), §3.3 `9986454440` (baroda-up-gramin, up-gramin), §3.4
- * `18001807777` (punjab-gramin, himachal-pradesh-gramin, bihar-gramin, haryana-gramin),
- * §3.5 `18005327444` (jharkhand-gramin, uttarakhand-gramin, rajasthan-gramin).
- * `18001088222` is deliberately absent: FIX-P3-1 removed that duplicate from both
- * idfc-first and hsbc, so it must never reappear here.
+ * sponsor lines, not copy-paste errors — §3.3 `9986454440` (baroda-up-gramin,
+ * up-gramin), §3.4 `18001807777` (punjab-gramin, himachal-pradesh-gramin,
+ * bihar-gramin, haryana-gramin), §3.5 `18005327444` (jharkhand-gramin,
+ * uttarakhand-gramin, rajasthan-gramin). §3.2 `9015800700` and `18001025250`
+ * were shared only because kvgb/pragathi-krishna carried their successor's
+ * published helpline; those defunct records moved to /merged-banks/, so the
+ * digits are now single-holder and the entries are retired. `18001088222` is
+ * deliberately absent: FIX-P3-1 removed that duplicate from both idfc-first
+ * and hsbc, so it must never reappear here.
  */
-// 18001025250 is shared by kvgb + karnataka-grameena on purpose: Karnataka Vikas Grameena Bank
-// amalgamated into Karnataka Grameena Bank (mergers.ts oldSlug 'karnataka-vikas', Gazette
-// S.O. 1629(E)), so kvgb now carries the successor's own published helpline; the digits are
-// read at https://karnatakagb.bank.in/contact (kvgbank.com only 302-redirects there) — see
-// docs/audits/bank-number-recheck-2026-09-26.md.
-const SHARED_NUMBER_ALLOWLIST = ['9015800700', '9986454440', '18001807777', '18005327444', '18001025250'];
+const SHARED_NUMBER_ALLOWLIST = ['9986454440', '18001807777', '18005327444'];
 
 /**
  * The 2026-09-18 audit found no evidence at all for these records (verdict
@@ -176,12 +176,13 @@ const SHARED_NUMBER_ALLOWLIST = ['9015800700', '9986454440', '18001807777', '180
  * hsbc is deliberately NOT in this list, because its live
  * https://www.hsbc.bank.in/help/contact/ was read on 2026-09-18 and carries
  * tel:18002673456 / tel:18002663456 (18001088222 absent).
+ * apgb, kvgb, pragathi-krishna and fincare left this list on 2026-10: as
+ * evidence-confirmed defunct entities they moved to mergers.ts / /merged-banks/.
  */
 const UNCONFIRMED_NO_EVIDENCE = [
-  'apgb', 'arunachal-pradesh-rural', 'dbs', 'deutsche', 'equitas', 'esaf',
-  'fincare', 'ippb', 'jio-payments', 'kvgb', 'mizoram-rural',
-  'pragathi-krishna', 'saraswat', 'standard-chartered', 'suryoday',
-  'tamil-nadu-grama',
+  'arunachal-pradesh-rural', 'dbs', 'deutsche', 'equitas', 'esaf',
+  'ippb', 'jio-payments', 'mizoram-rural',
+  'saraswat', 'standard-chartered', 'suryoday', 'tamil-nadu-grama',
 ].sort();
 
 /** Receipt wording that marks a record as "checked, nothing found". */

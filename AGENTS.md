@@ -16,13 +16,13 @@ Stack: Astro 7, TypeScript, Tailwind CSS 4, Cloudflare Workers
 - The bank search matches every whitespace token of the query (`tokens.every(...)`) — reverting to a single `includes(query)` substring breaks natural multi-word queries like "sbi bank"; fix: keep token matching and add the query shape to tests/homepage.spec.ts.
 - The 9-page snippet cohort (central-bank, mp-gramin, indian-bank, airtel-payments, maharashtra, iob, ippb, gujarat-gramin, jio-payments) is frozen only while a registry job is actually measuring it: the `BALCHECK_CTR_69896FB_28D_CLOSEOUT` cron named here was never created, so its 28-day window closed unread and the batch went unmeasured; fix: verify the named job exists in the cron registry (name + future run date) before treating this freeze as live, and register the closeout job in the same change that declares a cohort.
 - Three pinned counters must move together when a route family is added or its page count changes, or CI fails far from the edit: `tests/sitemap.spec.ts` → `expectedSitemapUrlCount()` (exact `<loc>` count), `tests/architecture-correction.spec.ts` → the `[data-testid="more-services"] a` link count, and `scripts/test-ci-runtime-contract.mjs` → the `Fresh-build baseline: N generated pages` regex that pins AGENTS.md; fix: update all three in the same commit and re-derive the numbers from `dist/`.
-- `verified: true` in `src/data/banks.ts` is a claim about evidence, not about having a receipt: a record whose 2026-09-18 audit verdict was NO_SUPPORT / SITE_BLOCKED must stay `verified: false` with no `lastVerified`, otherwise its `/missed-call/`, `/mini-statement/` and `/sms-banking/` pages print a verification date nobody earned; fix: do an actual official page read (the way hsbc's live `hsbc.bank.in/help/contact/` was read) and flip the flag + date together — `tests/verification-audit.spec.ts` pins the 16-slug no-evidence class and the 63-record `verified:true` count.
+- `verified: true` in `src/data/banks.ts` is a claim about evidence, not about having a receipt: a record whose 2026-09-18 audit verdict was NO_SUPPORT / SITE_BLOCKED must stay `verified: false` with no `lastVerified`, otherwise its `/missed-call/`, `/mini-statement/` and `/sms-banking/` pages print a verification date nobody earned; fix: do an actual official page read (the way hsbc's live `hsbc.bank.in/help/contact/` was read) and flip the flag + date together — `tests/verification-audit.spec.ts` pins the 12-slug no-evidence class and the 63-record `verified:true` count.
 
 - `src/lib/legacy-redirects.mjs` is the Worker's 301 map for crawler-visible 404s and is gated by `scripts/test-legacy-redirects.mjs` (CI, after the build): every SOURCE path must NOT exist in `dist/` and every TARGET MUST. Adding a redirect for a slug that later becomes a real route silently shadows a live page (the entry keeps matching, the route stops being served) — re-run the gate and re-check the target live before adding an entry.
 - A URL written as a JS template literal inside served HTML gets harvested and crawled by Googlebot — it fetched `/bank/${e.slug}/`, `/missed-call/${e.slug}/` and `/customer-care/${e.slug}/` into 404s from the inline script on `/number-lookup/`; fix: build hrefs from segments (`pageHref('bank', slug)`) and keep the template-literal-href gate in `scripts/test-legacy-redirects.mjs` green.
 - Cloudflare GraphQL analytics must be filtered by user agent before it says anything about a 404 bucket: the raw `edgeResponseStatus:404` set for this zone is ~90% vulnerability-scanner probes (`.env`, `phpinfo`, `.git`), and only the Googlebot UAs (`Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X …)`, `Googlebot-Image/1.0`) show what Google actually crawled; fix: add `dimensions{clientRequestPath userAgent}` and filter locally for `googlebot`.
 - `www.balcheck.in` is a Workers **custom domain** (not a DNS A/CNAME you write by hand): the zone has only apex AAAA `100::` (proxied) + the google-site-verification TXT, and CF auto-creates the www AAAA when the domain is bound. Binding fails with error `100117` ("already has externally managed DNS records") if any www record exists — delete it first, bind, and let CF re-create it. The Worker folds `www.*` → apex 301, so never add a www DNS record that would shadow the Worker.
-- A per-bank sweep that walks the whole registry inside one `test()` cannot survive its own timeout: 79 page loads cost ~26s locally and ~29s on a CI runner against the 30s default, so one slow navigation fails the deploy with no assertion failure; fix: generate one test per `bankSweepChunks()` chunk (`tests/utils.ts` — `BANKS_PER_CHUNK` pages each, bounded by `BANK_SWEEP_TIMEOUT_MS`) and assert the chunk union still equals `banks`, instead of raising the global timeout.
+- A per-bank sweep that walks the whole registry inside one `test()` cannot survive its own timeout: 75 page loads cost ~25s locally and ~28s on a CI runner against the 30s default, so one slow navigation fails the deploy with no assertion failure; fix: generate one test per `bankSweepChunks()` chunk (`tests/utils.ts` — `BANKS_PER_CHUNK` pages each, bounded by `BANK_SWEEP_TIMEOUT_MS`) and assert the chunk union still equals `banks`, instead of raising the global timeout.
 - The mirror-image trap: a spec can already be per-bank (one test per page, nothing to chunk) and still time out, because `page.goto` defaults to `waitUntil: 'load'`, which blocks on the page's third-party resources — for `/bank/[slug]` that is the ad/analytics scripts plus the video poster that `src/pages/bank/[slug].astro` points at the production domain, so even a localhost run fetches it over the network — and that unbounded wait is charged to each test's 30s budget (measured on this route: `load` 488ms average / 6.5s worst vs `domcontentloaded` 19ms); fix: navigate with `{ waitUntil: 'domcontentloaded' }` wherever every assertion reads static, server-rendered DOM, and keep a coverage guard (`tests/bank-pages.spec.ts` → the `bank page coverage` describe) pinning the walked bank slugs to `banks` and the `h1Overrides` slug set, so a dropped bank or a dropped H1 override fails CI instead of silently retiring that coverage.
 
 ## Commands
@@ -38,11 +38,11 @@ src/
   pages/
     index.astro              # Main page (directory + search + category tabs)
     how-it-works.astro       # How-to guide page with HowTo + FAQPage schema
-    bank/[slug].astro        # 79 bank detail PSEO pages (BankOrCreditUnion + FAQPage + HowTo + BreadcrumbList schema)
+    bank/[slug].astro        # 75 bank detail PSEO pages (BankOrCreditUnion + FAQPage + HowTo + BreadcrumbList schema)
     banks/[category].astro    # 7 category listing pages (CollectionPage + ItemList schema)
   layouts/Layout.astro       # HTML layout, meta tags, GA4
   components/SchemaOrg.astro # JSON-LD structured data (homepage)
-  data/banks.ts              # Bank missed-call number database (79 banks, 7 categories)
+  data/banks.ts              # Bank missed-call number database (75 banks, 7 categories)
 public/
   favicon.svg
   og-image.svg              # Social share image (Layout.astro og:image/twitter:image)
@@ -58,14 +58,14 @@ public/
 - The sticky header collapses to one ~61px bar below `sm` (`src/components/SiteHeader.astro`): the service rail sits behind the `service-nav-toggle` disclosure. Desktop keeps the two-row layout, so any header change must be re-measured at 390px AND 1280px.
 
 ## PSEO Pages
-- **79 bank pages** at `/bank/[slug]` — each with BankOrCreditUnion, FAQPage, HowTo, BreadcrumbList schema
+- **75 bank pages** at `/bank/[slug]` — each with BankOrCreditUnion, FAQPage, HowTo, BreadcrumbList schema
 - **7 category pages** at `/banks/[category]` — CollectionPage + ItemList schema
-- **9 vertical routes** — `/customer-care/[slug]`, `/net-banking/[slug]`, `/sms-banking/[slug]`, `/mini-statement/[slug]`, `/mobile-number-registration/[slug]`, `/aadhaar-link/[slug]`, `/atm-pin/[slug]`, `/balance-enquiry/[slug]`, `/toll-free-number/[slug]` — each with 79+ pages + hub
-- **Merged-banks vertical** — `/merged-banks/[oldSlug]` (11 legacy RRB merger pages) + `/merged-banks/` hub — data in `src/data/mergers.ts`, successor numbers rendered from `banks.ts` only
+- **9 vertical routes** — `/customer-care/[slug]`, `/net-banking/[slug]`, `/sms-banking/[slug]`, `/mini-statement/[slug]`, `/mobile-number-registration/[slug]`, `/aadhaar-link/[slug]`, `/atm-pin/[slug]`, `/balance-enquiry/[slug]`, `/toll-free-number/[slug]` — each with 75+ pages + hub
+- **Merged-banks vertical** — `/merged-banks/[oldSlug]` (14 legacy bank merger pages) + `/merged-banks/` hub — data in `src/data/mergers.ts`, successor numbers rendered from `banks.ts` only. Defunct banks (e.g. the 2026-10 retirement of apgb, kvgb, pragathi-krishna, fincare) live here, never in `banks.ts`; their legacy vertical URLs 301 through `src/lib/legacy-redirects.mjs` to the evidence-backed successor.
 - **Missed-call vertical** — `/missed-call/[slug]` + `/missed-call/` hub — pages exist only for banks where `balanceMode === 'missed-call'` (derived in `src/data/banks.ts`); banks whose balance number is their customer-care/IVR line get no page, and `MoreServices.astro` only links the vertical for those banks
 - **How-to page** at `/how-it-works` — HowTo + FAQPage schema
 - Sitemap auto-generated by @astrojs/sitemap at `/sitemap-index.xml`
-- Fresh-build baseline: 893 generated pages (879 of them sitemap URLs). Recompute from `dist/` and the sitemap instead of assuming this count is permanent.
+- Fresh-build baseline: 852 generated pages (839 of them sitemap URLs) — was 893/879 before the 2026-10 defunct-bank retirement (apgb, kvgb, pragathi-krishna, fincare → /merged-banks/). Recompute from `dist/` and the sitemap instead of assuming this count is permanent.
 
 ## Hermes Skills
 For PSEO/content work, load the `balcheck-pseo` Hermes skill. It contains the full data model, vertical expansion patterns, audit commands, and site-specific pitfalls.
@@ -84,7 +84,7 @@ Bank missed-call numbers sourced from:
 Last verified: 2026-09-18
 
 `verified: true` means an official page read or the multi-aggregator corroboration the 2026-07-20
-audit used (63 of 79 records). The 16 records whose 2026-09-18 verdict was NO_SUPPORT / SITE_BLOCKED
+audit used (63 of 75 records). The 12 records whose 2026-09-18 verdict was NO_SUPPORT / SITE_BLOCKED
 stay `verified: false` with no `lastVerified` and a receipt documenting the attempt — see the
 landmine above before flipping one.
 

@@ -213,16 +213,12 @@ test('compose helpers keep every composed meta within budget', () => {
 });
 
 test('no two built pages share a title', () => {
-  // P1-1 defunct-bank pair (apgb / andhra-pradesh-grameena share the "APGB"
-  // shortName in banks.ts) is out of scope for this audit item and is the
-  // only tolerated collision.
-  const tolerated = new Set(['sms-banking/apgb/', 'sms-banking/andhra-pradesh-grameena/']);
   const byTitle = new Map<string, string[]>();
   for (const p of builtPages) {
     byTitle.set(p.title, [...(byTitle.get(p.title) ?? []), p.path]);
   }
   const duplicates = [...byTitle.entries()]
-    .filter(([title, paths]) => paths.length > 1 && !(paths.length === 2 && paths.every(x => tolerated.has(x))))
+    .filter(([title, paths]) => paths.length > 1)
     .map(([title, paths]) => `${JSON.stringify(title)} -> ${paths.join(', ')}`);
   expect(duplicates, duplicates.join('\n')).toEqual([]);
 });

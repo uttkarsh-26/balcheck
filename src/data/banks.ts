@@ -589,19 +589,6 @@ const bankData: BankInput[] = [
     verificationSource: 'Official re-check 2026-09-26: read https://www.esafbank.com/contact-us, which 302-redirects to https://www.esaf.bank.in/contact-us/ (live 200); that page\'s CONTACT CENTRE block lists 1-800-103-3723 (labelled 1-800-103 - ESAF, toll free); the missed call number is not published there; customerCare was 1800-303-1201, corrected to 1800-103-3723 | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
   },
   {
-    slug: 'fincare',
-    name: 'Fincare Small Finance Bank',
-    nameHindi: 'फाइनकेयर स्मॉल फाइनेंस बैंक',
-    shortName: 'Fincare',
-    category: 'Small Finance Bank',
-    missedCall: '18001201200',
-    customerCare: '1800-309-9001',
-    website: 'https://www.au.bank.in',
-    verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
-    notes: 'Fincare merged into AU SFB; balance/customer care: 1800-120-1200 / 1800-26-66677 (Source: au.bank.in merger page).',
-    verificationSource: 'Official re-check 2026-09-26: read https://www.au.bank.in/au-small-finance-bank-and-fincare-small-finance-bank-merger; recorded number not published there | ENTITY DEFUNCT: Fincare SFB amalgamated into AU Small Finance Bank w.e.f. 2024-04-01 (RBI press release 57445); the recorded website domain no longer resolves. | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
-  },
-  {
     slug: 'ne-sfb',
     name: 'North East Small Finance Bank',
     nameHindi: 'नॉर्थ ईस्ट स्मॉल फाइनेंस बैंक',
@@ -762,30 +749,6 @@ const bankData: BankInput[] = [
 
   // === Regional Rural Banks ===
   {
-    slug: 'apgb',
-    name: 'Andhra Pradesh Grameena Vikas Bank',
-    nameHindi: 'आंध्र प्रदेश ग्रामीण विकास बैंक',
-    shortName: 'APGB',
-    category: 'Regional Rural Bank',
-    missedCall: '9289222024',
-    customerCare: '1800-123-6235',
-    website: 'https://apgb.bank.in',
-    verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
-    verificationSource: 'Official re-check 2026-09-26: read https://apgb.bank.in/ (successor Andhra Pradesh Grameena Bank; live 200); recorded number not published there | ENTITY DEFUNCT: APGVB was amalgamated into Andhra Pradesh Grameena Bank w.e.f. 2025-05-01 (Gazette S.O. 1625(E)); successor publishes missed-call 9090290912 and toll-free 1800 425 6708. | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
-  },
-  {
-    slug: 'kvgb',
-    name: 'Karnataka Vikas Grameena Bank',
-    nameHindi: 'कर्नाटक विकास ग्रामीण बैंक',
-    shortName: 'KVGB',
-    category: 'Regional Rural Bank',
-    missedCall: '09278700859',
-    customerCare: '1800-10-25250',
-    website: 'https://www.kvgbank.com',
-    verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
-    verificationSource: 'Official re-check 2026-09-26: KVGB has no site of its own - https://www.kvgbank.com/ 302-redirects to the successor https://karnatakagb.bank.in/ (Gazette S.O. 1629(E), amalgamated w.e.f. 2025-05-01) and kvgbank.com/contact-us lands on the successor 404 page; read https://karnatakagb.bank.in/contact (live 200), where 1800 10 25250 appears as the site header Helpline, under Toll free number, and as the footer Toll Free Number (same digits as the listed Customer support number 1800 102 5250); the missed call number is not published on any official page and the withdrawn 1800-425-1100 never appeared on the KVGB contact page in any archived snapshot; customerCare was 1800-425-1100, corrected to 1800-10-25250',
-  },
-  {
     slug: 'baroda-up-gramin',
     name: 'Baroda UP Gramin Bank',
     nameHindi: 'बड़ौदा यूपी ग्रामीण बैंक',
@@ -852,18 +815,6 @@ const bankData: BankInput[] = [
     verified: true,
     verificationSource: 'https://pygb.bank.in/contact-us (official page carries customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
     lastVerified: '2026-09-18',
-  },
-  {
-    slug: 'pragathi-krishna',
-    name: 'Pragathi Krishna Gramin Bank',
-    nameHindi: 'प्रगति कृष्ण ग्रामीण बैंक',
-    shortName: 'Pragathi Krishna',
-    category: 'Regional Rural Bank',
-    missedCall: '9015800700',
-    customerCare: '08392-236444',
-    website: 'https://apgb.bank.in',
-    verified: false, // 2026-09-18 audit: no official confirmation found — see verificationSource
-    verificationSource: 'Official re-check 2026-09-26: read https://apgb.bank.in/ (successor of the amalgamated bank; live 200); recorded number not published there | ENTITY DEFUNCT: amalgamated into Andhra Pradesh Grameena Bank w.e.f. 2025-05-01 (Gazette S.O. 1625(E)); the recorded website domain no longer resolves. | number NOT officially confirmed | audit: docs/audits/bank-number-authenticity-2026-09-18.md + docs/audits/bank-number-recheck-2026-09-26.md',
   },
   {
     slug: 'baroda-rajasthan',

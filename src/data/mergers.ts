@@ -1,4 +1,4 @@
-// Historical RRB → current bank merger records (PSEO vertical: /merged-banks/).
+// Historical bank → current bank merger records (PSEO vertical: /merged-banks/).
 //
 // Facts verified 2026-08-10 against primary sources only:
 //   - Gazette of India notifications (S.O. 291(E), S.O. 449(E), S.O. 6255(E),
@@ -212,7 +212,6 @@ export const mergers: MergerRecord[] = [
   },
   {
     oldSlug: 'karnataka-vikas',
-    bankSlugAliases: ['kvgb'],
     oldName: 'Karnataka Vikas Grameena Bank',
     oldNameHindi: 'कर्नाटक विकास ग्रामीण बैंक',
     successorSlug: 'karnataka-grameena',
@@ -251,6 +250,64 @@ export const mergers: MergerRecord[] = [
     ],
     noteHindi:
       'इलाहाबाद उत्तर प्रदेश ग्रामीण बैंक 01.04.2019 को ग्रामीण बैंक ऑफ आर्यावर्त के साथ विलय होकर आर्यावर्त बैंक बना (S.O. 449(E)), और 01.05.2025 से उत्तर प्रदेश ग्रामीण बैंक (UPGB) का हिस्सा है।',
+  },
+  {
+    oldSlug: 'apgb',
+    oldName: 'Andhra Pradesh Grameena Vikas Bank',
+    oldNameHindi: 'आंध्र प्रदेश ग्रामीण विकास बैंक',
+    successorSlug: 'andhra-pradesh-grameena',
+    events: [
+      {
+        effectiveDate: '2025-05-01',
+        resultingName: 'Andhra Pradesh Grameena Bank',
+        resultingNameHindi: 'आंध्र प्रदेश ग्रामीण बैंक',
+        sourceUrl: gazette2025Url,
+        sourceLabel: 'भारत का राजपत्र — S.O. 1625(E) (05.04.2025)',
+      },
+    ],
+    noteHindi:
+      'आंध्र प्रदेश ग्रामीण विकास बैंक (APGVB) 01.05.2025 को "One State One RRB" सुधार के तहत आंध्र प्रदेश के अन्य ग्रामीण बैंकों के साथ विलय होकर आंध्र प्रदेश ग्रामीण बैंक बना — भारत का राजपत्र S.O. 1625(E) (05.04.2025)।',
+  },
+  {
+    oldSlug: 'pragathi-krishna',
+    oldName: 'Pragathi Krishna Gramin Bank',
+    oldNameHindi: 'प्रगति कृष्ण ग्रामीण बैंक',
+    successorSlug: 'karnataka-grameena',
+    events: [
+      {
+        effectiveDate: '2019-04-01',
+        resultingName: 'Karnataka Gramin Bank',
+        resultingNameHindi: 'कर्नाटक ग्रामीण बैंक',
+        sourceUrl: 'https://www.rbi.org.in/scripts/FS_Notification.aspx?Id=11985&fn=2&Mode=0',
+        sourceLabel: 'RBI/2020-21/57 Second Schedule update — Karnataka Gramin Bank / PKGB',
+      },
+      {
+        effectiveDate: '2025-05-01',
+        resultingName: 'Karnataka Grameena Bank',
+        resultingNameHindi: 'कर्नाटक ग्रामीण बैंक',
+        sourceUrl: gazette2025Url,
+        sourceLabel: 'भारत का राजपत्र — S.O. 1629(E) (05.04.2025)',
+      },
+    ],
+    noteHindi:
+      'प्रगति कृष्ण ग्रामीण बैंक (PKGB) 01.04.2019 को कावेरी ग्रामीण बैंक के साथ विलय होकर कर्नाटक ग्रामीण बैंक, बल्लारी बना (RBI/2020-21/57), और 01.05.2025 से कर्नाटक ग्रामीण बैंक (Karnataka Grameena Bank) का हिस्सा है — Canara Bank प्रायोजित।',
+  },
+  {
+    oldSlug: 'fincare',
+    oldName: 'Fincare Small Finance Bank',
+    oldNameHindi: 'फाइनकेयर स्मॉल फाइनेंस बैंक',
+    successorSlug: 'au-sfb',
+    events: [
+      {
+        effectiveDate: '2024-04-01',
+        resultingName: 'AU Small Finance Bank',
+        resultingNameHindi: 'एयू स्मॉल फाइनेंस बैंक',
+        sourceUrl: 'https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=57445',
+        sourceLabel: 'RBI प्रेस विज्ञप्ति 2023-2024/1995 — Fincare → AU SFB',
+      },
+    ],
+    noteHindi:
+      'फाइनकेयर स्मॉल फाइनेंस बैंक 01.04.2024 को RBI-अनुमोदित विलय योजना के तहत AU स्मॉल फाइनेंस बैंक में विलय हो गया; Fincare की सभी शाखाएँ उसी दिन से AU SFB की शाखाएँ बन गईं।',
   },
 ];
 

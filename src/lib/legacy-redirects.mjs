@@ -44,6 +44,58 @@ export const EXACT_REDIRECTS = {
   '/mobile-number-registration/psb/|': '/mobile-number-registration/psb/',
   '/mobile-number-registration/iob/mobile-number-registration/iob/':
     '/mobile-number-registration/iob/',
+
+  // Defunct banks retired from banks.ts (2026-10 migration to /merged-banks/):
+  // every per-bank vertical page they used to ship is 301'd to the same
+  // vertical on the evidence-backed successor (Gazette S.O. 1625(E) APGB,
+  // S.O. 1629(E) Karnataka Grameena, RBI press release 2023-2024/1995 AU SFB).
+  '/bank/apgb/': '/bank/andhra-pradesh-grameena/',
+  '/missed-call/apgb/': '/missed-call/andhra-pradesh-grameena/',
+  '/balance-enquiry/apgb/': '/balance-enquiry/andhra-pradesh-grameena/',
+  '/sms-banking/apgb/': '/sms-banking/andhra-pradesh-grameena/',
+  '/customer-care/apgb/': '/customer-care/andhra-pradesh-grameena/',
+  '/net-banking/apgb/': '/net-banking/andhra-pradesh-grameena/',
+  '/mini-statement/apgb/': '/mini-statement/andhra-pradesh-grameena/',
+  '/mobile-number-registration/apgb/': '/mobile-number-registration/andhra-pradesh-grameena/',
+  '/aadhaar-link/apgb/': '/aadhaar-link/andhra-pradesh-grameena/',
+  '/atm-pin/apgb/': '/atm-pin/andhra-pradesh-grameena/',
+  '/toll-free-number/apgb/': '/toll-free-number/andhra-pradesh-grameena/',
+
+  '/bank/pragathi-krishna/': '/bank/karnataka-grameena/',
+  '/missed-call/pragathi-krishna/': '/missed-call/karnataka-grameena/',
+  '/balance-enquiry/pragathi-krishna/': '/balance-enquiry/karnataka-grameena/',
+  '/sms-banking/pragathi-krishna/': '/sms-banking/karnataka-grameena/',
+  '/customer-care/pragathi-krishna/': '/customer-care/karnataka-grameena/',
+  '/net-banking/pragathi-krishna/': '/net-banking/karnataka-grameena/',
+  '/mini-statement/pragathi-krishna/': '/mini-statement/karnataka-grameena/',
+  '/mobile-number-registration/pragathi-krishna/': '/mobile-number-registration/karnataka-grameena/',
+  '/aadhaar-link/pragathi-krishna/': '/aadhaar-link/karnataka-grameena/',
+  '/atm-pin/pragathi-krishna/': '/atm-pin/karnataka-grameena/',
+  '/toll-free-number/pragathi-krishna/': '/toll-free-number/karnataka-grameena/',
+
+  '/bank/kvgb/': '/bank/karnataka-grameena/',
+  '/missed-call/kvgb/': '/missed-call/karnataka-grameena/',
+  '/balance-enquiry/kvgb/': '/balance-enquiry/karnataka-grameena/',
+  '/sms-banking/kvgb/': '/sms-banking/karnataka-grameena/',
+  '/customer-care/kvgb/': '/customer-care/karnataka-grameena/',
+  '/net-banking/kvgb/': '/net-banking/karnataka-grameena/',
+  '/mini-statement/kvgb/': '/mini-statement/karnataka-grameena/',
+  '/mobile-number-registration/kvgb/': '/mobile-number-registration/karnataka-grameena/',
+  '/aadhaar-link/kvgb/': '/aadhaar-link/karnataka-grameena/',
+  '/atm-pin/kvgb/': '/atm-pin/karnataka-grameena/',
+  '/toll-free-number/kvgb/': '/toll-free-number/karnataka-grameena/',
+
+  '/bank/fincare/': '/bank/au-sfb/',
+  '/missed-call/fincare/': '/missed-call/au-sfb/',
+  '/balance-enquiry/fincare/': '/balance-enquiry/au-sfb/',
+  '/sms-banking/fincare/': '/sms-banking/au-sfb/',
+  '/customer-care/fincare/': '/customer-care/au-sfb/',
+  '/net-banking/fincare/': '/net-banking/au-sfb/',
+  '/mini-statement/fincare/': '/mini-statement/au-sfb/',
+  '/mobile-number-registration/fincare/': '/mobile-number-registration/au-sfb/',
+  '/aadhaar-link/fincare/': '/aadhaar-link/au-sfb/',
+  '/atm-pin/fincare/': '/atm-pin/au-sfb/',
+  '/toll-free-number/fincare/': '/toll-free-number/au-sfb/',
 };
 
 // Prefix rewrites, applied in order, only on paths with no dist/ match.

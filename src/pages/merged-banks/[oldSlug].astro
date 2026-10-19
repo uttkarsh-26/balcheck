@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import FaqAccordion from '../../components/FaqAccordion.astro';
 import RecordEvidence from '../../components/RecordEvidence.astro';
 import { mergers } from '../../data/mergers';
-import { banks } from '../../data/banks';
+import { banks, categoryHindi } from '../../data/banks';
 
 export function getStaticPaths() {
   return mergers.map((m) => ({
@@ -185,9 +185,9 @@ const displayDate = (iso: string) => {
       <p class="text-xs text-gray-500 mb-1">🏦 विलय हुई बैंकें</p>
       <p class="text-sm font-medium text-brand-700">सभी विलय की सूची देखें →</p>
     </a>
-    <a href="/banks/regional-rural-bank/" class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
-      <p class="text-xs text-gray-500 mb-1">🌾 क्षेत्रीय ग्रामीण बैंक</p>
-      <p class="text-sm font-medium text-brand-700">मौजूदा RRB नंबर →</p>
+    <a href={`/banks/${successor.category.toLowerCase().replace(/\s+/g, '-')}/`} class="bg-white rounded-xl border border-gray-200 p-4 text-center hover:border-brand-300 transition-colors">
+      <p class="text-xs text-gray-500 mb-1">🏦 {categoryHindi[successor.category]}</p>
+      <p class="text-sm font-medium text-brand-700">मौजूदा {categoryHindi[successor.category]} नंबर →</p>
     </a>
   </div>
 

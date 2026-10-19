@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { getMerger, mergers } from '../src/data/mergers';
+import { mergers } from '../src/data/mergers';
 import { banks } from '../src/data/banks';
 import { gotoDom, getJsonLdScripts, findSchema } from './utils';
 
@@ -18,13 +18,16 @@ const EXPECTED_LINEAGE: Record<string, { dates: string[]; successor: string }> =
   'purvanchal': { dates: ['2020-04-01', '2025-05-01'], successor: 'up-gramin' },
   'karnataka-vikas': { dates: ['2025-05-01'], successor: 'karnataka-grameena' },
   'allahabad-up-gramin': { dates: ['2019-04-01', '2025-05-01'], successor: 'up-gramin' },
+  apgb: { dates: ['2025-05-01'], successor: 'andhra-pradesh-grameena' },
+  'pragathi-krishna': { dates: ['2019-04-01', '2025-05-01'], successor: 'karnataka-grameena' },
+  fincare: { dates: ['2024-04-01'], successor: 'au-sfb' },
 };
 
 const FORBIDDEN_NUMBER = '9224150150';
 
 test.describe('merged-banks data integrity', () => {
-  test('batch contains exactly the researched 11 records with unique oldSlugs', () => {
-    expect(mergers).toHaveLength(11);
+  test('batch contains exactly the researched 14 records with unique oldSlugs', () => {
+    expect(mergers).toHaveLength(14);
     const slugs = mergers.map((m) => m.oldSlug);
     expect(new Set(slugs).size).toBe(slugs.length);
     expect(Object.keys(EXPECTED_LINEAGE).sort()).toEqual(slugs.sort());
@@ -35,10 +38,6 @@ test.describe('merged-banks data integrity', () => {
     for (const m of mergers) {
       expect(bankSlugs, `${m.oldSlug} -> ${m.successorSlug}`).toContain(m.successorSlug);
     }
-  });
-
-  test('existing legacy bank slug aliases resolve to their canonical merger record', () => {
-    expect(getMerger('kvgb')?.oldSlug).toBe('karnataka-vikas');
   });
 
   test('every event sourceUrl is HTTPS', () => {
@@ -147,7 +146,7 @@ test.describe('merged-banks hub', () => {
 
 test.describe('merged-banks detail pages', () => {
   for (const m of mergers) {
-    test(`${m.oldSlug}: single-intent H1 with old RRB name + balance check intent, successor explained`, async ({ page }) => {
+    test(`${m.oldSlug}: single-intent H1 with old bank name + balance check intent, successor explained`, async ({ page }) => {
       await gotoDom(page, `/merged-banks/${m.oldSlug}/`);
       await expect(page.locator('h1')).toHaveCount(1);
 
@@ -236,11 +235,10 @@ test.describe('merged-banks detail pages', () => {
 });
 
 test.describe('cross-links from existing bank pages', () => {
-  test('old RRB bank pages show an accurate first-event banner linking to the canonical merger page', async ({ page }) => {
+  test('old bank pages show an accurate first-event banner linking to the canonical merger page', async ({ page }) => {
     const legacyBankPages: Record<string, string> = {
       'baroda-up-gramin': 'baroda-up-gramin',
       'baroda-rajasthan': 'baroda-rajasthan',
-      kvgb: 'karnataka-vikas',
     };
     for (const [bankSlug, oldSlug] of Object.entries(legacyBankPages)) {
       const merger = mergers.find((m) => m.oldSlug === oldSlug)!;
@@ -258,8 +256,10 @@ test.describe('cross-links from existing bank pages', () => {
       'up-gramin': ['baroda-up-gramin', 'kashi-gomti-samyut', 'purvanchal', 'allahabad-up-gramin'],
       'mp-gramin': ['narmada-jhabua', 'central-madhya-pradesh', 'madhyanchal'],
       'punjab-gramin': ['malwa', 'sutlej'],
-      'karnataka-grameena': ['karnataka-vikas'],
+      'karnataka-grameena': ['karnataka-vikas', 'pragathi-krishna'],
       'rajasthan-gramin': ['baroda-rajasthan'],
+      'andhra-pradesh-grameena': ['apgb'],
+      'au-sfb': ['fincare'],
     };
     for (const [slug, oldSlugs] of Object.entries(expected)) {
       await gotoDom(page, `/bank/${slug}/`);
