@@ -1,6 +1,8 @@
 ---
 // BalCheck.in global footer — policy + service discovery links.
 // AdSense site-review requirement: every page must reach Privacy/About/Contact.
+import { articles, articlePath } from '../data/articles';
+
 const serviceLinks = [
   { href: '/number-lookup/', label: 'Number Lookup' },
   { href: '/balance-enquiry/', label: 'Balance Enquiry' },
@@ -10,6 +12,10 @@ const serviceLinks = [
   { href: '/banks/', label: 'All Banks' },
   { href: '/how-it-works/', label: 'कैसे काम करता है' },
 ] as const;
+
+// Every guide article gets a crawlable inbound link from every page — the
+// footer is the shared surface that keeps new articles from going orphaned.
+const guideLinks = articles.map(a => ({ href: articlePath(a.slug), label: a.linkLabel }));
 
 /** 44px tap targets: the audited defect measured these quick links at 28px. */
 const quickLinkClass =
@@ -32,6 +38,12 @@ const infoLinks = [
       <nav aria-label="Services" class="flex flex-col text-sm">
         <p class="text-xs font-semibold uppercase tracking-wide text-gray-600">सेवाएं</p>
         {serviceLinks.map((l) => (
+          <a href={l.href} class={quickLinkClass} data-testid="footer-quick-link">{l.label}</a>
+        ))}
+      </nav>
+      <nav aria-label="Guides" class="flex flex-col text-sm">
+        <p class="text-xs font-semibold uppercase tracking-wide text-gray-600">गाइड</p>
+        {guideLinks.map((l) => (
           <a href={l.href} class={quickLinkClass} data-testid="footer-quick-link">{l.label}</a>
         ))}
       </nav>

@@ -5,6 +5,7 @@ import RecordEvidence from '../../components/RecordEvidence.astro';
 import { hasDocumentedEvidence } from '../../lib/evidence';
 import { banks } from '../../data/banks';
 import type { Bank } from '../../data/banks';
+import { composeDescription, composeTitle } from '../../lib/seo';
 
 export function getStaticPaths() {
   return banks.map((bank: Bank) => ({ params: { slug: bank.slug }, props: { bank } }));
@@ -21,7 +22,8 @@ const canonicalUrl = `${siteUrl}/sms-banking/${bank.slug}/`;
 // - cosmos: 147 imp @ 0% CTR; top query "cosmos bank balance check number missed call" (38 imp) -> verified missed-call number
 const smsBankingOverrides: Partial<Record<string, { title: string }>> = {
   'punjab-gramin': {
-    title: `Punjab Gramin Bank Balance Check Number ${bank.missedCall}`,
+    // " — SMS" differentiates this from the byte-identical /bank/ title (P2-2).
+    title: `Punjab Gramin Bank Balance Check Number ${bank.missedCall} — SMS`,
   },
   'mp-gramin': {
     title: `MPGB Balance Check Number ${bank.missedCall} — Missed Call`,
@@ -30,10 +32,15 @@ const smsBankingOverrides: Partial<Record<string, { title: string }>> = {
     title: `Cosmos Bank Balance Check Number ${bank.missedCall} — Missed Call`,
   },
 };
-const title = smsBankingOverrides[bank.slug]?.title
-  ?? `${bank.shortName} SMS Banking — Official Registration & Balance Methods`;
+const smsTitleOverride = smsBankingOverrides[bank.slug]?.title;
+const title = smsTitleOverride
+  // GSC override titles carry their own intent; only budget-clamp them.
+  ? composeTitle([smsTitleOverride])
+  : composeTitle([`${bank.shortName} SMS Banking`, 'Official Registration & Balance Methods'], 'BalCheck');
 const h1Text = bank.slug === 'punjab-gramin' ? 'Punjab Gramin Bank Balance Check Number' : `${bank.shortName} SMS Banking`;
-const description = `${bank.name} SMS banking guide. Official commands और registration के लिए bank website देखें। Balance enquiry: ${bank.missedCall} (${isMissedCall ? 'missed call' : 'customer care/IVR'})।`;
+const description = composeDescription(
+  `${bank.name} SMS banking guide. Official commands और registration के लिए bank website देखें। Balance enquiry: ${bank.missedCall} (${isMissedCall ? 'missed call' : 'customer care/IVR'})।`,
+);
 const balanceText = isMissedCall
   ? `${bank.name} में registered mobile से recorded balance number ${bank.missedCall} पर missed call दें। Bank की service active होने पर balance SMS मिल सकता है।`
   : `${bank.missedCall} Customer Care / IVR number है; dedicated missed-call service verified नहीं है। Call करके balance enquiry विकल्प चुनें और IVR के निर्देश पूरे करें।`;

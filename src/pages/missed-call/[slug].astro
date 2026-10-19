@@ -6,6 +6,7 @@ import RecordEvidence from '../../components/RecordEvidence.astro';
 import { banks, categoryHindi } from '../../data/banks';
 import type { Bank } from '../../data/banks';
 import { mergers } from '../../data/mergers';
+import { composeDescription, composeTitle } from '../../lib/seo';
 
 // Scope: only banks whose balance number is a dedicated missed-call facility —
 // the same predicate the /missed-call/ hub uses (see src/pages/missed-call/index.astro).
@@ -61,8 +62,15 @@ const legacyRecords = mergers.filter(
   (m) => m.successorSlug === bank.slug || m.oldSlug === bank.slug,
 );
 
-const title = `${bank.shortName} Missed Call Number ${bank.missedCall} — ${bank.nameHindi} बैलेंस चेक SMS | BalCheck`;
-const description = `${bank.name} (${bank.shortName}) का missed call balance check number ${bank.missedCall} (${missedCallSpaced})। Registered mobile से मिस्ड कॉल दें और SMS में बैलेंस पाएं — बिना ऐप, बिना नेट बैंकिंग। अन्य तरीकों से तुलना और SMS न आने पर क्या करें।`;
+const title = composeTitle(
+  [`${bank.shortName} Missed Call Number ${bank.missedCall}`, `${bank.nameHindi} बैलेंस चेक SMS`],
+  'BalCheck',
+);
+// The full Hindi bank name leads the description so it stays in the SERP
+// snippet even when the 65-char title budget drops it from the title.
+const description = composeDescription(
+  `${bank.nameHindi} (${bank.name}) का missed call balance check number ${bank.missedCall}। Registered mobile से मिस्ड कॉल दें और SMS में बैलेंस पाएं — बिना ऐप, बिना नेट बैंकिंग। अन्य तरीकों से तुलना और SMS न आने पर क्या करें।`,
+);
 
 const faqs = [
   {

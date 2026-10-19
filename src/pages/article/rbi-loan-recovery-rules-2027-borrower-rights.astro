@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { getArticle } from '../../data/articles';
 import FaqAccordion from '../../components/FaqAccordion.astro';
 import ScannableArticleSummary from '../../components/ScannableArticleSummary.astro';
 
@@ -9,8 +10,8 @@ const canonicalUrl = `${siteUrl}/article/${slug}/`;
 const publishDate = '2026-08-11';
 const modifiedDate = '2026-08-11';
 
-const pageTitle = 'RBI Loan Recovery Rules 2027: Recovery Calls, Agent Visits और Phone Lock के नए नियम | BalCheck.in';
-const pageDesc = 'RBI के नए loan recovery rules 1 जनवरी 2027 से लागू — recovery agent call timing, mandatory recording, phone lock limits, ₹250/hr का मुआवजा और borrower rights की पूरी जानकारी।';
+const pageTitle = getArticle('rbi-loan-recovery-rules-2027-borrower-rights').title;
+const pageDesc = getArticle('rbi-loan-recovery-rules-2027-borrower-rights').description;
 
 const articleBrief = {
   summary: 'RBI ने 6 अगस्त 2026 को loan recovery के नए नियम जारी किए। 1 जनवरी 2027 से recovery calls रिकॉर्ड होंगी और agents सुबह 8 से शाम 7 तक ही contact कर सकेंगे।',

@@ -5,6 +5,7 @@ import MoreServices from '../../components/MoreServices.astro';
 import RecordEvidence from '../../components/RecordEvidence.astro';
 import { banks } from '../../data/banks';
 import type { Bank } from '../../data/banks';
+import { composeDescription, composeTitle } from '../../lib/seo';
 
 export function getStaticPaths() {
   return banks.map((bank: Bank) => ({
@@ -39,7 +40,7 @@ interface Override {
 }
 
 const defaultOverride: Override = {
-  title: `${bank.shortName} Mobile Number Registration — ${bank.nameHindi} Mobile Link`,
+  title: composeTitle([`${bank.shortName} Mobile Number Registration`, bank.nameHindi], 'BalCheck'),
   h1: `${bank.shortName} Mobile Number Registration`,
   quickAnswer: `${bank.name} में mobile number register करने के लिए branch जाएं या ${bank.customerCare} पर customer care से संपर्क करें। अगर ${bank.shortName} ने अपनी वेबसाइट ${bank.website} पर net-banking/mobile-banking update दिया है तो वहां से भी कोशिश कर सकते हैं — पर official online update सभी बैंकों में उपलब्ध नहीं है।`,
   capability: 'branch-or-customer-care',
@@ -53,7 +54,7 @@ const overrides: Record<string, Override> = {
     capability: 'branch-or-customer-care',
   },
   'ippb': {
-    title: 'IPPB Mobile Number Link Online — India Post Payments Bank Mobile Link',
+    title: 'IPPB Mobile Number Link Online — India Post Payments Bank',
     h1: 'IPPB Mobile Number Link Online',
     quickAnswer: `India Post Payments Bank (IPPB) में mobile number link के लिए nearest post-office branch या ${bank.customerCare} customer care से संपर्क करें। IPPB की वेबसाइट ${bank.website} पर account/online banking login उपलब्ध है, पर mobile number link का full process "online" claim के बिना verify करें — हम यह दावा नहीं करते कि पूरी तरह से online होता है। Branch में form भरना सबसे विश्वसनीय है।`,
     capability: 'branch-or-customer-care',
@@ -102,7 +103,11 @@ const categoryContext: Record<Bank['category'], CategoryContext> = {
 const ctx = categoryContext[bank.category];
 
 const title = override.title;
-const description = `${bank.name} में mobile number registration कैसे करें। ${bank.shortName} mobile number link के लिए branch, ATM, या अगर उपलब्ध हो तो ${bank.website} पर official online method देखें। जानकारी customer care ${bank.customerCare} से confirm करें।`;
+// The raw website URL made this description overflow the SERP budget; the
+// Hindi bank name leads so it survives even when the title drops it.
+const description = composeDescription(
+  `${bank.nameHindi} (${bank.name}) में mobile number registration कैसे करें। Branch, ATM या official website से ${bank.shortName} mobile number link कराएं; जानकारी customer care ${bank.customerCare} से confirm करें।`,
+);
 
 const faqs = [
   {

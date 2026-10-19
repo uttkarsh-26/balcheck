@@ -5,6 +5,7 @@ import MoreServices from '../../components/MoreServices.astro';
 import RecordEvidence from '../../components/RecordEvidence.astro';
 import { banks } from '../../data/banks';
 import type { Bank } from '../../data/banks';
+import { composeDescription, composeTitle } from '../../lib/seo';
 
 export function getStaticPaths() {
   return banks.map((bank: Bank) => ({
@@ -21,8 +22,11 @@ const { bank } = Astro.props;
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = `${siteUrl}/aadhaar-link/${bank.slug}/`;
 
-const title = `${bank.shortName} Aadhaar Link — ${bank.nameHindi} आधार लिंक कैसे करें`;
-const description = `${bank.name} account में Aadhaar link करने के तरीके। Net banking, SMS, ATM या branch जाकर आधार लिंक करें। ${bank.shortName} Aadhaar seeding online।`;
+const title = composeTitle([`${bank.shortName} Aadhaar Link`, `${bank.nameHindi} आधार लिंक कैसे करें`], 'BalCheck');
+// Full Hindi bank name leads the description even when the title drops it.
+const description = composeDescription(
+  `${bank.nameHindi} (${bank.name}) account में Aadhaar link करने के तरीके। Net banking, SMS, ATM या branch जाकर आधार लिंक करें। ${bank.shortName} Aadhaar seeding online।`,
+);
 
 const faqs = [
   {

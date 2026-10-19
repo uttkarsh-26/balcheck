@@ -6,6 +6,7 @@ import type { Bank } from '../../data/banks';
 import MoreServices from '../../components/MoreServices.astro';
 import RecordEvidence from '../../components/RecordEvidence.astro';
 import { isTrueTollFreeNumber } from '../../lib/phone';
+import { composeDescription, composeTitle } from '../../lib/seo';
 
 export function getStaticPaths() {
   return banks.map((bank: Bank) => ({
@@ -25,12 +26,14 @@ const siteUrl = 'https://balcheck.in';
 const routeUrl = `${siteUrl}/toll-free-number/${bank.slug}/`;
 const canonicalUrl = isTollFree ? routeUrl : `${siteUrl}/customer-care/${bank.slug}/`;
 
-const title = isTollFree
-  ? `${bank.shortName} Toll Free Number — ${bank.nameHindi} Helpline | BalCheck`
-  : `${bank.shortName} Customer Care Number — ${bank.nameHindi} Helpline | BalCheck`;
+const title = composeTitle(
+  [isTollFree ? `${bank.shortName} Toll Free Number` : `${bank.shortName} Customer Care Number`, `${bank.nameHindi} Helpline`],
+  'BalCheck',
+);
+// Full Hindi bank name leads the description even when the title drops it.
 const description = isTollFree
-  ? `${bank.name} (${bank.shortName}) का verified 1800 customer care number ${bank.customerCare}। बैंकिंग समस्या और account help के लिए call करें।`
-  : `${bank.name} (${bank.shortName}) customer care number ${bank.customerCare}। यह legacy toll-free-number URL customer-care coverage बनाए रखने के लिए उपलब्ध है; इसे toll-free न मानें।`;
+  ? composeDescription(`${bank.nameHindi} (${bank.name}) का verified 1800 customer care number ${bank.customerCare}। बैंकिंग समस्या और account help के लिए call करें।`)
+  : composeDescription(`${bank.nameHindi} (${bank.name}) customer care number ${bank.customerCare}। यह legacy toll-free-number URL customer-care coverage बनाए रखने के लिए उपलब्ध है; इसे toll-free न मानें।`);
 
 const faqs = [
   {

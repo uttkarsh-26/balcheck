@@ -5,6 +5,7 @@ import RecordEvidence from '../../components/RecordEvidence.astro';
 import { banks } from '../../data/banks';
 import { hasDocumentedEvidence } from '../../lib/evidence';
 import type { Bank } from '../../data/banks';
+import { composeDescription } from '../../lib/seo';
 
 export function getStaticPaths() {
   return banks.map((bank: Bank) => ({ params: { slug: bank.slug }, props: { bank } }));
@@ -23,10 +24,10 @@ const title = hasDedicatedNumber
 // A record only claims a documented transaction count when it has citable evidence.
 const documentedTransactionCount = hasDedicatedNumber && hasDocumentedEvidence(bank) ? transactionCount : null;
 const description = hasDedicatedNumber
-  ? documentedTransactionCount
+  ? composeDescription(documentedTransactionCount
     ? `${bank.name} verified mini statement number ${bank.missedCallAlt}. Registered mobile से missed call देकर last ${documentedTransactionCount} transactions पाएं।`
-    : `${bank.name} recorded mini statement number ${bank.missedCallAlt}. Exact transaction count के लिए official website या customer care ${bank.customerCare} से confirm करें।`
-  : `${bank.name} का dedicated mini-statement missed-call number verified नहीं है। ATM, official app, net banking या customer care ${bank.customerCare} का उपयोग करें।`;
+    : `${bank.name} recorded mini statement number ${bank.missedCallAlt}. Exact transaction count के लिए official website या customer care ${bank.customerCare} से confirm करें।`)
+  : composeDescription(`${bank.name} का dedicated mini-statement missed-call number verified नहीं है। ATM, official app, net banking या customer care ${bank.customerCare} से confirm करें।`);
 const h1Text = hasDedicatedNumber ? `${bank.shortName} Mini Statement Number` : `${displayName} Mini Statement`;
 const websiteHost = bank.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
 const accessSteps = hasDedicatedNumber ? [

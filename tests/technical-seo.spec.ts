@@ -100,3 +100,141 @@ test('breadcrumb schema uses canonical slash for Home', async ({ page }) => {
     expect(breadcrumb.itemListElement[0].item).toBe('https://balcheck.in/');
   }
 });
+
+/**
+ * Site-wide meta-budget regression coverage (P1-2/P1-4/P2-2 + P1-3 orphans).
+ *
+ * Deterministic: scans the freshly built dist/ HTML directly instead of
+ * crawling 800+ URLs. The webServer builds dist before the suite runs, so the
+ * files reflect the current source.
+ */
+import { readdirSync, readFileSync, statSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import nodePath from 'node:path';
+import { articles, articlePath } from '../src/data/articles';
+import { composeDescription, composeTitle, DESCRIPTION_MAX, fitText, TITLE_MAX } from '../src/lib/seo';
+
+const distDir = nodePath.resolve(fileURLToPath(new URL('..', import.meta.url)), 'dist');
+
+function collectPages(dir: string, prefix = ''): string[] {
+  const pages: string[] = [];
+  for (const entry of readdirSync(dir)) {
+    const full = nodePath.join(dir, entry);
+    const rel = prefix ? `${prefix}/${entry}` : entry;
+    if (statSync(full).isDirectory()) pages.push(...collectPages(full, rel));
+    else if (entry === 'index.html') pages.push(rel);
+  }
+  return pages;
+}
+
+function decodeEntities(text: string): string {
+  return text
+    .replaceAll('&amp;', '&')
+    .replaceAll('&lt;', '<')
+    .replaceAll('&gt;', '>')
+    .replaceAll('&quot;', '"')
+    .replaceAll('&#39;', "'")
+    .replaceAll('&apos;', "'");
+}
+
+interface BuiltPage {
+  path: string;
+  title: string;
+  description: string;
+  html: string;
+}
+
+const builtPages: BuiltPage[] = collectPages(distDir).map((rel) => {
+  const html = readFileSync(nodePath.join(distDir, rel), 'utf8');
+  const titleMatch = html.match(/<title[^>]*>([\s\S]*?)<\/title>/);
+  const descMatch = html.match(/<meta name="description" content="([^"]*)"/);
+  return {
+    path: rel.replace(/\/index\.html$/, '/'),
+    title: decodeEntities(titleMatch?.[1]?.trim() ?? ''),
+    description: decodeEntities(descMatch?.[1] ?? ''),
+    html,
+  };
+});
+
+test('site builds pages', () => {
+  expect(builtPages.length).toBeGreaterThan(800);
+});
+
+test('every built page keeps title <=65 and description <=165 chars', () => {
+  const offenders = builtPages
+    .map(p => ({ path: p.path, titleLen: p.title.length, descLen: p.description.length }))
+    .filter(p => p.titleLen > 65 || p.descLen > 165);
+  const report = offenders
+    .sort((a, b) => Math.max(b.titleLen, b.descLen) - Math.max(a.titleLen, a.descLen))
+    .slice(0, 10)
+    .map(o => `${o.path} title=${o.titleLen} desc=${o.descLen}`)
+    .join('; ');
+  expect(offenders, `meta budget violations: ${report}`).toEqual([]);
+});
+
+test('fitText never cuts mid-word or mid-Devanagari-cluster', () => {
+  const seg = new Intl.Segmenter('hi', { granularity: 'grapheme' });
+  const inputs = [
+    'बड़ौदा राजस्थान क्षेत्रीय ग्रामीण बैंक बैलेंस चेक एसएमएस सेवा उपलब्ध',
+    'क्षत्रिय स्टेट ग्रांट वर्क्ष ड्वॉर्ड्स ज़िद्दी फ़ोन '.repeat(6),
+    'word '.repeat(50),
+    'aaaaaaaaaa', // single token longer than the budget
+  ];
+  const isGraphemePrefix = (out: string, input: string): boolean => {
+    let acc = '';
+    for (const { segment } of seg.segment(input)) {
+      acc += segment;
+      if (acc === out) return true;
+      if (acc.length > out.length) return false;
+    }
+    return false;
+  };
+  for (const input of inputs) {
+    for (const max of [3, 7, 13, 65]) {
+      const out = fitText(input, max);
+      expect(out.length).toBeLessThanOrEqual(max);
+      expect(
+        isGraphemePrefix(out, input),
+        `${JSON.stringify(out)} is not a grapheme-complete prefix of the input`,
+      ).toBe(true);
+    }
+  }
+});
+
+test('compose helpers keep every composed meta within budget', () => {
+  const longHead = 'Baroda Rajasthan Kshetriya Gramin Bank Missed Call Number 8880094411';
+  const title = composeTitle([longHead, 'बड़ौदा राजस्थान क्षेत्रीय ग्रामीण बैंक बैलेंस चेक SMS'], 'BalCheck');
+  expect(title.length).toBeLessThanOrEqual(TITLE_MAX);
+  expect(title.startsWith('Baroda Rajasthan Kshetriya')).toBe(true);
+
+  const description = composeDescription(`${'बड़ौदा राजस्थान क्षेत्रीय ग्रामीण बैंक '.repeat(10)}Registered mobile से मिस्ड कॉल दें।`);
+  expect(description.length).toBeLessThanOrEqual(DESCRIPTION_MAX);
+  expect(description.startsWith('बड़ौदा राजस्थान')).toBe(true);
+});
+
+test('no two built pages share a title', () => {
+  // P1-1 defunct-bank pair (apgb / andhra-pradesh-grameena share the "APGB"
+  // shortName in banks.ts) is out of scope for this audit item and is the
+  // only tolerated collision.
+  const tolerated = new Set(['sms-banking/apgb/', 'sms-banking/andhra-pradesh-grameena/']);
+  const byTitle = new Map<string, string[]>();
+  for (const p of builtPages) {
+    byTitle.set(p.title, [...(byTitle.get(p.title) ?? []), p.path]);
+  }
+  const duplicates = [...byTitle.entries()]
+    .filter(([title, paths]) => paths.length > 1 && !(paths.length === 2 && paths.every(x => tolerated.has(x))))
+    .map(([title, paths]) => `${JSON.stringify(title)} -> ${paths.join(', ')}`);
+  expect(duplicates, duplicates.join('\n')).toEqual([]);
+});
+
+test('every guide article has at least one internal inbound link', () => {
+  for (const article of articles) {
+    const href = articlePath(article.slug);
+    const selfPath = `article/${article.slug}/`;
+    const linking = builtPages.filter(p => p.path !== selfPath && p.html.includes(`href="${href}"`));
+    expect(
+      linking.length,
+      `${href} has no internal inbound link (orphan article)`,
+    ).toBeGreaterThanOrEqual(1);
+  }
+});

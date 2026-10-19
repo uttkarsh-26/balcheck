@@ -1,6 +1,7 @@
 ---
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import { GA4_MEASUREMENT_ID } from '../lib/site-config';
 import '../styles/global.css';
 
 interface Props {
@@ -28,6 +29,39 @@ const canonicalHref = canonicalUrl.endsWith('/') ? canonicalUrl : `${canonicalUr
 // HTML: browser always revalidates (max-age=0), CF edge caches 1h with SWR
 // Short edge TTL ensures deploys are visible within ~1h even if purge fails
 Astro.response.headers.set('Cache-Control', 'public, s-maxage=3600, max-age=0, stale-while-revalidate=86400');
+
+// GA4 bootstrap emitted verbatim into the page: the measurement id is
+// interpolated once at build time from the shared constant, so the config
+// call and the gtag.js loader URL can never drift apart.
+const ga4BootstrapScript = `
+if (window.location.hostname === 'balcheck.in' || window.location.hostname === 'www.balcheck.in') {
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '${GA4_MEASUREMENT_ID}');
+
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const utmMedium = params.get('utm_medium');
+
+    if (utmMedium && utmMedium.toLowerCase() === 'social') {
+      gtag('event', 'social_landing', {
+        utm_source: params.get('utm_source') || '',
+        utm_campaign: params.get('utm_campaign') || '',
+        utm_content: params.get('utm_content') || '',
+        landing_path: window.location.pathname,
+      });
+    }
+  } catch (_error) {
+    // ignore URL/params parse failures
+  }
+
+  const analyticsScript = document.createElement('script');
+  analyticsScript.src = 'https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}';
+  analyticsScript.async = true;
+  document.head.appendChild(analyticsScript);
+}
+`.trim();
 ---
 
 <!DOCTYPE html>
@@ -74,36 +108,10 @@ Astro.response.headers.set('Cache-Control', 'public, s-maxage=3600, max-age=0, s
   <meta name="theme-color" content="#2563eb" />
 
   <!-- Google Analytics (GA4) — production hostname only.
-       Dynamic loading prevents localhost/Playwright traffic from polluting GA4. -->
-  <script>
-    if (window.location.hostname === 'balcheck.in' || window.location.hostname === 'www.balcheck.in') {
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-ZEL0FEF89W');
-
-      try {
-        const params = new URLSearchParams(window.location.search);
-        const utmMedium = params.get('utm_medium');
-
-        if (utmMedium && utmMedium.toLowerCase() === 'social') {
-          gtag('event', 'social_landing', {
-            utm_source: params.get('utm_source') || '',
-            utm_campaign: params.get('utm_campaign') || '',
-            utm_content: params.get('utm_content') || '',
-            landing_path: window.location.pathname,
-          });
-        }
-      } catch (_error) {
-        // ignore URL/params parse failures
-      }
-
-      const analyticsScript = document.createElement('script');
-      analyticsScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-ZEL0FEF89W';
-      analyticsScript.async = true;
-      document.head.appendChild(analyticsScript);
-    }
-  </script>
+       Dynamic loading prevents localhost/Playwright traffic from polluting GA4.
+       The measurement id lives in src/lib/site-config.ts; it is interpolated at
+       build time so the emitted script stays verbatim (one constant, both uses). -->
+  <script is:inline set:html={ga4BootstrapScript}></script>
 
   <!-- Google AdSense (publisher ID verification + loader) -->
   <script

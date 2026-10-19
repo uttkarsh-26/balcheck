@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import { banks, categories, categoryHindi } from '../../data/banks';
 import RecordEvidence from '../../components/RecordEvidence.astro';
 import { directoryEvidence } from '../../lib/evidence';
+import { composeTitle } from '../../lib/seo';
 
 const registryEvidence = directoryEvidence();
 
@@ -70,9 +71,13 @@ const categoryTitles: Record<string, { title: string; description: string }> = {
   },
 };
 const categoryOverride = categoryTitles[category];
-const pageTitle = categoryOverride?.title ?? (isCooperative
-  ? `Cooperative Bank Balance Check Number — सहकारी बैंकों की enquiry guide | BalCheck.in`
-  : `${hindiName} ${categoryMethodLabel} — ${catBanks.length} बैंक | BalCheck.in`);
+// composeTitle drops the bank-count segment when the 65-char budget demands it
+// (long Devanagari category names) instead of letting SERP truncate mid-word.
+const pageTitle = categoryOverride
+  ? composeTitle([categoryOverride.title])
+  : isCooperative
+    ? 'Cooperative Bank Balance Check Number — सहकारी बैंकों की guide'
+    : composeTitle([`${hindiName} ${categoryMethodLabel}`, `${catBanks.length} बैंक`], 'BalCheck.in');
 const pageDesc = categoryOverride?.description ?? (isCooperative
   ? `सहकारी बैंकों के balance enquiry methods। ${catBanks.length} records में missed call, customer care और IVR details को अलग-अलग label के साथ देखें।`
   : `${hindiName} के ${categoryMethodLabel.toLowerCase()} एक जगह। ${catBanks.length} बैंकों में ${missedCallCount} missed-call और ${alternateMethodCount} customer-care/IVR या अन्य records।`);

@@ -5,6 +5,7 @@ import MoreServices from '../../components/MoreServices.astro';
 import RecordEvidence from '../../components/RecordEvidence.astro';
 import { banks } from '../../data/banks';
 import type { Bank } from '../../data/banks';
+import { composeDescription, composeTitle } from '../../lib/seo';
 
 export function getStaticPaths() {
   return banks.map((bank: Bank) => ({
@@ -21,8 +22,11 @@ const { bank } = Astro.props;
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = `${siteUrl}/atm-pin/${bank.slug}/`;
 
-const title = `${bank.shortName} ATM PIN Generate — ${bank.nameHindi} Green PIN Online`;
-const description = `${bank.name} ATM PIN generate करने के तरीके। Net banking, ATM, SMS या customer care से Green PIN generate करें। ${bank.shortName} debit card PIN online।`;
+const title = composeTitle([`${bank.shortName} ATM PIN Generate`, bank.nameHindi], 'BalCheck');
+// Full Hindi bank name leads the description even when the title drops it.
+const description = composeDescription(
+  `${bank.nameHindi} (${bank.name}) ATM PIN generate करने के तरीके। Net banking, ATM, SMS या customer care से Green PIN generate करें। ${bank.shortName} debit card PIN online।`,
+);
 
 const faqs = [
   {

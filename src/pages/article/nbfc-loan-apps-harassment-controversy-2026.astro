@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { getArticle } from '../../data/articles';
 import FaqAccordion from '../../components/FaqAccordion.astro';
 
 const siteUrl = 'https://balcheck.in';
@@ -8,8 +9,8 @@ const canonicalUrl = `${siteUrl}/article/${slug}/`;
 const publishDate = '2026-07-23';
 const modifiedDate = '2026-07-25';
 
-const pageTitle = 'Loan App Harassment: RBI Rules, Safety Steps और Complaint Guide | BalCheck.in';
-const pageDesc = 'Loan app harassment, unauthorised debit या धमकी की स्थिति में evidence, lender complaint, cybercrime report और RBI CMS escalation के practical steps।';
+const pageTitle = getArticle('nbfc-loan-apps-harassment-controversy-2026').title;
+const pageDesc = getArticle('nbfc-loan-apps-harassment-controversy-2026').description;
 
 const faqItems = [
   {

@@ -1,13 +1,14 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { getArticle } from '../../data/articles';
 import FaqAccordion from '../../components/FaqAccordion.astro';
 
 const siteUrl = 'https://balcheck.in';
 const slug = 'delhi-hc-flags-credit-card-harassment-directs-rbi-to-strengthen-grievance-system';
 const publishDate = '2026-07-24';
 const modifiedDate = '2026-07-24';
-const pageTitle = 'Credit Card Harassment: RBI शिकायत और CMS प्रक्रिया | BalCheck.in';
-const pageDesc = 'Credit card harassment या unauthorised transaction पर पहले card-issuer को लिखित शिकायत दें, फिर RBI CMS में escalation करें और threat/fraud में police path अपनाएं।';
+const pageTitle = getArticle('delhi-hc-flags-credit-card-harassment-directs-rbi-to-strengthen-grievance-system').title;
+const pageDesc = getArticle('delhi-hc-flags-credit-card-harassment-directs-rbi-to-strengthen-grievance-system').description;
 
 const faqItems = [
   {

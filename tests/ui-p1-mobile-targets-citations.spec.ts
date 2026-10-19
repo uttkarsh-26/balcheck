@@ -251,7 +251,8 @@ test.describe('P1 10: footer quick links are 44px tap targets', () => {
     test(`every footer quick link is at least ${MIN_TAP_TARGET_PX}px tall on ${path}`, async ({ page }) => {
       await gotoDom(page, path);
       const links = page.locator('[data-testid="site-footer"] [data-testid="footer-quick-link"]');
-      await expect(links, `footer quick links on ${path}`).toHaveCount(10);
+      // 7 service links + 3 guide-article links + 3 info links.
+      await expect(links, `footer quick links on ${path}`).toHaveCount(13);
 
       const heights = await links.evaluateAll((elements) =>
         elements.map((element) => Math.round(element.getBoundingClientRect().height)),

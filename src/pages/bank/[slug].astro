@@ -360,7 +360,7 @@ const pageDesc = !isMissedCall
     : compactMissedCallDesc;
 ---
 
-<Layout title={pageTitle} description={pageDesc} preloadImage="/videos/balcheck-poster.jpg">
+<Layout title={pageTitle} description={pageDesc} preloadImage="/videos/balcheck-poster.webp">
 <script type="application/ld+json" set:html={JSON.stringify(bankSchema)} />
 <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
@@ -394,7 +394,7 @@ const pageDesc = !isMissedCall
 <!-- Video Hero Banner — universal on all bank pages -->
 <VideoHeroBanner
   src="/videos/balcheck-bank-hero.mp4"
-  poster="/videos/balcheck-poster.jpg"
+  poster="/videos/balcheck-poster.webp"
   title={`${bank.nameHindi} बैलेंस चेक नंबर`}
   subtitle={isMissedCall ? `अपने बैंक खाते का बैलेंस जानें — मिस्ड कॉल दें` : `Customer Care / IVR से balance enquiry करें`}
   ctaText={`Call Now:`}
