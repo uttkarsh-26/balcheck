@@ -111,6 +111,18 @@ const h1Overrides: Partial<Record<string, string>> = {
   // 28d pull 2026-10-16: 'bank of india balance check number' 5,168 impr @ 0.77%
   // pos 7.6 — the H1 led with 'बैंक ऑफ इंडिया', never the Latin name the query uses.
   boi: `Bank of India Balance Check Number ${bank.missedCall}`,
+  // 14d pull 2026-10-20: 'bank of maharashtra balance check number' 10,019
+  // impr @ 0.52% CTR pos 7.6 — the H1 was the Devanagari name only, so no
+  // heading carried the Latin words the query is written in. Same fix as
+  // ubi/canara/idbi; first tried in 70f00cc, reverted in 45fee3d for the
+  // (never-registered) snippet-cohort closeout, now re-shipped on fresh GSC
+  // evidence with no cohort freeze live.
+  maharashtra: `Bank of Maharashtra Balance Check Number ${bank.missedCall}`,
+  // 14d pull 2026-10-20: 'bandhan bank balance enquiry number' 3,418 impr @
+  // 0.26% CTR pos 8.5 — the H1 was 'बंधन बैंक' only, so the heading never
+  // bold-matched the Latin query. Uses the query's own 'balance enquiry'
+  // wording (same as the axis title), not the balance-check phrasing.
+  bandhan: `Bandhan Bank Balance Enquiry Number ${bank.missedCall}`,
 };
 if (bank.slug === 'psb') {
   faqs.push(

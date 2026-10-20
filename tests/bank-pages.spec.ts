@@ -60,6 +60,8 @@ const h1Overrides: Record<string, (bank: Bank) => string> = {
   canara: bank => `Canara Bank Balance Check Number ${bank.missedCall}`,
   idbi: bank => `IDBI Bank Balance Check Number ${bank.missedCall}`,
   boi: bank => `Bank of India Balance Check Number ${bank.missedCall}`,
+  maharashtra: bank => `Bank of Maharashtra Balance Check Number ${bank.missedCall}`,
+  bandhan: bank => `Bandhan Bank Balance Enquiry Number ${bank.missedCall}`,
 };
 
 // The banks this file actually walks, recorded as the describes are generated.
@@ -297,9 +299,32 @@ test.describe('bank page coverage', () => {
   });
 
   test('asserts the H1 override contract for every overridden bank', () => {
-    const expectedOverrideSlugs = ['boi', 'canara', 'idbi', 'psb', 'ubi', 'up-gramin'];
+    const expectedOverrideSlugs = ['bandhan', 'boi', 'canara', 'idbi', 'maharashtra', 'psb', 'ubi', 'up-gramin'];
     expect(Object.keys(h1Overrides).sort()).toEqual(expectedOverrideSlugs);
     // An override naming an unknown slug would never be asserted on any page.
     expect(expectedOverrideSlugs.every(slug => banks.some(bank => bank.slug === slug))).toBe(true);
+  });
+});
+
+// Regression pins for the 2026-10-20 CTR fixes: the rendered H1 must equal the
+// override text verbatim (the per-bank assertion above uses substring name
+// matching, which would pass a heading that merely contains the phrase), and a
+// bank with no override keeps its Devanagari default H1.
+test.describe('demand-matched H1 overrides', () => {
+  for (const slug of ['maharashtra', 'bandhan'] as const) {
+    test(`/bank/${slug}/ renders the override H1 verbatim`, async ({ page }) => {
+      const bank = banks.find(b => b.slug === slug)!;
+      await gotoDom(page, `/bank/${slug}`);
+      expect(await page.locator('h1').textContent()).toBe(h1Overrides[slug](bank));
+    });
+  }
+
+  test('an untouched bank keeps its Devanagari default H1', async ({ page }) => {
+    // Resolved from the registry, never a hardcoded slug — see the
+    // defaultTemplateBank note above for why hardcoding fails CI later.
+    const bank = banks.find(b => !h1Overrides[b.slug] && b.balanceMode === 'missed-call');
+    expect(bank).toBeDefined();
+    await gotoDom(page, `/bank/${bank!.slug}`);
+    expect(await page.locator('h1').textContent()).toBe(bank!.nameHindi);
   });
 });
