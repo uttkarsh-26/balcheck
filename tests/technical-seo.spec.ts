@@ -51,6 +51,14 @@ const netBankingOverrideContracts: Array<{
     lead: 'Nainital Bank net banking login',
     host: 'nainitalbank.co.in',
   },
+  // 14d GSC: 'boi net banking' 2,953 impr @ 0.34% CTR pos 6.2 — the default
+  // snippet led with the Devanagari name so the acronym never bold-matched.
+  {
+    slug: 'boi',
+    title: [/BOI Net Banking Login/i, /Bank of India Online Banking/i],
+    lead: 'BOI net banking login',
+    host: 'www.bankofindia.co.in',
+  },
 ];
 
 for (const { slug, title, lead, host } of netBankingOverrideContracts) {
@@ -65,6 +73,19 @@ for (const { slug, title, lead, host } of netBankingOverrideContracts) {
     expect(description!.length).toBeLessThanOrEqual(155);
   });
 }
+
+// Verbatim regression pin for the BOI override (14d GSC: 2,953 impr @ 0.34%
+// pos 6.2) — exact strings, so a silent drift back to the Devanagari-led
+// default fails CI rather than just loosening the regex contract above.
+test('net-banking boi override title and description are pinned verbatim', async ({ page }) => {
+  await gotoDom(page, '/net-banking/boi/');
+  await expect(page).toHaveTitle('BOI Net Banking Login — Bank of India Online Banking | BalCheck');
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+    'content',
+    'BOI net banking login at https://www.bankofindia.co.in — fund transfer, statement download, bill payment, FD/RD, 24×7 online banking.',
+  );
+  await expect(page.locator('h1')).toHaveText('BOI Net Banking');
+});
 
 test('Punjab Gramin SMS page targets balance-check-number demand', async ({ page }) => {
   await gotoDom(page, '/sms-banking/punjab-gramin/');

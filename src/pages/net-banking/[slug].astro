@@ -30,7 +30,14 @@ const canonicalUrl = `${siteUrl}/net-banking/${bank.slug}/`;
 // plus 'mpgb internet banking' 244 @ 3.28% and 'mpgb net banking registration'
 // 220 / 'mpgb net banking login' 151, so the whole cluster is Latin-phrased
 // while the default title led with the Devanagari bank name. Latin phrase leads.
+// BOI: 14d GSC — 2,953 impr @ 0.34% CTR pos 6.2 on 'boi net banking'; the
+// default title/description led with the Devanagari name so the acronym never
+// bold-matched. English query phrase leads, keeping the brand suffix (63 chars).
 const netBankingOverrides: Record<string, { title: string; description: string }> = {
+  boi: {
+    title: 'BOI Net Banking Login — Bank of India Online Banking | BalCheck',
+    description: `BOI net banking login at ${bank.website} — fund transfer, statement download, bill payment, FD/RD, 24×7 online banking.`,
+  },
   tmb: {
     title: 'TMB Net Banking Login — TMB Netbanking Online Banking',
     description: `TMB net banking login और TMB netbanking access के लिए official website ${bank.website} खोलें। Online banking registration, balance और statement सेवाएं।`,
