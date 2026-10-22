@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import type { Page } from '@playwright/test';
+import { articles } from '../src/data/articles';
 import { banks } from '../src/data/banks';
 import { mergers } from '../src/data/mergers';
 import { gotoDom } from './utils';
@@ -251,8 +252,8 @@ test.describe('P1 10: footer quick links are 44px tap targets', () => {
     test(`every footer quick link is at least ${MIN_TAP_TARGET_PX}px tall on ${path}`, async ({ page }) => {
       await gotoDom(page, path);
       const links = page.locator('[data-testid="site-footer"] [data-testid="footer-quick-link"]');
-      // 7 service links + 3 guide-article links + 3 info links.
-      await expect(links, `footer quick links on ${path}`).toHaveCount(13);
+      // 7 service links + articles.length guide-article links + 3 info links.
+      await expect(links, `footer quick links on ${path}`).toHaveCount(7 + articles.length + 3);
 
       const heights = await links.evaluateAll((elements) =>
         elements.map((element) => Math.round(element.getBoundingClientRect().height)),
