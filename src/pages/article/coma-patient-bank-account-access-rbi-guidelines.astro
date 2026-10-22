@@ -1,0 +1,233 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getArticle } from '../../data/articles';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ScannableArticleSummary from '../../components/ScannableArticleSummary.astro';
+
+const siteUrl = 'https://balcheck.in';
+const slug = 'coma-patient-bank-account-access-rbi-guidelines';
+const publishDate = '2026-10-22';
+const modifiedDate = '2026-10-22';
+const pageTitle = getArticle(slug).title;
+const pageDesc = getArticle(slug).description;
+
+const articleBrief = {
+  summary:
+    'कोमा में मरीज़ के बैंक खाते से पैसा निकालने का कोई एक राष्ट्रीय नियम नहीं; इलाहाबाद High Court ने Centre और RBI से guidelines बनाने की जरूरत कही।',
+  facts: [
+    { label: 'मामला', value: 'Parveen Jahan बनाम State of UP (इलाहाबाद High Court)' },
+    { label: 'पीठ', value: 'Justice Garima Prashad और Justice Ajit Kumar' },
+    { label: 'अदालत की बात', value: 'Centre और RBI को अपना रुख लिखित में रखना है' },
+    { label: 'रिपोर्ट', value: '21 अक्टूबर 2026' },
+    { label: 'स्थिति', value: 'guidelines अभी अधिसूचित नहीं' },
+  ],
+  timeline: [
+    { date: '29 सितंबर 2026', datetime: '2026-09-29', text: 'अदालत ने Chief Secretary से compliance हलफनामा मांगा।' },
+    { date: '21 अक्टूबर 2026', datetime: '2026-10-21', text: 'High Court ने Centre और RBI से कोमा मरीज़ों के खातों पर guidelines पर रुख साफ करने को कहा।' },
+  ],
+  action: {
+    title: 'परिवार के लिए अगले कदम',
+    steps: [
+      'मरीज़ के बैंक की शाखा में लिखित आवेदन दें और लिखित जवाब (receipt/reference) लें।',
+      'मेडिकल records, रिश्ते का प्रमाण और खाता विवरण साथ रखें।',
+      'guardian नियुक्ति जैसे कानूनी रास्ते पर वकील से सलाह लें।',
+      'बैंक के grievance officer के पास लिखित शिकायत दर्ज करें।',
+      '30 दिन में समाधान न मिले तो RBI CMS पर शिकायत दर्ज करें।',
+    ],
+    officialUrl: 'https://cms.rbi.org.in',
+    officialLabel: 'RBI Complaint Management System',
+  },
+  details: {
+    title: 'जरूरी बात',
+    body: 'यह लेख consumer-safety जानकारी है, व्यक्तिगत कानूनी सलाह नहीं। कोमा की स्थिति में बैंक क्या प्रक्रिया अपनाएगा, यह शाखा और खाते के प्रकार पर निर्भर करता है — इसलिए बैंक से लिखित जवाब लेना जरूरी है।',
+  },
+};
+
+const faqItems = [
+  {
+    q: 'कोमा में मरीज़ के बैंक खाते से पैसा कैसे निकाला जा सकता है?',
+    a: 'अभी कोई एक राष्ट्रीय नियम नहीं है। परिवार को बैंक शाखा में लिखित आवेदन देना होता है और मेडिकल records तथा रिश्ते के प्रमाण देने होते हैं। इलाहाबाद High Court ने Centre और RBI से इस विषय पर कानून या guidelines बनाने की जरूरत कही है, ताकि परिवार hospital खर्च और घर के खर्च के लिए पैसा इस्तेमाल कर सकें।',
+  },
+  {
+    q: 'क्या nomination होने से कोमा की स्थिति में पैसा मिल जाता है?',
+    a: 'Nomination मुख्य रूप से खाताधारक की मृत्यु के बाद claim के लिए होता है, बीमारी या कोमा की स्थिति में खाता चलाने के लिए नहीं। ऐसी स्थिति में बैंक से लिखित में पूछें कि वह कौन-सी प्रक्रिया और documents मांगता है।',
+  },
+  {
+    q: 'क्या Power of Attorney (PoA) से खाता चलाया जा सकता है?',
+    a: 'PoA खाताधारक के signature से बनता है, और कोमा की स्थिति में वह signature संभव नहीं होता। इसलिए परिवार अक्सर guardian नियुक्ति जैसे कानूनी रास्ते पर जाता है। यह जटिल कानूनी विषय है — वकील से सलाह लेकर ही आगे बढ़ें।',
+  },
+  {
+    q: 'बैंक request न माने तो शिकायत कहाँ करें?',
+    a: 'पहले बैंक के grievance redressal officer को लिखित शिकायत दें और reference number रखें। 30 दिन में जवाब न मिले, शिकायत reject हो या जवाब से संतुष्टि न हो, तो RBI के Complaint Management System (cms.rbi.org.in) पर शिकायत दर्ज करें।',
+  },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: pageTitle,
+  description: pageDesc,
+  datePublished: publishDate,
+  dateModified: modifiedDate,
+  inLanguage: 'hi-IN',
+  mainEntityOfPage: `${siteUrl}/article/${slug}/`,
+  author: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+};
+
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'कोमा में मरीज़ के बैंक खाते तक पहुँच के लिए कदम',
+  description: 'बैंक शाखा में लिखित आवेदन से लेकर grievance officer और RBI CMS तक practical steps.',
+  step: [
+    { '@type': 'HowToStep', name: 'बैंक शाखा में लिखित आवेदन दें', text: 'खाताधारक के कोमा में होने की जानकारी और परिवार के अनुरोध के साथ लिखित आवेदन दें, receipt या reference number लें।' },
+    { '@type': 'HowToStep', name: 'Medical और पहचान के documents जुटाएँ', text: 'Hospital के medical records, खाताधारक और आवेदक के पहचान documents तथा रिश्ते का प्रमाण साथ रखें।' },
+    { '@type': 'HowToStep', name: 'कानूनी रास्ते पर सलाह लें', text: 'guardian नियुक्ति या अन्य कानूनी विकल्पों पर वकील से सलाह लें; यह हर मामले में अलग होता है।' },
+    { '@type': 'HowToStep', name: 'बैंक के grievance officer को शिकायत दें', text: 'शाखा से जवाब न मिलने पर बैंक के grievance redressal officer के पास लिखित शिकायत दर्ज करें।' },
+    { '@type': 'HowToStep', name: 'RBI CMS में escalation करें', text: '30 दिन में समाधान न मिलने या शिकायत reject होने पर cms.rbi.org.in पर शिकायत दर्ज करें।' },
+  ],
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+    { '@type': 'ListItem', position: 2, name: 'कोमा मरीज़ का Bank Account', item: `${siteUrl}/article/${slug}/` },
+  ],
+};
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <div class="min-h-screen bg-gray-50">
+    <div class="container mx-auto max-w-copy px-4 py-8">
+      <nav aria-label="breadcrumb" class="mb-4 text-sm text-gray-600">
+        <a href="/" class="hover:underline">Home</a>
+        <span aria-hidden="true"> / </span>
+        <span class="text-gray-800">कोमा मरीज़ का Bank Account</span>
+      </nav>
+
+      <h1 class="text-h1 mb-4 font-bold text-gray-900">Coma Patient का Bank Account: परिवार पैसा कैसे निकाले</h1>
+      <p class="mb-6 text-lg text-gray-700">
+        जब खाताधारक कोमा में चला जाता है, तो परिवार के पास hospital का खर्च और घर का खर्च चलाने के लिए पैसा नहीं होता, जबकि वही पैसा उसके बैंक खाते में पड़ा रहता है। इलाहाबाद High Court ने इसी अंतर को गंभीर मानते हुए Centre और RBI से साफ रुख मांगा है — इस गाइड में वही स्थिति, आज के रास्ते और परिवार के अगले कदम दिए हैं।
+      </p>
+
+      <ScannableArticleSummary {...articleBrief} />
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">इलाहाबाद High Court ने क्या कहा</h2>
+      <p class="mb-4 text-gray-700">
+        मामला <strong>Parveen Jahan बनाम State of UP</strong> का है। Justice Garima Prashad और Justice Ajit Kumar की पीठ ने कहा कि कोमा में जाने पर परिवार लगभग पूरी तरह असहाय हो जाता है, क्योंकि जरूरी पैसे और आय के साधन उसके पास नहीं रहते। अदालत ने सुझाव दिया कि या तो सक्षम विधायिका से कानून आए, या RBI nationalised बैंकों और उनकी subsidiary banks के लिए ऐसी guidelines बनाए जिनसे कोमा में भर्ती व्यक्ति के savings account का पैसा उसके dependents को दिया जा सके।
+      </p>
+      <p class="mb-4 text-gray-700">
+        अदालत ने यह भी दर्ज किया कि Chief Secretary ने 29 सितंबर 2026 के आदेश के अनुपालन में हलफनामा दाखिल करते हुए और समय मांगा, क्योंकि उचित कानून बनाना लंबी प्रक्रिया है। रिपोर्ट के अनुसार अदालत ने कहा कि Central Government को इस मुद्दे पर अपना रुख लिखित में सामने रखना होगा।
+      </p>
+      <p class="mb-6 text-gray-700">
+        यह आदेश यह नहीं कहता कि आज से हर बैंक कोमा मरीज़ के परिवार को पैसा दे देगा। व्यवहार में अभी भी बैंक शाखा, खाते का प्रकार और कानूनी दस्तावेजों पर सब कुछ निर्भर करता है — और इसी वजह से परिवार को हर बात लिखित में लेनी चाहिए।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">कोमा में खाता क्यों अटक जाता है</h2>
+      <p class="mb-4 text-gray-700">
+        बैंक खाता खाताधारक के निर्देश और signature पर चलता है। कोमा में खाताधारक न तो निर्देश दे सकता है, न ही कोई दस्तखत कर सकता है। Nomination मुख्य रूप से मृत्यु के बाद claim निपटाने के लिए होता है, और Power of Attorney खाताधारक के signature से बनता है — इसलिए ये दोनों रास्ते कोमा की स्थिति में सीधे काम नहीं आते। यही कानूनी खाली जगह अदालत ने रेखांकित की।
+      </p>
+      <div class="mb-6 overflow-x-auto scrollbar-hide scroll-fade">
+        <table class="w-full border-collapse border border-gray-300 text-left">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-300 px-4 py-2">रास्ता</th>
+              <th class="border border-gray-300 px-4 py-2">कोमा में स्थिति</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">खाताधारक का खुद निर्देश या signature</td>
+              <td class="border border-gray-300 px-4 py-2">संभव नहीं — इसलिए बैंक तुरंत खाता नहीं चला सकता।</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Nomination</td>
+              <td class="border border-gray-300 px-4 py-2">मृत्यु के बाद claim के लिए; कोमा में खाता चलाने का साधन नहीं।</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Power of Attorney</td>
+              <td class="border border-gray-300 px-4 py-2">खाताधारक के signature से बनता है — कोमा में आमतौर पर संभव नहीं।</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">guardian नियुक्ति / अदालत का रास्ता</td>
+              <td class="border border-gray-300 px-4 py-2">कानूनी विकल्प, लेकिन समय लेने वाला और केस-दर-केस अलग।</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Step 1: बैंक शाखा में लिखित आवेदन दें</h2>
+      <p class="mb-4 text-gray-700">
+        मौखिक बातचीत से काम नहीं चलेगा। खाताधारक के कोमा में होने की जानकारी देते हुए लिखित आवेदन दें और उसकी receipt या reference number जरूर लें। आवेदन में साफ लिखें कि परिवार किस मदद (hospital खर्च, जरूरी भुगतान) के लिए अनुरोध कर रहा है और वह कौन-से documents दे सकता है।
+      </p>
+      <ul class="mb-6 list-inside list-disc space-y-2 text-gray-700">
+        <li>Hospital के medical records या doctor का लिखित बयान, जिसमें मरीज़ की स्थिति दर्ज हो।</li>
+        <li>खाताधारक और आवेदक दोनों के पहचान documents (Aadhaar, PAN आदि) की copies।</li>
+        <li>रिश्ते का प्रमाण और खाता संख्या या passbook की copy।</li>
+        <li>बैंक से मिली हर बात का लिखित record — तारीख, अधिकारी का नाम और दिया गया जवाब।</li>
+      </ul>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Step 2: कानूनी रास्ता साफ करें</h2>
+      <p class="mb-6 text-gray-700">
+        अगर बैंक लिखित जवाब में कहता है कि खाताधारक के signature या अदालत के आदेश के बिना भुगतान संभव नहीं, तो यह कानूनी सलाह लेने का समय है। guardian नियुक्ति जैसे विकल्प पर वकील ही सही मार्ग बता सकता है, क्योंकि हर केस के तथ्य और बैंक की मांग अलग होती है। इस चरण में अदालत का कोई आदेश या guidelines अभी लागू नहीं है, इसलिए किसी भी दावे को official document से जांचें।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Step 3: शिकायत और escalation</h2>
+      <p class="mb-4 text-gray-700">
+        बैंक के पास हर शिकायत के लिए grievance redressal व्यवस्था होती है। शाखा से जवाब न मिलने पर बैंक के grievance redressal officer के पास लिखित शिकायत दें और reference number रखें। अगर 30 दिन में समाधान नहीं मिलता, शिकायत reject हो जाती है या जवाब से संतुष्टि नहीं होती, तो RBI के Complaint Management System पर शिकायत दर्ज की जा सकती है।
+      </p>
+      <p class="mb-6 text-gray-700">
+        <a class="font-medium text-blue-700 underline" href="https://cms.rbi.org.in" target="_blank" rel="noopener noreferrer">RBI CMS पर शिकायत दर्ज करें</a>
+      </p>
+
+      <section class="mb-8 rounded-r-lg border-l-4 border-amber-500 bg-amber-50 p-4">
+        <p class="font-medium text-amber-900">
+          <strong>महत्वपूर्ण सीमा:</strong> यह consumer-safety information है, व्यक्तिगत legal advice नहीं। कोमा मरीज़ के खाते पर भुगतान को लेकर कोई भी निर्णय बैंक के लिखित जवाब और वकील की सलाह पर ही लें, और किसी बिचौलिए को पैसे न दें।
+        </p>
+      </section>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">स्रोत</h2>
+      <ul class="mb-8 list-inside list-disc space-y-2 text-gray-700">
+        <li><a class="text-blue-700 underline" href="https://www.verdictum.in/allahabad-high-court/parveen-jahan-v-state-of-up-legislation-mechanism-release-money-account-coma-patient-1624400" target="_blank" rel="noopener noreferrer">Verdictum — इलाहाबाद High Court का आदेश (21 अक्टूबर 2026)</a></li>
+        <li><a class="text-blue-700 underline" href="https://www.barandbench.com/news/allahabad-high-court-asks-centre-rbi-to-frame-guidelines-to-deal-with-bank-accounts-of-persons-in-coma" target="_blank" rel="noopener noreferrer">Bar and Bench — Centre और RBI से guidelines पर रुख मांगा</a></li>
+        <li><a class="text-blue-700 underline" href="https://cms.rbi.org.in" target="_blank" rel="noopener noreferrer">RBI Complaint Management System (official)</a></li>
+      </ul>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">अक्सर पूछे जाने वाले सवाल</h2>
+      <FaqAccordion items={faqItems} class="mb-8 space-y-4" />
+
+      <p class="mt-8 text-sm text-gray-500">
+        Published/updated: 22 October 2026. कोमा मरीज़ के खाते पर नियम और बैंक प्रक्रिया बदल सकते हैं; कोई भी कदम उठाने से पहले बैंक से लिखित जानकारी और official RBI pages पर latest स्थिति देखें।
+      </p>
+    </div>
+  </div>
+</Layout>

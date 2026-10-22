@@ -19,6 +19,12 @@ export interface ArticleMeta {
 
 export const articles: ArticleMeta[] = [
   {
+    slug: 'coma-patient-bank-account-access-rbi-guidelines',
+    title: 'Coma Patient Bank Account: पैसा कैसे निकाले | BalCheck.in',
+    description: 'कोमा में मरीज़ के बैंक खाते से पैसा निकालने का एक भी नियम नहीं; इलाहाबाद HC ने Centre-RBI से guidelines मांगे — परिवार के कदम और शिकायत रास्ता।',
+    linkLabel: 'कोमा मरीज़ का Bank Account — परिवार के कदम',
+  },
+  {
     slug: 'rbi-loan-recovery-rules-2027-borrower-rights',
     title: 'RBI Loan Recovery Rules 2027 — Borrower Rights | BalCheck.in',
     description: 'RBI के नए loan recovery rules 1 जनवरी 2027 से लागू — agent call timing, mandatory recording, phone lock limits, ₹250/hr मुआवजा और borrower rights की पूरी जानकारी।',
