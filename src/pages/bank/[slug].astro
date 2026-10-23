@@ -128,6 +128,12 @@ const h1Overrides: Partial<Record<string, string>> = {
   // but the H1 was 'बड़ौदा यूपी ग्रामीण बैंक' only, so no heading carried the
   // query's words. Uses the query's own 'balance enquiry' wording (bandhan).
   'baroda-up-gramin': `Baroda UP Gramin Bank Balance Enquiry Number ${bank.missedCall}`,
+  // 30d pull 2026-10-23: 'indusind bank missed call balance check sms' 2,920
+  // impr @ 0.45% CTR pos 8.7 — the H1 was 'इंडसइंड बैंक' only while the query
+  // is Latin. balanceMode is customer-care (same digits for balance + care), so
+  // the H1 claims balance check on the toll-free number only — no missed-call
+  // facility, same truthfulness line as the title's '— Toll Free' hook.
+  indusind: `IndusInd Bank Balance Check Number ${bank.missedCall}`,
 };
 if (bank.slug === 'psb') {
   faqs.push(
