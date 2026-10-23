@@ -299,6 +299,15 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
   'indian-bank': {
     title: `Indian Bank Balance Check Number ${bank.missedCall}`,
   },
+  // 30d pull 2026-10-23: 'airtel payment bank missed call balance check sms'
+  // 825 impr @ 0.61% CTR pos 7.8 — the query is Latin (missed-call intent) but
+  // the default title was Devanagari-first. Latin query phrase leads; distinct
+  // from the 2026-10-12 retired override, which targeted the separate 'balance
+  // check number' query cluster.
+  'airtel-payments': {
+    title: `Airtel Payments Bank Missed Call Balance Check ${bank.missedCall}`,
+    description: `Airtel Payments Bank missed call balance check ${bank.missedCall} — आधिकारिक मिस्ड कॉल सेवा। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं।`,
+  },
   // 2026-08-14..09-12 window: 12,206 impr @ pos 7.4 (0.11% CTR), dominant
   // query 'केनरा बैंक बैलेंस चेक नंबर' — the template title already carries the
   // exact Hindi phrase; this locks it and trades the Latin brand tail for the

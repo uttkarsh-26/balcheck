@@ -27,6 +27,7 @@ const ctrTitles: Record<string, string> = {
   'punjab-gramin': 'Punjab Gramin Bank Balance Check Number 18001807777',
   idbi: 'IDBI Bank Balance Check Number 18008431122 | Missed Call',
   ubi: 'Union Bank Balance Check Number 09223008586 | Missed Call',
+  'airtel-payments': 'Airtel Payments Bank Missed Call Balance Check 8800688006',
 };
 
 const sprint3Banks = new Set(['canara', 'psb', 'boi']);
