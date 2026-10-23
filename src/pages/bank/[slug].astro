@@ -123,6 +123,11 @@ const h1Overrides: Partial<Record<string, string>> = {
   // bold-matched the Latin query. Uses the query's own 'balance enquiry'
   // wording (same as the axis title), not the balance-check phrasing.
   bandhan: `Bandhan Bank Balance Enquiry Number ${bank.missedCall}`,
+  // 30d pull 2026-10-23: 'baroda up gramin bank balance enquiry number' 3,050
+  // impr @ 0.49% CTR pos 6.9 — the title already leads with the Latin phrase,
+  // but the H1 was 'बड़ौदा यूपी ग्रामीण बैंक' only, so no heading carried the
+  // query's words. Uses the query's own 'balance enquiry' wording (bandhan).
+  'baroda-up-gramin': `Baroda UP Gramin Bank Balance Enquiry Number ${bank.missedCall}`,
 };
 if (bank.slug === 'psb') {
   faqs.push(
