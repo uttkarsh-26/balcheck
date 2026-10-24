@@ -54,6 +54,14 @@ const netBankingOverrides: Record<string, { title: string; description: string }
     title: 'Nainital Bank Net Banking Login — Online Banking Registration',
     description: `Nainital Bank net banking login के लिए ${bank.website} पर जाएं। Online registration, balance enquiry और fund transfer।`,
   },
+  // Cosmos: 30d pull 2026-10-24 — 'cosmos bank net banking login' 514 impr @
+  // 0.97% CTR pos 5.7; /net-banking/cosmos/ had no GSC override, so the
+  // default title led with the Devanagari name and never bold-matched the
+  // Latin query. Same shape as nainital.
+  cosmos: {
+    title: 'Cosmos Bank Net Banking Login — Online Banking Registration',
+    description: `Cosmos Bank net banking login और internet banking access के लिए ${bank.website} खोलें। Online registration, balance check और fund transfer सेवाएं।`,
+  },
 };
 
 const override = netBankingOverrides[bank.slug];
