@@ -1,0 +1,251 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getArticle } from '../../data/articles';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ScannableArticleSummary from '../../components/ScannableArticleSummary.astro';
+
+const siteUrl = 'https://balcheck.in';
+const slug = 'sbi-data-leak-dark-web-customer-safety-guide';
+const publishDate = '2026-10-24';
+const modifiedDate = '2026-10-24';
+const pageTitle = getArticle(slug).title;
+const pageDesc = getArticle(slug).description;
+
+const articleBrief = {
+  summary:
+    'SBI ने 21 अक्टूबर 2026 को stock exchanges को सूचित किया कि dark web पर 3,897 customer records की PII expose होने का शक है; core banking operations पर material असर नहीं।',
+  facts: [
+    { label: 'Alert', value: '16 अक्टूबर 2026 को Threat Intelligence Provider, Defence Cyber Agency और CERT-In से' },
+    { label: 'सूचना', value: '21 अक्टूबर 2026 को SBI की stock exchange filing' },
+    { label: 'Records', value: '~3,75,000 dark web records में से 3,897 customer records में PII पहचाना गया' },
+    { label: 'खुलासा हुई फ़ील्ड', value: 'मोबाइल नंबर, जन्म तिथि, नाम, ईमेल, पता, branch/CIF ID, loan-lead metadata' },
+    { label: 'बैंक का बयान', value: 'core business operations, financial performance और business continuity पर material असर नहीं' },
+  ],
+  timeline: [
+    { date: '16 अक्टूबर 2026', datetime: '2026-10-16', text: 'SBI को Threat Intelligence Service Provider, Defence Cyber Agency और CERT-In से customer data के suspected exposure की alert मिली।' },
+    { date: '21 अक्टूबर 2026', datetime: '2026-10-21', text: 'SBI ने stock exchanges को incident की सूचना दी; incident response और containment protocols चालू हुए और CERT-In-empanelled स्वतंत्र agency लगाई गई।' },
+    { date: '21 अक्टूबर 2026', datetime: '2026-10-21', text: 'Internet Freedom Foundation ने affected customers को सीधे और बिना देर सूचना देने की मांग की।' },
+  ],
+  action: {
+    title: 'SBI ग्राहक के लिए अगले कदम',
+    steps: [
+      'Net banking और mobile banking का password बदलें; पुराना password दोबारा इस्तेमाल न करें।',
+      'बैंक के SMS/email alerts और पिछले कुछ महीनों के statement देखें — अनजान transaction हो तो तुरंत बैंक को बताएँ।',
+      'OTP, CVV, PIN या पूरा card number किसी को न दें; "data leak", "KYC update", "account block" वाले call/SMS पर link न खोलें।',
+      'पैसा गया हो तो cybercrime.gov.in या 1930 पर शिकायत दर्ज कराएँ और बैंक से लिखित complaint करें।',
+      '30 दिन में बैंक से संतोषजनक जवाब न मिले तो RBI CMS (cms.rbi.org.in) पर escalation करें।',
+    ],
+    officialUrl: 'https://cybercrime.gov.in/',
+    officialLabel: 'cybercrime.gov.in — Cyber Crime Complaint',
+  },
+  details: {
+    title: 'जरूरी बात',
+    body: 'यह consumer-safety जानकारी है, व्यक्तिगत कानूनी सलाह नहीं। SBI के मुताबिक exposed data की authenticity, completeness और source अभी पक्की नहीं — इसलिए कोई भी दावा official filing और बैंक के लिखित जवाब से जांचकर ही मानें।',
+  },
+};
+
+const faqItems = [
+  {
+    q: 'SBI data leak में कितने customers का data expose हुआ है?',
+    a: 'SBI की 21 अक्टूबर 2026 की stock exchange filing के मुताबिक, dark web पर उपलब्ध लगभग 3,75,000 records की preliminary analysis में 3,897 customer records में Personally Identifiable Information पहचानी गई। बैंक ने कहा है कि data की authenticity, completeness और source पक्की करने के लिए detailed investigation चल रही है।',
+  },
+  {
+    q: 'क्या मेरे खाते से पैसा सुरक्षित है?',
+    a: 'SBI ने filing में कहा कि इस incident का core business operations, financial performance या business continuity पर कोई material असर नहीं पड़ा और core banking functions बिना disruption चल रहे हैं। फिर भी अपने बैंक के SMS/email alerts और पिछले महीनों के statement देखें — अनजान transaction दिखे तो तुरंत बैंक को सूचित करें।',
+  },
+  {
+    q: 'कौन-सी जानकारी leak हुई मानी जा रही है?',
+    a: 'Filing के मुताबिक exposed records में registered mobile numbers, जन्म तिथि, नाम, gender, email addresses, residential addresses, branch और CIF identifiers, lead IDs तथा loan/lead records से जुड़ा metadata शामिल माना जा रहा है। पूरी list और उसका सही स्रोत अभी investigation के अधीन है।',
+  },
+  {
+    q: 'OTP या PIN मांगने वाले call पर क्या करें?',
+    a: 'ऐसे call या SMS को कभी न मानें। बैंक, RBI या कोई भी official संस्था OTP, CVV, ATM PIN, net banking password या पूरा card number नहीं मांगती। "data leak", "KYC update", "account block" जैसे message में दिया link कभी न खोलें — अपने बैंक के official app या website से ही login करें।',
+  },
+  {
+    q: 'पैसा गया हो तो complaint कहाँ और किस प्रकार करें?',
+    a: 'पहले तुरंत बैंक को phone और लिखित दोनों में सूचित करें और reference number रखें। साथ ही cybercrime.gov.in पर cyber financial fraud की शिकायत दर्ज कराएँ या helpline 1930 पर call करें। 30 दिन में बैंक से संतोषजनक समाधान न मिले, शिकायत reject हो या जवाब से संतुष्टि न हों, तो RBI के Complaint Management System (cms.rbi.org.in) पर escalation करें।',
+  },
+  {
+    q: 'क्या SBI ने affected customers को सीधित सूचित किया है?',
+    a: 'Internet Freedom Foundation ने 21 अक्टूबर 2026 के बयान में कहा कि alert आने और filing के बीच पाँच दिन बीते और SBI ने अभी तक यह नहीं बताया कि उसने affected customers को सूचित किया है या नहीं। इसलिए खाताधारक के लिए सही रास्ता है कि वह अपने statements और alerts स्वयं देखे और संदेह हो तो बैंक से लिखित पूछे।',
+  },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: pageTitle,
+  description: pageDesc,
+  datePublished: publishDate,
+  dateModified: modifiedDate,
+  inLanguage: 'hi-IN',
+  mainEntityOfPage: `${siteUrl}/article/${slug}/`,
+  author: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+};
+
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'SBI dark web data exposure के बाद खाता सुरक्षित रखने के कदम',
+  description: 'password बदलने से लेकर statement जाँच, phishing call से बचाव और RBI CMS escalation तक practical steps.',
+  step: [
+    { '@type': 'HowToStep', name: 'Password और PIN बदलें', text: 'Net banking और mobile banking का नया password रखें और ATM/card PIN बदलें; पुराना password कहीं दोबारा न इस्तेमाल करें।' },
+    { '@type': 'HowToStep', name: 'Statement और alerts जाँचें', text: 'पिछले कुछ महीनों के account statement और बैंक के SMS/email alerts देखें; अनजान transaction तुरंत बैंक को phone और लिखित दोनों में बताएँ।' },
+    { '@type': 'HowToStep', name: 'Phishing call और SMS से बचें', text: 'OTP, CVV, PIN, password या पूरा card number किसी को न दें और "data leak", "KYC update", "account block" वाले message का link न खोलें।' },
+    { '@type': 'HowToStep', name: 'Cybercrime और बैंक में शिकायत दर्ज करें', text: 'पैसा गया हो तो cybercrime.gov.in पर शिकायत दर्ज कराएँ या 1930 पर call करें, और बैंक से लिखित complaint का reference number रखें।' },
+    { '@type': 'HowToStep', name: 'RBI CMS में escalation करें', text: '30 दिन में बैंक से संतोषजनक जवाब न मिलने या शिकायत reject होने पर cms.rbi.org.in पर शिकायत दर्ज करें।' },
+  ],
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+    { '@type': 'ListItem', position: 2, name: 'SBI Data Leak — Dark Web Records', item: `${siteUrl}/article/${slug}/` },
+  ],
+};
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <div class="min-h-screen bg-gray-50">
+    <div class="container mx-auto max-w-copy px-4 py-8">
+      <nav aria-label="breadcrumb" class="mb-4 text-sm text-gray-600">
+        <a href="/" class="hover:underline">Home</a>
+        <span aria-hidden="true"> / </span>
+        <span class="text-gray-800">SBI Data Leak — Dark Web Records</span>
+      </nav>
+
+      <h1 class="text-h1 mb-4 font-bold text-gray-900">SBI Data Leak: Dark Web पर Customer Records — क्या करें</h1>
+      <p class="mb-6 text-lg text-gray-700">
+        State Bank of India ने 21 अक्टूबर 2026 को stock exchanges को सूचित किया कि dark web पर मिले लगभग 3,75,000 records की जाँच में 3,897 customer records में Personally Identifiable Information expose होने का शक है। बैंक के मुताबिक core banking चल रही है, लेकिन data का सही स्रोत और पूरा दायरा अभी investigation के अधीन है — इस गाइड में वही verified तथ्य, जो अभी पक्का नहीं, और खाताधारक के लिए तुरंत के कदम दिए हैं।
+      </p>
+
+      <ScannableArticleSummary {...articleBrief} />
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">SBI ने stock exchanges को क्या बताया</h2>
+      <p class="mb-4 text-gray-700">
+        Filing के मुताबिक बैंक को <strong>16 अक्टूबर 2026</strong> को उसके Threat Intelligence Service Provider, Defence Cyber Agency और CERT-In से संपर्क हुआ, जिसमें customer data के dark web पर suspected exposure की alert थी। बैंक ने कहा कि dark web पर उपलब्ध लगभग <strong>3,75,000 records</strong> की preliminary analysis में <strong>3,897 customer records</strong> में Personally Identifiable Information (PII) पहचानी गई।
+      </p>
+      <p class="mb-4 text-gray-700">
+        खुलासा मानी जा रही जानकारी में registered mobile numbers, जन्म तिथि, नाम, gender, email addresses, residential addresses, branch और CIF identifiers, lead IDs तथा loan/lead records से जुड़ा metadata शामिल है। बैंक ने कहा कि exposed data की authenticity और completeness, उसका संभावित स्रोत और exposure की पूरी सीमा तथा customers और बैंक के लिए जोखिम तय करने के लिए detailed investigation ज़रूरी है।
+      </p>
+      <p class="mb-6 text-gray-700">
+        बैंक ने अपने cyber incident response और containment protocols तुरंत चालू किए और nature व extent of the alleged compromise की पूरी जाँच के लिए एक <strong>CERT-In-empanelled स्वतंत्र cybersecurity agency</strong> लगाई। SBI का बयान है कि इस incident का core business operations, financial performance या business continuity पर कोई material असर नहीं पड़ा और core banking functions बिना disruption चल रहे हैं। बैंक ने कहा कि detailed assessment चल रहा है और ज़रूरत के अनुसार remedial और preventive measures लागू हो रहे हैं।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">जो अभी पक्का नहीं है</h2>
+      <div class="mb-6 overflow-x-auto scrollbar-hide scroll-fade">
+        <table class="w-full border-collapse border border-gray-300 text-left">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-300 px-4 py-2">सवाल</th>
+              <th class="border border-gray-300 px-4 py-2">अब क्या कहा जा सकता है</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Data असली है या नहीं?</td>
+              <td class="border border-gray-300 px-4 py-2">अभी नहीं — authenticity और completeness की जाँच चल रही है।</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Leak कहाँ से हुआ?</td>
+              <td class="border border-gray-300 px-4 py-2">Source और extent अभी तय नहीं; बैंक और स्वतंत्र agency जाँच कर रही हैं।</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">केवल 3,897 records ही निकले?</td>
+              <td class="border border-gray-300 px-4 py-2">Internet Freedom Foundation ने कहा कि 3,75,000 rows और 2,722 PDF documents के दावे का ज़िक्र SBI की filing में नहीं है।</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Customers को सूचना मिली?</td>
+              <td class="border border-gray-300 px-4 py-2">Filing में इसका ज़िक्र नहीं; Foundation ने तुरंत सीधी सूचना की मांग की है।</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mb-6 text-gray-700">
+        Internet Freedom Foundation के 21 अक्टूबर 2026 के बयान में कहा गया कि breach को SBI ने खुद नहीं पकड़ा — बाहरी agencies से alert मिलने पर पता चला, जब data पहले ही public हो चुकी थी। Foundation ने यह भी कहा कि alert और filing के बीच पाँच दिन बीते। यह Foundation का बयान है, बैंक या किसी regulator की पुष्टि नहीं — इसलिए इसे तथ्य की तरह न लें।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Step 1: Password और PIN बदलें</h2>
+      <p class="mb-6 text-gray-700">
+        Net banking और mobile banking का नया password रखें, और ATM/card PIN बदलें। जो password पहले किसी और साइट पर इस्तेमाल हो चुका है उसे दोबारा न रखें। अगर बैंक app में biometric या two-factor login का विकल्प है तो उसे चालू रखें — यही सबसे सस्ता और तुरंत असर देने वाला कदम है।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Step 2: Statement और alerts जाँचें</h2>
+      <p class="mb-4 text-gray-700">
+        पिछले कुछ महीनों के account statement और बैंक के SMS/email alerts खोलकर देखें कि कोई अनजान transaction, नया beneficiary या अपरिचित login alert तो नहीं। कुछ भी संदिग्ट दिखे तो तुरंत बैंक को phone करें और उसके बाद लिखित में भी सूचित करें, ताकि reference number के साथ record रहे।
+      </p>
+      <ul class="mb-6 list-inside list-disc space-y-2 text-gray-700">
+        <li>अनजान debit, नया payee या अपरिचित city से login alert।</li>
+        <li>बिना मांगे आया "KYC update", "account block", "PAN link" वाला SMS या call।</li>
+        <li>ईमेल में आया कोई भी attachment या link जो bank का दावा करता हो।</li>
+      </ul>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Step 3: Phishing call और SMS से बचें</h2>
+      <p class="mb-6 text-gray-700">
+        Data exposure की खबर के बाद सबसे बड़ा असर phishing पर पड़ता है — callers "SBI से बोल रहा हूँ" कहकर OTP या card detail मांग सकते हैं। OTP, CVV, ATM PIN, net banking password या पूरा card number किसी को न दें, चाहे वह bank employee, RBI अधिकारी या police का दावा कर रहा हो। किसी भी message में दिया link न खोलें; अपने बैंक के official app या website से ही login करें और नंबर app में दिए official customer care से ही मिलें।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Step 4: Complaint और escalation</h2>
+      <p class="mb-4 text-gray-700">
+        अगर खाते से पैसा गया हो या कोई unauthorized transaction दिखे, तो पहले बैंक को तुरंत phone और लिखित दोनों में सूचित करें और reference number रखें। साथ ही cyber financial fraud की शिकायत <a class="font-medium text-blue-700 underline" href="https://cybercrime.gov.in/" target="_blank" rel="noopener noreferrer">cybercrime.gov.in</a> पर दर्ज कराएँ या helpline 1930 पर call करें — जल्दी शिकायत करने पर funds को रोकने की संभावना बढ़ जाती है।
+      </p>
+      <p class="mb-6 text-gray-700">
+        अगर 30 दिन में बैंक से संतोषजनक जवाब न मिले, शिकायत reject हो जाए या जवाब से संतुष्टि न हों, तो RBI के Complaint Management System पर escalation कर सकते हैं।
+      </p>
+      <p class="mb-6 text-gray-700">
+        <a class="font-medium text-blue-700 underline" href="https://cms.rbi.org.in" target="_blank" rel="noopener noreferrer">RBI CMS पर शिकायत दर्ज करें</a>
+      </p>
+
+      <section class="mb-8 rounded-r-lg border-l-4 border-amber-500 bg-amber-50 p-4">
+        <p class="font-medium text-amber-900">
+          <strong>महत्वपूर्ण सीमा:</strong> यह consumer-safety information है, व्यक्तिगत legal या investment सलाह नहीं। SBI की filing के मुताबिक exposed data की authenticity, completeness और source अभी investigation के अधीन हैं — इसलिए किसी भी दावे को official filing या बैंक के लिखित जवाब से जांचे बिना आगे न बढ़ें, और किसी बिचौलिए को पैसे न दें।
+        </p>
+      </section>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">स्रोत</h2>
+      <ul class="mb-8 list-inside list-disc space-y-2 text-gray-700">
+        <li><a class="text-blue-700 underline" href="https://www.bseindia.com/xml-data/corpfiling/AttachLive/e16e3a1a-ee15-4971-977c-5f9f6aef1fb9.pdf" target="_blank" rel="noopener noreferrer">SBI की stock exchange filing — BSE Limited, 21 अक्टूबर 2026 (official)</a></li>
+        <li><a class="text-blue-700 underline" href="https://www.thehindu.com/business/Economy/state-bank-of-india-investigates-exposure-customer-records-dark-web-october-21/article71606599.ece" target="_blank" rel="noopener noreferrer">The Hindu — SBI probes exposure of dark web customer records (21 अक्टूबर 2026)</a></li>
+        <li><a class="text-blue-700 underline" href="https://www.indiatoday.in/technology/news/story/sbi-confirms-cyberattack-3897-customer-records-stolen-and-put-on-dark-web-3021725-2026-10-21" target="_blank" rel="noopener noreferrer">India Today — SBI confirms 3,897 customer records on dark web (21 अक्टूबर 2026)</a></li>
+        <li><a class="text-blue-700 underline" href="https://cybercrime.gov.in/" target="_blank" rel="noopener noreferrer">cybercrime.gov.in — Cyber Crime Complaint Portal (official)</a></li>
+        <li><a class="text-blue-700 underline" href="https://cms.rbi.org.in" target="_blank" rel="noopener noreferrer">RBI Complaint Management System (official)</a></li>
+      </ul>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">अक्सर पूछे जाने वाले सवाल</h2>
+      <FaqAccordion items={faqItems} class="mb-8 space-y-4" />
+
+      <p class="mt-8 text-sm text-gray-500">
+        Published/updated: 24 October 2026. यह घटना अभी investigation के अधीन है; कोई भी कदम उठाने से पहले बैंक के official app, SBI की exchange filing और RBI/cert-in के official pages पर latest स्थिति देखें।
+      </p>
+    </div>
+  </div>
+</Layout>

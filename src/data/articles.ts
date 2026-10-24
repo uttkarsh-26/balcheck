@@ -19,6 +19,12 @@ export interface ArticleMeta {
 
 export const articles: ArticleMeta[] = [
   {
+    slug: 'sbi-data-leak-dark-web-customer-safety-guide',
+    title: 'SBI Data Leak: Dark Web Records — क्या करें | BalCheck.in',
+    description: 'SBI ने 21 अक्टूबर 2026 को exchanges को सूचित किया: dark web पर 3,897 customer records की PII exposure का शक — safety steps, phishing बचाव और complaint रास्ता।',
+    linkLabel: 'SBI Data Leak — Dark Web Records',
+  },
+  {
     slug: 'coma-patient-bank-account-access-rbi-guidelines',
     title: 'Coma Patient Bank Account: पैसा कैसे निकाले | BalCheck.in',
     description: 'कोमा में मरीज़ के बैंक खाते से पैसा निकालने का एक भी नियम नहीं; इलाहाबाद HC ने Centre-RBI से guidelines मांगे — परिवार के कदम और शिकायत रास्ता।',
