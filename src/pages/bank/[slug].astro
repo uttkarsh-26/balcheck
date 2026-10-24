@@ -140,6 +140,12 @@ const h1Overrides: Partial<Record<string, string>> = {
   // so no heading carried the query's words. The missed-call facility is real
   // (8800688006, verified), so the missed-call wording stays honest.
   'airtel-payments': `Airtel Payments Bank Missed Call Balance Check ${bank.missedCall}`,
+  // 30d pull 2026-10-24: 'mpgb balance check number' 651 impr @ 0.92% CTR pos
+  // 4.8 (+1,207 @ 1.66% pos 4.5 on 'mpgb balance check' and 735 @ 1.63% pos
+  // 6.3 on 'mpgb portal') — the whole cluster is Latin-phrased while the H1
+  // was 'मध्य प्रदेश ग्रामीण बैंक' only. Full name first with the acronym in
+  // parentheses (psb shape); the title override already leads with 'MPGB'.
+  'mp-gramin': `Madhya Pradesh Gramin Bank (MPGB) Balance Check Number ${bank.missedCall}`,
 };
 if (bank.slug === 'psb') {
   faqs.push(
