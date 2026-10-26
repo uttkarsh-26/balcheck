@@ -4,6 +4,7 @@ import FaqAccordion from '../../components/FaqAccordion.astro';
 import { banks, categories, categoryHindi } from '../../data/banks';
 import type { Bank } from '../../data/banks';
 import { getMerger, getPredecessors } from '../../data/mergers';
+import { isTrueTollFreeNumber } from '../../lib/phone';
 import VideoHeroBanner from '../../components/VideoHeroBanner.astro';
 import PhoneNumber from '../../components/PhoneNumber.astro';
 import RecordEvidence from '../../components/RecordEvidence.astro';
@@ -18,6 +19,12 @@ export function getStaticPaths() {
 interface Props { bank: Bank }
 const { bank } = Astro.props;
 const isMissedCall = bank.balanceMode === 'missed-call';
+// Helpline tile: only a real 1800 number gets a /toll-free-number/<slug>/
+// page — the other banks' legacy toll-free URL 301s to /customer-care/<slug>/
+// (src/lib/legacy-redirects.mjs), so the tile must not link to a dead route.
+const tollFreeTile = isTrueTollFreeNumber(bank.customerCare)
+  ? { href: 'toll-free-number', icon: '🆓', label: 'Toll Free Number' }
+  : { href: 'customer-care', icon: '🎧', label: 'Customer Care' };
 const serviceLabel = isMissedCall ? 'मिस्ड कॉल बैलेंस नंबर' : 'Customer Care / Balance Enquiry';
 const serviceInstruction = isMissedCall
   ? 'रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं।'
@@ -670,9 +677,9 @@ const pageDesc = !isMissedCall
         <p class="text-xs text-gray-500">💰 Balance Enquiry</p>
         <p class="text-xs font-medium text-brand-700 mt-1">Check Balance →</p>
       </a>
-      <a href={`/toll-free-number/${bank.slug}/`}
+      <a data-testid="helpline-tile" href={`/${tollFreeTile.href}/${bank.slug}/`}
          class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
-        <p class="text-xs text-gray-500">🆓 Toll Free Number</p>
+        <p class="text-xs text-gray-500">{tollFreeTile.icon} {tollFreeTile.label}</p>
         <p class="text-xs font-medium text-brand-700 mt-1">Helpline →</p>
       </a>
     </div>

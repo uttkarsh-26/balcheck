@@ -3,6 +3,7 @@ import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { banks, categories } from '../src/data/banks';
 import { isTrueTollFreeNumber } from '../src/lib/phone';
+import { resolveLegacyRedirect } from '../src/lib/legacy-redirects.mjs';
 import { mergers } from '../src/data/mergers';
 import { gotoDom, categorySlug } from './utils';
 
@@ -24,6 +25,12 @@ const VERTICAL_HUBS = [
 const MISSED_CALL_HUB = '/missed-call/';
 const MISSED_CALL_BANKS = banks.filter((bank) => bank.balanceMode === 'missed-call');
 
+// The one vertical that does not build a page per bank: only a true 1800
+// customer-care number earns a /toll-free-number/<slug>/ page, the other banks
+// 301 to /customer-care/<slug>/ (src/lib/legacy-redirects.mjs).
+const TOLL_FREE_HUB = '/toll-free-number/';
+const TOLL_FREE_BANKS = banks.filter((bank) => isTrueTollFreeNumber(bank.customerCare));
+
 const MERGED_BANKS_HUB = '/merged-banks/';
 
 /**
@@ -36,22 +43,24 @@ function expectedSitemapUrlCount(): number {
   const articleCount = readdirSync(
     join(process.cwd(), 'src', 'pages', 'article')
   ).filter((f) => f.endsWith('.astro')).length;
+  // Hub page per vertical, plus one page per bank for every vertical except
+  // toll-free-number, which only builds the banks with a true 1800 number.
+  const verticalPages = VERTICAL_HUBS.reduce(
+    (total, hub) => total + (hub === TOLL_FREE_HUB ? TOLL_FREE_BANKS.length : banks.length),
+    VERTICAL_HUBS.length,
+  );
   return (
     1 + // homepage /
     1 + // /how-it-works/
     3 + // /privacy/ /about/ /contact/
     banks.length + // /bank/[slug]/
     (1 + categories.length) + // /banks/ index + /banks/[category]/
-    VERTICAL_HUBS.length * (banks.length + 1) + // per vertical: hub + one page per bank
+    verticalPages +
     articleCount + // /article/[slug]/
     (1 + mergers.length) + // /merged-banks/ hub + one page per merger record
     1 + // /missed-call/ hub
     MISSED_CALL_BANKS.length + // /missed-call/[slug]/ (one page per missed-call bank)
-    1 + // /number-lookup/ standalone tool page
-    // Legacy /toll-free-number/<bank>/ routes whose bank has no real 1800 number
-    // are kept live but excluded from the sitemap, because those pages declare
-    // /customer-care/<slug>/ as canonical (see astro.config.mjs).
-    -banks.filter((bank) => !isTrueTollFreeNumber(bank.customerCare)).length
+    1 // /number-lookup/ standalone tool page
   );
 }
 
@@ -136,20 +145,33 @@ test.describe('sitemap', () => {
     expect(locCount).toBe(expectedSitemapUrlCount());
   });
 
-  test('sitemap omits legacy toll-free URLs that canonicalise to customer-care', async ({ request }) => {
+  test('sitemap omits retired toll-free URLs and no longer builds them', async ({ request }) => {
     const response = await request.get('/sitemap-0.xml');
     const text = await response.text();
 
-    const legacySlugs = banks
+    const retiredSlugs = banks
       .filter((bank) => !isTrueTollFreeNumber(bank.customerCare))
       .map((bank) => bank.slug);
 
-    for (const slug of legacySlugs) {
+    for (const slug of retiredSlugs) {
       expect(text, `${slug} has no true 1800 number, so its legacy toll-free URL must not be submitted`)
         .not.toContain(`https://balcheck.in/toll-free-number/${slug}/`);
-      // …but the page itself stays live for users who land on it.
+      // The route is retired, not merely un-submitted: nothing is built there.
       const page = await request.get(`/toll-free-number/${slug}/`);
-      expect(page.status()).toBe(200);
+      expect(page.status(), `${slug} legacy toll-free URL must not be built`).toBe(404);
+      // …and the worker folds it onto the canonical customer-care page.
+      expect(resolveLegacyRedirect(`/toll-free-number/${slug}/`))
+        .toBe(`/customer-care/${slug}/`);
+    }
+  });
+
+  test('sitemap lists every true toll-free bank page', async ({ request }) => {
+    const response = await request.get('/sitemap-0.xml');
+    const text = await response.text();
+
+    for (const bank of TOLL_FREE_BANKS) {
+      expect(text, `${bank.slug} has a true 1800 number, so its toll-free page must be submitted`)
+        .toContain(`https://balcheck.in/toll-free-number/${bank.slug}/`);
     }
   });
 

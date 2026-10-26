@@ -9,10 +9,17 @@ import { isTrueTollFreeNumber } from '../../lib/phone';
 import { composeDescription, composeTitle } from '../../lib/seo';
 
 export function getStaticPaths() {
-  return banks.map((bank: Bank) => ({
-    params: { slug: bank.slug },
-    props: { bank },
-  }));
+  // Only a real 1800 number earns a toll-free page. Banks whose customerCare is
+  // not one (1860/080/regular) have no page here — their legacy
+  // /toll-free-number/<slug>/ URL 301s to /customer-care/<slug>/ through
+  // src/lib/legacy-redirects.mjs, because a page that merely declares a
+  // different canonical let Google index the legacy URL itself.
+  return banks
+    .filter((bank: Bank) => isTrueTollFreeNumber(bank.customerCare))
+    .map((bank: Bank) => ({
+      params: { slug: bank.slug },
+      props: { bank },
+    }));
 }
 
 interface Props {
@@ -21,28 +28,24 @@ interface Props {
 
 const { bank } = Astro.props;
 const isMissedCall = bank.balanceMode === 'missed-call';
-const isTollFree = isTrueTollFreeNumber(bank.customerCare);
 const siteUrl = 'https://balcheck.in';
-const routeUrl = `${siteUrl}/toll-free-number/${bank.slug}/`;
-const canonicalUrl = isTollFree ? routeUrl : `${siteUrl}/customer-care/${bank.slug}/`;
+const canonicalUrl = `${siteUrl}/toll-free-number/${bank.slug}/`;
 
 const title = composeTitle(
-  [isTollFree ? `${bank.shortName} Toll Free Number` : `${bank.shortName} Customer Care Number`, `${bank.nameHindi} Helpline`],
+  [`${bank.shortName} Toll Free Number`, `${bank.nameHindi} Helpline`],
   'BalCheck',
 );
 // Full Hindi bank name leads the description even when the title drops it.
-const description = isTollFree
-  ? composeDescription(`${bank.nameHindi} (${bank.name}) का verified 1800 customer care number ${bank.customerCare}। बैंकिंग समस्या और account help के लिए call करें।`)
-  : composeDescription(`${bank.nameHindi} (${bank.name}) customer care number ${bank.customerCare}। यह legacy toll-free-number URL customer-care coverage बनाए रखने के लिए उपलब्ध है; इसे toll-free न मानें।`);
+const description = composeDescription(`${bank.nameHindi} (${bank.name}) का verified 1800 customer care number ${bank.customerCare}। बैंकिंग समस्या और account help के लिए call करें।`);
 
 const faqs = [
   {
-    q: `${bank.shortName} ${isTollFree ? 'toll free ' : ''}customer care number क्या है?`,
-    a: `${bank.name} का customer care number ${bank.customerCare} है। बैंकिंग समस्या, balance enquiry, card blocking या account help के लिए इस नंबर पर संपर्क करें।${isTollFree ? ' यह 1800 toll-free number है।' : ' इसे toll-free न मानें; सामान्य call charges लागू हो सकते हैं।'}`,
+    q: `${bank.shortName} toll free customer care number क्या है?`,
+    a: `${bank.name} का customer care number ${bank.customerCare} है। बैंकिंग समस्या, balance enquiry, card blocking या account help के लिए इस नंबर पर संपर्क करें। यह 1800 toll-free number है।`,
   },
   {
     q: `${bank.nameHindi} का customer care number क्या है?`,
-    a: `${bank.name} (${bank.shortName}) का customer care number ${bank.customerCare} है।${isTollFree ? ' यह 1800 toll-free number है।' : ' यह toll-free number नहीं है।'}`,
+    a: `${bank.name} (${bank.shortName}) का customer care number ${bank.customerCare} है। यह 1800 toll-free number है।`,
   },
   {
     q: `${bank.shortName} customer care पर कब call करें?`,
@@ -50,9 +53,7 @@ const faqs = [
   },
   {
     q: `क्या ${bank.shortName} customer care number पर call करने का charge लगता है?`,
-    a: isTollFree
-      ? `${bank.name} का ${bank.customerCare} 1800 toll-free number है। फिर भी operator policy और call routing की जानकारी के लिए bank की official terms देखें।`
-      : `${bank.name} का customer care number ${bank.customerCare} toll-free नहीं है। सामान्य telecom या bank call charges लागू हो सकते हैं।`,
+    a: `${bank.name} का ${bank.customerCare} 1800 toll-free number है। फिर भी operator policy और call routing की जानकारी के लिए bank की official terms देखें।`,
   },
   {
     q: `${bank.shortName} का official website क्या है?`,
@@ -65,8 +66,8 @@ const schema = {
   "@graph": [
     {
       "@type": "ContactPage",
-      "name": `${bank.name} ${isTollFree ? 'Toll Free ' : ''}Customer Care Number`,
-      "description": `${bank.name} customer care number ${bank.customerCare}${isTollFree ? ' (1800 toll-free)' : ''} और balance enquiry number ${bank.missedCall}.`,
+      "name": `${bank.name} Toll Free Customer Care Number`,
+      "description": `${bank.name} customer care number ${bank.customerCare} (1800 toll-free) और balance enquiry number ${bank.missedCall}.`,
       "url": canonicalUrl,
       "mainEntity": {
         "@type": "BankOrCreditUnion",
@@ -114,13 +115,13 @@ const schema = {
 
     <!-- Header -->
     <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-6">
-      <h1 class="text-h1 font-bold mb-1">{bank.shortName} {isTollFree ? 'Toll Free Number' : 'Customer Care Number'}</h1>
-      <p class="text-white text-sm">{bank.nameHindi} — {isTollFree ? '1800 customer care helpline' : 'customer care helpline (not toll-free)'}</p>
+      <h1 class="text-h1 font-bold mb-1">{bank.shortName} Toll Free Number</h1>
+      <p class="text-white text-sm">{bank.nameHindi} — 1800 customer care helpline</p>
     </div>
 
     <!-- Toll Free CTA -->
     <div class="bg-white rounded-xl border-2 border-brand-200 p-5 shadow-sm mb-6">
-      <p data-testid="toll-free-label" class="text-sm text-brand-700 font-medium mb-1">🎧 {isTollFree ? 'Toll-Free Customer Care Number' : 'Customer Care Number'}</p>
+      <p data-testid="toll-free-label" class="text-sm text-brand-700 font-medium mb-1">🎧 Toll-Free Customer Care Number</p>
       <a href={`tel:${bank.customerCare}`} class="block">
         <span class="text-3xl sm:text-4xl font-bold text-brand-700 tracking-wide"><PhoneNumber variant="display" number={bank.customerCare} /></span>
       </a>
@@ -138,7 +139,7 @@ const schema = {
 
     <!-- When to Call -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-      <h2 class="text-h2 font-semibold text-gray-900 mb-3">{bank.shortName} {isTollFree ? 'toll-free customer care' : 'customer care'} पर कब कॉल करें?</h2>
+      <h2 class="text-h2 font-semibold text-gray-900 mb-3">{bank.shortName} toll-free customer care पर कब कॉल करें?</h2>
       <ul class="space-y-2 text-sm text-gray-700">
         <li class="flex gap-2"><span class="text-brand-600">✓</span> {isMissedCall ? 'Missed call balance SMS नहीं आया' : 'Balance enquiry या IVR में सहायता चाहिए'}</li>
         <li class="flex gap-2"><span class="text-brand-600">✓</span> मोबाइल नंबर बैंक खाते से लिंक या update करना है</li>

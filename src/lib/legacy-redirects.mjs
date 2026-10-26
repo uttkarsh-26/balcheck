@@ -17,7 +17,27 @@
 //   * every TARGET path MUST exist in dist/ (never redirect into another 404).
 // Add entries only with a live status check of the target.
 
+import { banks } from '../data/banks.ts';
+import { isTrueTollFreeNumber } from './phone.ts';
+
+// Retired /toll-free-number/<bank>/ pages (2026-10 consolidation). Banks whose
+// customerCare is not a real 1800 number no longer build that route: GSC showed
+// Google indexing the legacy URL itself on 3 of the 12 banks and ignoring the
+// page's declared /customer-care/<slug>/ canonical, so the cross-canonical page
+// was not consolidating anything. Consolidation is enforced with a 301 instead.
+// Derived from banks.ts with the same predicate the route's getStaticPaths
+// filter uses, so a bank that gains or loses a true 1800 number moves the entry
+// (and the page) automatically. Spread first so a hand-written entry for a slug
+// that ever reappears still wins.
+const retiredTollFreeRedirects = Object.fromEntries(
+  banks
+    .filter((bank) => !isTrueTollFreeNumber(bank.customerCare))
+    .map((bank) => [`/toll-free-number/${bank.slug}/`, `/customer-care/${bank.slug}/`]),
+);
+
 export const EXACT_REDIRECTS = {
+  ...retiredTollFreeRedirects,
+
   // Crawler probes for the sitemap. robots.txt declares /sitemap-index.xml,
   // but Googlebot and third-party tools still request these two forms.
   '/sitemap.xml': '/sitemap-index.xml',

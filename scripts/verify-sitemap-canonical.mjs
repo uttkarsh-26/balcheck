@@ -100,7 +100,7 @@ function main() {
     console.error(`❌ ${offenders.length}/${checked + offenders.length} sitemap URLs are not self-canonical:`);
     for (const o of offenders) console.error(`   ${o.url} — ${o.reason}`);
     console.error('   Fix: either self-canonicalise the page or drop it from the sitemap');
-    console.error('   (see the sitemap filter in astro.config.mjs for the legacy-route pattern).');
+    console.error('   (see the retired-route 301s in src/lib/legacy-redirects.mjs).');
     process.exit(1);
   }
 

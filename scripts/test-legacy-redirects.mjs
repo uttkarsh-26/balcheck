@@ -1,15 +1,21 @@
 // Contract test for the worker's legacy-URL redirect layer.
 //
-// The map (src/lib/legacy-redirects.mjs) exists to clear crawler-visible 404s.
-// Two failure modes are silent in production and are gated here:
+// The map (src/lib/legacy-redirects.mjs) exists to clear crawler-visible 404s
+// and to retire routes the site no longer builds (the /toll-free-number/<bank>/
+// pages of banks without a true 1800 number). Three failure modes are silent in
+// production and are gated here:
 //   1. A redirect that shadows a real route (source path exists in dist/) —
 //      a live page would start 301-ing away.
 //   2. A redirect whose target does not exist — the 404 just moves.
+//   3. A retired route missing from the map — the old URL 404s instead of
+//      consolidating onto its canonical page.
 // Run after `npm run build`: node scripts/test-legacy-redirects.mjs
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { EXACT_REDIRECTS, resolveLegacyRedirect } from '../src/lib/legacy-redirects.mjs';
+import { banks } from '../src/data/banks.ts';
+import { isTrueTollFreeNumber } from '../src/lib/phone.ts';
 
 const DIST = 'dist';
 const exists = (urlPath) => {
@@ -27,6 +33,33 @@ for (const [source, target] of Object.entries(EXACT_REDIRECTS)) {
   assert.ok(exists(target), `redirect target ${target} (from ${source}) does not exist in dist/`);
 }
 
+// Retired toll-free pages: every bank whose customerCare is not a real 1800
+// number must 301 from its legacy /toll-free-number/<slug>/ URL to
+// /customer-care/<slug>/. The route no longer builds for these banks (a
+// cross-canonical page let Google index the legacy URL itself), so a missing
+// entry here is a live 404 in production.
+for (const bank of banks) {
+  const source = `/toll-free-number/${bank.slug}/`;
+  if (isTrueTollFreeNumber(bank.customerCare)) {
+    assert.equal(
+      resolveLegacyRedirect(source),
+      null,
+      `${source} is a real built route and must not be redirected`,
+    );
+    continue;
+  }
+  assert.equal(
+    EXACT_REDIRECTS[source],
+    `/customer-care/${bank.slug}/`,
+    `${source} must 301 to its customer-care page (bank has no true 1800 number)`,
+  );
+  assert.equal(
+    resolveLegacyRedirect(source),
+    `/customer-care/${bank.slug}/`,
+    `${source} must resolve to its customer-care page`,
+  );
+}
+
 // Real routes must never be captured by the prefix rules.
 for (const real of [
   '/',
@@ -37,6 +70,8 @@ for (const real of [
   '/number-lookup/',
   '/sitemap-index.xml',
   '/robots.txt',
+  // A true-1800 bank's toll-free page is a built route, not a legacy redirect.
+  '/toll-free-number/sbi/',
 ]) {
   assert.equal(resolveLegacyRedirect(real), null, `${real} must not be redirected`);
 }

@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { banks, categories } from '../src/data/banks';
 import { gotoDom, categorySlug } from './utils';
 import { isTrueTollFreeNumber } from '../src/lib/phone';
+import { resolveLegacyRedirect } from '../src/lib/legacy-redirects.mjs';
 
 const serviceOrder = [
   'balance-enquiry',
@@ -97,14 +98,19 @@ test.describe('truthful service architecture', () => {
     expect(html).not.toContain('�');
   });
 
-  test('keeps legacy toll-free URLs live without calling non-1800 numbers toll-free', async ({ page }) => {
-    const nonTollFree = banks.find(bank => !isTrueTollFreeNumber(bank.customerCare));
-    expect(nonTollFree).toBeDefined();
-    await gotoDom(page, `/toll-free-number/${nonTollFree!.slug}/`);
-    await expect(page).toHaveURL(`/toll-free-number/${nonTollFree!.slug}/`);
-    await expect(page.getByRole('heading', { level: 1 })).not.toContainText(/toll[- ]free/i);
-    await expect(page.locator('body')).toContainText('Customer Care');
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `https://balcheck.in/customer-care/${nonTollFree!.slug}/`);
+  test('retires legacy toll-free URLs for banks without a true 1800 number', async ({ page }) => {
+    const nonTollFree = banks.filter(bank => !isTrueTollFreeNumber(bank.customerCare));
+    expect(nonTollFree.length).toBeGreaterThan(0);
+
+    for (const bank of nonTollFree) {
+      const legacy = `/toll-free-number/${bank.slug}/`;
+      // The route is gone: a page that only declared a different canonical let
+      // Google index the legacy URL itself, so consolidation is a 301 now.
+      const response = await page.request.get(legacy);
+      expect(response.status(), `${legacy} must not be built`).toBe(404);
+      expect(resolveLegacyRedirect(legacy), `${legacy} must 301 to customer care`)
+        .toBe(`/customer-care/${bank.slug}/`);
+    }
   });
 
   test('adds the reusable more-services block to every service detail family', async ({ page }) => {
@@ -141,8 +147,22 @@ test.describe('truthful service architecture', () => {
     await gotoDom(page, `/toll-free-number/${tollFree!.slug}/`);
     await expect(page.locator('[data-testid="toll-free-label"]')).toContainText(/toll[- ]free/i);
 
-    await gotoDom(page, `/toll-free-number/${nonTollFree!.slug}/`);
-    await expect(page.locator('[data-testid="toll-free-label"]')).not.toContainText(/toll[- ]free/i);
+    // No true 1800 number → no toll-free route at all, and the bank page's
+    // helpline tile sends the user to customer care instead.
+    await expect(page.locator('[data-testid="toll-free-label"]')).toHaveCount(1);
+    const response = await page.request.get(`/toll-free-number/${nonTollFree!.slug}/`);
+    expect(response.status(), `${nonTollFree!.slug} has no true 1800 number, so no toll-free page exists`).toBe(404);
+
+    await gotoDom(page, `/bank/${nonTollFree!.slug}/`);
+    await expect(page.getByTestId('helpline-tile'))
+      .toHaveAttribute('href', `/customer-care/${nonTollFree!.slug}/`);
+    await expect(page.getByTestId('helpline-tile')).toContainText('Customer Care');
+
+    // A true 1800 bank keeps the toll-free route and its label.
+    await gotoDom(page, `/bank/${tollFree!.slug}/`);
+    await expect(page.getByTestId('helpline-tile'))
+      .toHaveAttribute('href', `/toll-free-number/${tollFree!.slug}/`);
+    await expect(page.getByTestId('helpline-tile')).toContainText('Toll Free Number');
   });
 
   test('does not misrepresent external bank login sites as BalCheck WebSite schema', async ({ page }) => {
