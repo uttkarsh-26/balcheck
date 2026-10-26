@@ -373,6 +373,15 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
     title: `Union Bank Balance Check Number ${bank.missedCall} | Missed Call`,
     description: `Union Bank balance check number ${bank.missedCall} — आधिकारिक मिस्ड कॉल सेवा। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
   },
+  // 30d pull 2026-10-26: 'mgb balance check number' 668 impr @ 1.35% CTR pos
+  // 6.2 — the query is Latin but the default title carried no 'MGB' token, so
+  // only 3 of the 4 query terms bold-matched. Latin query phrase leads; the
+  // number is a customer-care line (same digits in both fields), so the snippet
+  // claims no missed-call facility.
+  'maharashtra-gramin': {
+    title: `MGB Balance Check Number ${bank.missedCall}`,
+    description: `Maharashtra Gramin Bank (MGB) balance check number ${bank.missedCall} — आधिकारिक customer care नंबर। कॉल करके बैलेंस enquiry करें, तुरंत जानकारी पाएं।`,
+  },
 };
 
 const customerCareTitle = `${bank.name} Balance Check Number ${bank.missedCall}`;
