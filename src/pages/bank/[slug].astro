@@ -153,6 +153,14 @@ const h1Overrides: Partial<Record<string, string>> = {
   // was 'मध्य प्रदेश ग्रामीण बैंक' only. Full name first with the acronym in
   // parentheses (psb shape); the title override already leads with 'MPGB'.
   'mp-gramin': `Madhya Pradesh Gramin Bank (MPGB) Balance Check Number ${bank.missedCall}`,
+  // 30d pull 2026-10-27: 'mgb balance check number' 677 impr @ 1.48% CTR pos
+  // 6.2 — the title override (same pull, shipped 2026-10-26) already leads
+  // with 'MGB', but the H1 was 'महाराष्ट्र ग्रामीण बैंक' only, so no heading
+  // carried the query's words. Full name first with the acronym in
+  // parentheses (mp-gramin shape); the number is a customer-care line (same
+  // digits in both fields), so the H1 claims balance check on it, not a
+  // missed-call facility.
+  'maharashtra-gramin': `Maharashtra Gramin Bank (MGB) Balance Check Number ${bank.missedCall}`,
 };
 if (bank.slug === 'psb') {
   faqs.push(
