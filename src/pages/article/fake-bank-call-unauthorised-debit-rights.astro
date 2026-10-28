@@ -1,0 +1,261 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getArticle } from '../../data/articles';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ScannableArticleSummary from '../../components/ScannableArticleSummary.astro';
+
+const siteUrl = 'https://balcheck.in';
+const slug = 'fake-bank-call-unauthorised-debit-rights';
+const publishDate = '2026-10-28';
+const modifiedDate = '2026-10-28';
+const pageTitle = getArticle(slug).title;
+const pageDesc = getArticle(slug).description;
+
+const articleBrief = {
+  summary:
+    'RBI circular RBI/2017-18/15 (6 जुलाई 2017) के मुताबिक, contributory fraud में zero liability और bank की गलती में bhi; अनधिकृत transaction की सूचना 3 working days में देने पर customer का loss शून्य।',
+  facts: [
+    { label: 'Circular', value: 'RBI/2017-18/15, DBR.No.Leg.BC.78/09.07.005/2017-18 — 6 जुलाई 2017' },
+    { label: 'Zero liability', value: 'Bank की contributory fraud/negligence होने पर, report करने या न करने के बावजूद' },
+    { label: 'Third-party breach', value: 'Bank की गलती न हो और customer बैंक की सूचना के 3 working days में रिपोर्ट करे' },
+    { label: 'Reporting timeline', value: '3 working days तक zero liability; 4-7 working days में सीमित; 7 दिन बाद bank की board-approved policy' },
+    { label: 'अधिकतम liability', value: 'BSBD ₹5,000; बचत/PPI/MSME तथा ₹25 लाख तक के खाते ₹10,000; बड़े current तथा ₹5 लाख+ credit card ₹25,000' },
+  ],
+  timeline: [
+    { date: '6 जुलाई 2017', datetime: '2017-07-06', text: 'RBI ने circular RBI/2017-18/15 जारी किया — unauthorised electronic banking transactions में customer की limited liability का ढाँचा तय किया।' },
+    { date: 'जुलाई 2019', datetime: '2019-07-01', text: 'Remadevi T.L. v. State Bank of India मामले में एक retired teacher को debit card block होने का SMS मिला, उसके बाद कॉल पर OTP साझा करने को कहा गया; ₹3.73 lakh unauthorised debit हुए (Indian Express)।' },
+    { date: '26 अक्टूबर 2026', datetime: '2026-10-26', text: 'Indian Express ने बताया कि fake bank calls और phishing messages से OTP मांगने वाले cases में ग्राहकों को RBI की liability policy समझना ज़रूरी है।' },
+  ],
+  action: {
+    title: 'पैसा गया हो तो अगले कदम',
+    steps: [
+      'तुरंत बैंक को phone और लिखित दोनों में सूचित करें; complaint reference number रखें।',
+      'cybercrime.gov.in पर cyber financial fraud की शिकायत दर्ज कराएँ या 1930 पर call करें।',
+      'OTP, CVV, PIN या पूरा card number किसी को न दें; "account block", "KYC update" वाले call/SMS का link न खोलें।',
+      '30 दिन में बैंक से संतोषजनक जवाब न मिले तो RBI CMS (cms.rbi.org.in) पर escalation करें।',
+      'Bank की Board-approved customer relations policy माँगें — liability तय करने के लिए यही दस्तावेज़ मान्य है।',
+    ],
+    officialUrl: 'https://www.rbi.org.in/Scripts/BS_CircularIndexDisplay.aspx?Id=11040',
+    officialLabel: 'RBI circular RBI/2017-18/15 — Limiting Liability',
+  },
+  details: {
+    title: 'जरूरी बात',
+    body: 'यह consumer-safety जानकारी है, कानूनी सलाह नहीं। RBI circular के मुताबिक liability तय करने के लिए यह देखा जाता है कि गलती bank में थी, customer में थी या system में कहीं और — इसलिए complaint का reference number, reporting की तारीख और bank का लिखित जवाब अपने पास रखें।',
+  },
+};
+
+const faqItems = [
+  {
+    q: 'फर्जी bank call पर OTP देने से paisa गया — bank paisa wapas karegi?',
+    a: 'RBI circular RBI/2017-18/15 (6 जुलाई 2017) के मुताबिक, अगर unauthorised transaction bank की contributory fraud, negligence या deficiency की वजह से हुआ है तो customer की liability शून्य है — चाहे उसने transaction रिपोर्ट किया हो या नहीं। यदि तीसरे पक्ष की गलती से हुआ है और customer ने बैंक की सूचना मिलने के 3 working days में रिपोर्ट किया, तो भी zero liability है।',
+  },
+  {
+    q: 'Report karne का time limit क्या है?',
+    a: 'Circular के Table 2 के मुताबिक: 3 working days के अंदर रिपोर्ट करने पर zero liability; 4 से 7 working days में रिपोर्ट करने पर सीमित liability (transaction value या Table 1 की राशि, जो कम हो); 7 working days के बाद रिपोर्ट करने पर liability bank की Board-approved policy के अनुसार तय होती है।',
+  },
+  {
+    q: 'अगर गलती मेरी हो तो कितना नुकसान मुझे झेलना पड़ सकता है?',
+    a: 'Circular के Table 1 में अधिकतम liability यह है: BSBD खातों पर ₹5,000; बचत खाते, prepaid payment instruments और gift cards, MSME के current/cash credit/overdraft खाते, ₹25 लाख तक के individual current/CC/OD खाते तथा ₹5 लाख तक लिमिट वाले credit cards पर ₹10,000; बाकी current/CC/OD खातों और ₹5 लाख से अधिक लिमिट वाले credit cards पर ₹25,000।',
+  },
+  {
+    q: 'OTP share करना ही customer negligence माना जाता है?',
+    a: 'Circular के मुताबिक liability तब तय होती है जब पता चलता है कि deficiency bank में थी, customer में थी या system में कहीं और। इसलिए reporting timeline और बैंक की सूचना का proof रखना ज़रूरी है। फिर भी OTP, CVV, ATM PIN या पूरा card number कभी किसी को न दें — कोई भी bank या RBI इसे नहीं मांगती।',
+  },
+  {
+    q: 'Remadevi T.L. v. State Bank of India मामले में क्या हुआ?',
+    a: 'Indian Express के मुताबिक इस मामले में एक retired teacher को जुलाई 2019 में debit card block होने का SMS मिला, उसके बाद कॉल आई और उसे "State Bank Secure App" के नाम पर OTP साझा करने को कहा गया; कुछ मिनटों में ₹3.73 lakh unauthorised transactions से डेबिट हो गए। यह मामला दिखाता है कि reporting timeline और RBI की liability policy को समझना कितना ज़रूरी है।',
+  },
+  {
+    q: 'शिकायत कहाँ और किस प्रकार करें?',
+    a: 'पहले बैंक को phone और लिखित दोनों में सूचित करें और reference number रखें। साथ ही cybercrime.gov.in पर cyber financial fraud की शिकायत दर्ज कराएँ या helpline 1930 पर call करें। 30 दिन में बैंक से संतोषजनक समाधान न मिले, शिकायत reject हो या जवाब से संतुष्टि न हों, तो RBI के Complaint Management System (cms.rbi.org.in) पर escalation करें।',
+  },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: pageTitle,
+  description: pageDesc,
+  datePublished: publishDate,
+  dateModified: modifiedDate,
+  inLanguage: 'hi-IN',
+  mainEntityOfPage: `${siteUrl}/article/${slug}/`,
+  author: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+};
+
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'फर्जी bank call के बाद unauthorised debit रिपोर्ट करने के कदम',
+  description: 'बैंक को सूचित करने से लेकर cybercrime शिकायत और RBI CMS escalation तक practical steps.',
+  step: [
+    { '@type': 'HowToStep', name: 'तुरंत बैंक को सूचित करें', text: 'Phone और लिखित दोनों में बैंक को बताएँ कि transaction अनधिकृत था; complaint reference number और सूचना दिए गए दिन की तारीख रखें।' },
+    { '@type': 'HowToStep', name: 'Cybercrime शिकायत दर्ज करें', text: 'cybercrime.gov.in पर cyber financial fraud की शिकायत दर्ज कराएँ या helpline 1930 पर call करें; SMS और call details evidence के रूप में रखें।' },
+    { '@type': 'HowToStep', name: 'Bank की policy माँगें', text: 'बैंक से उसकी Board-approved customer relations policy लिखित माँगें — limited liability तय करने के लिए यही दस्तावेज़ मान्य है।' },
+    { '@type': 'HowToStep', name: 'OTP और credentials सुरक्षित रखें', text: 'OTP, CVV, ATM PIN, net banking password या पूरा card number किसी को न दें; "account block", "KYC update" वाले call/SMS का link न खोलें।' },
+    { '@type': 'HowToStep', name: 'RBI CMS में escalation करें', text: '30 दिन में बैंक से संतोषजनक जवाब न मिलने या शिकायत reject होने पर cms.rbi.org.in पर शिकायत दर्ज करें।' },
+  ],
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+    { '@type': 'ListItem', position: 2, name: 'फर्जी Bank Call — Paisa Wapas ke Rules', item: `${siteUrl}/article/${slug}/` },
+  ],
+};
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <div class="min-h-screen bg-gray-50">
+    <div class="container mx-auto max-w-copy px-4 py-8">
+      <nav aria-label="breadcrumb" class="mb-4 text-sm text-gray-600">
+        <a href="/" class="hover:underline">Home</a>
+        <span aria-hidden="true"> / </span>
+        <span class="text-gray-800">फर्जी Bank Call — Paisa Wapas ke Rules</span>
+      </nav>
+
+      <h1 class="text-h1 mb-4 font-bold text-gray-900">फर्जी Bank Call पर OTP दिया? Paisa Wapas के RBI Rules</h1>
+      <p class="mb-6 text-lg text-gray-700">
+        "आपका debit card block होने वाला है" जैसा SMS, फिर bank official बनने वाली कॉल — इसी pattern से ठगे लोग OTP साझा करते हैं और मिनटों में account से पैसा चला जाता है। Indian Express ने 26 अक्टूबर 2026 को यही सवाल उठाया कि ऐसे मामले में ग्राहक का पैसा वापस मिलने का हक क्या है। इस गाइड में RBI circular <strong>RBI/2017-18/15</strong> (6 जुलाई 2017) के verified नियम, reporting timeline और complaint का पूरा रास्ता दिया गया है।
+      </p>
+
+      <ScannableArticleSummary {...articleBrief} />
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">फर्जी bank call का pattern कैसे चलता है</h2>
+      <p class="mb-4 text-gray-700">
+        Indian Express के मुताबिक cybercriminals phishing messages और fake bank calls का इस्तेमाल customers को OTP या banking credentials साझा करने के लिए करते हैं, जिससे unauthorised transaction हो जाता है। एक सामान्य तरीका यह है: पहले "card block", "KYC update" या "security alert" जैसा SMS, फिर उसी बात को लेकर कॉल — घबराहट में customer OTP बोल देता है या किसी ऐप को install कर लेता है।
+      </p>
+      <p class="mb-6 text-gray-700">
+        याद रखें: बैंक, RBI या कोई भी official संस्था OTP, CVV, ATM PIN, net banking password या पूरा card number कभी नहीं मांगती। ऐसी किसी भी मांग को तुरंत कॉल काट दें और अपने बैंक के official app या website से ही login करें।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">RBI का नियम — zero liability कब मिलती है</h2>
+      <p class="mb-4 text-gray-700">
+        RBI का circular <strong>RBI/2017-18/15</strong> (DBR.No.Leg.BC.78/09.07.005/2017-18, 6 जुलाई 2017) सभी scheduled commercial banks (RRBs सहित), small finance banks और payments banks को संबोधित है। इसके अनुसार customer को <strong>zero liability</strong> तब मिलती है जब unauthorised transaction इन स्थितियों में हो:
+      </p>
+      <ul class="mb-4 list-disc space-y-2 pl-6 text-gray-700">
+        <li>Bank की contributory fraud, negligence या deficiency की वजह से — इस स्थिति में customer ने transaction रिपोर्ट किया हो या नहीं, liability शून्य रहती है।</li>
+        <li>Third party breach की वजह से, जहाँ गलती न बैंक में हो और न customer में बल्कि system में कहीं और — और customer ने बैंक से unauthorised transaction की सूचना मिलने के <strong>3 working days के अंदर</strong> बैंक को रिपोर्ट किया हो।</li>
+      </ul>
+      <p class="mb-6 text-gray-700">
+        Circular के मुताबिक banks को Board की मंजूरी से अपनी customer relations policy बनानी या संशोधित करनी होती है, जिसमें customer awareness, reporting की प्रक्रिया और complaint की पावती का ढाँचा शामिल होना चाहिए। यही policy हर मामले में liability तय करने के लिए मान्य दस्तावेज़ है।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Limited liability — कितना नुकसान customer पर पड़ सकता है</h2>
+      <p class="mb-4 text-gray-700">
+        जब deficiency customer में होती है या third party breach होने पर भी customer समय पर रिपोर्ट नहीं करता, तो circular के <strong>Table 2</strong> के अनुसार liability तय होती है:
+      </p>
+      <div class="mb-4 overflow-x-auto scrollbar-hide scroll-fade">
+        <table class="w-full border-collapse border border-gray-300 text-left">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-300 px-4 py-2">रिपोर्ट कब की</th>
+              <th class="border border-gray-300 px-4 py-2">Customer liability</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">3 working days के अंदर</td>
+              <td class="border border-gray-300 px-4 py-2">Zero liability</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">4 से 7 working days</td>
+              <td class="border border-gray-300 px-4 py-2">Transaction value या Table 1 की राशि, जो कम हो</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">7 working days के बाद</td>
+              <td class="border border-gray-300 px-4 py-2">Bank की Board-approved policy के अनुसार</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mb-4 text-gray-700">
+        <strong>Table 1</strong> में खाते के प्रकार के अनुसार अधिकतम liability यह है:
+      </p>
+      <div class="mb-6 overflow-x-auto scrollbar-hide scroll-fade">
+        <table class="w-full border-collapse border border-gray-300 text-left">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-300 px-4 py-2">खाते का प्रकार</th>
+              <th class="border border-gray-300 px-4 py-2">अधिकतम liability</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">BSBD खाते</td>
+              <td class="border border-gray-300 px-4 py-2">₹5,000</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">बाकी बचत खाते, prepaid payment instruments और gift cards, MSME के current/cash credit/overdraft खाते, ₹25 लाख तक के individual current/CC/OD खाते, ₹5 लाख तक लिमिट वाले credit cards</td>
+              <td class="border border-gray-300 px-4 py-2">₹10,000</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">बाकी सभी current/cash credit/overdraft खाते और ₹5 लाख से अधिक लिमिट वाले credit cards</td>
+              <td class="border border-gray-300 px-4 py-2">₹25,000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mb-6 text-gray-700">
+        यह सीमा paragraph 7(ii) के तहत अधिकतम liability है, और यह तभी लागू होती है जब deficiency customer में पाई जाए। राशियों के बारे में कोई भी दावा अपने बैंक की Board-approved policy और बैंक के लिखित जवाब से मिलाकर ही मानें।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Remadevi T.L. v. State Bank of India — इस मामले से क्या सीखें</h2>
+      <p class="mb-4 text-gray-700">
+        Indian Express ने इस मामले को इसलिए उठाया है क्योंकि यह दिखाता है कि सावधान customer भी इस pattern में फँस सकता है। बताए गए तथ्यों के मुताबिक एक retired teacher को जुलाई 2019 में सुबह करीब 9:40 बजे SMS मिला कि उसका debit card block होने वाला है। उसके बाद कॉल आई और उसे "State Bank Secure App" के नाम पर register करने के बहाने OTP साझा करने को कहा गया। कुछ मिनटों में ₹3.73 lakh unauthorised transactions से डेबिट हो गए।
+      </p>
+      <p class="mb-6 text-gray-700">
+        सबसे बड़ी सीख — reporting का समय। Circular के Table 2 के मुताबिक 3 working days के अंदर रिपोर्ट करने पर liability शून्य रह सकती है, इसलिए अनजान transaction दिखते ही बैंक को phone और लिखित दोनों में सूचित करें और तारीख का proof रखें।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">तुरंत के कदम</h2>
+      <ol class="mb-6 list-decimal space-y-2 pl-6 text-gray-700">
+        <li>बैंक को phone और लिखित दोनों में सूचित करें कि transaction अनधिकृत था; complaint reference number रखें।</li>
+        <li>cybercrime.gov.in पर cyber financial fraud की शिकायत दर्ज कराएँ या helpline <strong>1930</strong> पर call करें।</li>
+        <li>बैंक से उसकी Board-approved customer relations policy लिखित माँगें।</li>
+        <li>पिछले कुछ महीनों के statement और SMS/email alerts देखें — कोई और अनजान transaction हो तो वही रिपोर्ट करें।</li>
+        <li>30 दिन में संतोषजनक जवाब न मिले, शिकायत reject हो या जवाब से संतुष्टि न हों, तो RBI CMS (cms.rbi.org.in) पर escalation करें।</li>
+      </ol>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Sources / आधिकारिक लिंक</h2>
+      <ul class="mb-6 list-disc space-y-2 pl-6 text-gray-700">
+        <li>RBI circular — Customer Protection: Limiting Liability of Customers in Unauthorised Electronic Banking Transactions, RBI/2017-18/15, DBR.No.Leg.BC.78/09.07.005/2017-18, 6 जुलाई 2017: <a class="text-blue-700 underline" href="https://www.rbi.org.in/Scripts/BS_CircularIndexDisplay.aspx?Id=11040">rbi.org.in</a></li>
+        <li>RBI Complaint Management System (CMS) — बैंक शिकायत की escalation: <a class="text-blue-700 underline" href="https://cms.rbi.org.in/">cms.rbi.org.in</a></li>
+        <li>Cyber Crime Portal — cyber financial fraud की शिकायत: <a class="text-blue-700 underline" href="https://cybercrime.gov.in/">cybercrime.gov.in</a></li>
+        <li>The Indian Express — "Duped by a fake bank call? Know your rights after an unauthorised debit", 26 अक्टूबर 2026: <a class="text-blue-700 underline" href="https://indianexpress.com/article/technology/otp-scam-bank-refund-rbi-rules-cyber-fraud-10935297/">indianexpress.com</a></li>
+      </ul>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">अक्सर पूछे जाने वाले सवाल</h2>
+      <FaqAccordion items={faqItems} />
+    </div>
+  </div>
+</Layout>

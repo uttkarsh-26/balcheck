@@ -48,6 +48,12 @@ export const articles: ArticleMeta[] = [
     description: 'Loan app harassment, unauthorised debit या धमकी की स्थिति में evidence, lender complaint, cybercrime report और RBI CMS escalation के practical steps।',
     linkLabel: 'Loan App Harassment — Complaint Guide',
   },
+  {
+    slug: 'fake-bank-call-unauthorised-debit-rights',
+    title: 'फर्जी Bank Call पर OTP? Paisa Wapas ke RBI Rules | BalCheck.in',
+    description: 'फर्जी bank call पर OTP दिया, paisa गया? RBI/2017-18/15: 3 working days में report करने पर zero liability — complaint, cybercrime.gov.in, RBI CMS rasta।',
+    linkLabel: 'फर्जी Bank Call — Paisa Wapas ke Rules',
+  },
 ];
 
 export const articlePath = (slug: string): string => `/article/${slug}/`;
