@@ -397,6 +397,15 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
     title: `MGB Balance Check Number ${bank.missedCall}`,
     description: `Maharashtra Gramin Bank (MGB) balance check number ${bank.missedCall} — आधिकारिक customer care नंबर। कॉल करके बैलेंस enquiry करें, तुरंत जानकारी पाएं।`,
   },
+  // 30d pull 2026-10-29: 'rgb balance check number' 1,258 impr @ 0.40% CTR
+  // pos 7.0 — the query is Latin but the default title was Devanagari-first
+  // and carried no 'RGB' token, so only part of the query bold-matched.
+  // Latin query phrase leads (maharashtra-gramin shape); the missed-call
+  // number is verified official (rgb.bank.in, audit 2026-09-18).
+  'rajasthan-gramin': {
+    title: `RGB Balance Check Number ${bank.missedCall}`,
+    description: `Rajasthan Gramin Bank (RGB) balance check number ${bank.missedCall} — आधिकारिक मिस्ड कॉल सेवा। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
+  },
 };
 
 const customerCareTitle = `${bank.name} Balance Check Number ${bank.missedCall}`;
