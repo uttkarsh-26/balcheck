@@ -1,0 +1,212 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ScannableArticleSummary from '../../components/ScannableArticleSummary.astro';
+
+const siteUrl = 'https://balcheck.in';
+const slug = 'stock-trader-investment-fraud-complaint-guide-2026';
+const canonicalUrl = `${siteUrl}/article/${slug}/`;
+const publishDate = '2026-10-29';
+const modifiedDate = '2026-10-29';
+
+const pageTitle = 'Stock Trader Investment Fraud: SEBI Verification और Complaint Guide';
+const pageDesc = 'Ahmedabad में retired bank manager पर ₹37.8 lakh के stock trader fraud मामले में high returns के red flags, SEBI registration verification और cybercrime व police complaint की पूरी प्रक्रिया जानें।';
+
+const faqItems = [
+  {
+    q: 'Stock trader ने high returns का वादा किया और पैसा नहीं लौटाया, पहले क्या करें?',
+    a: 'सभी payment proofs सुरक्षित करें — bank statements, cheque copies, RTGS/NEFT/IMPS/UPI references, chats और agreements। फिर trader को written demand भेजें और acknowledgement रखें; जवाब न मिले तो cybercrime.gov.in या 1930 पर financial fraud report करें और local police/cyber unit में cheating की शिकायत दें।',
+  },
+  {
+    q: 'Investment से पहले trader या advisor की SEBI registration कैसे check करें?',
+    a: 'पैसा देने से पहले व्यक्ति या फर्म का पूरा नाम और registration number लें और sebi.gov.in की official जानकारी से मिलान करें। SEBI-regulated intermediaries की जानकारी official portal पर उपलब्ध है; unregistered entity को पैसा न दें।',
+  },
+  {
+    q: 'Fraud होने पर SEBI SCORES पर complaint कैसे करें?',
+    a: 'अगर व्यक्ति या फर्म SEBI-registered है तो SEBI की complaint redress प्रक्रिया (SCORES) से शिकायत दर्ज करें और transaction records, communications तथा agreements evidence के रूप में attach करें। Entity registered न हो तो यह route लागू नहीं होता; police और cybercrime channel अपनाएँ।',
+  },
+  {
+    q: 'Guaranteed high returns का मतलब क्या होता है?',
+    a: 'Market-linked investment में निश्चित return की कोई गारंटी नहीं होती; guaranteed high returns जैसे दावे एक सामान्य red flag हैं। ऐसी प्रस्तावों को official sources पर verify किए बिना accept न करें और OTP, card details या login कभी न साझा करें।',
+  },
+  {
+    q: 'Cyber fraud में पैसा वापस कैसे मिल सकता है?',
+    a: 'तुरंत cybercrime.gov.in या helpline 1930 पर report करें — जल्दी रिपोर्ट होने पर transaction freeze का मौका बढ़ता है। साथ ही bank को लिखित में unauthorized transfer की शिकायत दें और police में FIR दर्ज कराएँ; recovery की कोई गारंटी नहीं होती।',
+  },
+];
+
+const articleBrief = {
+  summary: 'Ahmedabad में एक 63-year-old retired bank manager ने stock trader पर ₹37.8 lakh धोखाधड़ी का आरोप लगाया; high returns के वादे पर ₹46 lakh invest किए, वापस सिर्फ ₹8.2 lakh मिले।',
+  facts: [
+    { label: 'शिकायतकर्ता', value: '63-year-old retired bank manager, Ahmedabad' },
+    { label: 'आरोप', value: 'Stock trader ने high returns के वादे पर ₹37.8 lakh की धोखाधड़ी की' },
+    { label: 'Invest राशि', value: 'Dec 2025–Jan 2026 में ₹46 lakh; वापस ₹8.2 lakh मिले' },
+    { label: 'Transfer तरीके', value: 'Bank transfer, cheque, RTGS, NEFT, IMPS, UPI' },
+    { label: 'स्रोत', value: 'Times of India, 27 October 2026' },
+  ],
+  timeline: [
+    { date: 'Dec 2025 – Jan 2026', text: 'Complainant ने trader को कुल ₹46 lakh transfer किए' },
+    { date: '26 October 2026', text: 'Chandkheda police में शिकायत दर्ज' },
+    { date: '27 October 2026', text: 'Times of India में मामले की खबर प्रकाशित' },
+  ],
+  action: {
+    title: 'Investment fraud में तुरंत क्या करें',
+    steps: [
+      'सभी payment proofs, chats और agreements सुरक्षित करें',
+      'Bank को लिखित में unauthorized transfer की शिकायत दें',
+      'cybercrime.gov.in या 1930 पर report करें',
+      'Local police/cyber unit में cheating की FIR दर्ज कराएँ',
+      'Trader SEBI-registered हो तो SEBI complaint redress (SCORES) पर शिकायत दें',
+    ],
+    officialUrl: 'https://cybercrime.gov.in/',
+    officialLabel: 'cybercrime.gov.in',
+  },
+  details: {
+    title: 'मामला अभी आरोप स्तर पर है',
+    body: 'Police जाँच कर रही हैं; कोई निष्कर्ष या guilt अभी सिद्ध नहीं हुई। Investment से पहले SEBI-registered intermediary की verification और official channel से payment ज़रूरी है।',
+  },
+};
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: pageTitle,
+  description: pageDesc,
+  url: canonicalUrl,
+  datePublished: publishDate,
+  dateModified: modifiedDate,
+  inLanguage: 'hi-IN',
+  mainEntityOfPage: canonicalUrl,
+  author: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+};
+
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'Stock trader investment fraud पर complaint कैसे करें',
+  description: 'Evidence सुरक्षित करने से लेकर bank complaint, cybercrime report और applicable SEBI/police escalation तक practical steps.',
+  step: [
+    { '@type': 'HowToStep', name: 'Evidence सुरक्षित करें', text: 'Bank statements, cheque copies, RTGS/NEFT/IMPS/UPI references, chats, agreements और call records सुरक्षित रखें।' },
+    { '@type': 'HowToStep', name: 'Trader से लिखित में मांग करें', text: 'लेन-देन की तारीख, राशि और channel के साथ लिखित demand भेजें और acknowledgement रखें।' },
+    { '@type': 'HowToStep', name: 'Bank complaint दें', text: 'Unauthorised या fraudulent transfer पर bank के official grievance channel से लिखित शिकायत करें।' },
+    { '@type': 'HowToStep', name: 'Cybercrime report करें', text: 'Financial cyber fraud में cybercrime.gov.in या helpline 1930 पर report करें।' },
+    { '@type': 'HowToStep', name: 'Police और SEBI route अपनाएँ', text: 'Local police/cyber unit में cheating की FIR दर्ज कराएँ; व्यक्ति या फर्म SEBI-registered हो तो SEBI complaint redress (SCORES) पर शिकायत दें।' },
+  ],
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+    { '@type': 'ListItem', position: 2, name: 'Stock Trader Fraud Complaint Guide', item: canonicalUrl },
+  ],
+};
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <div class="min-h-screen bg-gray-50">
+    <div class="container mx-auto max-w-copy px-4 py-8">
+      <nav aria-label="breadcrumb" class="mb-4 text-sm text-gray-600">
+        <a href="/" class="hover:underline">Home</a>
+        <span aria-hidden="true"> / </span>
+        <span class="text-gray-800">Stock Trader Fraud Complaint Guide</span>
+      </nav>
+
+      <h1 class="text-h1 mb-4 font-bold text-gray-900">Stock Trader Investment Fraud: Verification और Complaint Guide</h1>
+      <p class="mb-6 text-lg text-gray-700">
+        Ahmedabad में एक retired bank manager के ₹37.8 lakh के stock trader fraud मामले को देखते हुए — high returns के वादे से कैसे बचें, trader की SEBI registration कैसे verify करें और fraud होने पर cybercrime, bank और police में complaint कैसे दर्ज कराएँ।
+      </p>
+
+      <section class="mb-8 rounded-r-lg border-l-4 border-amber-500 bg-amber-50 p-4">
+        <p class="font-medium text-amber-900">
+          <strong>महत्वपूर्ण सीमा:</strong> यह general consumer-safety information है, personal legal या financial advice नहीं। BalCheck.in investment नहीं करता। Complaint channels और rules बदल सकते हैं; action लेने से पहले नीचे दिए official sources पर latest details देखें।
+        </p>
+      </section>
+
+      <ScannableArticleSummary {...articleBrief} />
+
+      <section class="mb-8">
+        <h2 class="text-h2 mb-3 font-bold text-gray-900">क्या हुआ है?</h2>
+        <p class="mb-3 text-gray-700">
+          Times of India की 27 October 2026 की रिपोर्ट के मुताबिक, Ahmedabad के Chandkheda police में एक 63-year-old retired bank manager ने शिकायत दर्ज कराई। उनके मुताबिक एक stock trader ने high returns के वादे पर उनसे ₹37.8 lakh की धोखाधड़ी की।
+        </p>
+        <p class="mb-3 text-gray-700">
+          शिकायत के अनुसार, complainant ने December 2025 से January 2026 के बीच trader को कुल ₹46 lakh transfer किए — bank transfers, cheque, RTGS, NEFT, IMPS और UPI के जरिए — जिनमें से सिर्फ ₹8.2 lakh वापस मिले। शिकायत सोमवार, 26 October 2026 को दर्ज हुई। मामला अभी आरोप स्तर पर है और police जाँच कर रही हैं।
+        </p>
+      </section>
+
+      <section class="mb-8">
+        <h2 class="text-h2 mb-3 font-bold text-gray-900">High returns के वादे — red flags</h2>
+        <ul class="mb-3 list-disc space-y-2 pl-6 text-gray-700">
+          <li>Guaranteed या fixed high returns का दावा — market-linked investment में निश्चित return नहीं होता।</li>
+          <li>बिना SEBI registration verify किए पैसा लेना या WhatsApp/Telegram पर pressure बनाना।</li>
+          <li>पैसा personal account पर मांगना, official invoice या agreement न देना।</li>
+          <li>OTP, card details, login या screen-sharing कभी न साझा करना, मांगे जाने पर भी।</li>
+        </ul>
+      </section>
+
+      <section class="mb-8">
+        <h2 class="text-h2 mb-3 font-bold text-gray-900">Invest करने से पहले verification</h2>
+        <p class="mb-3 text-gray-700">
+          पैसा देने से पहले व्यक्ति या फर्म का पूरा नाम, registration number और official channel लें। SEBI-regulated intermediaries की जानकारी sebi.gov.in पर check करें; जिन entities की registration verify न हो, उन्हें पैसा न दें। Payment हमेशा official, traceable channel से करें और receipt/agreement सुरक्षित रखें।
+        </p>
+      </section>
+
+      <section class="mb-8">
+        <h2 class="text-h2 mb-3 font-bold text-gray-900">Fraud होने पर क्या करें</h2>
+        <ol class="mb-3 list-decimal space-y-2 pl-6 text-gray-700">
+          <li>Evidence सुरक्षित करें — statements, cheque copies, UPI/RTGS references, chats, agreements।</li>
+          <li>Trader को लिखित में राशि मांगें और acknowledgement रखें।</li>
+          <li>Bank को unauthorized/fraudulent transfer की लिखित शिकायत दें।</li>
+          <li>cybercrime.gov.in या helpline 1930 पर report करें — जल्दी report से transaction freeze का मौका बढ़ता है।</li>
+          <li>Local police/cyber unit में cheating की FIR दर्ज कराएँ; trader SEBI-registered हो तो SEBI complaint redress (SCORES) पर भी शिकायत दें।</li>
+        </ol>
+        <p class="text-gray-700">Recovery की कोई गारंटी नहीं होती; timeline और नतीजा case के आधार पर बदलता है।</p>
+      </section>
+
+      <section class="mb-8">
+        <h2 class="text-h2 mb-3 font-bold text-gray-900">Sources और official links</h2>
+        <ul class="mb-3 list-disc space-y-2 pl-6 text-gray-700">
+          <li>Times of India — "Ahmedabad: Retired bank manager accuses stock trader of ₹37.8L fraud" (27 October 2026): <a class="text-brand-800 underline" href="https://timesofindia.indiatimes.com/city/ahmedabad/ahmedabad-retired-bank-manager-accuses-stock-trader-of-37-8l-fraud/articleshow/135244123.cms">timesofindia.indiatimes.com</a></li>
+          <li>Gujarat Samachar (English) — same case coverage: <a class="text-brand-800 underline" href="https://english.gujaratsamachar.com/news/ahmedabad/retired-bank-of-baroda-manager-loses-rs-378-lakh-in-alleged-stock-market-fraud-35528591497">english.gujaratsamachar.com</a></li>
+          <li>SEBI — official investor और intermediary information: <a class="text-brand-800 underline" href="https://www.sebi.gov.in/">sebi.gov.in</a></li>
+          <li>SEBI complaint redress (SCORES): <a class="text-brand-800 underline" href="https://scores.gov.in/">scores.gov.in</a></li>
+          <li>Cybercrime reporting portal: <a class="text-brand-800 underline" href="https://cybercrime.gov.in/">cybercrime.gov.in</a> (helpline 1930)</li>
+        </ul>
+      </section>
+
+      <section class="mb-8">
+        <h2 class="text-h2 mb-3 font-bold text-gray-900">अक्सर पूछे जाने वाले सवाल</h2>
+        <FaqAccordion items={faqItems} faqs={faqItems} />
+      </section>
+    </div>
+  </div>
+</Layout>
