@@ -161,6 +161,13 @@ const h1Overrides: Partial<Record<string, string>> = {
   // digits in both fields), so the H1 claims balance check on it, not a
   // missed-call facility.
   'maharashtra-gramin': `Maharashtra Gramin Bank (MGB) Balance Check Number ${bank.missedCall}`,
+  // 30d pull 2026-10-30: 'rgb balance check number' 1,255 impr @ 0.40% CTR pos
+  // 6.9 — the title override (same pull) already leads with 'RGB', but the H1
+  // was 'राजस्थान ग्रामीण बैंक' only, so no heading carried the query's words.
+  // Full name first with the acronym in parentheses (mp-gramin/
+  // maharashtra-gramin shape); the missed-call facility is real (8750187504,
+  // verified), so the balance-check wording stays honest.
+  'rajasthan-gramin': `Rajasthan Gramin Bank (RGB) Balance Check Number ${bank.missedCall}`,
 };
 if (bank.slug === 'psb') {
   faqs.push(
