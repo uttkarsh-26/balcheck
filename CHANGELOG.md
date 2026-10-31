@@ -5,6 +5,14 @@ All notable changes to this repository are recorded here, newest first.
 ## [Unreleased]
 
 ### Fixed
+- `src/pages/atm-pin/[slug].astro` — the header subtitle on the two pilot pages
+  read `{bank.nameHindi} — Green PIN ऑनलाइन` unconditionally, claiming an online
+  Green PIN channel no pilot source documents (PSB's cited poster documents the
+  ATM flow only; OGB calls its portal service "Card Instant PIN
+  Re-generation"). A pilot page now renders `{bank.nameHindi} — {guide.channel}`,
+  and the other 73 banks keep the previous string. H1, title, meta description
+  and schema are unchanged; `tests/atm-pin-pilot-pages.spec.ts` pins the
+  rendered subtitle per page.
 - `src/pages/article/stock-trader-investment-fraud-complaint-guide-2026.astro` —
   meta-budget violation that failed `tests/technical-seo.spec.ts` on both
   projects (title 67→61 chars, description 196→161). The title contracts

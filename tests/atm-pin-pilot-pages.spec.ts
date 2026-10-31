@@ -20,6 +20,9 @@ import { findSchema, gotoDom } from './utils';
  * 4. No pilot page collects anything: no form, no input, no credential ask.
  * 5. Non-pilot banks fall back to the generic template deterministically.
  * 6. Mobile layout: one H1, no horizontal overflow, source detail visible.
+ * 7. The header subtitle names the documented channel on a pilot page — it
+ *    never claims an online Green PIN — while the non-pilot fallback keeps
+ *    the generic subtitle string.
  */
 
 const PILOT_PATHS = ['/atm-pin/odisha-grameen/', '/atm-pin/psb/'] as const;
@@ -58,6 +61,21 @@ for (const path of PILOT_PATHS) {
       );
       await expect(page.locator('h1')).toHaveCount(1);
       await expect(page.locator('h1')).toHaveText(`${bank.shortName} ATM PIN Generate`);
+    });
+
+    test('subtitle names the documented channel and claims no online Green PIN', async ({
+      page,
+    }) => {
+      await gotoDom(page, path);
+      const subtitle = page.getByTestId('atm-pin-subtitle');
+      await expect(subtitle).toBeVisible();
+      await expect(subtitle).toContainText(bank.nameHindi);
+      await expect(subtitle).toContainText(guide.channel);
+      // The audited defect: the subtitle read "Green PIN ऑनलाइन" on every
+      // bank. PSB's cited poster documents the ATM channel only and OGB names
+      // its portal service "Card Instant PIN Re-generation", so a pilot page
+      // must not claim an online channel.
+      await expect(subtitle).not.toContainText('ऑनलाइन');
     });
 
     test('meta description is scoped to the documented channel and drops the generic claims', async ({
@@ -283,6 +301,12 @@ for (const path of NON_PILOT_PATHS) {
         (await page.getByTestId('record-evidence').locator('dt').first().textContent()) ?? '',
       );
       expect(scopeLabel).toContain(`${bank.shortName} customer care`);
+    });
+
+    test('keeps the generic Green PIN ऑनलाइन subtitle', async ({ page }) => {
+      await gotoDom(page, path);
+      const subtitle = page.getByTestId('atm-pin-subtitle');
+      await expect(subtitle).toContainText('Green PIN ऑनलाइन');
     });
   });
 }

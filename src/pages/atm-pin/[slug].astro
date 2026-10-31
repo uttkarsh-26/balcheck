@@ -128,7 +128,14 @@ const schema = {
     <!-- Header -->
     <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-2xl p-6 text-white mb-6">
       <h1 class="text-h1 font-bold mb-1">{bank.shortName} ATM PIN Generate</h1>
-      <p class="text-white text-sm">{bank.nameHindi} — Green PIN ऑनलाइन</p>
+      {/*
+        The audited defect: this subtitle read "Green PIN ऑनलाइन" for every
+        bank, but no pilot source documents an online channel — PSB's poster
+        documents the ATM flow only, and OGB names its portal service "Card
+        Instant PIN Re-generation". A pilot page names its documented channel
+        (guide.channel); the other 73 banks keep the generic string.
+      */}
+      <p class="text-white text-sm" data-testid="atm-pin-subtitle">{bank.nameHindi} — {guide ? guide.channel : 'Green PIN ऑनलाइन'}</p>
     </div>
 
     {
