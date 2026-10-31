@@ -193,6 +193,25 @@ test('every built page keeps title <=65 and description <=165 chars', () => {
   expect(offenders, `meta budget violations: ${report}`).toEqual([]);
 });
 
+// Verbatim pin for the article that broke the budget above (title 67,
+// description 196). The budget scan only fails once a page is over budget, so
+// this pins the exact shortened strings and the case evidence they must keep
+// carrying — a future reword that silently drops the ₹37.8 lakh figure, the
+// Ahmedabad anchor or the allegation-level "मामले" framing fails here.
+test('stock trader article meta stays in budget and keeps the case evidence', async ({ page }) => {
+  await gotoDom(page, '/article/stock-trader-investment-fraud-complaint-guide-2026/');
+  const title = 'Stock Trader Investment Fraud: SEBI Verify और Complaint Guide';
+  const description =
+    'Ahmedabad में retired bank manager पर ₹37.8 lakh के stock trader fraud मामले के red flags, SEBI verification और cybercrime व police complaint की प्रक्रिया जानें।';
+  await expect(page).toHaveTitle(title);
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', description);
+  expect(title.length).toBeLessThanOrEqual(TITLE_MAX);
+  expect(description.length).toBeLessThanOrEqual(DESCRIPTION_MAX);
+  for (const evidence of ['Ahmedabad', '₹37.8 lakh', 'retired bank manager', 'मामले']) {
+    expect(description, `description dropped ${evidence}`).toContain(evidence);
+  }
+});
+
 test('fitText never cuts mid-word or mid-Devanagari-cluster', () => {
   const seg = new Intl.Segmenter('hi', { granularity: 'grapheme' });
   const inputs = [

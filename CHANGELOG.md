@@ -4,6 +4,17 @@ All notable changes to this repository are recorded here, newest first.
 
 ## [Unreleased]
 
+### Fixed
+- `src/pages/article/stock-trader-investment-fraud-complaint-guide-2026.astro` —
+  meta-budget violation that failed `tests/technical-seo.spec.ts` on both
+  projects (title 67→61 chars, description 196→161). The title contracts
+  "Verification" to "Verify"; the description drops "high returns के",
+  "registration" and "पूरी". The demand phrase, the SEBI-verification and
+  complaint intents, the ₹37.8 lakh figure, the Ahmedabad anchor and the
+  allegation-level "मामले" framing all stay, and no article body, route or
+  schema claim changed. `tests/technical-seo.spec.ts` gained a verbatim pin
+  for this page's title/description and its case evidence.
+
 ### Added
 - `src/data/atm-pin-guides.ts` — typed, source-cited ATM-PIN procedure guides.
   A record exists only for a bank whose official procedure was actually read:
