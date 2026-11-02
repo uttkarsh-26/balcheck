@@ -54,6 +54,12 @@ export const articles: ArticleMeta[] = [
     description: 'फर्जी bank call पर OTP दिया, paisa गया? RBI/2017-18/15: 3 working days में report करने पर zero liability — complaint, cybercrime.gov.in, RBI CMS rasta।',
     linkLabel: 'फर्जी Bank Call — Paisa Wapas ke Rules',
   },
+  {
+    slug: 'upi-fraud-3-checks-phonepe-guide-2026',
+    title: 'UPI Fraud से बचें: PhonePe के 3 Checks | BalCheck.in',
+    description: 'PhonePe ने 3 checks बताए: पैसा receive करने के लिए UPI PIN कभी न डालें, payee का नाम जाँचें, OTP/link साझा न करें; ठगी पर 1930 या cybercrime.gov.in पर शिकायत करें।',
+    linkLabel: 'UPI Fraud — PhonePe के 3 Checks',
+  },
 ];
 
 export const articlePath = (slug: string): string => `/article/${slug}/`;

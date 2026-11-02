@@ -1,0 +1,184 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getArticle } from '../../data/articles';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ScannableArticleSummary from '../../components/ScannableArticleSummary.astro';
+
+const siteUrl = 'https://balcheck.in';
+const slug = 'upi-fraud-3-checks-phonepe-guide-2026';
+const publishDate = '2026-11-02';
+const modifiedDate = '2026-11-02';
+const pageTitle = getArticle(slug).title;
+const pageDesc = getArticle(slug).description;
+
+const articleBrief = {
+  summary:
+    'PhonePe ने NDTV के साथ 3 checks साझा किए: पैसा receive करने के लिए UPI PIN कभी न डालें, payee का नाम जाँचें, और OTP, link या screen-sharing app किसी अनजान से साझा न करें।',
+  facts: [
+    { label: 'Source', value: 'NDTV Business, 30 अक्टूबर 2026 — PhonePe के 3 checks' },
+    { label: 'Check 1', value: 'UPI PIN सिर्फ़ भेजने के लिए; receive करने या refund के लिए PIN कभी नहीं' },
+    { label: 'Check 2', value: 'Payment screen पर payee का registered नाम मिलाएँ, मेल न खाए तो रुकें' },
+    { label: 'Check 3', value: 'OTP, UPI PIN, banking details किसी को न दें; अनजान के कहने पर app install न करें' },
+    { label: 'ठगी होने पर', value: 'ऐप का Help section, helpline 1930 और cybercrime.gov.in' },
+  ],
+  timeline: [
+    { date: '30 अक्टूबर 2026', datetime: '2026-10-30', text: 'NDTV ने PhonePe के 3 basic checks की रिपोर्ट प्रकाशित की — fake payment request, impersonation और remote-access scams के बढ़ते मामलों के बीच।' },
+  ],
+  action: {
+    title: 'आज ही करने वाली 3 जाँच',
+    steps: [
+      'जब भी पैसा receive करने की बात हो और PIN माँगा जाए, transaction तुरंत रोक दें।',
+      'भुगतान से पहले screen पर दिख रहा payee का नाम अपने परिचित नाम से मिलाएँ।',
+      'OTP, UPI PIN, CVV किसी कॉल पर न बताएँ और अनजान कॉलर के कहने पर कोई app install न करें।',
+    ],
+    officialUrl: 'https://cybercrime.gov.in/',
+    officialLabel: 'National Cyber Crime Reporting Portal',
+  },
+  details: {
+    title: 'क्यों जरूरी है',
+    body: 'UPI में पैसा भेजने का और माँगने का screen लगभग एक जैसा दिखता है, इसलिए ठग "पैसा भेज रहा हूँ" कहकर collect request या QR भेजते हैं। जिस transaction में PIN डाला जाए, वह भुगतान होता है — चाहे ठग कुछ भी कहे। यह consumer-safety जानकारी है, कानूनी सलाह नहीं।',
+  },
+};
+
+const faqItems = [
+  {
+    q: 'पैसा receive करने के लिए UPI PIN डालना पड़ता है?',
+    a: 'नहीं। NDTV के मुताबिक PhonePe ने साफ़ कहा है कि UPI PIN सिर्फ़ आपके खाते से पैसा भेजने यानी payment authorise करने के लिए होता है, receive करने के लिए नहीं। अगर कोई कहे कि "पैसा भेजने के लिए" या "refund के लिए" PIN डालो, तो वह अनुरोध धोखाधड़ी हो सकता है — उस transaction को रोक दें।',
+  },
+  {
+    q: 'Payee का नाम गलत दिखे तो क्या करें?',
+    a: 'भुगतान से पहले payment screen पर दिख रहा payee का registered bank account नाम जाँचें। PhonePe के मुताबिक ठग नकली profile या भ्रामक UPI ID से दोस्त, परिवार या किसी business का रूप धर सकते हैं। नाम उस व्यक्ति से मेल न खाए जिसे पैसा भेजना है, तो transaction रोकें और दूसरे ज़रिये से पुष्टि करें।',
+  },
+  {
+    q: 'कोई कॉल करके screen-sharing app install करने को कहे तो?',
+    a: 'मना कर दें। NDTV की रिपोर्ट के मुताबिक ठग खुद को bank official, telecom representative या customer support बताकर OTP, UPI PIN या banking details माँगते हैं और अनजान कॉलर के कहने पर screen-sharing app install कराने की कोशिश करते हैं, जिससे उन्हें आपके फ़ोन तक पहुँच मिल जाती है। किसी भी अनजान लिंक पर क्लिक न करें।',
+  },
+  {
+    q: 'Money mule scam क्या है और इसमें खाता क्यों freeze होता है?',
+    a: 'PhonePe ने money mule scams से भी आगाह किया है, जिनमें लोगों को ऐसा पैसा receive करके आगे transfer करने के लिए फँसाया जाता है जो किसी अवैध गतिविधि से जुड़ा होता है। रिपोर्ट के मुताबिक अनजाना ही संदिग्ध धनराशि handle करने पर bank account freeze हो सकता है और कानूनी परेशानी भी बन सकती है — इसलिए किसी अजनबी के पैसे अपने खाते से न निकालें।',
+  },
+  {
+    q: 'UPI से ठगी हो जाए तो शिकायत कहाँ करें?',
+    a: 'NDTV की रिपोर्ट के मुताबिक PhonePe users ऐप के Help section से शिकायत कर सकते हैं या customer care 080-68727374 और 022-68727374 पर संपर्क कर सकते हैं। आगे की कार्रवाई के लिए राष्ट्रीय cybercrime helpline 1930 पर call करें या cybercrime.gov.in पर शिकायत दर्ज करें। संदिग्ध call, message और fraudulent WhatsApp/Telegram गतिविधि की शिकायत Sanchar Saathi portal की Chakshu सुविधा पर भी की जा सकती है।',
+  },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: pageTitle,
+  description: pageDesc,
+  datePublished: publishDate,
+  dateModified: modifiedDate,
+  inLanguage: 'hi-IN',
+  mainEntityOfPage: `${siteUrl}/article/${slug}/`,
+  author: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+};
+
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'UPI भुगतान से पहले 3 जाँच कैसे करें',
+  description: 'PhonePe के 3 basic checks के आधार पर UPI fraud से बचाव के कदम।',
+  step: [
+    { '@type': 'HowToStep', name: 'PIN माँगने वाला अनुरोध रोकें', text: 'पैसा receive करने या refund के नाम पर PIN माँगा जाए तो transaction रोक दें; PIN सिर्फ़ भुगतान authorize करता है।' },
+    { '@type': 'HowToStep', name: 'Payee का नाम मिलाएँ', text: 'Payment screen पर दिख रहा registered account नाम उस व्यक्ति या business से मिलाएँ जिसे पैसा भेजना है; मेल न खाए तो रुकें।' },
+    { '@type': 'HowToStep', name: 'OTP और app install से इनकार करें', text: 'OTP, UPI PIN, CVV या banking details किसी कॉल पर न बताएँ; अनजान कॉलर के कहने पर link न खोलें और screen-sharing app install न करें।' },
+    { '@type': 'HowToStep', name: 'ठगी की शिकायत दर्ज करें', text: 'ऐप के Help section, helpline 1930, cybercrime.gov.in या Sanchar Saathi की Chakshu सुविधा पर शिकायत करें।' },
+  ],
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+    { '@type': 'ListItem', position: 2, name: 'UPI Fraud — PhonePe के 3 Checks', item: `${siteUrl}/article/${slug}/` },
+  ],
+};
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <div class="min-h-screen bg-gray-50">
+    <div class="container mx-auto max-w-copy px-4 py-8">
+      <nav aria-label="breadcrumb" class="mb-4 text-sm text-gray-600">
+        <a href="/" class="hover:underline">Home</a>
+        <span aria-hidden="true"> / </span>
+        <span class="text-gray-800">UPI Fraud — PhonePe के 3 Checks</span>
+      </nav>
+
+      <h1 class="text-h1 mb-4 font-bold text-gray-900">UPI Fraud से कैसे बचें? PhonePe के 3 Checks और शिकायत का रास्ता</h1>
+      <p class="mb-6 text-lg text-gray-700">
+        UPI से भुगतान आसान है, और ठग भी उसी आसानी का फ़ायदा उठाते हैं — fake payment request, नकली QR, impersonation और remote-access scams। 30 अक्टूबर 2026 को NDTV की रिपोर्ट में PhonePe ने तीन basic checks बताए, जिनसे आम user का पैसा बच सकता है। नीचे वही तीन जाँच, money mule का खतरा और ठगी होने पर शिकायत का official रास्ता दिया गया है।
+      </p>
+
+      <ScannableArticleSummary {...articleBrief} />
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Check 1: पैसा receive करने के लिए UPI PIN कभी न डालें</h2>
+      <p class="mb-4 text-gray-700">
+        UPI PIN आपके खाते से पैसा <strong>भेजने</strong> यानी payment authorise करने के लिए होता है — पैसा receive करने के लिए नहीं। NDTV के मुताबिक ठग अक्सर ऐसा payment request या QR भेजते हैं और कहते हैं कि इससे आपको पैसा मिलेगा या refund आएगा। जिस transaction में PIN डाला जाए, वह आपके खाते से debit हो सकता है, इसलिए PIN माँगने वाले अनुरोध पर रुकें और transaction की जानकारी ध्यान से पढ़ें।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Check 2: भुगतान से पहले payee का नाम जाँचें</h2>
+      <p class="mb-4 text-gray-700">
+        Payment पूरा करने से पहले screen पर दिख रहा payee का registered bank account नाम देखें। ठग नकली profile या भ्रामक UPI ID बनाकर खुद को दोस्त, परिवार का सदस्य या कोई business बता सकते हैं। अगर नाम उस व्यक्ति से मेल नहीं खाता जिसे पैसा भेजना है, तो transaction रोकें और दूसरे ज़रिये से पुष्टि करें। रिपोर्ट में यह भी सलाह है कि कोई अजनबी cash के बदले digital transfer का प्रस्ताव दे तो सतर्क रहें।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Check 3: OTP, PIN और अनजान link से दूरी</h2>
+      <p class="mb-4 text-gray-700">
+        ठग खुद को bank official, telecom representative या customer support बताकर OTP, UPI PIN या banking details माँगते हैं। ये जानकारी कॉल, message या email पर कभी साझा न करें। संदिग्ध link पर क्लिक न करें और अनजान कॉलर के कहने पर screen-sharing app install न करें — ऐसे app ठग को आपके फ़ोन की जानकारी तक पहुँच दे सकते हैं।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Money mule scam: अनजान का पैसा अपने खाते से न निकालें</h2>
+      <p class="mb-4 text-gray-700">
+        PhonePe ने money mule scams से भी आगाह किया है। इनमें व्यक्ति को ऐसा पैसा receive करके आगे transfer करने के लिए फँसाया जाता है जो किसी अवैध गतिविधि से जुड़ा होता है। रिपोर्ट के मुताबिक अनजाने में ही संदिग्ध धनराशि handle करने पर bank account freeze हो सकता है और कानूनी परेशानी भी बन सकती है। इसलिए कमीशन या "help" के नाम पर किसी अजनबी का पैसा अपने खाते में न लें और आगे न भेजें।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">ठगी हो जाए तो तुरंत क्या करें</h2>
+      <ul class="mb-4 list-disc space-y-2 pl-5 text-gray-700">
+        <li>ऐप के <strong>Help</strong> section से शिकायत दर्ज करें और complaint reference number सुरक्षित रखें।</li>
+        <li>PhonePe customer care: <strong>080-68727374</strong> या <strong>022-68727374</strong>।</li>
+        <li>राष्ट्रीय cybercrime helpline <strong>1930</strong> पर call करें या <a class="text-blue-700 underline" href="https://cybercrime.gov.in/" rel="noopener noreferrer" target="_blank">cybercrime.gov.in</a> पर शिकायत दर्ज करें।</li>
+        <li>संदिग्ध call, message और fraudulent WhatsApp/Telegram गतिविधि की शिकायत <a class="text-blue-700 underline" href="https://sancharsaathi.gov.in/sfc/" rel="noopener noreferrer" target="_blank">Sanchar Saathi की Chakshu सुविधा</a> पर करें।</li>
+        <li>ठगी का शक होते ही रिपोर्ट करें — रिपोर्ट में देरी से पैसा वापस मिलने की संभावना कम होती जाती है।</li>
+      </ul>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Sources / आधिकारिक लिंक</h2>
+      <ul class="mb-4 list-disc space-y-2 pl-5 text-gray-700">
+        <li>रिपोर्ट: <a class="text-blue-700 underline" href="https://www.ndtv.com/business-news/how-to-avoid-upi-fraud-phonepe-shares-3-checks-every-user-must-follow-12258280" rel="noopener noreferrer" target="_blank">NDTV Business — "How To Avoid UPI Fraud? PhonePe Shares 3 Checks Every User Must Follow"</a>, 30 अक्टूबर 2026।</li>
+        <li>शिकायत: <a class="text-blue-700 underline" href="https://cybercrime.gov.in/" rel="noopener noreferrer" target="_blank">National Cyber Crime Reporting Portal (cybercrime.gov.in)</a> — helpline 1930।</li>
+        <li>संदिग्ध communication: <a class="text-blue-700 underline" href="https://sancharsaathi.gov.in/sfc/" rel="noopener noreferrer" target="_blank">Sanchar Saathi — Chakshu (DoT)</a>।</li>
+      </ul>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">अक्सर पूछे जाने वाले सवाल</h2>
+      <FaqAccordion items={faqItems} />
+    </div>
+  </div>
+</Layout>
