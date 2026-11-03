@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { banks, categories } from '../src/data/banks';

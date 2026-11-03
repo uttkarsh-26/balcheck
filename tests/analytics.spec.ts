@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { gotoDom } from './utils';
 import { readFileSync } from 'node:fs';
 import { GA4_MEASUREMENT_ID } from '../src/lib/site-config';

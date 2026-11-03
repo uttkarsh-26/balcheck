@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { gotoDom } from './utils';
 import { banks } from '../src/data/banks';
 

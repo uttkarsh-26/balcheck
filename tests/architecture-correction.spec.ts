@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { banks, categories } from '../src/data/banks';
 import { gotoDom, categorySlug } from './utils';
 import { isTrueTollFreeNumber } from '../src/lib/phone';

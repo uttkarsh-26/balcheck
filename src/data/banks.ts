@@ -136,10 +136,12 @@ const bankData: BankInput[] = [
     category: 'Public Sector',
     missedCall: '9811255430',
     missedCallAlt: '9811255450',
-    customerCare: '1800-220-2299',
-    website: 'https://www.bankofindia.co.in',
+    // Customer care confirmed on Bank of India's official StarToken help page (2026-11-03):
+    // https://uaibconnect.bankofindia.bank.in/omnineo
+    customerCare: '1800-220-229',
+    website: 'https://bankofindia.bank.in',
     verified: true,
-    notes: 'Official site bankofindia.co.in blocks automated access (403). Number confirmed via cleartax.in/s/bank-of-india-balance-check-number + biznext.in + bankbazaar.com. Paisabazaar lists alternate numbers 9266135135/9015135135 — possibly older or regional; 9811255430 is the widely-cited current number.',
+    notes: 'During the 2026-07-20 audit, the then-listed bankofindia.co.in site blocked automated access (403). The missed-call number was corroborated by cleartax.in/s/bank-of-india-balance-check-number, biznext.in and bankbazaar.com. Paisabazaar listed alternate numbers 9266135135/9015135135, possibly older or regional.',
     verificationSource: "cleartax.in + biznext.in + bankbazaar.com (9811255430 confirmed by 3+ aggregators; official bankofindia.co.in returned 403, 2026-07-20)",
     lastVerified: '2026-07-20',
   },

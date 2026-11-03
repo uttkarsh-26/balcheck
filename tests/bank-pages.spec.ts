@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { banks, type Bank } from '../src/data/banks';
 import { categorySlug, getJsonLdScripts, findSchema, gotoDom } from './utils';
 

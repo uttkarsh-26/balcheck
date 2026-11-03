@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 import { gotoDom } from './utils';
 
 // Unknown URLs used to return a blank 0-byte page (Workers assets default).

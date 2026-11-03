@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { gotoDom } from './utils';
 
 test('Cooperative category aligns title, H1 and body with GSC demand', async ({ page }) => {
@@ -57,7 +57,7 @@ const netBankingOverrideContracts: Array<{
     slug: 'boi',
     title: [/BOI Net Banking Login/i, /Bank of India Online Banking/i],
     lead: 'BOI net banking login',
-    host: 'www.bankofindia.co.in',
+    host: 'bankofindia.bank.in',
   },
 ];
 
@@ -82,7 +82,7 @@ test('net-banking boi override title and description are pinned verbatim', async
   await expect(page).toHaveTitle('BOI Net Banking Login — Bank of India Online Banking | BalCheck');
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     'content',
-    'BOI net banking login at https://www.bankofindia.co.in — fund transfer, statement download, bill payment, FD/RD, 24×7 online banking.',
+    'BOI net banking login at https://bankofindia.bank.in — fund transfer, statement download, bill payment, FD/RD, 24×7 online banking.',
   );
   await expect(page.locator('h1')).toHaveText('BOI Net Banking');
 });

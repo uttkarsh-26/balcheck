@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { banks } from '../src/data/banks';
 import { gotoDom, getJsonLdScripts, findSchema } from './utils';
 
@@ -25,6 +25,20 @@ for (const bank of cases) {
     expect(findSchema(scripts, 'BreadcrumbList')).toBeDefined();
   });
 }
+
+test('BOI pages use the bank-confirmed helpline and current official website', async ({ page }) => {
+  for (const path of [
+    '/mobile-number-registration/boi/',
+    '/bank/boi/',
+    '/customer-care/boi/',
+    '/net-banking/boi/',
+  ]) {
+    await gotoDom(page, path);
+    await expect(page.locator('a[href="tel:1800-220-229"]').first()).toBeVisible();
+    await expect(page.locator('a[href="tel:1800-220-2299"]')).toHaveCount(0);
+    await expect(page.locator('a[href="https://bankofindia.bank.in"]').first()).toBeVisible();
+  }
+});
 
 test('UCO targets online-link intent while recommending verified channels', async ({ page }) => {
   const bank = banks.find(item => item.slug === 'uco-bank')!;

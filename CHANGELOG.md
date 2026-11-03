@@ -5,6 +5,8 @@ All notable changes to this repository are recorded here, newest first.
 ## [Unreleased]
 
 ### Fixed
+- Bank of India customer care corrected from `1800-220-2299` to the bank's published `1800-220-229` and its website changed to `https://bankofindia.bank.in`; the [official StarToken help page](https://uaibconnect.bankofindia.bank.in/omnineo) confirms the phone number. The earlier missed-call-number provenance and review date remain scoped separately. The browser regression checks the correction on mobile registration, bank, customer-care and net-banking pages.
+- All Playwright specs now use `tests/fixtures.ts` to abort ad-network requests before they leave the browser. An offline behavioral regression exercises the actual AdSense loader URL without contacting Google; production ad tags are unchanged.
 - `src/pages/atm-pin/[slug].astro` — the header subtitle on the two pilot pages
   read `{bank.nameHindi} — Green PIN ऑनलाइन` unconditionally, claiming an online
   Green PIN channel no pilot source documents (PSB's cited poster documents the

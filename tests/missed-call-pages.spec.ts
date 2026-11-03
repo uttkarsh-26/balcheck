@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { banks, categoryHindi } from '../src/data/banks';
 import type { Bank } from '../src/data/banks';
 import { mergers } from '../src/data/mergers';

@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 import { gotoDom } from './utils';
 
 const route = '/net-banking/sbi/';

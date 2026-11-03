@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { banks } from '../src/data/banks';
 import { gotoDom, getJsonLdScripts, findSchema, bankSweepChunks, BANK_SWEEP_TIMEOUT_MS } from './utils';
 

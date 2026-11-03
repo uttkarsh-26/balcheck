@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 import { ATM_PIN_GUIDES, getAtmPinGuide } from '../src/data/atm-pin-guides';
 import { banks } from '../src/data/banks';
 import { findSchema, gotoDom } from './utils';
