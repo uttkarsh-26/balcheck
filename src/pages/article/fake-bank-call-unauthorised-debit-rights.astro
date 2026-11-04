@@ -7,7 +7,7 @@ import ScannableArticleSummary from '../../components/ScannableArticleSummary.as
 const siteUrl = 'https://balcheck.in';
 const slug = 'fake-bank-call-unauthorised-debit-rights';
 const publishDate = '2026-10-28';
-const modifiedDate = '2026-10-28';
+const modifiedDate = '2026-11-04';
 const pageTitle = getArticle(slug).title;
 const pageDesc = getArticle(slug).description;
 
@@ -25,6 +25,7 @@ const articleBrief = {
     { date: '6 जुलाई 2017', datetime: '2017-07-06', text: 'RBI ने circular RBI/2017-18/15 जारी किया — unauthorised electronic banking transactions में customer की limited liability का ढाँचा तय किया।' },
     { date: 'जुलाई 2019', datetime: '2019-07-01', text: 'Remadevi T.L. v. State Bank of India मामले में एक retired teacher को debit card block होने का SMS मिला, उसके बाद कॉल पर OTP साझा करने को कहा गया; ₹3.73 lakh unauthorised debit हुए (Indian Express)।' },
     { date: '26 अक्टूबर 2026', datetime: '2026-10-26', text: 'Indian Express ने बताया कि fake bank calls और phishing messages से OTP मांगने वाले cases में ग्राहकों को RBI की liability policy समझना ज़रूरी है।' },
+    { date: '30 अक्टूबर 2026', datetime: '2026-10-30', text: 'कोलकाता के जिला उपभोक्ता आयोग ने एक private बैंक को credit card पर हुए ₹41,500 के unauthorised debit के लिए ₹41,500 refund, अतिरिक्त ₹9,092 और ₹15,000 मुआवज़े का आदेश दिया — आयोग के मुताबिक बैंक ने RBI के 90-दिन के भीतर liability तय नहीं की (Indian Express, 3 नवंबर 2026)।' },
   ],
   action: {
     title: 'पैसा गया हो तो अगले कदम',
@@ -68,6 +69,10 @@ const faqItems = [
   {
     q: 'शिकायत कहाँ और किस प्रकार करें?',
     a: 'पहले बैंक को phone और लिखित दोनों में सूचित करें और reference number रखें। साथ ही cybercrime.gov.in पर cyber financial fraud की शिकायत दर्ज कराएँ या helpline 1930 पर call करें। 30 दिन में बैंक से संतोषजनक समाधान न मिले, शिकायत reject हो या जवाब से संतुष्टि न हों, तो RBI के Complaint Management System (cms.rbi.org.in) पर escalation करें।',
+  },
+  {
+    q: 'OTP खुद share किया था, फिर भी bank par claim बनता है?',
+    a: 'Indian Express के मुताबिक 30 अक्टूबर 2026 के कोलकाता जिला उपभोक्ता आयोग के आदेश में यह साफ किया गया कि ग्राहक ने OTP साझा किया था — बैंक उसे नुकसान के लिए ज़िम्मेदार ठहरा सकता था, लेकिन सिर्फ उसी तरीके से और उसी समय-सीमा में जो RBI ने तय की है। बैंक ने 90 दिन में liability तय नहीं की, एक साल से ज़्यादा बाद बिना कारण credit reverse किया और investigation report पेश नहीं की, इसलिए आयोग ने इसे service deficiency माना।',
   },
 ];
 
@@ -237,6 +242,20 @@ const breadcrumbSchema = {
         सबसे बड़ी सीख — reporting का समय। Circular के Table 2 के मुताबिक 3 working days के अंदर रिपोर्ट करने पर liability शून्य रह सकती है, इसलिए अनजान transaction दिखते ही बैंक को phone और लिखित दोनों में सूचित करें और तारीख का proof रखें।
       </p>
 
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">कोलकाता आयोग का आदेश — 90 दिन में liability तय करना बैंक की ज़िम्मेदारी</h2>
+      <p class="mb-4 text-gray-700">
+        Indian Express की 3 नवंबर 2026 की रिपोर्ट के मुताबिक कोलकाता के जिला उपभोक्ता विवाद निवारण आयोग ने 30 अक्टूबर 2026 को एक private बैंक को service deficiency का दोषी माना। मामले में ग्राहक के पास ₹65,000 लिमिट वाला credit card था; 21 फरवरी 2020 को bank agent बताने वाले व्यक्ति ने online भुगतान के लिए card activate कराने के बहाने OTP मांगा और card से ₹41,500 का unauthorised debit हो गया।
+      </p>
+      <p class="mb-4 text-gray-700">
+        बैंक ने पहले राशि अस्थायी रूप से credit की, फिर एक साल से ज़्यादा बाद बिना सूचना और बिना कारण वह credit reverse कर दिया और ब्याज व शुल्क भी लगाए। आयोग ने कहा कि बैंक ने complaint का निपटारा RBI के 90 दिन के भीतर नहीं किया, investigation report पेश नहीं की और आयोग के सामने यह भी गलत बताया कि ग्राहक ने नया transaction किया था।
+      </p>
+      <p class="mb-4 text-gray-700">
+        अहम बात यह है कि आयोग ने ग्राहक की लापरवाही को नज़रअंदाज़ नहीं किया — उसने OTP साझा करना स्वीकार किया था। फिर भी आयोग का कहना था कि बैंक उसे नुकसान का भार दे सकता था, पर केवल RBI के तय तरीके और समय-सीमा के भीतर। यानी OTP साझा कर देना अपने आप पूरा दावा खत्म नहीं करता — बैंक को तय प्रक्रिया और 90 दिन की अवधि में फैसला देना होता है।
+      </p>
+      <p class="mb-6 text-gray-700">
+        इसलिए अपनी शिकायत की तारीख, बैंक का हर लिखित जवाब और investigation report की मांग का record रखें। अगर बैंक समय-सीमा में लिखित फैसला नहीं देता, बाद में चुपचाप credit reverse करता है या बिना कारण ब्याज लगाता है, तो यह service deficiency का आधार बन सकता है — पहले RBI CMS पर और ज़रूरत पड़ने पर उपभोक्ता आयोग के सामने।
+      </p>
+
       <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">तुरंत के कदम</h2>
       <ol class="mb-6 list-decimal space-y-2 pl-6 text-gray-700">
         <li>बैंक को phone और लिखित दोनों में सूचित करें कि transaction अनधिकृत था; complaint reference number रखें।</li>
@@ -252,6 +271,7 @@ const breadcrumbSchema = {
         <li>RBI Complaint Management System (CMS) — बैंक शिकायत की escalation: <a class="text-blue-700 underline" href="https://cms.rbi.org.in/">cms.rbi.org.in</a></li>
         <li>Cyber Crime Portal — cyber financial fraud की शिकायत: <a class="text-blue-700 underline" href="https://cybercrime.gov.in/">cybercrime.gov.in</a></li>
         <li>The Indian Express — "Duped by a fake bank call? Know your rights after an unauthorised debit", 26 अक्टूबर 2026: <a class="text-blue-700 underline" href="https://indianexpress.com/article/technology/otp-scam-bank-refund-rbi-rules-cyber-fraud-10935297/">indianexpress.com</a></li>
+        <li>The Indian Express — "Kolkata man wins Rs 65,000 payout after sharing OTP on fraud call, losing Rs 41,000", 3 नवंबर 2026: <a class="text-blue-700 underline" href="https://indianexpress.com/article/legal-news/kolkata-man-wins-payout-sharing-otp-fraud-call-losing-rs-41000-10948912/">indianexpress.com</a></li>
       </ul>
 
       <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">अक्सर पूछे जाने वाले सवाल</h2>
