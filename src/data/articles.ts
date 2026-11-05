@@ -55,6 +55,12 @@ export const articles: ArticleMeta[] = [
     linkLabel: 'फर्जी Bank Call — Paisa Wapas ke Rules',
   },
   {
+    slug: 'mere-naam-par-loan-phantom-loan-complaint-guide',
+    title: 'मेरे नाम पर Loan, जो मैंने लिया ही नहीं — क्या करें | BalCheck.in',
+    description: 'अनजान loan या recovery agent की धमकी? दस्तावेज़ माँगें, credit report जाँचें, lender grievance और RBI CMS (cms.rbi.org.in) पर शिकायत करें — पूरा step-by-step guide।',
+    linkLabel: 'मेरे नाम पर Loan — क्या करें',
+  },
+  {
     slug: 'upi-fraud-3-checks-phonepe-guide-2026',
     title: 'UPI Fraud से बचें: PhonePe के 3 Checks | BalCheck.in',
     description: 'PhonePe ने 3 checks बताए: पैसा receive करने के लिए UPI PIN कभी न डालें, payee का नाम जाँचें, OTP/link साझा न करें; ठगी पर 1930 या cybercrime.gov.in पर शिकायत करें।',

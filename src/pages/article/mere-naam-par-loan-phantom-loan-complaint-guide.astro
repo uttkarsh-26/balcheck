@@ -1,0 +1,239 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getArticle } from '../../data/articles';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ScannableArticleSummary from '../../components/ScannableArticleSummary.astro';
+
+const siteUrl = 'https://balcheck.in';
+const slug = 'mere-naam-par-loan-phantom-loan-complaint-guide';
+const publishDate = '2026-11-05';
+const modifiedDate = '2026-11-05';
+const pageTitle = getArticle(slug).title;
+const pageDesc = getArticle(slug).description;
+
+const articleBrief = {
+  summary:
+    'अनजान loan के लिए भुगतान से पहले loan documents माँगें, lender के grievance officer को शिकायत दें और धमकी पर police या cybercrime में report करें।',
+  facts: [
+    { label: 'Pune का मामला', value: '₹12-13 लाख का loan किसी और के नाम पर, परिवार का कहना है कि कोई loan pending नहीं' },
+    { label: 'Harassment शुरू', value: '22 अक्टूबर 2026 से लगातार call, परिवार के कई सदस्यों को' },
+    { label: 'Police complaint', value: '23 और 26 अक्टूबर 2026, Wanowrie police chowkey में' },
+    { label: 'Lender की जाँच', value: 'local branch ने कहा — उस नाम पर कोई outstanding loan नहीं' },
+    { label: 'Official रास्ता', value: 'lender grievance officer → RBI CMS (cms.rbi.org.in); धमकी पर 1930 / cybercrime.gov.in' },
+  ],
+  timeline: [
+    { date: '22 अक्टूबर 2026', datetime: '2026-10-22', text: 'पुणे में एक परिवार को recovery agent बनकर call आए, loan का नाम लेकर धमकी और अपमानजनक भाषा।' },
+    { date: '23 अक्टूबर 2026', datetime: '2026-10-23', text: 'परिवार ने Wanowrie police chowkey में पहली शिकायत दी।' },
+    { date: '26 अक्टूबर 2026', datetime: '2026-10-26', text: 'Calls न रुकने पर दूसरी शिकायत दर्ज कराई गई।' },
+    { date: '3 नवंबर 2026', datetime: '2026-11-03', text: 'Times of India ने परिवार का अनुभव और lender branch की जाँच प्रकाशित की।' },
+  ],
+  action: {
+    title: 'अनजान loan या धमकी मिले तो क्या करें',
+    steps: [
+      'Call का number, समय और रिकॉर्डिंग सुरक्षित रखें; किसी भी रकम का भुगतान तुरंत न करें।',
+      'Loan agreement, sanction letter, account statement और लोकल ब्रांच का लिखित पुष्टि-पत्र माँगें।',
+      'अपने नाम पर चल रहे loans की credit report से जाँच करें और गलत entry पर dispute करें।',
+      'Lender के grievance officer को लिखित शिकायत दें; 30 दिन में समाधान न मिले तो cms.rbi.org.in पर जाएँ।',
+      'धमकी, अपमान या ब्लैकमेलिंग पर police में शिकायत दर्ज कराएँ; online fraud हो तो 1930 या cybercrime.gov.in।',
+    ],
+    officialUrl: 'https://cms.rbi.org.in',
+    officialLabel: 'RBI Complaint Management System',
+  },
+  details: {
+    title: 'जरूरी बात',
+    body: 'यह consumer-safety जानकारी है, कानूनी सलाह नहीं। कोई भी recovery agent आपको मौखिक दावे के आधार पर भुगतान के लिए मजबूर नहीं कर सकता — loan अगर आपके नाम है तो lender के पास दस्तावेज़ होने चाहिए, और वही दस्तावेज़ माँगना आपका हक है।',
+  },
+};
+
+const faqItems = [
+  {
+    q: 'Mere naam par loan hai जो मैंने नहीं लिया — क्या मुझे पैसा देना पड़ेगा?',
+    a: 'मौखिक दावे के आधार पर भुगतान न करें। पहले lender से loan agreement, sanction letter, disbursement proof और account statement लिखित में माँगें। अगर lender इन्हें नहीं दे पाता या आपने कोई loan नहीं लिया, तो लिखित शिकायत दें और भुगतान न करें। कोई भी recovery agent आपको दस्तावेज़ दिखाए बिना भुगतान के लिए बाध्य नहीं कर सकता।',
+  },
+  {
+    q: 'अपने नाम पर कौन-कौन से loan चल रहे हैं, यह कैसे पता करें?',
+    a: 'अपनी credit report किसी भी RBI-registered credit information company से माँगें और उसमें listed हर credit account की जाँच करें। जो account आपने नहीं खोला, उस पर credit information company और lender दोनों के पास लिखित dispute दर्ज कराएँ, और dispute का reference number रखें।',
+  },
+  {
+    q: 'Recovery agent क्या नहीं कर सकता?',
+    a: 'RBI के recovery-related नियमों के तहत recovery agent को धमकी, अपमानजनक भाषा, सार्वजनिक अपमान या परिवार के उन सदस्यों से संपर्क नहीं करना चाहिए जो loan में party नहीं हैं। पुणे के मामले में परिवार का कहना है कि agent ने रिश्तेदारों के पूरे नाम लेकर धमकी दी — यही स्थिति शिकायत का आधार बनती है। नियमों का पूरा ब्यौरा हमारी <a class="text-blue-700 underline" href="/article/rbi-loan-recovery-rules-2027-borrower-rights/">RBI loan recovery rules</a> गाइड में है।',
+  },
+  {
+    q: 'Lender शिकायत न सुने तो RBI के पास कैसे जाएँ?',
+    a: 'पहले lender के grievance redressal officer को लिखित शिकायत दें और acknowledgement लें। 30 दिन में समाधान न मिले, शिकायत reject हो या जवाब से संतुष्टि न हो, तो RBI के Complaint Management System (cms.rbi.org.in) पर शिकायत दर्ज करें — यह सुविधा RBI-regulated banks और NBFCs दोनों के लिए है।',
+  },
+  {
+    q: 'धमकी वाली calls पर police में क्या करें?',
+    a: 'Call logs, voice notes/recordings और गवाही के साथ नज़दीकी police station में लिखित शिकायत दें और acknowledgement लें। अगर पैसा ठगी से गया है या online fraud हुआ है तो cybercrime.gov.in पर शिकायत करें या helpline 1930 पर call करें। जितनी जल्दी शिकायत, उतना बेहतर evidence record।',
+  },
+  {
+    q: 'क्या अनजान loan के लिए CIBIL score खराब हो सकता है?',
+    a: 'हाँ — अगर किसी और ने आपके दस्तावेज़ों का इस्तेमाल करके loan लिया और वह repay नहीं हुआ, तो वह account आपकी credit report में दिख सकता है और score पर असर डाल सकता है। इसलिए credit report की नियमित जाँच करें और गलत entry पर lender तथा credit information company दोनों के पास लिखित dispute दर्ज कराएँ।',
+  },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: pageTitle,
+  description: pageDesc,
+  datePublished: publishDate,
+  dateModified: modifiedDate,
+  inLanguage: 'hi-IN',
+  mainEntityOfPage: `${siteUrl}/article/${slug}/`,
+  author: { '@type': 'Organization', name: 'BalCheck.in', url: `${siteUrl}/` },
+  publisher: { '@type': 'Organization', name: 'BalCheck.in', url: `${siteUrl}/` },
+};
+
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'अपने नाम पर अनजान loan की जाँच और शिकायत के कदम',
+  description: 'Loan documents माँगने से लेकर lender grievance, RBI CMS और police/cybercrime शिकायत तक के practical steps।',
+  step: [
+    { '@type': 'HowToStep', name: 'भुगतान रोकें और evidence रखें', text: 'किसी भी रकम का भुगतान न करें; call numbers, समय, रिकॉर्डिंग और messages सुरक्षित रखें।' },
+    { '@type': 'HowToStep', name: 'Loan documents माँगें', text: 'Lender से loan agreement, sanction letter, disbursement proof और statement लिखित में माँगें।' },
+    { '@type': 'HowToStep', name: 'Credit report जाँचें', text: 'RBI-registered credit information company से credit report लेकर अपने नाम के सभी accounts जाँचें और गलत entry dispute करें।' },
+    { '@type': 'HowToStep', name: 'Lender grievance officer को शिकायत', text: 'लिखित शिकायत देकर acknowledgement और complaint reference number लें।' },
+    { '@type': 'HowToStep', name: 'RBI CMS, cybercrime और police', text: '30 दिन में समाधान न मिलने पर cms.rbi.org.in पर escalation; धमकी या fraud पर police शिकायत और 1930/cybercrime.gov.in।' },
+  ],
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+    { '@type': 'ListItem', position: 2, name: 'मेरे नाम पर Loan?', item: `${siteUrl}/article/${slug}/` },
+  ],
+};
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <div class="min-h-screen bg-gray-50">
+    <div class="container mx-auto max-w-copy px-4 py-8">
+      <nav aria-label="breadcrumb" class="mb-4 text-sm text-gray-600">
+        <a href="/" class="hover:underline">Home</a>
+        <span aria-hidden="true"> / </span>
+        <span class="text-gray-800">मेरे नाम पर Loan?</span>
+      </nav>
+
+      <h1 class="text-h1 mb-4 font-bold text-gray-900">मेरे नाम पर Loan, जो मैंने लिया ही नहीं — क्या करें</h1>
+      <p class="mb-6 text-lg text-gray-700">
+        एक recovery agent का call, आपके रिश्तेदारों के पूरे नाम, और एक ऐसा loan जिसके बारे में परिवार का कहना है कि किसी ने लिया ही नहीं — Times of India ने 3 नवंबर 2026 को पुणे के ऐसे ही परिवार का अनुभव छापा। इस गाइड में वही verified तथ्य, दस्तावेज़ कैसे माँगें, credit report कैसे जाँचें और कहाँ शिकायत करें — step-by-step।
+      </p>
+
+      <ScannableArticleSummary {...articleBrief} />
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">पुणे का मामला — क्या हुआ</h2>
+      <p class="mb-4 text-gray-700">
+        Times of India की रिपोर्ट के मुताबिक 63 वर्षीय Deepak Sukhramani और उनका परिवार 22 अक्टूबर 2026 से लगातार धमकी भरी calls झेल रहा है। Caller ने खुद को loan recovery agent बताया और ₹12-13 लाख के loan की बात की, जिसके बारे में परिवार का कहना है कि किसी सदस्य पर कोई loan pending ही नहीं था।
+      </p>
+      <p class="mb-4 text-gray-700">
+        रिपोर्ट के अनुसार caller ने परिवार के कई सदस्यों — गर्भवती बहू और 92 वर्षीय माँ सहित — को फोन किया और रिश्तेदारों के पूरे नाम सही-सही बताए। Calls रोज़ सुबह करीब 11 बजे से शाम करीब 5:30 बजे तक आती रहीं, और परिवार के बुज़ुर्ग सदस्यों ने इस दौरान फोन बंद रखना शुरू कर दिया।
+      </p>
+      <p class="mb-6 text-gray-700">
+        परिवार ने 23 और 26 अक्टूबर 2026 को Wanowrie police chowkey में शिकायत दी। जिस रिश्तेदार के नाम पर loan बताया गया, उसने रिपोर्ट में कहा कि उसे इस बारे में कोई call नहीं आई और lender की local branch ने बताया कि उस नाम पर कोई outstanding loan नहीं है।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">ऐसा "phantom loan" क्या है</h2>
+      <p class="mb-4 text-gray-700">
+        Phantom loan का मतलब है — किसी व्यक्ति के नाम पर loan का दावा किया जाना, जबकि उसने वह loan लिया ही नहीं, या loan का कोई documentary आधार उसे नहीं दिया गया। ऐसे मामलों में दो चीज़ें अलग रखनी ज़रूरी हैं:
+      </p>
+      <ul class="mb-6 list-disc space-y-2 pl-6 text-gray-700">
+        <li><strong>दावा:</strong> किसी agent या call का मौखिक दावा कि आपके या आपके रिश्तेदार के नाम पर loan बकाया है।</li>
+        <li><strong>दस्तावेज़:</strong> lender के पास loan agreement, sanction letter, disbursement proof और statement — यही तय करता है कि loan वाकई आपके नाम है या नहीं।</li>
+      </ul>
+      <p class="mb-6 text-gray-700">
+        सबसे पहला काम यही है: दावे और दस्तावेज़ के बीच का फ़र्क साफ़ करें। दस्तावेज़ न मिलने तक भुगतान न करें।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">सबसे पहले ये दस्तावेज़ लिखित में माँगें</h2>
+      <ul class="mb-6 list-disc space-y-2 pl-6 text-gray-700">
+        <li>Loan agreement और sanction letter — किसने, कब और कितनी रकम approve की।</li>
+        <li>Disbursement proof — पैसा किस खाते में गया; वह खाता आपका है या नहीं।</li>
+        <li>पूरा account statement और बकाया राशि का breakdown।</li>
+        <li>Recovery agent की पहचान और lender से उसका authorization।</li>
+        <li>Lender की grievance redressal policy और nodal officer का संपर्क।</li>
+      </ul>
+      <p class="mb-6 text-gray-700">
+        यह माँग लिखित में करें — email या lender की शाखा में दिए गए पत्र से — और उसकी प्रति तथा acknowledgement अपने पास रखें। मौखिक बातचीत बाद में साबित करना मुश्किल होता है।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Credit report से अपने नाम के loans जाँचें</h2>
+      <p class="mb-4 text-gray-700">
+        अगर किसी ने आपके दस्तावेज़ों का इस्तेमाल करके loan लिया है, तो वह account आपकी credit report में दिख सकता है। किसी भी RBI-registered credit information company से अपनी credit report लें और हर credit account को मिलाएँ — कौन सा account आपने खोला, कौन सा नहीं।
+      </p>
+      <p class="mb-6 text-gray-700">
+        जो account आपने नहीं खोला, उसके लिए दो जगह लिखित dispute दें: संबंधित lender के पास और credit information company के पास। Dispute का reference number रखें, क्योंकि आगे की शिकायत में यही काम आता है।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Recovery agent क्या नहीं कर सकता</h2>
+      <p class="mb-4 text-gray-700">
+        RBI-regulated lenders और उनके recovery agents को borrower से संपर्क के तरीके पर नियम मानने होते हैं। इनमें धमकी या अपमानजनक भाषा, सार्वजनिक अपमान, और उन लोगों से बार-बार संपर्क शामिल नहीं है जो loan में party ही नहीं हैं।
+      </p>
+      <p class="mb-4 text-gray-700">
+        पुणे के मामले में परिवार का कहना है कि agent ने उन रिश्तेदारों को भी call किया जिनका loan से कोई संबंध नहीं था — यही बात शिकायत का आधार बनती है। recovery calls के नियम, timing और complaint framework का पूरा ब्यौरा हमारी <a class="text-blue-700 underline" href="/article/rbi-loan-recovery-rules-2027-borrower-rights/">RBI loan recovery rules गाइड</a> में दिया गया है।
+      </p>
+      <p class="mb-6 text-gray-700">
+        ध्यान दें: पहचान बताए बिना और दस्तावेज़ दिखाए बिना कोई भी व्यक्ति आपसे भुगतान नहीं माँग सकता। भुगतान सिर्फ lender के official channel से ही करें — किसी agent के personal UPI/account में नहीं।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">कहाँ-कहाँ शिकायत करें</h2>
+      <div class="mb-6 overflow-x-auto scrollbar-hide scroll-fade">
+        <table class="w-full border-collapse border border-gray-300 text-left">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-300 px-4 py-2">किस स्थिति में</th>
+              <th class="border border-gray-300 px-4 py-2">कहाँ शिकायत करें</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Loan आपके नाम पर दिख रहा है पर आपने नहीं लिया</td>
+              <td class="border border-gray-300 px-4 py-2">Lender का grievance redressal officer → credit information company में dispute</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">30 दिन में समाधान नहीं मिला</td>
+              <td class="border border-gray-300 px-4 py-2">RBI CMS — <a class="text-blue-700 underline" href="https://cms.rbi.org.in/">cms.rbi.org.in</a></td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">धमकी, अपमान या ब्लैकमेलिंग</td>
+              <td class="border border-gray-300 px-4 py-2">नज़दीकी police station में लिखित शिकायत, acknowledgement सहित</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Online ठगी या पैसा गया</td>
+              <td class="border border-gray-300 px-4 py-2"><a class="text-blue-700 underline" href="https://cybercrime.gov.in/">cybercrime.gov.in</a> या helpline 1930</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Sources / आधिकारिक लिंक</h2>
+      <ul class="mb-6 list-disc space-y-2 pl-6 text-gray-700">
+        <li>The Times of India — "Phantom loan terrorises Pune family", 3 नवंबर 2026: <a class="text-blue-700 underline" href="https://timesofindia.indiatimes.com/city/pune/phantom-loan-terrorises-pune-family/articleshow/135511823.cms">timesofindia.indiatimes.com</a></li>
+        <li>RBI — Reserve Bank of India (Digital Lending) Directions, 2025, RBI/2025-26/36, 8 मई 2025: <a class="text-blue-700 underline" href="https://www.rbi.org.in/scripts/NotificationUser.aspx?Id=12848">rbi.org.in</a></li>
+        <li>RBI Complaint Management System (CMS) — बैंक/NBFC शिकायत की escalation: <a class="text-blue-700 underline" href="https://cms.rbi.org.in/">cms.rbi.org.in</a></li>
+        <li>Cyber Crime Portal — cyber financial fraud की शिकायत: <a class="text-blue-700 underline" href="https://cybercrime.gov.in/">cybercrime.gov.in</a></li>
+      </ul>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">अक्सर पूछे जाने वाले सवाल</h2>
+      <FaqAccordion items={faqItems} />
+    </div>
+  </div>
+</Layout>
