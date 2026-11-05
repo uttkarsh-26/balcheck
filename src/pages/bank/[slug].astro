@@ -8,6 +8,8 @@ import { isTrueTollFreeNumber } from '../../lib/phone';
 import VideoHeroBanner from '../../components/VideoHeroBanner.astro';
 import PhoneNumber from '../../components/PhoneNumber.astro';
 import RecordEvidence from '../../components/RecordEvidence.astro';
+import UnionBankBalanceGuide from '../../components/UnionBankBalanceGuide.astro';
+import { UNION_BALANCE_GUIDE, unionBalanceSteps } from '../../data/union-bank-balance';
 
 export function getStaticPaths() {
   return banks.map(bank => ({
@@ -18,6 +20,7 @@ export function getStaticPaths() {
 
 interface Props { bank: Bank }
 const { bank } = Astro.props;
+const isUnionBank = bank.slug === 'ubi';
 const isMissedCall = bank.balanceMode === 'missed-call';
 // Helpline tile: only a real 1800 number gets a /toll-free-number/<slug>/
 // page — the other banks' legacy toll-free URL 301s to /customer-care/<slug>/
@@ -26,7 +29,9 @@ const tollFreeTile = isTrueTollFreeNumber(bank.customerCare)
   ? { href: 'toll-free-number', icon: '🆓', label: 'Toll Free Number' }
   : { href: 'customer-care', icon: '🎧', label: 'Customer Care' };
 const serviceLabel = isMissedCall ? 'मिस्ड कॉल बैलेंस नंबर' : 'Customer Care / Balance Enquiry';
-const serviceInstruction = isMissedCall
+const serviceInstruction = isUnionBank
+  ? UNION_BALANCE_GUIDE.instruction
+  : isMissedCall
   ? 'रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं।'
   : 'इस customer-care/IVR नंबर पर कॉल करके balance enquiry विकल्प चुनें।';
 
@@ -60,7 +65,7 @@ const faqs = [
   },
   {
     q: `क्या ${bank.shortName} balance enquiry सेवा मुफ़्त है?`,
-    a: isMissedCall ? `हाँ, ${bank.name} की verified missed-call balance enquiry सेवा मुफ़्त है।` : `यह customer-care/IVR line है; telecom या bank के सामान्य call charges लागू हो सकते हैं।`
+    a: isUnionBank ? UNION_BALANCE_GUIDE.feeExplanation : isMissedCall ? `हाँ, ${bank.name} की verified missed-call balance enquiry सेवा मुफ़्त है।` : `यह customer-care/IVR line है; telecom या bank के सामान्य call charges लागू हो सकते हैं।`
   },
   {
     q: `${bank.shortName} का customer care नंबर क्या है?`,
@@ -214,7 +219,9 @@ const howToSchema = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
   name: `${bank.nameHindi} से बैलेंस कैसे चेक करें`,
-  step: isMissedCall ? [
+  step: isUnionBank
+    ? unionBalanceSteps(bank.missedCall).map(text => ({ '@type': 'HowToStep', text }))
+    : isMissedCall ? [
     { '@type': 'HowToStep', text: `${bank.missedCall} पर अपने रजिस्टर्ड मोबाइल से कॉल करें` },
     { '@type': 'HowToStep', text: '2-3 ring के बाद कॉल अपने आप कट जाएगी' },
     { '@type': 'HowToStep', text: 'कुछ सेकंड में SMS में बैलेंस प्राप्त करें' },
@@ -389,11 +396,11 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
   // snippet is what the Latin slice is missing: 'union bank balance check
   // number' 6,296 imp @ 0.11% (pos 6.9) and 'ubi balance check number' 1,947 @
   // 0.10% (pos 6.4) never matched a title word. Latin query phrase leads; the
-  // missed-call mechanism stays as the tail hook. (Number is the 2026-09-18
-  // official-page read in banks.ts; balanceMode derives missed-call.)
+  // missed-call mechanism stays as the tail hook. Current published numbers
+  // and dated source receipts are maintained in banks.ts.
   ubi: {
     title: `Union Bank Balance Check Number ${bank.missedCall} | Missed Call`,
-    description: `Union Bank balance check number ${bank.missedCall} — आधिकारिक मिस्ड कॉल सेवा। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
+    description: `Union Bank balance check: ${bank.missedCall}। Primary account के लिए missed call; SMS commands, registration और charges की स्रोत-आधारित जानकारी।`,
   },
   // 30d pull 2026-10-26: 'mgb balance check number' 668 impr @ 1.35% CTR pos
   // 6.2 — the query is Latin but the default title carried no 'MGB' token, so
@@ -580,6 +587,8 @@ const pageDesc = !isMissedCall
   scope={`${bank.shortName} balance check`}
 />
 
+{isUnionBank && <UnionBankBalanceGuide bank={bank} />}
+
 <!-- WhatsApp Banking — honest channel answer, only for banks with a checked official site -->
 {waCheck && (
   <section data-testid="whatsapp-banking" class="bg-white border-t border-gray-100">
@@ -602,7 +611,7 @@ const pageDesc = !isMissedCall
 )}
 
 <!-- How It Works -->
-<section class="bg-white border-t border-gray-100">
+{!isUnionBank && <section class="bg-white border-t border-gray-100">
   <div class="max-w-copy mx-auto px-4 py-8">
     <h2 class="text-h2 font-bold text-gray-900 mb-6">{bank.nameHindi} से बैलेंस कैसे चेक करें?</h2>
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -629,7 +638,7 @@ const pageDesc = !isMissedCall
       </div>
     </div>
   </div>
-</section>
+</section>}
 
 <!-- FAQ -->
 <section class="bg-gray-50 border-t border-gray-100">

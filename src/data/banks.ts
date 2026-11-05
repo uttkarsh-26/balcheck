@@ -1,3 +1,5 @@
+import { UNION_BALANCE_GUIDE } from './union-bank-balance.ts';
+
 // Bank missed-call balance inquiry numbers.
 //
 // Verification status (2026-07-20 audit of top-20 pages by GSC impressions):
@@ -121,12 +123,14 @@ const bankData: BankInput[] = [
     nameHindi: 'यूनियन बैंक ऑफ इंडिया',
     shortName: 'UBI',
     category: 'Public Sector',
-    missedCall: '09223008586',
-    customerCare: '1800-208-2244',
+    // The official SMS Banking "How To Use" panel lists six missed-call
+    // options; use its first published option. No live-call test was made.
+    missedCall: '9152379484',
+    customerCare: '1800-2333',
     website: 'https://www.unionbankofindia.bank.in',
     verified: true,
-    verificationSource: 'https://www.unionbankofindia.bank.in/en/common/contact-us (official page carries customerCare; audit 2026-09-18 section 2) | audit: docs/audits/bank-number-authenticity-2026-09-18.md',
-    lastVerified: '2026-09-18',
+    verificationSource: `${UNION_BALANCE_GUIDE.sources.sms} (How To Use: primary-account missed-call option) | ${UNION_BALANCE_GUIDE.sources.customerCare} (general toll-free customer care)`,
+    lastVerified: UNION_BALANCE_GUIDE.checkedOn,
   },
   {
     slug: 'boi',

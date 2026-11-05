@@ -1,0 +1,77 @@
+---
+import type { Bank } from '../data/banks';
+import { UNION_BALANCE_GUIDE, unionBalanceSteps } from '../data/union-bank-balance';
+import PhoneNumber from './PhoneNumber.astro';
+
+interface Props { bank: Bank }
+const { bank } = Astro.props;
+const guide = UNION_BALANCE_GUIDE;
+const steps = unionBalanceSteps(bank.missedCall);
+---
+
+<section data-testid="union-bank-balance-guide" aria-labelledby="union-balance-guide-heading" class="bg-white border-b border-gray-100">
+  <div class="max-w-copy mx-auto px-4 py-6 sm:py-8">
+    <h2 id="union-balance-guide-heading" class="text-h2 font-bold text-gray-900 mb-3">Union Bank balance check: किस काम के लिए कौन-सा तरीका?</h2>
+    <p class="text-sm text-gray-800 leading-relaxed">
+      <strong>Union Bank of India / यूनियन बैंक ऑफ इंडिया:</strong> बैंक के SMS Banking पेज का “How To Use” भाग
+      <a href={`tel:${bank.missedCall}`} class="font-semibold text-brand-700 underline"><PhoneNumber variant="inline" number={bank.missedCall} /></a>
+      को primary account balance की missed-call सेवा के लिए प्रकाशित करता है। SMS command भेजना अलग तरीका है;
+      missed-call नंबर को अपने-आप SMS destination न मानें।
+    </p>
+
+    <div class="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-gray-800 leading-relaxed">
+      <h3 class="font-semibold mb-1">09223008586 खोजकर आए हैं?</h3>
+      <p>यह नंबर बैंक की नीचे दी गई, पढ़ी हुई मौजूदा सूची में नहीं मिला। इसका चालू या बंद होना हमने जांचा नहीं है;
+        इसलिए इसे यहां call button नहीं बनाया गया है। प्रकाशित missed-call विकल्प ऊपर है; उपयोग से पहले official सूची भी देखें।</p>
+    </div>
+
+    <h3 class="mt-6 text-base font-semibold text-gray-900">मिस्ड कॉल से बैलेंस: पहले यह जांचें</h3>
+    <ol class="mt-3 list-decimal pl-5 space-y-2 text-sm text-gray-800 leading-relaxed">
+      {steps.map(step => <li data-testid="union-balance-step">{step}</li>)}
+    </ol>
+    <p class="mt-3 text-sm text-gray-700 leading-relaxed">किसी निश्चित ring count या SMS आने के समय की गारंटी यहां नहीं दी जा रही है।
+      लगातार enquiry दोहराने के बजाय registration की स्थिति पूछें और SMS charges ध्यान में रखें।</p>
+
+    <h3 class="mt-6 text-base font-semibold text-gray-900">SMS भेजना हो तो सही command और destination चुनें</h3>
+    <p class="mt-2 text-sm text-gray-800 leading-relaxed">बैंक की प्रकाशित सूची में नीचे के commands primary account के लिए हैं।
+      इनसे अपना balance या मिनी स्टेटमेंट मांग सकते हैं; ये customer care से बात करने या card block कराने के commands नहीं हैं।</p>
+    <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+      {guide.commands.map(command => (
+        <div class="rounded-xl border border-gray-200 p-4">
+          <h4 class="text-sm font-semibold text-gray-900">{command.label}</h4>
+          <p class="mt-1 text-sm text-gray-800">SMS में केवल <code class="font-semibold">{command.keyword}</code> लिखें और बैंक के प्रकाशित विकल्पों में से किसी एक पर भेजें:</p>
+          <div class="mt-3 flex flex-wrap gap-2">
+            {guide.smsDestinations.map(destination => (
+              <a href={`sms:${destination}?body=${command.keyword}`} class="inline-flex min-h-[44px] items-center rounded-lg border border-brand-200 px-3 py-2 text-sm font-semibold text-brand-700 underline">{destination}</a>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+    <p class="mt-3 text-sm text-gray-700 leading-relaxed">SMS link आपके फोन का messaging app खोलता है; संदेश भेजने का फैसला आपका है।
+      BalCheck कोई संदेश नहीं भेजता और यहां account number नहीं मांगता। दूसरे linked account की enquiry चाहिए तो official format पढ़ें;
+      बिना जांचे account number किसी नए नंबर पर न भेजें।</p>
+
+    <h3 class="mt-6 text-base font-semibold text-gray-900">Registration और charges: दो अलग जांच</h3>
+    <p class="mt-2 text-sm text-gray-800 leading-relaxed">बैंक का “How To Apply” भाग registration के लिए call centre या शाखा से संपर्क बताता है;
+      उसी पेज का FAQ शाखा में form जमा करने का तरीका बताता है। अपने खाते के लिए लागू प्रक्रिया बैंक से पक्की करें।
+      संयुक्त खाते के FAQ में सभी joint customers के हस्ताक्षर मांगे गए हैं। मोबाइल नंबर बदला है तो FAQ शाखा को सूचित करने को कहता है।</p>
+    <p class="mt-3 text-sm text-gray-800 leading-relaxed">{guide.feeExplanation}</p>
+    <p class="mt-3 text-sm text-gray-800 leading-relaxed">Registration, SMS न मिलने या खाते से जुड़ी मदद के लिए
+      <a href={`tel:${bank.customerCare}`} class="font-semibold text-brand-700 underline"><PhoneNumber variant="inline" number={bank.customerCare} /></a>
+      बैंक के Customer Care पेज पर प्रकाशित सामान्य toll-free विकल्प है। यह SMS enquiry destination नहीं है।</p>
+
+    <div class="mt-4 rounded-xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-800 leading-relaxed">
+      <p><strong>सुरक्षा:</strong> OTP, PIN, password या पूरा card number BalCheck, किसी public comment या अनजान caller को न बताएं।
+        Registration की जांच केवल बैंक के official channel पर करें। हम किसी call या SMS की सफलता का दावा नहीं कर रहे हैं।</p>
+    </div>
+    <div class="mt-4 text-sm text-gray-700 leading-relaxed">
+      <p class="font-semibold">इन निर्देशों के स्रोत — <time datetime={guide.checkedOn}>{guide.checkedOn}</time> को पढ़े गए</p>
+      <ul class="mt-1 list-disc pl-5 space-y-1">
+        <li><a href={guide.sources.sms} target="_blank" rel="noopener noreferrer" class="text-brand-700 underline">Union Bank SMS Banking: How To Use, How To Apply, charges और FAQ</a></li>
+        <li><a href={guide.sources.customerCare} target="_blank" rel="noopener noreferrer" class="text-brand-700 underline">Union Bank Customer Care: सामान्य सहायता और registration</a></li>
+      </ul>
+      <p class="mt-2">ये बैंक द्वारा प्रकाशित निर्देश हैं, live account access या service uptime की जांच नहीं। बैंक की सूची और tariff बदल सकते हैं।</p>
+    </div>
+  </div>
+</section>

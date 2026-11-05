@@ -27,7 +27,7 @@
  *
  * EXIT CODES:
  *   0  checks ran (regardless of pass/fail counts; this script never writes anything)
- *   1  internal failure: src/data/banks.ts could not be parsed, so results would be unsound
+ *   1  internal failure: src/data/banks.ts could not be loaded, so results would be unsound
  *
  * Usage: node scripts/audit-number-authenticity.mjs
  */
@@ -73,50 +73,6 @@ function classify(raw) {
     if (s.re.test(d)) return { bucket: s.name, digits: d, canonical: typeof s.canonical === 'function' ? s.canonical(d) : s.canonical };
   }
   return { bucket: `UNRECOGNIZED(len${d.length})`, digits: d, canonical: false };
-}
-
-// ---------------------------------------------------------------------------------------
-// src/data/banks.ts parser (no TypeScript toolchain — the file is a literal array)
-// ---------------------------------------------------------------------------------------
-function parseBanksTs(text) {
-  const start = text.indexOf('const bankData');
-  const end = text.indexOf('export const banks');
-  if (start < 0 || end < 0) throw new Error('bankData array boundary not found in banks.ts');
-  const body = text.slice(start, end);
-  const str = (block, key) => {
-    const m = block.match(new RegExp(`${key}:\\s*(?:'((?:[^'\\\\]|\\\\.)*)'|"((?:[^"\\\\]|\\\\.)*)")`, 's'));
-    if (!m) return undefined;
-    const v = m[1] !== undefined ? m[1] : m[2];
-    return v.replace(/\\'/g, "'").replace(/\\"/g, '"').replace(/\\\\/g, '\\');
-  };
-  const records = [];
-  const blockRe = /\n  \{\n([\s\S]*?)\n  \},/g;
-  let m;
-  while ((m = blockRe.exec(body)) !== null) {
-    const b = m[1];
-    const slug = str(b, 'slug');
-    if (!slug) continue;
-    const missedCall = str(b, 'missedCall');
-    const customerCare = str(b, 'customerCare');
-    const explicitMode = str(b, 'balanceMode');
-    records.push({
-      slug,
-      name: str(b, 'name'),
-      category: str(b, 'category'),
-      missedCall,
-      missedCallAlt: str(b, 'missedCallAlt'),
-      customerCare,
-      website: str(b, 'website'),
-      notes: str(b, 'notes'),
-      verified: /verified:\s*true/.test(b),
-      verificationSource: str(b, 'verificationSource'),
-      lastVerified: str(b, 'lastVerified'),
-      // banks.ts derives balanceMode when it is not stored explicitly
-      balanceMode: explicitMode ?? (digits(missedCall) === digits(customerCare) ? 'customer-care' : 'missed-call'),
-      explicitMode: explicitMode ?? null,
-    });
-  }
-  return records;
 }
 
 // ---------------------------------------------------------------------------------------
@@ -386,27 +342,29 @@ const STUBS = [
 // ---------------------------------------------------------------------------------------
 // main
 // ---------------------------------------------------------------------------------------
-function main() {
+async function main() {
   if (!existsSync(BANKS_TS)) {
     console.error(`FATAL: ${BANKS_TS} not found. Run from a balcheck checkout.`);
     process.exit(1);
   }
   let banks;
   try {
-    banks = parseBanksTs(readFileSync(BANKS_TS, 'utf8'));
+    // Node 22+ loads the same evaluated records as the site and CI gates.
+    // Regex parsing silently drops template literals and imported evidence.
+    banks = (await import('../src/data/banks.ts')).banks;
   } catch (err) {
-    console.error(`FATAL: could not parse src/data/banks.ts — ${err.message}`);
-    console.error('Refusing to report counts from a partial parse.');
+    console.error(`FATAL: could not load src/data/banks.ts — ${err.message}`);
+    console.error('Refusing to report counts from partial records.');
     process.exit(1);
   }
   if (!banks.length) {
-    console.error('FATAL: parsed 0 bank records from src/data/banks.ts.');
+    console.error('FATAL: loaded 0 bank records from src/data/banks.ts.');
     process.exit(1);
   }
 
   console.log('balcheck — bank number authenticity audit (Phase 0, offline)');
   console.log(`repo: ${ROOT}`);
-  console.log(`audit date: ${AUDIT_DATE} | records parsed from src/data/banks.ts: ${banks.length}`);
+  console.log(`audit date: ${AUDIT_DATE} | records loaded from src/data/banks.ts: ${banks.length}`);
   console.log('');
 
   checkFormat(banks);

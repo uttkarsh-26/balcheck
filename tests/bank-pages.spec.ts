@@ -26,7 +26,7 @@ const ctrTitles: Record<string, string> = {
   'bihar-gramin': 'Bihar Gramin Bank Balance Check Number 1800-180-7777',
   'punjab-gramin': 'Punjab Gramin Bank Balance Check Number 18001807777',
   idbi: 'IDBI Bank Balance Check Number 18008431122 | Missed Call',
-  ubi: 'Union Bank Balance Check Number 09223008586 | Missed Call',
+  ubi: 'Union Bank Balance Check Number 9152379484 | Missed Call',
   'airtel-payments': 'Airtel Payments Bank Missed Call Balance Check 8800688006',
   'maharashtra-gramin': 'MGB Balance Check Number 9549224443',
   'rajasthan-gramin': 'RGB Balance Check Number 8750187504',
@@ -166,12 +166,17 @@ for (const bank of banks) {
 
       test('uses a verified, action-oriented meta description', async ({ page }) => {
         const description = await page.locator('meta[name="description"]').getAttribute('content');
-        // punjab-gramin's number is aggregator-confirmed only (official site bot-blocked),
-        // so its snippet deliberately avoids the आधिकारिक claim — see seoOverrides.
-        if (bank.slug !== 'punjab-gramin') {
-          expect(description).toContain('आधिकारिक');
+        if (bank.slug === 'ubi') {
+          // The source-checked guide does not document instant delivery,
+          // universally free enquiries or verified 24×7 availability.
+          expect(description).toBe(`Union Bank balance check: ${bank.missedCall}। Primary account के लिए missed call; SMS commands, registration और charges की स्रोत-आधारित जानकारी।`);
+          expect(description).not.toMatch(/तुरंत|मुफ़्त|24×7/);
+        } else {
+          // punjab-gramin's number is aggregator-confirmed only (official site bot-blocked),
+          // so its snippet deliberately avoids the आधिकारिक claim — see seoOverrides.
+          if (bank.slug !== 'punjab-gramin') expect(description).toContain('आधिकारिक');
+          expect(description).toContain('तुरंत');
         }
-        expect(description).toContain('तुरंत');
         if (bank.slug === 'boi') expect(description).toContain(bank.missedCallAlt);
       });
     }
