@@ -69,7 +69,7 @@ export const articles: ArticleMeta[] = [
   {
     slug: 'money-mule-account-rbi-sop-temporary-debit-hold-guide',
     title: 'Money Mule Account: Debit Hold हो तो क्या करें | BalCheck.in',
-    description: 'Mumbai ₹500 करोड़ mule account मामला और RBI draft SOP: account पर temporary debit hold, 20 दिन में explanation, 1930/cybercrime.gov.in और RBI CMS शिकायत — पूरा guide।',
+    description: 'Mumbai ₹500 करोड़ mule account मामला और RBI draft SOP: temporary debit hold, 20 दिन में explanation, 1930/cybercrime.gov.in और RBI CMS शिकायत — guide।',
     linkLabel: 'Money Mule Account — Debit Hold क्या करें',
   },
 ];
