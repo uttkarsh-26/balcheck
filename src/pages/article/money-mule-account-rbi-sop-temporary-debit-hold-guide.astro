@@ -1,0 +1,274 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getArticle } from '../../data/articles';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ScannableArticleSummary from '../../components/ScannableArticleSummary.astro';
+
+const siteUrl = 'https://balcheck.in';
+const slug = 'money-mule-account-rbi-sop-temporary-debit-hold-guide';
+const publishDate = '2026-11-06';
+const modifiedDate = '2026-11-06';
+const pageTitle = getArticle(slug).title;
+const pageDesc = getArticle(slug).description;
+
+const articleBrief = {
+  summary:
+    'Money mule account वह खाता है जिससे दूसरों का fraud money आगे भेजा जाता है; RBI draft SOP में hold और 20 दिन में सफाई का रास्ता तय है।',
+  facts: [
+    { label: 'Mumbai probe', value: '₹500 करोड़ से ज़्यादा के cyber fraud proceeds mule accounts से Dubai handlers तक, 12 गिरफ्तार' },
+    { label: 'किसने जाँच शुरू की', value: 'Mumbai Police की parallel probe, ED की APX/MGM91 betting जाँच के साथ' },
+    { label: 'RBI का आधार', value: 'Supreme Court का 4 अगस्त 2026 का order — RBI को SOP बनाने का निर्देश' },
+    { label: 'Hold की सीमा', value: 'LEA से कोई निर्देश न मिले तो अधिकतम 60 दिन, फिर hold हटाना ज़रूरी' },
+    { label: 'लागू होने की तारीख', value: 'Banks को यह SOP 1 अप्रैल 2027 तक लागू करना है' },
+  ],
+  timeline: [
+    { date: '4 अगस्त 2026', datetime: '2026-08-04', text: 'Supreme Court ने RBI को money-mule accounts पर temporary debit hold का SOP बनाने का निर्देश दिया।' },
+    { date: '11 सितंबर 2026', datetime: '2026-09-11', text: 'RBI ने draft KYC Amendment Directions, 2026 जारी किए, जिनमें Annex III के रूप में SOP शामिल है।' },
+    { date: '2 अक्टूबर 2026', datetime: '2026-10-02', text: 'Draft directions पर public comments की आखिरी तारीख तय की गई।' },
+    { date: '3 नवंबर 2026', datetime: '2026-11-03', text: 'Times of India ने बताया कि Mumbai Police ने ₹500 करोड़ के mule account नेटवर्क की अलग जाँच शुरू की।' },
+    { date: '1 अप्रैल 2027', datetime: '2027-04-01', text: 'Banks को यह SOP इस तारीख तक लागू करना है (या उससे पहले, अगर बैंक खुद लागू करे)।' },
+  ],
+  action: {
+    title: 'खाते पर debit hold लगे तो क्या करें',
+    steps: [
+      'बैंक से hold का कारण, रकम और reference number लिखित में माँगें — SMS/email की प्रति रखें।',
+      '20 दिन के अंदर उस transaction की असली वजह बताकर लिखित explanation बैंक को दें (invoice, buyer का नाम, पैसा भेजने वाले से रिश्ता)।',
+      'जवाब न मिले तो बैंक के grievance officer को शिकायत दें और acknowledgement लें।',
+      'ठगी का शिकार हुए हैं तो cybercrime.gov.in पर शिकायत या helpline 1930 पर call करें।',
+      'बैंक 30 दिन में निर्णय न दे तो cms.rbi.org.in पर शिकायत दर्ज करें।',
+    ],
+    officialUrl: 'https://cybercrime.gov.in',
+    officialLabel: 'National Cyber Crime Reporting Portal',
+  },
+  details: {
+    title: 'जरूरी बात',
+    body: 'RBI ने 11 सितंबर 2026 को जो directions जारी किए वे draft हैं — final directions अलग से जारी होंगे और SOP 1 अप्रैल 2027 तक लागू करना है। यानी अभी हर बैंक का process अलग हो सकता है; अपने बैंक की शाखा और लिखित notice पर चलें, WhatsApp या call पर किसी "agent" के दावे पर नहीं। यह consumer-safety जानकारी है, कानूनी सलाह नहीं।',
+  },
+};
+
+const faqItems = [
+  {
+    q: 'Money mule account क्या होता है?',
+    a: 'RBI के draft SOP के मुताबिक money mule account वह खाता है जिसका इस्तेमाल — जानते हुए या बिना जाने — किसी और के लिए cyber fraud से आए पैसे को receive करने, आगे बाँटने (layering) या transfer करने में होता है। खाताधारक खुद ठग हो सकता है, या कमीशन के लालच में किसी और का पैसा अपने खाते से निकाल रहा हो — दोनों स्थितियों में खाता mule माना जाता है।',
+  },
+  {
+    q: 'Temporary debit hold लगने का मतलब क्या है — मेरा पैसा चला जाएगा?',
+    a: 'नहीं। Temporary debit hold का मतलब है कि बैंक ने उस रकम या खाते से पैसे निकालने पर अस्थायी रोक लगाई है, जब तक जाँच पूरी न हो। RBI के draft SOP के मुताबिक hold लगाते ही बैंक को आपको सूचना देनी है (digital mode में तुरंत, वरना अगले दिन के अंत तक) और सफाई देने के लिए 20 दिन का समय देना है।',
+  },
+  {
+    q: 'कितनी रकम पर बैंक hold लगा सकता है?',
+    a: 'Draft SOP में "suspected money mule transaction" की परिभाषा ₹1,000 और उससे ऊपर की उस transaction के लिए है जिसे बैंक का monitoring system (AI/ML tools सहित) संदिग्ध मानता है — जैसे लेन-देन खाताधारक की घोषित profile से मेल न खाए, या किसी ऐसे खाते से जुड़ा हो जो पहले mule/fraud बताया गया हो।',
+  },
+  {
+    q: 'Hold कितने दिन चलेगा?',
+    a: 'Draft SOP की timeline के मुताबिक आपको 20 दिन में explanation देना है; बैंक को explanation मिलने के 10 दिन के अंदर निर्णय लेना है, और explanation न मिलने पर hold से 30 दिन के अंदर। अगर बैंक मामला police (jurisdictional police authority) को NCRP-CFCFRMS से भेजता है, तो 30 दिन में LEA से कोई निर्देश न आने पर 31वें दिन hold हटाना होता है। LEA के विपरीत निर्देश के बिना अधिकतम अवधि 60 दिन है।',
+  },
+  {
+    q: 'कमीशन के लिए किसी का पैसा अपने खाते से भेजना क्या अपराध है?',
+    a: 'हाँ। Money mule बनना अपराध है — भले आपको पता न हो कि पैसा कहाँ से आया। ऐसे लेन-देन PMLA, 2002 के दायरे में आ सकते हैं, बैंक suspicious transaction report (STR) FIU-IND को भेज सकता है, और खाता freeze होने पर आपको खुद सफाई देनी पड़ती है। इसलिए किसी अजनबी का पैसा "forward" करने, अपना account किराए पर देने या commission के लिए UPI से पैसा भेजने का कोई भी offer ठुकरा दें।',
+  },
+  {
+    q: 'ठगी हो गई हो तो शिकायत कहाँ करें?',
+    a: 'जल्दी शिकायत ही सबसे बड़ी मदद है: cybercrime.gov.in पर शिकायत करें या helpline 1930 पर call करें, और बैंक को तुरंत लिखित सूचना दें ताकि transaction रोकी जा सके। बैंक के जवाब से संतुष्ट न हों या 30 दिन में समाधान न मिले तो RBI के Complaint Management System (cms.rbi.org.in) पर शिकायत दर्ज करें।',
+  },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: pageTitle,
+  description: pageDesc,
+  datePublished: publishDate,
+  dateModified: modifiedDate,
+  inLanguage: 'hi-IN',
+  mainEntityOfPage: `${siteUrl}/article/${slug}/`,
+  author: { '@type': 'Organization', name: 'BalCheck.in', url: `${siteUrl}/` },
+  publisher: { '@type': 'Organization', name: 'BalCheck.in', url: `${siteUrl}/` },
+};
+
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'Bank account पर temporary debit hold लगने पर क्या करें',
+  description: 'Hold का कारण जानने से लेकर explanation, grievance officer, 1930/cybercrime.gov.in और RBI CMS तक के कदम।',
+  step: [
+    { '@type': 'HowToStep', name: 'Hold की जानकारी लिखित में लें', text: 'बैंक से hold का कारण, रकम, तारीख और reference number माँगें; SMS/email और शाखा का पत्र सुरक्षित रखें।' },
+    { '@type': 'HowToStep', name: '20 दिन में explanation दें', text: 'उस transaction की असली वजह दस्तावेज़ों के साथ लिखकर दें — invoice, buyer/sender की पहचान और रिश्ता।' },
+    { '@type': 'HowToStep', name: 'Grievance officer को शिकायत', text: 'जवाब न मिलने पर बैंक के grievance redressal officer को लिखित शिकायत देकर acknowledgement और reference number लें।' },
+    { '@type': 'HowToStep', name: 'Fraud हो तो 1930 / cybercrime.gov.in', text: 'ठगी का शिकार हुए हैं तो cybercrime.gov.in पर शिकायत करें या helpline 1930 पर call करें — जल्दी शिकायत से transaction रुक सकती है।' },
+    { '@type': 'HowToStep', name: 'RBI CMS पर escalation', text: '30 दिन में समाधान न मिले या शिकायत reject हो तो cms.rbi.org.in पर शिकायत दर्ज करें।' },
+  ],
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+    { '@type': 'ListItem', position: 2, name: 'Money Mule Account — क्या करें', item: `${siteUrl}/article/${slug}/` },
+  ],
+};
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <div class="min-h-screen bg-gray-50">
+    <div class="container mx-auto max-w-copy px-4 py-8">
+      <nav aria-label="breadcrumb" class="mb-4 text-sm text-gray-600">
+        <a href="/" class="hover:underline">Home</a>
+        <span aria-hidden="true"> / </span>
+        <span class="text-gray-800">Money Mule Account — क्या करें</span>
+      </nav>
+
+      <h1 class="text-h1 mb-4 font-bold text-gray-900">Money Mule Account: खाते पर Debit Hold हो तो क्या करें</h1>
+      <p class="mb-6 text-lg text-gray-700">
+        Mumbai Police ने ₹500 करोड़ से ज़्यादा के cyber fraud proceeds को mule bank accounts से निकालने वाले नेटवर्क की अलग जाँच शुरू की है — Times of India ने 3 नवंबर 2026 को यह रिपोर्ट छापी। उसी महीने RBI ने money mule accounts पर temporary debit hold का एक पूरा SOP draft किया, जिसमें समय-सीमा तय है। नीचे verified तथ्य, hold लगने पर आपके 20 दिन और शिकायत के official रास्ते दिए गए हैं।
+      </p>
+
+      <ScannableArticleSummary {...articleBrief} />
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Mumbai का मामला — क्या पता चला</h2>
+      <p class="mb-4 text-gray-700">
+        Times of India की 3 नवंबर 2026 की रिपोर्ट के मुताबिक Mumbai Police ने मनी-म्यूल bank accounts के उस नेटवर्क की parallel जाँच शुरू की है जिससे online gaming, betting और cyber fraud से आया पैसा आगे भेजा जा रहा था। रिपोर्ट में बताया गया कि यह जाँच Enforcement Directorate (ED) की उस जाँच के साथ चल रही है जो All Panel Exchange (APX) और MGM91 से जुड़े online betting नेटवर्क पर है।
+      </p>
+      <p class="mb-4 text-gray-700">
+        रिपोर्ट के अनुसार ED पहले ही mule bank accounts, shell companies और payment intermediaries के ज़रिये पैसे जमा करने और घुमाने (layering) के तरीके जाँच रहा है, और Mumbai Police को ऐसे कई खाते मिले हैं जो उसकी अपनी जाँचों में भी आए थे। शहर की crime branch ने Goa के Calangute में एक समुद्र-किनारे वाले villa से चल रहे अंतरराष्ट्रीय cyber fraud और money laundering सिंडिकेट के 12 सदस्यों को गिरफ्तार किया; जाँचकर्ताओं को शक है कि इस सिंडिकेट ने ₹500 करोड़ से ज़्यादा का पैसा mule bank accounts और SIM cards के ज़रिये Dubai में बैठे handlers तक पहुँचाया।
+      </p>
+      <p class="mb-6 text-gray-700">
+        ध्यान रखें — यह अभी जाँच का चरण है, कोई अंतिम दोषसिद्धि नहीं। रिपोर्ट में जिन व्यक्तियों के नाम आए हैं, उनके खिलाफ मामला अदालत में साबित होना बाकी है। जो बात आम उपभोक्ता के लिए मायने रखती है वह यह है कि mule accounts कैसे बनते हैं और एक बार आपका खाता इसमें फँसा तो आपके पास क्या रास्ता है।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Money mule account आखिर होता क्या है</h2>
+      <p class="mb-4 text-gray-700">
+        RBI के 11 सितंबर 2026 के draft directions में दी गई परिभाषा के मुताबिक money mule account वह खाता है जिसका इस्तेमाल — चाहे खाताधारक जानता हो या नहीं — cyber fraud से आए पैसे को receive करने, अलग-अलग खातों में बाँटने या किसी और के लिए transfer करने में होता है। यानी एक ही खाता दो तरह से mule बन सकता है:
+      </p>
+      <ul class="mb-6 list-disc space-y-2 pl-6 text-gray-700">
+        <li><strong>अनजाने में:</strong> किसी ने आपके account में पैसा भेजा और कहा कि "गलती से आ गया, वापस भेज दो" — आप वह पैसा आगे भेजते हैं और खाता fraud chain का हिस्सा बन जाता है।</li>
+        <li><strong>जानबूझकर:</strong> commission या "part-time job" के नाम पर अपना account, ATM card, UPI ID या SIM किसी और को दे देना। इसमें कानूनी जोखिम सबसे ज़्यादा है।</li>
+      </ul>
+      <p class="mb-6 text-gray-700">
+        दोनों स्थितियों में नुकसान एक जैसा है — खाते पर रोक, पैसे का इंतज़ार और सफाई देने की ज़िम्मेदारी आपकी। UPI के जिन basic checks से ऐसा होना रुकता है, वे हमारी <a class="text-blue-700 underline" href="/article/upi-fraud-3-checks-phonepe-guide-2026/">UPI fraud guide</a> में step-by-step दिए हैं।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">RBI का SOP: temporary debit hold कैसे लगता है</h2>
+      <p class="mb-4 text-gray-700">
+        Supreme Court ने 4 अगस्त 2026 के अपने order में RBI को निर्देश दिया था कि वह ऐसा SOP बनाए जिससे banks money-mule गतिविधि से जुड़ी रकम या खातों पर temporary debit hold लगा सकें। RBI ने 11 सितंबर 2026 को draft KYC Amendment Directions, 2026 जारी किए, जिनके Annex III में यह SOP है। Public comments 2 अक्टूबर 2026 तक माँगे गए थे और banks को यह SOP 1 अप्रैल 2027 तक लागू करना है — या उससे पहले, अगर बैंक खुद जल्दी लागू करना चाहे।
+      </p>
+      <p class="mb-4 text-gray-700">
+        SOP के मुताबिक बैंक अपने transaction-monitoring system (AI/ML tools सहित) से ऐसी transaction पकड़ता है जो ₹1,000 या उससे ऊपर हो और संदिग्ध लगे — जैसे वह खाताधारक की घोषित आय/प्रोफ़ाइल से बेमेल हो, या किसी ऐसे खाते से जुड़ी हो जिसे पहले mule या fraudulent बताया गया हो। Hold लगाते ही बैंक को आपको सूचित करना होता है — mobile/email रिकॉर्ड में हो तो digital mode से तुरंत, वरना अगले दिन के अंत तक।
+      </p>
+      <div class="mb-6 overflow-x-auto scrollbar-hide scroll-fade">
+        <table class="w-full border-collapse border border-gray-300 text-left">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-300 px-4 py-2">चरण</th>
+              <th class="border border-gray-300 px-4 py-2">समय-सीमा (draft SOP)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">बैंक की सूचना</td>
+              <td class="border border-gray-300 px-4 py-2">Hold लगते ही — digital mode में तुरंत, वरना अगले दिन के अंत तक</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">आपको explanation देने का समय</td>
+              <td class="border border-gray-300 px-4 py-2">Hold की तारीख से 20 दिन</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">बैंक का निर्णय</td>
+              <td class="border border-gray-300 px-4 py-2">Explanation मिलने के 10 दिन के अंदर; explanation न मिलने पर hold से 30 दिन के अंदर</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Police/LEA को reference</td>
+              <td class="border border-gray-300 px-4 py-2">NCRP-CFCFRMS के ज़रिये jurisdictional police authority को, कारणों सहित</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">LEA से निर्देश न आने पर</td>
+              <td class="border border-gray-300 px-4 py-2">Reference की तारीख से 30 दिन; hold 31वें दिन हटाना होता है</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">अधिकतम अवधि</td>
+              <td class="border border-gray-300 px-4 py-2">LEA/Competent Authority के विपरीत निर्देश के बिना 60 दिन</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mb-6 text-gray-700">
+        SOP में यह भी लिखा है कि पूरे खाते पर hold "last resort" है और सिर्फ असाधारण हालात में लगाया जाना चाहिए — आम तौर पर सिर्फ संदिग्ध रकम पर। साथ ही बैंक के internal policy में customer grievance redressal का रास्ता होना ज़रूरी है। यानी hold का मतलब यह नहीं कि आपका पूरा खाता हमेशा के लिए बंद है, और बिना सूचना hold लंबे समय तक चलना SOP के तहत जायज़ नहीं।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Hold लगा है तो 20 दिन में क्या करें</h2>
+      <ul class="mb-6 list-disc space-y-2 pl-6 text-gray-700">
+        <li><strong>कारण लिखित में लें:</strong> शाखा या बैंक के official channel से hold की तारीख, रकम, transaction reference और कारण माँगें। SMS/email की प्रति और शाखा का पत्र दोनों रखें।</li>
+        <li><strong>Explanation में तथ्य दें:</strong> उस पैसे की असली वजह बताएँ — किसने भेजा, क्यों भेजा, invoice या agreement, और भेजने वाले से आपका रिश्ता। जितना दस्तावेज़, उतनी जल्दी सफाई।</li>
+        <li><strong>जवाब का इंतज़ार लिखित में करें:</strong> explanation देते समय receipt/acknowledgement और complaint reference number लें। मौखिक बातचीत बाद में साबित नहीं होती।</li>
+        <li><strong>ठगी हुई है तो तुरंत रिपोर्ट:</strong> cybercrime.gov.in पर शिकायत या helpline 1930, और बैंक को लिखित सूचना — जल्दी शिकायत से आगे का पैसा रुक सकता है।</li>
+        <li><strong>Escalation:</strong> बैंक तय समय में निर्णय न दे या शिकायत reject करे तो grievance officer, उसके बाद cms.rbi.org.in।</li>
+      </ul>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">mule बनने से बचने के 4 practical नियम</h2>
+      <ul class="mb-6 list-disc space-y-2 pl-6 text-gray-700">
+        <li>अनजान से आया पैसा वापस भेजने के लिए अपने UPI/account का इस्तेमाल न करें — बैंक से कहें कि वह transaction reverse करे।</li>
+        <li>"Part-time job", "task के पैसे" या commission के नाम पर अपना account, ATM card, cheque book, UPI ID या SIM किसी को न दें।</li>
+        <li>अपना account किराए पर देने का offer सीधे मना कर दें — इसमें PMLA के तहत कार्रवाई हो सकती है और बैंक STR (suspicious transaction report) FIU-IND को भेज सकता है।</li>
+        <li>बैंक से आया "KYC update" लिंक, OTP या remote-access app कभी न दें — यही सबसे आम तरीका है जिससे खाते का control छिनता है।</li>
+      </ul>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">कहाँ-कहाँ शिकायत करें</h2>
+      <div class="mb-6 overflow-x-auto scrollbar-hide scroll-fade">
+        <table class="w-full border-collapse border border-gray-300 text-left">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="border border-gray-300 px-4 py-2">किस स्थिति में</th>
+              <th class="border border-gray-300 px-4 py-2">कहाँ शिकायत करें</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">खाते/रकम पर hold लगा है</td>
+              <td class="border border-gray-300 px-4 py-2">पहले बैंक की शाखा और grievance redressal officer — hold की जानकारी और explanation लिखित में</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Online ठगी या fraud money transfer</td>
+              <td class="border border-gray-300 px-4 py-2"><a class="text-blue-700 underline" href="https://cybercrime.gov.in/">cybercrime.gov.in</a> या helpline 1930</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">बैंक 30 दिन में समाधान न दे</td>
+              <td class="border border-gray-300 px-4 py-2">RBI CMS — <a class="text-blue-700 underline" href="https://cms.rbi.org.in/">cms.rbi.org.in</a></td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Recovery/धमकी वाले call</td>
+              <td class="border border-gray-300 px-4 py-2">नज़दीकी police station में लिखित शिकायत; recovery के नियम हमारी <a class="text-blue-700 underline" href="/article/rbi-loan-recovery-rules-2027-borrower-rights/">loan recovery guide</a> में</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Sources / आधिकारिक लिंक</h2>
+      <ul class="mb-6 list-disc space-y-2 pl-6 text-gray-700">
+        <li>RBI — "Draft Reserve Bank of India (Know Your Customer) Amendment Directions, 2026" (Annex III: SOP on Suspected Money Mule Accounts), Press Release 2026-2027/1109, 11 सितंबर 2026: <a class="text-blue-700 underline" href="https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=63587">rbi.org.in</a></li>
+        <li>RBI — Draft KYC Amendment Directions, 2026 का पूरा पाठ (SOP सहित): <a class="text-blue-700 underline" href="https://www.rbi.org.in/scripts/bs_viewcontent.aspx?Id=5170">rbi.org.in</a></li>
+        <li>The Times of India — "Rs 500 crore cyber fraud trail: Mumbai Police examine mule accounts linked to betting network", 3 नवंबर 2026: <a class="text-blue-700 underline" href="https://timesofindia.indiatimes.com/city/mumbai/rs-500-crore-cyber-fraud-trail-mumbai-police-examine-mule-accounts-linked-to-betting-network/articleshow/135484455.cms">timesofindia.indiatimes.com</a></li>
+        <li>Cyber Crime Portal — cyber financial fraud की शिकायत और NCRP-CFCFRMS: <a class="text-blue-700 underline" href="https://cybercrime.gov.in/">cybercrime.gov.in</a></li>
+        <li>RBI Complaint Management System — बैंक शिकायत की escalation: <a class="text-blue-700 underline" href="https://cms.rbi.org.in/">cms.rbi.org.in</a></li>
+      </ul>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">अक्सर पूछे जाने वाले सवाल</h2>
+      <FaqAccordion items={faqItems} />
+    </div>
+  </div>
+</Layout>

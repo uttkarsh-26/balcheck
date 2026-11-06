@@ -66,6 +66,12 @@ export const articles: ArticleMeta[] = [
     description: 'PhonePe ने 3 checks बताए: पैसा receive करने के लिए UPI PIN कभी न डालें, payee का नाम जाँचें, OTP/link साझा न करें; ठगी पर 1930 या cybercrime.gov.in पर शिकायत करें।',
     linkLabel: 'UPI Fraud — PhonePe के 3 Checks',
   },
+  {
+    slug: 'money-mule-account-rbi-sop-temporary-debit-hold-guide',
+    title: 'Money Mule Account: Debit Hold हो तो क्या करें | BalCheck.in',
+    description: 'Mumbai ₹500 करोड़ mule account मामला और RBI draft SOP: account पर temporary debit hold, 20 दिन में explanation, 1930/cybercrime.gov.in और RBI CMS शिकायत — पूरा guide।',
+    linkLabel: 'Money Mule Account — Debit Hold क्या करें',
+  },
 ];
 
 export const articlePath = (slug: string): string => `/article/${slug}/`;
