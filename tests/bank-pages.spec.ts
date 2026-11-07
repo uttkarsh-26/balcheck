@@ -171,6 +171,11 @@ for (const bank of banks) {
           // universally free enquiries or verified 24×7 availability.
           expect(description).toBe(`Union Bank balance check: ${bank.missedCall}। Primary account के लिए missed call; SMS commands, registration और charges की स्रोत-आधारित जानकारी।`);
           expect(description).not.toMatch(/तुरंत|मुफ़्त|24×7/);
+        } else if (bank.slug === 'canara') {
+          expect(description).toContain(bank.missedCall);
+          expect(description).toContain('Saving account balance');
+          expect(description).toContain('mini statement');
+          expect(description).not.toMatch(/तुरंत|मुफ़्त|24×7/);
         } else {
           // punjab-gramin's number is aggregator-confirmed only (official site bot-blocked),
           // so its snippet deliberately avoids the आधिकारिक claim — see seoOverrides.

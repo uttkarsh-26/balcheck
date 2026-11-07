@@ -2,6 +2,8 @@
 import Layout from '../../layouts/Layout.astro';
 import MoreServices from '../../components/MoreServices.astro';
 import RecordEvidence from '../../components/RecordEvidence.astro';
+import CanaraMiniStatementNumbers from '../../components/CanaraMiniStatementNumbers.astro';
+import { getCanaraBalanceGuide } from '../../data/canara-balance-guide';
 import { banks } from '../../data/banks';
 import { hasDocumentedEvidence } from '../../lib/evidence';
 import type { Bank } from '../../data/banks';
@@ -13,6 +15,7 @@ export function getStaticPaths() {
 
 interface Props { bank: Bank }
 const { bank } = Astro.props;
+const canaraGuide = getCanaraBalanceGuide(bank);
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = `${siteUrl}/mini-statement/${bank.slug}/`;
 const hasDedicatedNumber = Boolean(bank.missedCallAlt);
@@ -23,14 +26,16 @@ const title = hasDedicatedNumber
   : `${displayName} Mini Statement — Official Methods | BalCheck`;
 // A record only claims a documented transaction count when it has citable evidence.
 const documentedTransactionCount = hasDedicatedNumber && hasDocumentedEvidence(bank) ? transactionCount : null;
-const description = hasDedicatedNumber
+const description = canaraGuide
+  ? composeDescription(`${bank.name} mini statement: ${canaraGuide.miniSummary}। Official missed-call table: last ${canaraGuide.transactionCount} transactions; balance number अलग है।`)
+  : hasDedicatedNumber
   ? composeDescription(documentedTransactionCount
     ? `${bank.name} verified mini statement number ${bank.missedCallAlt}. Registered mobile से missed call देकर last ${documentedTransactionCount} transactions पाएं।`
     : `${bank.name} recorded mini statement number ${bank.missedCallAlt}. Exact transaction count के लिए official website या customer care ${bank.customerCare} से confirm करें।`)
   : composeDescription(`${bank.name} का dedicated mini-statement missed-call number verified नहीं है। ATM, official app, net banking या customer care ${bank.customerCare} से confirm करें।`);
 const h1Text = hasDedicatedNumber ? `${bank.shortName} Mini Statement Number` : `${displayName} Mini Statement`;
 const websiteHost = bank.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
-const accessSteps = hasDedicatedNumber ? [
+const accessSteps = canaraGuide?.miniStatementSteps ?? (hasDedicatedNumber ? [
   `${bank.name} account में registered mobile number तैयार रखें।`,
   `${bank.missedCallAlt} पर missed call दें और bank को call disconnect करने दें।`,
   documentedTransactionCount
@@ -42,9 +47,9 @@ const accessSteps = hasDedicatedNumber ? [
   `${bank.shortName} ATM में debit card डालकर “Mini Statement” option चुनें, या official app/net banking में recent transactions खोलें।`,
   `Digital method उपलब्ध न हो तो passbook update कराएं या ${bank.customerCare} पर official process पूछें।`,
   `Latest service availability और safe login path ${bank.website} पर confirm करें।`,
-];
+]);
 
-const faqs = [
+const faqs = canaraGuide?.miniFaqs ?? [
   {
     q: `${bank.shortName} mini statement कैसे प्राप्त करें?`,
     a: hasDedicatedNumber
@@ -113,8 +118,8 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
 
     <section class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-6">
       <h2 class="text-h2 font-semibold text-blue-950 mb-2">सीधा जवाब</h2>
-      <p class="text-sm text-blue-900 leading-relaxed">{hasDedicatedNumber ? documentedTransactionCount ? `${bank.name} का documented dedicated mini-statement number ${bank.missedCallAlt} है। Registered mobile से missed call देकर last ${documentedTransactionCount} transactions का SMS पाएं।` : `${bank.name} का recorded mini-statement number ${bank.missedCallAlt} है। Registered mobile से missed call दें; exact transaction count इस record में documented नहीं है।` : `${bank.name} के लिए dedicated mini-statement missed-call number verified नहीं है। Balance number ${bank.missedCall} को mini-statement number न मानें; ATM, official app, net banking या customer care ${bank.customerCare} उपयोग करें।`}</p>
-      <a href={`tel:${hasDedicatedNumber ? bank.missedCallAlt : bank.customerCare}`} class="mt-4 inline-flex bg-brand-600 text-white px-5 py-2.5 rounded-lg font-medium">📞 {hasDedicatedNumber ? bank.missedCallAlt : bank.customerCare}</a>
+      <p class="text-sm text-blue-900 leading-relaxed">{canaraGuide ? `बैंक mini statement / last ${canaraGuide.transactionCount} transactions के लिए दो भाषा-वार missed-call नंबर देता है: ${canaraGuide.miniSummary}।` : hasDedicatedNumber ? documentedTransactionCount ? `${bank.name} का documented dedicated mini-statement number ${bank.missedCallAlt} है। Registered mobile से missed call देकर last ${documentedTransactionCount} transactions का SMS पाएं।` : `${bank.name} का recorded mini-statement number ${bank.missedCallAlt} है। Registered mobile से missed call दें; exact transaction count इस record में documented नहीं है।` : `${bank.name} के लिए dedicated mini-statement missed-call number verified नहीं है। Balance number ${bank.missedCall} को mini-statement number न मानें; ATM, official app, net banking या customer care ${bank.customerCare} उपयोग करें।`}</p>
+      {canaraGuide ? <div class="mt-4"><CanaraMiniStatementNumbers guide={canaraGuide} /></div> : <a href={`tel:${hasDedicatedNumber ? bank.missedCallAlt : bank.customerCare}`} class="mt-4 inline-flex bg-brand-600 text-white px-5 py-2.5 rounded-lg font-medium">📞 {hasDedicatedNumber ? bank.missedCallAlt : bank.customerCare}</a>}
     </section>
 
     <section class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
@@ -122,14 +127,14 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
       <dl class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
         <div class="rounded-lg bg-gray-50 p-3"><dt class="text-gray-500">Bank</dt><dd class="font-medium text-gray-900">{bank.name} · {bank.nameHindi}</dd></div>
         <div class="rounded-lg bg-gray-50 p-3"><dt class="text-gray-500">Category</dt><dd class="font-medium text-gray-900">{bank.category}</dd></div>
-        <div class="rounded-lg bg-gray-50 p-3"><dt class="text-gray-500">Dedicated mini-statement number</dt><dd class="font-medium text-gray-900">{hasDedicatedNumber ? bank.missedCallAlt : 'verified नहीं'}</dd></div>
+        <div class="rounded-lg bg-gray-50 p-3"><dt class="text-gray-500">Dedicated mini-statement number</dt><dd class="font-medium text-gray-900">{canaraGuide?.miniSummary ?? (hasDedicatedNumber ? bank.missedCallAlt : 'verified नहीं')}</dd></div>
         <div class="rounded-lg bg-gray-50 p-3"><dt class="text-gray-500">Balance number (different purpose)</dt><dd class="font-medium text-gray-900">{bank.missedCall}</dd></div>
         <div class="rounded-lg bg-gray-50 p-3"><dt class="text-gray-500">Customer care fallback</dt><dd class="font-medium text-gray-900">{bank.customerCare}</dd></div>
         <div class="rounded-lg bg-gray-50 p-3"><dt class="text-gray-500">Official website</dt><dd><a href={bank.website} target="_blank" rel="noopener noreferrer" class="font-medium text-brand-700 break-all">{bank.website}</a></dd></div>
       </dl>
     </section>
 
-    <section class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+    {!canaraGuide && <section class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
       {hasDedicatedNumber ? (
         <>
           <h2 class="text-h2 font-semibold mb-3">{documentedTransactionCount ? 'Verified Mini Statement Number' : 'Recorded Mini Statement Number'}</h2>
@@ -148,7 +153,7 @@ const schema = { '@context': 'https://schema.org', '@graph': graph };
           <a href={`tel:${bank.customerCare}`} class="inline-flex bg-brand-600 text-white px-5 py-2.5 rounded-lg font-medium">Customer Care: {bank.customerCare}</a>
         </>
       )}
-    </section>
+    </section>}
 
     <section class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
       <h2 class="text-h2 font-semibold mb-4">Mini statement पाने के steps</h2>

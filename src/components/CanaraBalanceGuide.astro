@@ -1,0 +1,42 @@
+---
+import CanaraMiniStatementNumbers from './CanaraMiniStatementNumbers.astro';
+import type { CanaraBalanceGuide } from '../data/canara-balance-guide';
+interface Props { guide: CanaraBalanceGuide }
+const { guide } = Astro.props;
+---
+<section data-testid="canara-balance-guide" aria-labelledby="canara-balance-guide-heading" class="bg-white border-t border-gray-100">
+  <div class="max-w-copy mx-auto px-4 py-8">
+    <h2 id="canara-balance-guide-heading" class="text-h2 font-bold text-gray-900 mb-4">Canara balance check: किस काम के लिए कौन-सा नंबर?</h2>
+    <p class="text-sm text-gray-700 leading-relaxed">बैंक अपनी Missed Call Banking table में <strong>Saving Account</strong> balance enquiry के लिए
+      <a href={`tel:${guide.number}`} class="font-bold text-brand-700 underline">{guide.number}</a> देता है। उसी table में mini statement के अलग नंबर हैं।
+      Customer care का नंबर एक तीसरी सुविधा है; उसे balance नंबर के साथ जोड़कर dial न करें।</p>
+    <div class="mt-5"><CanaraMiniStatementNumbers guide={guide} /></div>
+
+    <h3 class="mt-5 text-base font-semibold text-gray-900">अपनी जरूरत के अनुसार तरीका चुनें</h3>
+    <ol class="mt-3 list-decimal pl-5 space-y-3 text-sm text-gray-700 leading-relaxed">
+      {guide.steps.map(step => <li><span data-testid="canara-balance-step">{step}</span></li>)}
+    </ol>
+
+    <h3 class="mt-5 text-base font-semibold text-gray-900">SMS या service response नहीं आए तो</h3>
+    <dl class="mt-3 space-y-3 text-sm text-gray-700 leading-relaxed">
+      <div><dt class="font-semibold text-gray-900">Balance चाहिए था, mini statement नंबर लगाया</dt><dd>ऊपर दिए Saving balance और last-five transaction वाले नंबरों का काम अलग है। अपनी जरूरत का नंबर दोबारा देखें; दोनों से समान जवाब का दावा नहीं किया जा रहा है।</dd></div>
+      <div><dt class="font-semibold text-gray-900">मिनी स्टेटमेंट दूसरी भाषा में चाहिए</dt><dd>English और हिंदी के लिए bank ने अलग नंबर दिए हैं। फोन की language setting बदलने से bank की published phone table नहीं बदलती।</dd></div>
+      <div><dt class="font-semibold text-gray-900">मोबाइल बदला है या registration पर संदेह है</dt><dd>Current eligibility, registered number और activation की पुष्टि बैंक से करें। पढ़ा गया missed-call पेज इनकी चरणबद्ध प्रक्रिया या remote registration code नहीं देता।</dd></div>
+      <div><dt class="font-semibold text-gray-900">सही नंबर पर कोशिश के बाद भी जवाब नहीं</dt><dd>बैंक का SMS Help Desk <a href={`tel:${guide.smsHelpPhone}`} class="font-semibold text-brand-700 underline">{guide.smsHelpPhone}</a> ({guide.smsHelpHours}) प्रकाशित है। General call centre <a href={`tel:${guide.customerCare}`} class="font-semibold text-brand-700 underline">{guide.customerCare}</a> भी बैंक का प्रकाशित सहायता नंबर है। बिना जांच account block या outage का निष्कर्ष न निकालें।</dd></div>
+    </dl>
+
+    <h3 class="mt-5 text-base font-semibold text-gray-900">SMS command, शुल्क और उपलब्धता: क्या अभी सत्यापित नहीं है?</h3>
+    <p class="mt-2 text-sm text-gray-700 leading-relaxed">पढ़ी गई missed-call table नंबर, उद्देश्य, भाषा और last {guide.transactionCount} transactions का दायरा बताती है।
+      उसमें SMS भेजने का command/destination, registration steps, reply format, ring count, शुल्क या निश्चित delivery time नहीं है। इसलिए इस नंबर पर SMS भेजने का format या “कुछ सेकंड में” response की guarantee नहीं दी गई है।</p>
+    <p class="mt-3 text-sm text-gray-700 leading-relaxed">Bank का Contact Us पेज <strong>{guide.customerCare}</strong> call centre को toll-free और 24*7 कहता है।
+      ये call-centre terms हैं, अलग missed-call number की शुल्क-मुक्त या हर समय उपलब्ध सेवा होने का प्रमाण नहीं। SMS Help Desk पर संपर्क करना भी balance SMS command भेजना नहीं है।</p>
+
+    <div class="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-gray-800 leading-relaxed">
+      <p><strong>सुरक्षा:</strong> OTP, PIN, password, CVV या पूरा account/card number BalCheck या किसी अनजान caller को न दें। यहां कोई account-verification form नहीं है।</p>
+    </div>
+    <div class="mt-4 text-sm text-gray-600 leading-relaxed">
+      <p>सहायता के स्रोत: <a href={guide.sources.contact} target="_blank" rel="noopener noreferrer" class="text-brand-700 underline">Canara Contact Us</a> और <a href={guide.sources.smsHelp} target="_blank" rel="noopener noreferrer" class="text-brand-700 underline">SMS Help Desk</a>। ये पेज भी <time datetime={guide.checkedOn}>{guide.checkedOn}</time> को पढ़े गए।</p>
+      <p class="mt-2">यह published instructions की जांच है; कोई live call या SMS नहीं भेजा गया। किसी account तक पहुंच, registration, response speed या uptime का live test नहीं किया गया है।</p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,17 @@
+---
+import type { CanaraBalanceGuide } from '../data/canara-balance-guide';
+interface Props { guide: CanaraBalanceGuide }
+const { guide } = Astro.props;
+---
+<div data-testid="canara-mini-options" class="rounded-xl border border-brand-100 bg-brand-50 p-4">
+  <h3 class="font-semibold text-gray-900">Mini statement / last {guide.transactionCount} transactions</h3>
+  <p class="mt-2 text-sm text-gray-700">बैंक भाषा के अनुसार दो अलग missed-call नंबर प्रकाशित करता है। शुरुआत का 0 नीचे bank की table जैसा ही रखा गया है।</p>
+  <ul class="mt-3 space-y-2 text-sm">
+    {guide.miniStatements.map(option => <li class="flex flex-wrap items-center gap-x-3">
+      <span class="font-medium text-gray-900">{option.language}</span>
+      <a href={`tel:${option.number}`} class="inline-flex min-h-[44px] items-center text-brand-700 font-bold underline">{option.number}</a>
+    </li>)}
+  </ul>
+  <p class="mt-2 text-sm text-gray-700">यह पूरी date range का account statement नहीं है। Saving balance और last {guide.transactionCount} transactions के नंबरों को आपस में न बदलें।</p>
+  <p class="mt-3 text-xs text-gray-600"><a href={guide.sources.missedCall} target="_blank" rel="noopener noreferrer" class="text-brand-700 underline">Canara का official Missed Call Banking पेज</a> — पढ़ने की तारीख <time datetime={guide.checkedOn}>{guide.checkedOn}</time>।</p>
+</div>

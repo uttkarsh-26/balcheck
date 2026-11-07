@@ -4,6 +4,9 @@ All notable changes to this repository are recorded here, newest first.
 
 ## [Unreleased]
 
+### Canara balance-check depth and contact correction
+- Added source-backed Savings balance versus Hindi/English last-five-transaction guidance on the existing `/bank/canara/` page, with explicit limits for SMS commands, registration, fees and response timing. Corrected the shared support record to `18001030` and the official `.bank.in` website; updated the existing Canara mini-statement/SMS consumers so they no longer deny the verified language-specific numbers. Preserved existing titles, H1s, canonicals, routes and the ATM-PIN pilot; corrected unsupported description claims rather than making a new title experiment. [Official-source audit](docs/audits/canara-balance-guide-2026-11-07.md).
+
 ### UP Gramin balance-enquiry depth
 - Deepened the existing `/balance-enquiry/up-gramin/` URL with the bank's published account/mobile eligibility, first-ring missed-call flow, same-CUST-ID reply scope and base-branch recovery instructions. Procedure and FAQ schema reuse the visible guide data; the UPGB-only branch removes generic fixed-seconds, two-to-three-ring, DND and undocumented SMS/app instructions. Existing title, description, H1, canonical, bank record and ATM-PIN pilot are preserved; no new URLs. The [source audit](docs/audits/up-gramin-balance-guide-2026-11-07.md) separates the fresh procedure read from the older number-record citation.
 

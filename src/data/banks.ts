@@ -1,4 +1,5 @@
 import { UNION_BALANCE_GUIDE } from './union-bank-balance.ts';
+import { CANARA_BALANCE_EVIDENCE } from './canara-balance-guide.ts';
 
 // Bank missed-call balance inquiry numbers.
 //
@@ -111,11 +112,11 @@ const bankData: BankInput[] = [
     shortName: 'Canara',
     category: 'Public Sector',
     missedCall: '8886610360',
-    customerCare: '1800-1030-1800',
-    website: 'https://www.canarabank.com',
+    customerCare: '18001030',
+    website: 'https://www.canarabank.bank.in',
     verified: true,
-    verificationSource: "https://www.canarabank.bank.in/pages/missed-call-banking (official .bank.in page, number 8886610360 confirmed, 2026-07-20)",
-    lastVerified: '2026-07-20',
+    verificationSource: `${CANARA_BALANCE_EVIDENCE.sources.missedCall} (Saving Account missed-call balance number); ${CANARA_BALANCE_EVIDENCE.sources.contact} (general call-centre number). Published pages read; no live call was made.`,
+    lastVerified: CANARA_BALANCE_EVIDENCE.checkedOn,
   },
   {
     slug: 'ubi',

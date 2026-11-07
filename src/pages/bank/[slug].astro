@@ -9,6 +9,8 @@ import VideoHeroBanner from '../../components/VideoHeroBanner.astro';
 import PhoneNumber from '../../components/PhoneNumber.astro';
 import RecordEvidence from '../../components/RecordEvidence.astro';
 import UnionBankBalanceGuide from '../../components/UnionBankBalanceGuide.astro';
+import CanaraBalanceGuide from '../../components/CanaraBalanceGuide.astro';
+import { getCanaraBalanceGuide } from '../../data/canara-balance-guide';
 import { UNION_BALANCE_GUIDE, unionBalanceSteps } from '../../data/union-bank-balance';
 
 export function getStaticPaths() {
@@ -21,6 +23,7 @@ export function getStaticPaths() {
 interface Props { bank: Bank }
 const { bank } = Astro.props;
 const isUnionBank = bank.slug === 'ubi';
+const canaraGuide = getCanaraBalanceGuide(bank);
 const isMissedCall = bank.balanceMode === 'missed-call';
 // Helpline tile: only a real 1800 number gets a /toll-free-number/<slug>/
 // page — the other banks' legacy toll-free URL 301s to /customer-care/<slug>/
@@ -29,11 +32,11 @@ const tollFreeTile = isTrueTollFreeNumber(bank.customerCare)
   ? { href: 'toll-free-number', icon: '🆓', label: 'Toll Free Number' }
   : { href: 'customer-care', icon: '🎧', label: 'Customer Care' };
 const serviceLabel = isMissedCall ? 'मिस्ड कॉल बैलेंस नंबर' : 'Customer Care / Balance Enquiry';
-const serviceInstruction = isUnionBank
+const serviceInstruction = canaraGuide?.instruction ?? (isUnionBank
   ? UNION_BALANCE_GUIDE.instruction
   : isMissedCall
   ? 'रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं।'
-  : 'इस customer-care/IVR नंबर पर कॉल करके balance enquiry विकल्प चुनें।';
+  : 'इस customer-care/IVR नंबर पर कॉल करके balance enquiry विकल्प चुनें।');
 
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = `${siteUrl}/bank/${bank.slug}/`;
@@ -54,7 +57,7 @@ const related = banks
 const catSlug = bank.category.toLowerCase().replace(/\s+/g, '-');
 
 // FAQ items
-const faqs = [
+const faqs = canaraGuide?.faqs ?? [
   {
     q: `${bank.shortName} का बैलेंस चेक करने का नंबर क्या है?`,
     a: `${bank.name} (${bank.shortName}) का balance enquiry number ${bank.missedCall} है। ${serviceInstruction}`
@@ -219,7 +222,9 @@ const howToSchema = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
   name: `${bank.nameHindi} से बैलेंस कैसे चेक करें`,
-  step: isUnionBank
+  step: canaraGuide
+    ? canaraGuide.steps.map((text, index) => ({ '@type': 'HowToStep', position: index + 1, text }))
+    : isUnionBank
     ? unionBalanceSteps(bank.missedCall).map(text => ({ '@type': 'HowToStep', text }))
     : isMissedCall ? [
     { '@type': 'HowToStep', text: `${bank.missedCall} पर अपने रजिस्टर्ड मोबाइल से कॉल करें` },
@@ -443,7 +448,8 @@ const pageTitle = !isMissedCall
       : compactMissedCallTitle;
 const defaultMissedCallDesc = `${bank.nameHindi} (${bank.shortName}) का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} है। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`;
 const compactMissedCallDesc = `${bank.nameHindi} का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall}। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें; SMS में तुरंत बैलेंस पाएं। मुफ़्त 24×7।`;
-const requestedMissedCallDesc = seoOverrides[bank.slug]?.description ?? defaultMissedCallDesc;
+// Correct unsupported Canara promises without changing its existing title.
+const requestedMissedCallDesc = canaraGuide?.description ?? seoOverrides[bank.slug]?.description ?? defaultMissedCallDesc;
 const pageDesc = !isMissedCall
   ? (seoOverrides[bank.slug]?.description ?? `${bank.name} balance check number ${bank.missedCall}। यह customer-care/IVR line है; dedicated missed-call service verified नहीं है।`)
   : requestedMissedCallDesc.length <= 155
@@ -588,6 +594,7 @@ const pageDesc = !isMissedCall
 />
 
 {isUnionBank && <UnionBankBalanceGuide bank={bank} />}
+{canaraGuide && <CanaraBalanceGuide guide={canaraGuide} />}
 
 <!-- WhatsApp Banking — honest channel answer, only for banks with a checked official site -->
 {waCheck && (
@@ -611,7 +618,7 @@ const pageDesc = !isMissedCall
 )}
 
 <!-- How It Works -->
-{!isUnionBank && <section class="bg-white border-t border-gray-100">
+{!isUnionBank && !canaraGuide && <section class="bg-white border-t border-gray-100">
   <div class="max-w-copy mx-auto px-4 py-8">
     <h2 class="text-h2 font-bold text-gray-900 mb-6">{bank.nameHindi} से बैलेंस कैसे चेक करें?</h2>
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">

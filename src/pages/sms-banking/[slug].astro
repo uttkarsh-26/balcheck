@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import MoreServices from '../../components/MoreServices.astro';
 import RecordEvidence from '../../components/RecordEvidence.astro';
+import { getCanaraBalanceGuide } from '../../data/canara-balance-guide';
 import { hasDocumentedEvidence } from '../../lib/evidence';
 import { banks } from '../../data/banks';
 import type { Bank } from '../../data/banks';
@@ -12,6 +13,8 @@ export function getStaticPaths() {
 }
 interface Props { bank: Bank }
 const { bank } = Astro.props;
+const canaraGuide = getCanaraBalanceGuide(bank);
+const canaraMiniStatementText = canaraGuide ? `${canaraGuide.miniSummary}। Bank इन्हें missed call से last ${canaraGuide.transactionCount} transactions के लिए प्रकाशित करता है; यह SMS भेजने का command नहीं है।` : undefined;
 const isMissedCall = bank.balanceMode === 'missed-call';
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = `${siteUrl}/sms-banking/${bank.slug}/`;
@@ -60,7 +63,7 @@ const serviceSteps = isMissedCall ? [
 const faqs = [
   { q: `${bank.shortName} SMS banking कैसे use करें?`, a: `${bank.name} की balance service का recorded mode “${serviceModeLabel}” है। ऊपर दिए steps follow करें। Exact SMS command या short code के लिए ${bank.website} पर current official instructions देखें; commands bank के अनुसार बदलते हैं।` },
   { q: `${bank.shortName} balance कैसे check करें?`, a: balanceText },
-  { q: `${bank.shortName} mini statement SMS कैसे मिलेगा?`, a: bank.missedCallAlt ? `${bank.name} का dedicated mini-statement number ${bank.missedCallAlt} है। Registered mobile से इसका उपयोग करें और detailed steps के लिए mini-statement page देखें।` : `${bank.name} के लिए dedicated mini-statement missed-call number इस dataset में verified नहीं है। Balance number ${bank.missedCall} को mini-statement number न मानें; official app, ATM, net banking या customer care ${bank.customerCare} उपयोग करें।` },
+  { q: `${bank.shortName} mini statement SMS कैसे मिलेगा?`, a: canaraMiniStatementText ?? (bank.missedCallAlt ? `${bank.name} का dedicated mini-statement number ${bank.missedCallAlt} है। Registered mobile से इसका उपयोग करें और detailed steps के लिए mini-statement page देखें।` : `${bank.name} के लिए dedicated mini-statement missed-call number इस dataset में verified नहीं है। Balance number ${bank.missedCall} को mini-statement number न मानें; official app, ATM, net banking या customer care ${bank.customerCare} उपयोग करें।`) },
   { q: `Balance SMS नहीं आया तो क्या करें?`, a: `Mobile registration, network और service mode check करें। ${bank.missedCall} को बार-बार dial न करें। ${bank.customerCare} से official availability confirm करें। OTP, ATM PIN, UPI PIN या CVV share न करें।` },
   { q: `${bank.shortName} का exact SMS command क्या है?`, a: `BalCheck बिना documented official source के SMS keyword या short code publish नहीं करता। Latest command के लिए ${bank.website} खोलें या ${bank.customerCare} पर bank से confirm करें।` },
 ];
@@ -127,7 +130,7 @@ const schema = {
         </div>
         <div>
           <h3 class="font-semibold text-gray-900">Mini statement</h3>
-          {bank.missedCallAlt ? (
+          {canaraMiniStatementText ? <p>{canaraMiniStatementText}</p> : bank.missedCallAlt ? (
             <p>{bank.name} का अलग mini-statement number <strong>{bank.missedCallAlt}</strong> recorded है। Balance और mini statement numbers को mix न करें। <a href={`/mini-statement/${bank.slug}/`} class="font-medium text-brand-700">पूरी mini-statement guide देखें →</a></p>
           ) : (
             <p>{bank.name} के लिए dedicated mini-statement missed-call number इस dataset में verified नहीं है। Recent transactions के लिए official app, ATM, net banking या customer care {bank.customerCare} का उपयोग करें।</p>

@@ -1,5 +1,6 @@
 import { test, expect } from './fixtures';
 import { banks } from '../src/data/banks';
+import { getCanaraBalanceGuide } from '../src/data/canara-balance-guide';
 import { gotoDom, getJsonLdScripts, findSchema, bankSweepChunks, BANK_SWEEP_TIMEOUT_MS } from './utils';
 
 const cases = ['sbi', 'boi', 'axis'].map(slug => banks.find(bank => bank.slug === slug)!);
@@ -164,7 +165,15 @@ for (const { label, banks: chunkBanks } of miniStatementSweep) {
           await expect(guide.getByTestId('record-evidence-date')).toHaveAttribute('datetime', bank.lastVerified!);
         }
 
-        if (bank.missedCallAlt) {
+        const languageGuide = getCanaraBalanceGuide(bank);
+        if (languageGuide) {
+          for (const option of languageGuide.miniStatements) {
+            await expect(guide.locator(`a[href="tel:${option.number}"]`)).toBeVisible();
+            expect(text).toContain(option.language);
+          }
+          expect(text).toContain(`last ${languageGuide.transactionCount} transactions`);
+          expect(text).not.toContain('dedicated mini-statement missed-call number verified नहीं है');
+        } else if (bank.missedCallAlt) {
           expect(text, `${bank.slug}: missing dedicated mini-statement number`).toContain(bank.missedCallAlt);
           if (!bank.verificationSource || !bank.lastVerified) {
             const scripts = await getJsonLdScripts(page);
