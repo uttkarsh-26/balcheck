@@ -3,6 +3,8 @@ import Layout from '../../layouts/Layout.astro';
 import PhoneNumber from '../../components/PhoneNumber.astro';
 import MoreServices from '../../components/MoreServices.astro';
 import RecordEvidence from '../../components/RecordEvidence.astro';
+import UpGraminBalanceGuide from '../../components/UpGraminBalanceGuide.astro';
+import { getUpGraminBalanceGuide } from '../../data/up-gramin-balance-guide';
 import { banks } from '../../data/banks';
 import type { Bank } from '../../data/banks';
 import { composeDescription, composeTitle } from '../../lib/seo';
@@ -19,6 +21,7 @@ interface Props {
 }
 
 const { bank } = Astro.props;
+const balanceGuide = getUpGraminBalanceGuide(bank);
 const isMissedCall = bank.balanceMode === 'missed-call';
 const serviceInstruction = isMissedCall
   ? 'अपने registered mobile से missed call दें और SMS में बैलेंस पाएं।'
@@ -35,7 +38,7 @@ const description = composeDescription(
   `${bank.nameHindi} (${bank.name}) balance enquiry number ${bank.missedCall}। ${serviceInstruction}`,
 );
 
-const faqs = [
+const faqs = balanceGuide?.faqs ?? [
   {
     q: `${bank.shortName} balance enquiry number क्या है?`,
     a: `${bank.name} का balance enquiry number ${bank.missedCall} है। ${serviceInstruction}`,
@@ -65,7 +68,10 @@ const schema = {
       "@type": "HowTo",
       "name": `${bank.shortName} Balance Enquiry — बैलेंस कैसे चेक करें`,
       "description": `${bank.name} balance enquiry करने की विधि`,
-      "step": isMissedCall ? [
+      ...(balanceGuide ? { dateModified: balanceGuide.checkedOn } : {}),
+      "step": balanceGuide
+        ? balanceGuide.steps.map((step, index) => ({ '@type': 'HowToStep', position: index + 1, ...step }))
+        : isMissedCall ? [
         { "@type": "HowToStep", "position": 1, "name": "Registered mobile से call करें", "text": `अपने ${bank.name} में registered mobile number से ${bank.missedCall} पर missed call दें।` },
         { "@type": "HowToStep", "position": 2, "name": "Call कटने का इंतज़ार करें", "text": `2-3 ring के बाद call अपने आप कट जाएगी।` },
         { "@type": "HowToStep", "position": 3, "name": "SMS प्राप्त करें", "text": `कुछ ही सेकंड में SMS में आपका खाता बैलेंस आ जाएगा।` },
@@ -120,7 +126,7 @@ const schema = {
     <div data-testid="balance-enquiry-service" class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
       <h2 class="text-h2 font-semibold text-gray-900 mb-3">📞 बैलेंस एन्क्वायरी करें</h2>
       <p class="text-gray-600 text-sm mb-4">
-        {isMissedCall ? 'अपने registered mobile number से नीचे दिए गए number पर missed call दें। SMS में आपका खाता बैलेंस आ जाएगा।' : 'नीचे दिए गए Customer Care / IVR number पर call करें और balance enquiry विकल्प चुनें।'}
+        {balanceGuide ? 'अपने खाते में registered domestic mobile number से नीचे दिए नंबर पर missed call दें। बैंक के अनुसार यह सुविधा resident accounts के लिए है; पात्रता और जवाब की जानकारी नीचे पढ़ें।' : isMissedCall ? 'अपने registered mobile number से नीचे दिए गए number पर missed call दें। SMS में आपका खाता बैलेंस आ जाएगा।' : 'नीचे दिए गए Customer Care / IVR number पर call करें और balance enquiry विकल्प चुनें।'}
       </p>
       <a href={`tel:${bank.missedCall}`}
          class="inline-flex items-center gap-2 bg-brand-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-brand-700 transition-colors">
@@ -133,6 +139,7 @@ const schema = {
       )}
     </div>
 
+    {balanceGuide ? <UpGraminBalanceGuide guide={balanceGuide} /> : <>
     <!-- Steps -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
       <h2 class="text-h2 font-semibold text-gray-900 mb-4">📝 बैलेंस कैसे चेक करें?</h2>
@@ -167,6 +174,8 @@ const schema = {
         <li class="flex gap-2"><span class="text-brand-600">✓</span> SMS banking — अगर SMS banking सेवा active है तो SMS करके बैलेंस पाएं</li>
       </ul>
     </div>
+
+    </>}
 
     <RecordEvidence
       source={bank.verificationSource}

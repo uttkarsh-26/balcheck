@@ -4,6 +4,9 @@ All notable changes to this repository are recorded here, newest first.
 
 ## [Unreleased]
 
+### UP Gramin balance-enquiry depth
+- Deepened the existing `/balance-enquiry/up-gramin/` URL with the bank's published account/mobile eligibility, first-ring missed-call flow, same-CUST-ID reply scope and base-branch recovery instructions. Procedure and FAQ schema reuse the visible guide data; the UPGB-only branch removes generic fixed-seconds, two-to-three-ring, DND and undocumented SMS/app instructions. Existing title, description, H1, canonical, bank record and ATM-PIN pilot are preserved; no new URLs. The [source audit](docs/audits/up-gramin-balance-guide-2026-11-07.md) separates the fresh procedure read from the older number-record citation.
+
 ### Security — all 21 open Dependabot alerts cleared by in-range dependency updates
 - `zod` 4.6.5 → **4.6.6** (GHSA-mrhx-c7xc-m3w5, CVE-2023-54404, high), `undici` 8.10.2 → **8.12.2** (8 advisories incl. GHSA-2m5v-pch6-74hx TLS-option drop and GHSA-4w7w-5xrc-9h26 cross-origin redirect cache poisoning), `undici` 7.29.1 → **7.30.1** (same 8 advisories on the 7.x line), `fast-uri` 3.1.8 → **3.1.9** (4 advisories incl. GHSA-w74x-v6f9-j3xg scheme spoofing), `vite` 8.2.1 → **8.2.4** (5 advisories incl. GHSA-587h-7wmj-h5pm launch-editor command execution and GHSA-9jrq-w75r-8gcw cross-origin script execution via custom middleware).
 - Behind those bumps: `miniflare` 5.20261019.0-beta → 5.20261103.0-beta (now pins `undici` 7.30.1 instead of the exact-pinned vulnerable 7.29.1), `wrangler` 4.151.2 → **4.157.0** (clears the wrangler→miniflare alert; range `^4.120.0` → `^4.157.0` so the fixed miniflare is the floor), `vite` range `^8.2.1` → `^8.2.4`. No `overrides` were widened: the only override is still `compression`.

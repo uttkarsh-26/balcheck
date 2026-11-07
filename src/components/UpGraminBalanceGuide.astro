@@ -1,0 +1,54 @@
+---
+import type { UpGraminBalanceGuide } from '../data/up-gramin-balance-guide';
+interface Props { guide: UpGraminBalanceGuide }
+const { guide } = Astro.props;
+---
+
+<section data-testid="upgb-balance-guide" aria-labelledby="upgb-balance-guide-heading" class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+  <h2 id="upgb-balance-guide-heading" class="text-h2 font-semibold text-gray-900 mb-3">UPGB balance enquiry: पात्रता, SMS का जवाब और मदद</h2>
+  <p class="text-sm text-gray-700 leading-relaxed">उत्तर प्रदेश ग्रामीण बैंक अपने official Miss Call Facility पेज पर
+    <strong>{guide.number}</strong> प्रकाशित करता है। इस तरीके में रजिस्टर्ड मोबाइल से call दी जाती है और बैंक balance का SMS भेजता है;
+    किसी UPI app में PIN डालने या BalCheck पर account details भरने की प्रक्रिया नहीं है।</p>
+
+  <h3 class="mt-5 text-base font-semibold text-gray-900">पहले जांचें कि आपका खाता और मोबाइल पात्र हैं</h3>
+  <ul class="mt-2 list-disc pl-5 space-y-2 text-sm text-gray-700 leading-relaxed">
+    <li>मोबाइल नंबर उसी खाते में बैंक के पास registered होना चाहिए; किसी दूसरे परिवारजन के फोन से call देने को समान प्रक्रिया न मानें।</li>
+    <li>बैंक Saving Bank (SB), Current Account (CA), Overdraft (OD) और Cash Credit (CC) खातों को पात्र बताता है।</li>
+    <li>एक ही CUST ID से जुड़े पात्र खातों पर balance information आधारित होती है। हर अलग customer ID के खाते को अपने-आप शामिल न मानें।</li>
+    <li>यह सुविधा resident accounts और domestic mobile numbers के लिए बताई गई है। विदेशी country code वाले मोबाइल पर इस सुविधा का SMS नहीं भेजा जाता।</li>
+  </ul>
+
+  <h3 class="mt-5 text-base font-semibold text-gray-900">मिस्ड कॉल के बाद क्या करें?</h3>
+  <ol class="mt-3 list-decimal pl-5 space-y-3 text-sm text-gray-700 leading-relaxed">
+    {guide.steps.map(step => <li><span data-testid="upgb-balance-step">{step.text}</span></li>)}
+  </ol>
+  <div class="mt-4 rounded-xl border border-brand-100 bg-brand-50 p-4 text-sm text-gray-800 leading-relaxed">
+    <p class="font-semibold">जवाब में क्या पहचानें?</p>
+    <p class="mt-1">बैंक खाते के अंतिम चार अंक और मौजूदा बैलेंस का SMS बताता है। एक से ज्यादा खाते हों तो आखिरी अंक देखकर पहचानें;
+      अधूरे account number को किसी public comment या अनजान caller को पूरा करके न भेजें। यह balance information है, पूरा account statement नहीं।</p>
+  </div>
+
+  <h3 class="mt-5 text-base font-semibold text-gray-900">SMS नहीं आया: समस्या के अनुसार अगला कदम</h3>
+  <dl class="mt-3 space-y-3 text-sm text-gray-700 leading-relaxed">
+    <div><dt class="font-semibold text-gray-900">मोबाइल कभी register नहीं कराया</dt><dd>बैंक के अनुसार अपनी base branch से mobile registration के लिए संपर्क करें। इस पेज पर कोई remote activation code या अप्रमाणित document list नहीं है।</dd></div>
+    <div><dt class="font-semibold text-gray-900">SIM या नंबर बदल गया, खो गया या बंद कराया</dt><dd>बैंक का caution उसी base branch को तुरंत सूचना देकर पुराने mobile number की deletion/change कराने को कहता है। पुरानी SIM से खाते की जानकारी मिलती रहे, ऐसा मानकर न चलें।</dd></div>
+    <div><dt class="font-semibold text-gray-900">विदेशी मोबाइल से कोशिश की</dt><dd>बैंक के इस service description में overseas country code / mobile number शामिल नहीं हैं। अलग सहायता के लिए शाखा से संपर्क करें; बार-बार इसी तरीके से SMS आने की उम्मीद न रखें।</dd></div>
+    <div><dt class="font-semibold text-gray-900">रजिस्टर्ड domestic नंबर है, फिर भी जवाब नहीं</dt><dd>फोन पर incoming SMS देख लें; base branch से registered number, account eligibility और CUST ID linkage की जांच मांगें। पढ़े गए पेज में fixed delivery time या outage का कारण नहीं दिया गया है।</dd></div>
+  </dl>
+
+  <h3 class="mt-5 text-base font-semibold text-gray-900">मुफ़्त सेवा, mini statement और SMS command में फर्क</h3>
+  <p class="mt-2 text-sm text-gray-700 leading-relaxed">बैंक इस missed-call facility को free of cost और 24×7 बताता है। ये बैंक के प्रकाशित terms हैं,
+    live availability की हमारी guarantee नहीं। बैंक का यह पेज SMS भेजने का command या इसी call से मिनी स्टेटमेंट की प्रक्रिया नहीं देता;
+    किसी दूसरे बैंक का SMS format यहां इस्तेमाल न करें।</p>
+  <p class="mt-3 text-sm text-gray-700 leading-relaxed">अगर mobile registration ठीक करना है, नंबर बदलना है या eligible accounts की mapping में संदेह है,
+    bank page का निर्देश base branch से संपर्क करना है। केवल इस मिस्ड कॉल से registration बदलने या balance SMS को account statement बनाने का दावा नहीं किया जा रहा है।</p>
+
+  <div class="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-gray-800 leading-relaxed">
+    <p><strong>सुरक्षा:</strong> OTP, PIN, password और पूरा card/account number BalCheck या किसी अनजान व्यक्ति को न दें। इस पेज पर कोई account verification form नहीं है।</p>
+  </div>
+  <div class="mt-4 text-sm text-gray-600 leading-relaxed">
+    <p><a href={guide.sourceUrl} target="_blank" rel="noopener noreferrer" class="text-brand-700 font-semibold underline">UPGB का official Miss Call Facility पेज</a>
+      — procedure और eligibility <time datetime={guide.checkedOn}>{guide.checkedOn}</time> को पढ़े गए।</p>
+    <p class="mt-2">हमने live call या SMS भेजकर account access, response time या service uptime की जांच नहीं की है। नीचे अलग record citation बैंक के नंबर की पुरानी verification date बताता है; यह procedure source उसी date का दावा नहीं करता।</p>
+  </div>
+</section>
