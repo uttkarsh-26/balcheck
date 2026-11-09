@@ -19,6 +19,12 @@ export interface ArticleMeta {
 
 export const articles: ArticleMeta[] = [
   {
+    slug: 'parcel-delivery-fraud-indore-refund-guide-2026',
+    title: 'Parcel Fraud: ₹75,000 वापस मिले — Indore Case | BalCheck.in',
+    description: 'Indore में Diwali parcel delivery fraud: homemaker के ₹78,000 गए, Crime Branch ने ₹75,000 court order से वापस दिलाए — NCRP complaint और बचाव के नियम।',
+    linkLabel: 'Parcel Delivery Fraud — ₹75,000 वापसी',
+  },
+  {
     slug: 'sbi-data-leak-dark-web-customer-safety-guide',
     title: 'SBI Data Leak: Dark Web Records — क्या करें | BalCheck.in',
     description: 'SBI ने 21 अक्टूबर 2026 को exchanges को सूचित किया: dark web पर 3,897 customer records की PII exposure का शक — safety steps, phishing बचाव और complaint रास्ता।',

@@ -1,0 +1,200 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getArticle } from '../../data/articles';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ScannableArticleSummary from '../../components/ScannableArticleSummary.astro';
+
+const siteUrl = 'https://balcheck.in';
+const slug = 'parcel-delivery-fraud-indore-refund-guide-2026';
+const publishDate = '2026-11-09';
+const modifiedDate = '2026-11-09';
+const pageTitle = getArticle(slug).title;
+const pageDesc = getArticle(slug).description;
+
+const articleBrief = {
+  summary:
+    'Indore में एक homemaker से Diwali parcel delivery के नाम पर link भेजकर ₹78,000 निकाले गए; NCRP portal पर तुरंत शिकायत के बाद Crime Branch ने court order से ₹75,000 वापस दिलाए।',
+  facts: [
+    { label: 'जगह', value: 'Indore — Crime Branch की cyber fraud investigation team' },
+    { label: 'नुकसान', value: '₹78,000, चार bank accounts से debit' },
+    { label: 'रिकवरी', value: '₹75,000 court order के ज़रिए complainant को refund' },
+    { label: 'खाते freeze', value: 'Delhi, Odisha, Gujarat और Maharashtra के suspect accounts' },
+    { label: 'स्रोत', value: 'Times of India (Indore), 7 नवंबर 2026 की रिपोर्ट' },
+  ],
+  timeline: [
+    {
+      date: '7 नवंबर 2026',
+      datetime: '2026-11-07',
+      text: 'Times of India ने बताया कि Indore Crime Branch ने NCRP complaint पर कार्रवाई करते हुए suspect accounts freeze कराए और ₹75,000 refund दिलाया।',
+    },
+  ],
+  action: {
+    title: 'ठगी होने पर तुरंत करने वाले कदम',
+    steps: [
+      'जिस bank account से पैसा गया है, उसकी customer care को call करके transaction रोकने और account सुरक्षित करने को कहें।',
+      'cybercrime.gov.in पर NCRP complaint दर्ज करें या helpline 1930 पर call करें — जितनी जल्दी शिकायत, उतनी जल्दी suspect accounts freeze हो सकते हैं।',
+      'complaint का reference number, bank का written reply और सभी messages सुरक्षित रखें।',
+      'bank/Crime Branch की follow-up में सहयोग करें; refund का आदेश अदालत के ज़रिए आ सकता है, इसलिए status पूछते रहें।',
+    ],
+    officialUrl: 'https://cybercrime.gov.in/',
+    officialLabel: 'National Cyber Crime Reporting Portal',
+  },
+  details: {
+    title: 'क्यों यही स्कैम बार-बार चलता है',
+    body: 'त्योहारों के समय parcel का इंतज़ार कर रहे ग्राहक को "address गलत है" जैसी सामान्य-सी बात कम संदिग्ध लगती है। ठग इसी भरोसे पर link भेजकर खाते से पैसा निकाल लेते हैं। TOI की रिपोर्ट के मुताबिक Indore पुलिस की सलाह साफ़ है: parcel की स्थिति सिर्फ़ उसी e-commerce company की official website या app पर देखें, और अनजान link पर कभी न जाएँ।',
+  },
+};
+
+const faqItems = [
+  {
+    q: 'Parcel delivery के नाम पर ठगी कैसे होती है?',
+    a: 'Times of India की 7 नवंबर 2026 की रिपोर्ट के मुताबिक Indore में एक homemaker ने त्योहार के लिए online shopping की थी और parcel का इंतज़ार कर रही थी। Parcel आने से पहले एक अनजान व्यक्ति ने call करके खुद को delivery boy बताया और कहा कि address गलत है। उसने address update करने का link भेजा; link खोलते ही चार bank accounts से ₹78,000 transfer हो गए।',
+  },
+  {
+    q: 'पैसा वापस कैसे मिला?',
+    a: 'रिपोर्ट के मुताबिक महिला ने ठगी का पता चलते ही National Cyber Crime Reporting Portal (NCRP) पर complaint दर्ज की। Indore Crime Branch की cyber fraud investigation team ने complaint पर कार्रवाई करते हुए suspect accounts से पैसा freeze कराया — वे खाते Delhi, Odisha, Gujarat और Maharashtra में थे। इसके बाद court order के ज़रिए ₹75,000 complainant को refund किए गए। ₹78,000 में से ₹3,000 अभी वापस नहीं आए हैं।',
+  },
+  {
+    q: 'शिकायत में देरी हो जाए तो क्या होगा?',
+    a: 'रिपोर्ट में यह साफ़ है कि money freeze इसलिए हो पाया क्योंकि महिला ने ठगी का पता चलते ही तुरंत complaint की। ठगी की रकम आम तौर पर कई खातों से गुज़रते हुए आगे transfer होती रहती है, इसलिए हर घंटे की देरी से रकम freeze होने की संभावना कम होती जाती है। शिकायत जल्दी करें और सभी transaction details साथ रखें।',
+  },
+  {
+    q: 'Indore police ने क्या सलाह दी है?',
+    a: 'रिपोर्ट के मुताबिक police advisory में कहा गया है: त्योहारों के दौरान parcel delivery से जुड़े अनजान call और message से सतर्क रहें; address update, delivery reschedule या extra charge के नाम पर भेजे गए अनजान link पर क्लिक न करें; और banking details, OTP, UPI PIN या personal जानकारी किसी अजनबी से साझा न करें। Parcel की स्थिति सिर्फ़ संबंधित e-commerce company की official website या app पर जाँचें।',
+  },
+  {
+    q: 'Cyber fraud की शिकायत कहाँ दर्ज करें?',
+    a: 'National Cyber Crime Reporting Portal (cybercrime.gov.in) पर online complaint दर्ज करें और राष्ट्रीय cybercrime helpline 1930 पर call करें। साथ ही अपने bank की customer care को तुरंत सूचित करें ताकि account और card block कराया जा सके। Complaint number और bank से मिली written acknowledgement सुरक्षित रखें — आगे की जाँच और refund में यही reference काम आता है।',
+  },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: pageTitle,
+  description: pageDesc,
+  datePublished: publishDate,
+  dateModified: modifiedDate,
+  inLanguage: 'hi-IN',
+  mainEntityOfPage: `${siteUrl}/article/${slug}/`,
+  author: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+};
+
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'Parcel delivery fraud में फँसे पैसे वापस पाने के लिए क्या करें',
+  description: 'Indore case के आधार पर cyber fraud complaint, account freeze और refund की प्रक्रिया।',
+  step: [
+    { '@type': 'HowToStep', name: 'Bank को तुरंत सूचित करें', text: 'जिस account से पैसा debit हुआ है, उसकी customer care को call करके transaction की जानकारी दें और account/card block कराएँ।' },
+    { '@type': 'HowToStep', name: 'NCRP पर complaint दर्ज करें', text: 'cybercrime.gov.in पर complaint दर्ज करें या helpline 1930 पर call करें; transaction की तारीख, रकम और beneficiary details दें।' },
+    { '@type': 'HowToStep', name: 'सबूत सुरक्षित रखें', text: 'Caller का number, भेजा गया link, bank statements, complaint number और bank का written reply सुरक्षित रखें।' },
+    { '@type': 'HowToStep', name: 'Follow-up करते रहें', text: 'bank और police से complaint की स्थिति पूछें; suspect account freeze और refund अदालत के आदेश से हो सकता है।' },
+  ],
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+    { '@type': 'ListItem', position: 2, name: 'Parcel Delivery Fraud — Indore Refund Case', item: `${siteUrl}/article/${slug}/` },
+  ],
+};
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <div class="min-h-screen bg-gray-50">
+    <div class="container mx-auto max-w-copy px-4 py-8">
+      <nav aria-label="breadcrumb" class="mb-4 text-sm text-gray-600">
+        <a href="/" class="hover:underline">Home</a>
+        <span aria-hidden="true"> / </span>
+        <span class="text-gray-800">Parcel Delivery Fraud — Indore Refund Case</span>
+      </nav>
+
+      <h1 class="text-h1 mb-4 font-bold text-gray-900">Parcel Delivery Fraud: Indore में ₹75,000 वापस कैसे मिले</h1>
+      <p class="mb-6 text-lg text-gray-700">
+        त्योहार के समय parcel का इंतज़ार कर रहे लोगों को ठग "address गलत है" कहकर link भेजते हैं और खाते खाली कर देते हैं। Indore में एक homemaker के साथ ऐसा ही हुआ — ₹78,000 गए, पर तुरंत complaint और Crime Branch की कार्रवाई से ₹75,000 वापस मिले। नीचे पूरा घटनाक्रम, police की सलाह और शिकायत का official रास्ता दिया गया है।
+      </p>
+
+      <ScannableArticleSummary {...articleBrief} />
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Indore में क्या हुआ</h2>
+      <p class="mb-4 text-gray-700">
+        Times of India (Indore) की 7 नवंबर 2026 की रिपोर्ट के मुताबिक शहर की एक homemaker ने त्योहार के लिए online shopping की थी और parcel का इंतज़ार कर रही थीं। Parcel पहुँचने से पहले एक अनजान व्यक्ति ने call करके खुद को delivery boy बताया और कहा कि address गलत है। उसने address update करने का link भेजा।
+      </p>
+      <p class="mb-4 text-gray-700">
+        Link खोलने के बाद उनके <strong>चार bank accounts से ₹78,000</strong> transfer हो गए। रिपोर्ट के मुताबिक महिला ने ठगी समझते ही National Cyber Crime Reporting Portal (NCRP) पर complaint दर्ज की, और मामला Indore Crime Branch की cyber fraud investigation team के पास पहुँचा।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">पैसा कैसे freeze हुआ और ₹75,000 वापस कैसे आए</h2>
+      <p class="mb-4 text-gray-700">
+        रिपोर्ट के अनुसार Crime Branch ने complaint पर तेज़ी से कार्रवाई की और suspect accounts से पैसा freeze कराया। वे खाते <strong>Delhi, Odisha, Gujarat और Maharashtra</strong> में थे। इसके बाद court order के ज़रिए complainant को <strong>₹75,000</strong> refund किए गए — यानी ₹78,000 में से ₹3,000 अभी बाकी हैं।
+      </p>
+      <p class="mb-4 text-gray-700">
+        रिपोर्ट में यह भी कहा गया है कि Indore के police commissioner Santosh Kumar Singh ने online और financial fraud के मामलों में तेज़ और प्रभावी कार्रवाई के निर्देश दिए हैं, और Crime Branch की cyber fraud investigation team को ऐसी complaints पर जल्दी काम करने को कहा गया है। ध्यान दें: रकम वापस मिलना हर मामले में तय नहीं होता — यह इस बात पर निर्भर है कि शिकायत कितनी जल्दी हुई और पैसा suspect खातों में रुका या नहीं।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Police advisory: parcel के नाम पर आए call पर 4 नियम</h2>
+      <p class="mb-4 text-gray-700">
+        रिपोर्ट में दी गई police advisory आम उपभोक्ता के लिए है, और त्योहारों के दौरान parcel की संख्या बढ़ने पर यही सबसे अधिक काम आती है:
+      </p>
+      <ul class="mb-4 list-disc space-y-2 pl-5 text-gray-700">
+        <li>Parcel delivery से जुड़े <strong>अनजान call और message</strong> पर सतर्क रहें — खासकर त्योहारों के समय।</li>
+        <li>Address update, delivery reschedule या extra charge के नाम पर भेजे गए <strong>अनजान link पर क्लिक न करें</strong>।</li>
+        <li><strong>Banking details, OTP, UPI PIN या personal जानकारी</strong> किसी अजनबी से साझा न करें।</li>
+        <li>Parcel की स्थिति सिर्फ़ संबंधित e-commerce company की <strong>official website या app</strong> पर जाँचें।</li>
+      </ul>
+      <p class="mb-4 text-gray-700">
+        एक practical नियम यह भी जोड़ा जा सकता है: courier company या e-commerce app स्वयं address सुधारने के लिए SMS/WhatsApp link नहीं भेजते — status वही दिखाते हैं जो आपके order page या app में दिखता है। Link मिले तो order page खुद खोलकर देखें, link पर न जाएँ।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">ठगी हो जाए तो शिकायत कैसे करें</h2>
+      <p class="mb-4 text-gray-700">
+        शिकायत का क्रम मायने रखता है — पहले bank, फिर cyber complaint, और दोनों की रसीद सुरक्षित। Indore मामले में NCRP complaint और तेज़ follow-up की वजह से suspect accounts तक पहुँच बनी।
+      </p>
+      <ul class="mb-4 list-disc space-y-2 pl-5 text-gray-700">
+        <li><strong>Bank:</strong> जिस account से पैसा debit हुआ, उसकी customer care को call करें और transaction की जानकारी के साथ account/card block कराएँ। Written complaint दें और acknowledgement लें।</li>
+        <li><strong>Cyber complaint:</strong> <a class="text-blue-700 underline" href="https://cybercrime.gov.in/" rel="noopener noreferrer" target="_blank">cybercrime.gov.in</a> (NCRP) पर complaint दर्ज करें; राष्ट्रीय cybercrime helpline <strong>1930</strong> पर भी call कर सकते हैं।</li>
+        <li><strong>सबूत:</strong> caller का number, भेजा गया link, bank statement, UPI/bank reference और complaint number सुरक्षित रखें।</li>
+        <li><strong>Follow-up:</strong> complaint की स्थिति bank और police से पूछते रहें; suspect account freeze और refund अदालत के आदेश से हो सकता है — इसमें समय लगता है।</li>
+      </ul>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Sources / आधिकारिक लिंक</h2>
+      <ul class="mb-4 list-disc space-y-2 pl-5 text-gray-700">
+        <li>रिपोर्ट: <a class="text-blue-700 underline" href="https://timesofindia.indiatimes.com/city/indore/homemaker-gets-back-rs-75000-lost-in-diwali-parcel-delivery-fraud/articleshow/135619003.cms" rel="noopener noreferrer" target="_blank">The Times of India (Indore) — "Homemaker gets back Rs 75,000 lost in Diwali parcel delivery fraud"</a>, 7 नवंबर 2026।</li>
+        <li>शिकायत: <a class="text-blue-700 underline" href="https://cybercrime.gov.in/" rel="noopener noreferrer" target="_blank">National Cyber Crime Reporting Portal (cybercrime.gov.in)</a> — helpline 1930।</li>
+      </ul>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">अक्सर पूछे जाने वाले सवाल</h2>
+      <FaqAccordion items={faqItems} />
+    </div>
+  </div>
+</Layout>
