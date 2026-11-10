@@ -176,6 +176,14 @@ const h1Overrides: Partial<Record<string, string>> = {
   // maharashtra-gramin shape); the missed-call facility is real (8750187504,
   // verified), so the balance-check wording stays honest.
   'rajasthan-gramin': `Rajasthan Gramin Bank (RGB) Balance Check Number ${bank.missedCall}`,
+  // 30d pull 2026-11-10: 'punjab gramin bank balance check number' 2,394 impr
+  // @ 0.29% CTR pos 5.3 — the title override (same pull) already matches the
+  // query, but the H1 was 'पंजाब ग्रामीण बैंक' only, so no heading carried the
+  // query's words. balanceMode is customer-care (same toll-free digits for
+  // balance + care), so the H1 claims balance check on that line, not a
+  // missed-call facility (indusind shape); pgb.bank.in is bot-blocked (468),
+  // so nothing here claims आधिकारिक.
+  'punjab-gramin': `Punjab Gramin Bank Balance Check Number ${bank.missedCall}`,
 };
 if (bank.slug === 'psb') {
   faqs.push(
