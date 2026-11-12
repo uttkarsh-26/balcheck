@@ -4,6 +4,9 @@ All notable changes to this repository are recorded here, newest first.
 
 ## [Unreleased]
 
+### Bihar Gramin Bank contact source scope
+- On the existing bank page, identify the toll-free number as a published contact rather than a confirmed balance procedure, and link the bank-listed BGB mBanking balance feature. Scope the fresh evidence date sentence to that contact number, withhold the unsupported SMS-balance and balance-enquiry method links, remove unsupported instructions and balance HowTo, and correct the description. The frozen title and H1 still imply unconfirmed balance-check and 24x7 availability; title, H1, canonical and registry remain unchanged.
+
 ### UCO Bank mobile-number registration accuracy
 - Replaced unsupported ATM account-linking steps, fixed timelines and mandatory-document claims with source-scoped UCO FAQ guidance and the advertised mBanking profile feature, without inferring its eligibility or effect. FAQ and HowTo reuse the visible guide; title, H1, canonical and other banks remain unchanged, with only the unsupported ATM/website description promise removed.
 

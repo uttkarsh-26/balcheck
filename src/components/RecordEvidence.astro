@@ -19,9 +19,11 @@ interface Props {
   lastVerified?: string | null;
   /** What the citation covers, e.g. `SBI balance enquiry record`. */
   scope?: string;
+  /** Opt in only when the check covered the published contact number alone. */
+  dateSubject?: 'published-toll-free-contact';
 }
 
-const { source, lastVerified, scope } = Astro.props;
+const { source, lastVerified, scope, dateSubject } = Astro.props;
 
 const trimmedSource = typeof source === 'string' ? source.trim() : '';
 const hasEvidence = Boolean(trimmedSource && lastVerified && ISO_DATE.test(lastVerified));
@@ -60,7 +62,7 @@ const sourceUrl = evidenceSourceUrl(trimmedSource);
           <time datetime={lastVerified} class="font-semibold" data-testid="record-evidence-date">
             {lastVerified}
           </time>
-          {' को इस record के numbers जांचे गए थे।'}
+          {dateSubject === 'published-toll-free-contact' ? ' को प्रकाशित टोल-फ्री संपर्क नंबर जांचा गया था।' : ' को इस record के numbers जांचे गए थे।'}
         </dd>
       </div>
     </dl>

@@ -84,7 +84,9 @@ for (const bank of banks) {
   sweptBankSlugs.push(bank.slug);
   test.describe(`/bank/${bank.slug}`, () => {
     // Every assertion here reads static, server-rendered DOM — see gotoDom().
-    test.beforeEach(async ({ page }) => {
+    test.beforeEach(async ({ page, context, baseURL }) => {
+      const origin = new URL(baseURL!).origin;
+      await context.route('**/*', route => new URL(route.request().url()).origin === origin ? route.continue() : route.abort());
       await gotoDom(page, `/bank/${bank.slug}`);
     });
 
@@ -173,6 +175,9 @@ for (const bank of banks) {
           // universally free enquiries or verified 24×7 availability.
           expect(description).toBe(`Union Bank balance check: ${bank.missedCall}। Primary account के लिए missed call; SMS commands, registration और charges की स्रोत-आधारित जानकारी।`);
           expect(description).not.toMatch(/तुरंत|मुफ़्त|24×7/);
+        } else if (bank.slug === 'bihar-gramin') {
+          expect(description).toBe(`Bihar Gramin Bank का प्रकाशित टोल-फ्री संपर्क ${bank.missedCall} और BGB mBanking में सूचीबद्ध balance enquiry की जानकारी।`);
+          expect(description).not.toMatch(/तुरंत|मुफ़्त|24×7/);
         } else if (bank.slug === 'canara') {
           expect(description).toContain(bank.missedCall);
           expect(description).toContain('Saving account balance');
@@ -254,7 +259,8 @@ for (const bank of banks) {
         : 0;
       expect(faqCount).toBeGreaterThanOrEqual(4);
 
-      expect(howToSchema).toBeDefined();
+      if (bank.slug === 'bihar-gramin') expect(howToSchema).toBeUndefined();
+      else expect(howToSchema).toBeDefined();
       expect(breadcrumbSchema).toBeDefined();
       const crumbs = Array.isArray(breadcrumbSchema?.itemListElement)
         ? (breadcrumbSchema.itemListElement as unknown[]).length

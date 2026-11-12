@@ -11,6 +11,7 @@ import RecordEvidence from '../../components/RecordEvidence.astro';
 import UnionBankBalanceGuide from '../../components/UnionBankBalanceGuide.astro';
 import CanaraBalanceGuide from '../../components/CanaraBalanceGuide.astro';
 import { getCanaraBalanceGuide } from '../../data/canara-balance-guide';
+import { getBiharGraminBankGuide } from '../../data/bihar-gramin-bank-guide';
 import { UNION_BALANCE_GUIDE, unionBalanceSteps } from '../../data/union-bank-balance';
 
 export function getStaticPaths() {
@@ -24,6 +25,7 @@ interface Props { bank: Bank }
 const { bank } = Astro.props;
 const isUnionBank = bank.slug === 'ubi';
 const canaraGuide = getCanaraBalanceGuide(bank);
+const contactGuide = getBiharGraminBankGuide(bank);
 const isMissedCall = bank.balanceMode === 'missed-call';
 // Helpline tile: only a real 1800 number gets a /toll-free-number/<slug>/
 // page — the other banks' legacy toll-free URL 301s to /customer-care/<slug>/
@@ -31,8 +33,8 @@ const isMissedCall = bank.balanceMode === 'missed-call';
 const tollFreeTile = isTrueTollFreeNumber(bank.customerCare)
   ? { href: 'toll-free-number', icon: '🆓', label: 'Toll Free Number' }
   : { href: 'customer-care', icon: '🎧', label: 'Customer Care' };
-const serviceLabel = isMissedCall ? 'मिस्ड कॉल बैलेंस नंबर' : 'Customer Care / Balance Enquiry';
-const serviceInstruction = canaraGuide?.instruction ?? (isUnionBank
+const serviceLabel = contactGuide?.label ?? (isMissedCall ? 'मिस्ड कॉल बैलेंस नंबर' : 'Customer Care / Balance Enquiry');
+const serviceInstruction = contactGuide?.instruction ?? canaraGuide?.instruction ?? (isUnionBank
   ? UNION_BALANCE_GUIDE.instruction
   : isMissedCall
   ? 'रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं।'
@@ -57,7 +59,7 @@ const related = banks
 const catSlug = bank.category.toLowerCase().replace(/\s+/g, '-');
 
 // FAQ items
-const faqs = canaraGuide?.faqs ?? [
+const baseFaqs = canaraGuide?.faqs ?? [
   {
     q: `${bank.shortName} का बैलेंस चेक करने का नंबर क्या है?`,
     a: `${bank.name} (${bank.shortName}) का balance enquiry number ${bank.missedCall} है। ${serviceInstruction}`
@@ -76,12 +78,6 @@ const faqs = canaraGuide?.faqs ?? [
   },
 ];
 
-if (bank.notes) {
-  faqs.push({
-    q: `${bank.shortName} balance enquiry के बारे में ज़रूरी जानकारी`,
-    a: bank.notes,
-  });
-}
 
 // WhatsApp-banking answer — rendered ONLY for banks whose official site was
 // actually checked (bank.whatsappBanking set). Never derived from aggregators;
@@ -94,9 +90,7 @@ const waFaqs = waCheck ? [
     a: `${bank.name} की आधिकारिक वेबसाइट ${waCheck.sourceUrl.replace('https://', '')} पर WhatsApp बैंकिंग का कोई नंबर नहीं दिया गया है (${waCheck.checkedOn} को जांचा गया)। बैलेंस जानने के लिए ${bank.missedCall} पर मिस्ड कॉल दें या ${bank.customerCare} पर customer care से बात करें। किसी भी तीसरे वेबसाइट पर दिया गया "WhatsApp नंबर" आधिकारिक नहीं है — उस पर अपनी जानकारी या पैसे का जोखिम न लें।`,
   },
 ] : [];
-if (waFaqs.length > 0) {
-  faqs.push(...waFaqs);
-}
+
 
 // PSB full-name cluster: GSC shows 'punjab and sind bank balance check number',
 // 'psb balance check number' and 'punjab and sind' spellings as the top demand.
@@ -185,16 +179,11 @@ const h1Overrides: Partial<Record<string, string>> = {
   // so nothing here claims आधिकारिक.
   'punjab-gramin': `Punjab Gramin Bank Balance Check Number ${bank.missedCall}`,
   // 30d pull 2026-11-10: 'bihar gramin bank customer care number 24x7' 892 impr
-  // @ 0.78% CTR pos 4.5 — the seoOverride title serves the balance-check
-  // cluster, but the H1 was 'बिहार ग्रामीण बैंक' only, so no heading carried
-  // the customer-care words this query uses. balanceMode is customer-care: the
-  // same toll-free line (bgb.bank.in contact page, verified 2026-09-14) serves
-  // balance enquiry and customer care, so the H1 names both and claims no
-  // missed-call facility.
+  // @ 0.78% CTR pos 4.5 — the frozen H1 includes unverified 24x7 and balance implications. The
+  // current contact source only establishes a toll-free contact number.
   'bihar-gramin': `Bihar Gramin Bank Customer Care Number 24x7 & Balance Check ${bank.missedCall}`,
 };
-if (bank.slug === 'psb') {
-  faqs.push(
+const psbFaqs = bank.slug === 'psb' ? [
     {
       q: 'Punjab and Sind Bank का balance check number क्या है?',
       a: `Punjab & Sind Bank, जिसे PSB के नाम से भी जाना जाता है, का balance check number ${bank.missedCall} है। अपने registered mobile नंबर से मिस्ड कॉल दें — कॉल 2-3 ring के बाद अपने आप कट जाएगी और SMS में तुरंत बैलेंस आ जाएगा।`,
@@ -207,8 +196,14 @@ if (bank.slug === 'psb') {
       q: 'Punjab & Sind Bank balance enquiry मुफ़्त है या charge लगता है?',
       a: `${bank.name} की missed-call balance enquiry सेवा अधिकांश ऑपरेटरों पर मुफ़्त है क्योंकि कॉल जवाब में जुड़ती नहीं। बैंक की नवीनतम शर्तें आधिकारिक वेबसाइट ${bank.website.replace('https://', '')} पर देखें।`,
     },
-  );
-}
+  ] : [];
+// Do not mutate guide-owned arrays: visible FAQ and JSON-LD share this value.
+const faqs = contactGuide ? [...contactGuide.faqs] : [
+  ...baseFaqs,
+  ...(bank.notes ? [{ q: `${bank.shortName} balance enquiry के बारे में ज़रूरी जानकारी`, a: bank.notes }] : []),
+  ...waFaqs,
+  ...psbFaqs,
+];
 
 // JSON-LD: BankOrCreditUnion + FAQPage + BreadcrumbList + HowTo
 const bankSchema = {
@@ -218,7 +213,7 @@ const bankSchema = {
   alternateName: bank.slug === 'psb'
     ? [bank.shortName, 'Punjab and Sind Bank', 'पंजाब एंड सिंध बैंक']
     : bank.shortName,
-  description: `${bank.name} balance enquiry number ${bank.missedCall}. ${serviceInstruction}`,
+  description: contactGuide ? `${bank.name} का टोल-फ्री संपर्क ${bank.missedCall}. ${serviceInstruction}` : `${bank.name} balance enquiry number ${bank.missedCall}. ${serviceInstruction}`,
   url: canonicalUrl,
   telephone: bank.missedCall,
   areaServed: { '@type': 'Country', name: 'India' },
@@ -387,13 +382,11 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
     title: `IndusInd Bank Balance Check Number ${bank.missedCall} — Toll Free`,
     description: `IndusInd Bank balance check number ${bank.missedCall} — आधिकारिक टोल-फ्री customer care/IVR नंबर। कॉल करके balance enquiry करें, तुरंत जानकारी पाएं। मुफ़्त, 24×7।`,
   },
-  // 3,366 impr @ pos 7.0 (0.59% CTR) on 'bihar gramin bank balance check
-  // number'. Title already matches the query exactly; the CTR gap comes from
-  // the old customer-care description that told users the service was
-  // "verified नहीं". Same toll-free line, now described as the official one.
+  // Keep the demand-matched title frozen; the contact source does not establish
+  // balance by this line, instant response, free balance service or 24x7 hours.
   'bihar-gramin': {
     title: `Bihar Gramin Bank Balance Check Number ${bank.missedCall}`,
-    description: `Bihar Gramin Bank balance check number ${bank.missedCall} — आधिकारिक टोल-फ्री नंबर। कॉल करके बैलेंस enquiry करें, तुरंत जानकारी पाएं। मुफ़्त, 24×7।`,
+    description: contactGuide?.description ?? '',
   },
   // 2,767 impr @ pos 6.0 (0.58% CTR) on 'punjab gramin bank balance check
   // number'; /sms-banking/punjab-gramin/ (2,558 @ 6.5) has its own title map.
@@ -476,7 +469,7 @@ const pageDesc = !isMissedCall
 <Layout title={pageTitle} description={pageDesc} preloadImage="/videos/balcheck-poster.webp">
 <script type="application/ld+json" set:html={JSON.stringify(bankSchema)} />
 <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
-<script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
+{!contactGuide && <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />}
 <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
 
 <!-- Breadcrumb -->
@@ -508,9 +501,9 @@ const pageDesc = !isMissedCall
 <VideoHeroBanner
   src="/videos/balcheck-bank-hero.mp4"
   poster="/videos/balcheck-poster.webp"
-  title={`${bank.nameHindi} बैलेंस चेक नंबर`}
-  subtitle={isMissedCall ? `अपने बैंक खाते का बैलेंस जानें — मिस्ड कॉल दें` : `Customer Care / IVR से balance enquiry करें`}
-  ctaText={`Call Now:`}
+  title={contactGuide ? `${bank.nameHindi} टोल-फ्री संपर्क` : `${bank.nameHindi} बैलेंस चेक नंबर`}
+  subtitle={contactGuide ? 'सहायता के लिए बैंक का प्रकाशित संपर्क' : isMissedCall ? `अपने बैंक खाते का बैलेंस जानें — मिस्ड कॉल दें` : `Customer Care / IVR से balance enquiry करें`}
+  ctaText={contactGuide ? 'बैंक संपर्क:' : `Call Now:`}
   ctaNumber={bank.missedCall}
   ctaHref={`tel:${bank.missedCall}`}
   headingLevel={2}
@@ -520,7 +513,7 @@ const pageDesc = !isMissedCall
 <section class="bg-white border-b border-gray-100">
   <div class="max-w-copy mx-auto px-4 py-4">
     <p class="text-base sm:text-lg text-gray-900">
-      <span class="font-bold">{bank.nameHindi} बैलेंस चेक नंबर:</span>
+      <span class="font-bold">{contactGuide ? `${bank.nameHindi} टोल-फ्री संपर्क:` : `${bank.nameHindi} बैलेंस चेक नंबर:`}</span>
       <a href={`tel:${bank.missedCall}`} class="underline"><PhoneNumber variant="inline" number={bank.missedCall} /></a>
       <span class="text-gray-600"> — {serviceInstruction}</span>
     </p>
@@ -533,6 +526,7 @@ const pageDesc = !isMissedCall
     <div class="flex items-start justify-between gap-4 flex-wrap">
       <div>
         <h1 class="text-h1 font-bold text-gray-900">{h1Overrides[bank.slug] ?? bank.nameHindi}</h1>
+        {contactGuide && <p class="text-sm text-gray-700 mt-1">स्रोत इस लाइन पर balance enquiry या 24×7 उपलब्धता की पुष्टि नहीं करता; सहायता और समय बैंक से पूछें।</p>}
         <p class="text-sm text-gray-500 mt-1">{bank.name} · {categoryHindi[bank.category]}</p>
       </div>
       <span class="text-xs font-medium text-brand-700 bg-brand-100 px-3 py-2 rounded-full">{bank.shortName}</span>
@@ -557,7 +551,7 @@ const pageDesc = !isMissedCall
         class="mt-4 w-full flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white font-medium py-3.5 rounded-xl transition-colors text-base min-h-[48px]"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-        {isMissedCall ? 'अभी मिस्ड कॉल दें' : 'Customer Care / IVR पर कॉल करें'}
+        {contactGuide ? 'बैंक संपर्क पर कॉल करें' : isMissedCall ? 'अभी मिस्ड कॉल दें' : 'Customer Care / IVR पर कॉल करें'}
       </a>
     </div>
 
@@ -567,7 +561,7 @@ const pageDesc = !isMissedCall
       </div>
     )}
 
-    {bank.notes && (
+    {!contactGuide && bank.notes && (
       <div class="mt-3 bg-amber-50 rounded-lg p-3 border border-amber-200">
         <p class="text-xs text-amber-800">⚠️ {bank.notes}</p>
       </div>
@@ -575,7 +569,7 @@ const pageDesc = !isMissedCall
 
     <!-- WhatsApp Share -->
     <a
-      href={`https://wa.me/?text=${encodeURIComponent(`${bank.nameHindi} का balance enquiry number: ${bank.missedCall}${isMissedCall ? ' (missed call)' : ' (customer care/IVR)'} — ${siteUrl}/bank/${bank.slug}/`)}`}
+      href={`https://wa.me/?text=${encodeURIComponent(contactGuide ? `${bank.nameHindi} का टोल-फ्री संपर्क: ${bank.missedCall} — ${siteUrl}/bank/${bank.slug}/` : `${bank.nameHindi} का balance enquiry number: ${bank.missedCall}${isMissedCall ? ' (missed call)' : ' (customer care/IVR)'} — ${siteUrl}/bank/${bank.slug}/`)}`}
       target="_blank"
       rel="noopener"
       class="mt-3 inline-flex items-center gap-2 text-sm text-green-700 bg-green-50 hover:bg-green-100 px-4 py-2 rounded-lg transition-colors"
@@ -604,10 +598,18 @@ const pageDesc = !isMissedCall
 </section>
 
 <RecordEvidence
-  source={bank.verificationSource}
-  lastVerified={bank.lastVerified}
-  scope={`${bank.shortName} balance check`}
+  source={contactGuide ? `बैंक का टोल-फ्री संपर्क: ${contactGuide.contact}` : bank.verificationSource}
+  lastVerified={contactGuide?.contactCheckedOn ?? bank.lastVerified}
+  scope={contactGuide ? 'केवल संपर्क नंबर' : `${bank.shortName} balance check`}
+  dateSubject={contactGuide?.evidenceDateSubject}
 />
+
+{contactGuide && <section class="bg-white border-t border-gray-100">
+  <div class="max-w-copy mx-auto px-4 py-8">
+    <h2 class="text-h2 font-bold text-gray-900 mb-3">बैंक का सूचीबद्ध balance विकल्प</h2>
+    <p class="text-sm text-gray-700 leading-relaxed">बैंक के <a href={contactGuide.mobileBanking} target="_blank" rel="noopener noreferrer" class="text-brand-700 underline">BGB mBanking पेज</a> पर ऐप की सुविधाओं में balance enquiry सूचीबद्ध है। पात्रता, पंजीकरण और उपलब्धता बैंक से जांचें; परिणाम की गारंटी नहीं है।</p>
+  </div>
+</section>}
 
 {isUnionBank && <UnionBankBalanceGuide bank={bank} />}
 {canaraGuide && <CanaraBalanceGuide guide={canaraGuide} />}
@@ -634,7 +636,7 @@ const pageDesc = !isMissedCall
 )}
 
 <!-- How It Works -->
-{!isUnionBank && !canaraGuide && <section class="bg-white border-t border-gray-100">
+{!isUnionBank && !canaraGuide && !contactGuide && <section class="bg-white border-t border-gray-100">
   <div class="max-w-copy mx-auto px-4 py-8">
     <h2 class="text-h2 font-bold text-gray-900 mb-6">{bank.nameHindi} से बैलेंस कैसे चेक करें?</h2>
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -698,11 +700,11 @@ const pageDesc = !isMissedCall
         <p class="text-xs text-gray-500">🎧 Customer Care</p>
         <p class="text-xs font-medium text-brand-700 mt-1">Helpline →</p>
       </a>
-      <a href={`/sms-banking/${bank.slug}/`}
+      {!contactGuide && <a href={`/sms-banking/${bank.slug}/`}
          class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
         <p class="text-xs text-gray-500">📱 SMS Banking</p>
         <p class="text-xs font-medium text-brand-700 mt-1">Balance by SMS →</p>
-      </a>
+      </a>}
       <a href={`/net-banking/${bank.slug}/`}
          class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
         <p class="text-xs text-gray-500">🌐 Net Banking</p>
@@ -728,11 +730,11 @@ const pageDesc = !isMissedCall
         <p class="text-xs text-gray-500">🔑 ATM PIN</p>
         <p class="text-xs font-medium text-brand-700 mt-1">Generate PIN →</p>
       </a>
-      <a href={`/balance-enquiry/${bank.slug}/`}
+      {!contactGuide && <a href={`/balance-enquiry/${bank.slug}/`}
          class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
         <p class="text-xs text-gray-500">💰 Balance Enquiry</p>
         <p class="text-xs font-medium text-brand-700 mt-1">Check Balance →</p>
-      </a>
+      </a>}
       <a data-testid="helpline-tile" href={`/${tollFreeTile.href}/${bank.slug}/`}
          class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
         <p class="text-xs text-gray-500">{tollFreeTile.icon} {tollFreeTile.label}</p>
@@ -801,7 +803,7 @@ const pageDesc = !isMissedCall
     )}
     
     <div class="mt-4 flex flex-wrap gap-3">
-      <a href={`https://wa.me/?text=${encodeURIComponent(`${bank.name} का बैलेंस चेक नंबर: ${bank.missedCall} | BalCheck.in`)}`}
+      <a href={`https://wa.me/?text=${encodeURIComponent(contactGuide ? `${bank.name} का टोल-फ्री संपर्क: ${bank.missedCall} | BalCheck.in` : `${bank.name} का बैलेंस चेक नंबर: ${bank.missedCall} | BalCheck.in`)}`}
         target="_blank" rel="noopener"
         class="inline-flex min-h-[44px] items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-600 transition-colors">
         📱 WhatsApp पर शेयर करें
