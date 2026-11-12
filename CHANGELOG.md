@@ -4,6 +4,9 @@ All notable changes to this repository are recorded here, newest first.
 
 ## [Unreleased]
 
+### BOI mobile-number registration accuracy
+- On the existing BOI registration page, replaced unverified fixed timelines, mandatory-document and ATM/online sequences with source-scoped guidance; distinguished changes to the mobile number held on an account, mobile-app onboarding and service activation. FAQ and HowTo schema reuse the visible guidance. Corrected the description's unsupported ATM/website instruction while preserving the title, H1 and canonical; other banks remain unchanged.
+
 ### Canara balance-check depth and contact correction
 - Added source-backed Savings balance versus Hindi/English last-five-transaction guidance on the existing `/bank/canara/` page, with explicit limits for SMS commands, registration, fees and response timing. Corrected the shared support record to `18001030` and the official `.bank.in` website; updated the existing Canara mini-statement/SMS consumers so they no longer deny the verified language-specific numbers. Preserved existing titles, H1s, canonicals, routes and the ATM-PIN pilot; corrected unsupported description claims rather than making a new title experiment. [Official-source audit](docs/audits/canara-balance-guide-2026-11-07.md).
 
