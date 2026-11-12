@@ -4,6 +4,9 @@ All notable changes to this repository are recorded here, newest first.
 
 ## [Unreleased]
 
+### UCO Bank mobile-number registration accuracy
+- Replaced unsupported ATM account-linking steps, fixed timelines and mandatory-document claims with source-scoped UCO FAQ guidance and the advertised mBanking profile feature, without inferring its eligibility or effect. FAQ and HowTo reuse the visible guide; title, H1, canonical and other banks remain unchanged, with only the unsupported ATM/website description promise removed.
+
 ### Indian Bank mobile-number registration accuracy
 - Replaced unverified ATM/online menus, mandatory documents and fixed completion promises on the high-value registration page with the bank's CIF policy and source-scoped guidance. Distinguished app onboarding and missing-old-number cases; preserved title, H1, canonical and other banks, correcting only the unsupported description promise.
 

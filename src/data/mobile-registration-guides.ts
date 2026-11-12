@@ -7,6 +7,37 @@ import type { Bank } from './banks';
 // BOI mobile banking page describes app onboarding, not changing the account's mobile number:
 // https://bankofindia.bank.in/smart-banking/mobile-banking-payment
 export function getMobileRegistrationGuide(bank: Bank) {
+  if (bank.slug === 'uco-bank') {
+    // UCO digital FAQ: changed number in mBanking and m-Passbook contexts.
+    // https://www.uco.bank.in/faq-on-digital-products
+    // UCO mBanking: My Profile lists Update Mobile Number; its scope is unspecified.
+    // https://www.uco.bank.in/mbanking-plus
+    const steps = [
+      { name: 'अपनी स्थिति बैंक को बताएं', text: `UCO Bank में पहली बार नंबर जोड़ने या बदलने के विकल्प और पात्रता शाखा या customer care ${bank.customerCare} से पूछें। पुराना SIM उपलब्ध नहीं है तो यह भी बताएं।` },
+      { name: 'बदले नंबर के लिए शाखा से पूछें', text: 'UCO की mBanking FAQ बदले हुए नंबर को Finacle में शाखा द्वारा अपडेट करने की बात करती है। m-Passbook में बदले नंबर के लिए ग्राहक ID से जोड़ने को base branch जाने का निर्देश है।' },
+      { name: 'App विकल्प की पुष्टि करें', text: 'UCO की mBanking सुविधा सूची में My Profile के अंतर्गत Update Mobile Number है। App तक पहुंच registered mobile number से होती है; इस सुविधा की पात्रता, क्रम और खाते या customer ID पर प्रभाव बैंक से पूछें।' },
+      { name: 'जरूरत और स्थिति पूछें', text: 'अपनी स्थिति में जरूरी फॉर्म, पहचान, शुल्क, समय और पुष्टि का तरीका बैंक से पूछें। OTP, PIN और password किसी को न बताएं।' },
+    ];
+    const faqs = [
+      { q: 'UCO mobile number registration कैसे करें?', a: `पहली बार नंबर जोड़ने या बदलने की उपलब्ध प्रक्रिया और पात्रता UCO Bank शाखा या customer care ${bank.customerCare} से पूछें। mBanking FAQ में बदले नंबर का शाखा द्वारा Finacle अपडेट बताया गया है; यह अन्य विकल्पों को असंभव नहीं बताता।` },
+      { q: 'क्या UCO app से मोबाइल नंबर बदल सकते हैं?', a: 'UCO की mBanking सूची में My Profile के अंतर्गत Update Mobile Number है। बैंक से अपनी पात्रता, प्रक्रिया और खाते या customer ID पर इसका प्रभाव पूछें; स्रोत इनका विवरण नहीं देता। App तक पहुंच registered mobile number से होती है।' },
+      { q: 'क्या ATM से खाते का मोबाइल नंबर जोड़ सकते हैं?', a: 'UCO ATM को mBanking सेवा के registration के विकल्प के रूप में बताता है। इससे खाते का मोबाइल नंबर जोड़ने का ATM क्रम सिद्ध नहीं होता; उपलब्ध विकल्प बैंक से पूछें।' },
+      { q: 'पुराना SIM उपलब्ध नहीं हो तो क्या करें?', a: 'अपनी स्थिति शाखा या customer care को बताएं और लागू विकल्प तथा पुष्टि का तरीका पूछें। पढ़े गए स्रोत में इस स्थिति की प्रक्रिया स्पष्ट नहीं है।' },
+      { q: 'कौन से documents और कितना समय या शुल्क लगेगा?', a: 'जरूरी फॉर्म, पहचान, शुल्क, अपेक्षित समय और अनुरोध की पुष्टि अपनी स्थिति के अनुसार बैंक से पूछें। पढ़े गए स्रोत हर मामले के लिए निश्चित दस्तावेज़ या समय नहीं बताते।' },
+      { q: 'm-Passbook में बदले नंबर के लिए क्या करें?', a: 'UCO की FAQ में नए नंबर को customer ID से base branch के माध्यम से जोड़ने और m-Passbook में नए user के रूप में registration का निर्देश है। अपनी स्थिति बैंक से पुष्टि करें।' },
+    ];
+    return {
+      description: `यूको बैंक (UCO Bank) में mobile number registration कैसे करें। जानकारी customer care ${bank.customerCare} से confirm करें।`,
+      quickAnswer: `UCO Bank में नंबर जोड़ने या बदलने के विकल्प Branch या customer care ${bank.customerCare} से पूछें। mBanking FAQ में बदला नंबर शाखा द्वारा अपडेट बताया है; app में Update Mobile Number भी सूचीबद्ध है। अन्य विकल्प असंभव होने का दावा नहीं करते।`,
+      context: 'UCO Bank की mBanking FAQ बदले नंबर के लिए शाखा द्वारा Finacle अपडेट और m-Passbook FAQ base branch द्वारा customer ID से नए नंबर को जोड़ने की बात करती है। ये संबंधित संदर्भ हैं, सभी मामलों में केवल शाखा का दावा नहीं।',
+      steps,
+      faqs,
+      sources: [
+        { href: 'https://www.uco.bank.in/faq-on-digital-products', label: 'UCO Bank: digital products FAQ' },
+        { href: 'https://www.uco.bank.in/mbanking-plus', label: 'UCO Bank: mBanking सुविधाएं और registration' },
+      ],
+    };
+  }
   if (bank.slug === 'indian-bank') {
     const steps = [
       { name: 'शाखा से प्रक्रिया पूछें', text: `खाते में पहली बार नंबर जोड़ने या बदलने के लिए Indian Bank शाखा से प्रक्रिया और अपनी स्थिति के लिए जरूरी दस्तावेज़ पूछें। पुराने नंबर तक पहुंच नहीं है तो यह भी बताएं; सहायता के लिए ${bank.customerCare} से पूछें।` },

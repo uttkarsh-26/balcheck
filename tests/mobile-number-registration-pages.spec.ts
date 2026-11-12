@@ -131,6 +131,48 @@ test('UCO targets online-link intent while recommending verified channels', asyn
   await expect(answer).toContainText('दावा नहीं करते');
 });
 
+test('UCO guide scopes official FAQ and app feature and matches rendered schemas', async ({ page }) => {
+  const bank = banks.find(item => item.slug === 'uco-bank')!;
+  const guide = getMobileRegistrationGuide(bank)!;
+  await gotoDom(page, '/mobile-number-registration/uco-bank/');
+  await expect(page).toHaveTitle('UCO Bank Mobile Number Link Online — UCO Bank Mobile Number Link');
+  await expect(page.locator('h1')).toHaveText('UCO Bank Mobile Number Link Online');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://balcheck.in/mobile-number-registration/uco-bank/');
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', guide.description);
+  const section = page.getByTestId('uco-bank-registration-guide');
+  await expect(section).toContainText('My Profile');
+  await expect(section).toContainText('Update Mobile Number');
+  await expect(section).toContainText('पात्रता, क्रम और खाते या customer ID पर प्रभाव बैंक से पूछें');
+  await expect(section).toContainText('UCO Bank में पहली बार नंबर जोड़ने या बदलने के विकल्प और पात्रता शाखा या customer care');
+  await expect(section).toContainText('पुराना SIM उपलब्ध नहीं है तो यह भी बताएं');
+  const oldSimAnswer = page.getByRole('heading', { name: 'पुराना SIM उपलब्ध नहीं हो तो क्या करें?', exact: true }).locator('..').locator('p');
+  await expect(oldSimAnswer).toContainText('पढ़े गए स्रोत में इस स्थिति की प्रक्रिया स्पष्ट नहीं है');
+  await expect(section).toContainText('दूसरे विकल्पों के न होने का दावा नहीं है');
+  await expect(section.locator('a[href="https://www.uco.bank.in/faq-on-digital-products"]')).toBeVisible();
+  await expect(section.locator('a[href="https://www.uco.bank.in/mbanking-plus"]')).toBeVisible();
+  for (const source of guide.sources) await expect(section.locator(`a[href="${source.href}"]`)).toBeVisible();
+  const scripts = await getJsonLdScripts(page);
+  const howto = findSchema(scripts, 'HowTo') as { step: { name: string; text: string }[] };
+  const faq = findSchema(scripts, 'FAQPage') as { mainEntity: { name: string; acceptedAnswer: { text: string } }[] };
+  expect(howto.step.map(({ name, text }) => ({ name, text }))).toEqual(guide.steps);
+  expect(faq.mainEntity.map(item => ({ q: item.name, a: item.acceptedAnswer.text }))).toEqual(guide.faqs);
+  const steps = page.getByTestId('uco-bank-registration-steps').locator('li');
+  await expect(steps).toHaveCount(howto.step.length);
+  for (let i = 0; i < howto.step.length; i++) {
+    await expect(steps.nth(i)).toContainText(howto.step[i].name);
+    await expect(steps.nth(i)).toContainText(howto.step[i].text);
+  }
+  for (const item of faq.mainEntity) {
+    const heading = page.getByRole('heading', { name: item.name, exact: true });
+    await expect(heading).toBeVisible();
+    await expect(heading.locator('..').locator('p')).toHaveText(item.acceptedAnswer.text);
+  }
+  const content = `${await page.locator('body').innerText()} ${JSON.stringify(scripts)} ${guide.description}`;
+  for (const claim of ['24-48 घंटे', 'OTP आएगा — verify करें', 'Aadhaar card और passbook की copy', 'Aadhaar card (पहचान के लिए)', 'PAN card', '"Mobile Registration" या "Other Services"', 'हर deposit/withdrawal की SMS', 'mobile number link का official तरीका branch visit है']) expect(content).not.toContain(claim);
+  expect(content).not.toMatch(/(?:सिर्फ|केवल)\s+शाखा\s+(?:ही\s+)?(?:है|जाना|जाएं|से\s+हो)/);
+  await expect(section.locator('a[href*="ucobank.com"]')).toHaveCount(0);
+});
+
 test('IPPB targets online-link intent without claiming online completion', async ({ page }) => {
   const bank = banks.find(item => item.slug === 'ippb')!;
   await gotoDom(page, '/mobile-number-registration/ippb/');
