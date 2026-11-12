@@ -1,7 +1,7 @@
 import { test, expect } from './fixtures';
 import { banks } from '../src/data/banks';
 import { gotoDom, getJsonLdScripts, findSchema } from './utils';
-import { getBoiMobileRegistrationGuide } from '../src/data/boi-mobile-registration';
+import { getMobileRegistrationGuide } from '../src/data/mobile-registration-guides';
 
 const cases = ['sbi', 'uco-bank', 'ippb'].map(slug => banks.find(bank => bank.slug === slug)!);
 
@@ -43,7 +43,7 @@ test('BOI pages use the bank-confirmed helpline and current official website', a
 
 test('BOI guidance is source-scoped and matches visible FAQ and HowTo', async ({ page }) => {
   const bank = banks.find(item => item.slug === 'boi')!;
-  const guide = getBoiMobileRegistrationGuide(bank)!;
+  const guide = getMobileRegistrationGuide(bank)!;
   await gotoDom(page, '/mobile-number-registration/boi/');
   await expect(page).toHaveTitle('BOI Mobile Number Registration — बैंक ऑफ इंडिया | BalCheck');
   await expect(page.locator('h1')).toHaveText('BOI Mobile Number Registration');
@@ -78,9 +78,43 @@ test('BOI guidance is source-scoped and matches visible FAQ and HowTo', async ({
   await expect(page.locator('meta[name="description"]')).not.toHaveAttribute('content', /Branch, ATM या official website से/);
 });
 
+test('Indian Bank registration follows the policy without claiming unsupported flows', async ({ page }) => {
+  const bank = banks.find(item => item.slug === 'indian-bank')!;
+  const guide = getMobileRegistrationGuide(bank)!;
+  await gotoDom(page, '/mobile-number-registration/indian-bank/');
+  await expect(page).toHaveTitle('Indian Bank Mobile Number Registration — इंडियन बैंक | BalCheck');
+  await expect(page.locator('h1')).toHaveText('Indian Bank Mobile Number Registration');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://balcheck.in/mobile-number-registration/indian-bank/');
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', guide.description);
+  const section = page.getByTestId('indian-bank-registration-guide');
+  await expect(section).toContainText('कम से कम 4 घंटे');
+  await expect(section).toContainText('Do Not Register');
+  await expect(section).toContainText('पुराने नंबर पर OTP/SMS');
+  for (const source of guide.sources) await expect(section.locator(`a[href="${source.href}"]`)).toBeVisible();
+  const schema = await getJsonLdScripts(page);
+  const howto = findSchema(schema, 'HowTo') as { step: { name: string; text: string }[] };
+  const faq = findSchema(schema, 'FAQPage') as { mainEntity: { name: string; acceptedAnswer: { text: string } }[] };
+  expect(howto.step.map(({ name, text }) => ({ name, text }))).toEqual(guide.steps);
+  expect(faq.mainEntity.map(item => ({ q: item.name, a: item.acceptedAnswer.text }))).toEqual(guide.faqs);
+  const steps = page.getByTestId('indian-bank-registration-steps').locator('li');
+  await expect(steps).toHaveCount(howto.step.length);
+  for (let i = 0; i < howto.step.length; i++) {
+    await expect(steps.nth(i)).toContainText(howto.step[i].name);
+    await expect(steps.nth(i)).toContainText(howto.step[i].text);
+  }
+  for (const item of faq.mainEntity) {
+    const heading = page.getByRole('heading', { name: item.name, exact: true });
+    await expect(heading).toBeVisible();
+    await expect(heading.locator('..').locator('p')).toHaveText(item.acceptedAnswer.text);
+  }
+  const content = `${await page.locator('body').innerText()} ${JSON.stringify(schema)}`;
+  for (const claim of ['24-48 घंटे', 'OTP आएगा — verify करें', 'Aadhaar card और passbook की copy', 'SMS आता है → service registration active है', 'हर deposit/withdrawal की SMS', '"Mobile Registration" option select करें']) expect(content).not.toContain(claim);
+  await expect(page.locator('meta[name="description"]')).not.toHaveAttribute('content', /Branch, ATM या official website से/);
+});
+
 test('unconfigured bank falls back to existing registration content', async ({ page }) => {
   const bank = banks.find(item => item.slug === 'sbi')!;
-  expect(getBoiMobileRegistrationGuide(bank)).toBeUndefined();
+  expect(getMobileRegistrationGuide(bank)).toBeUndefined();
   await gotoDom(page, '/mobile-number-registration/sbi/');
   await expect(page.locator('[data-testid="boi-registration-guide"]')).toHaveCount(0);
   await expect(page.getByRole('heading', { name: /Branch Visit/ })).toBeVisible();

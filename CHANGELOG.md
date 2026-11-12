@@ -4,6 +4,9 @@ All notable changes to this repository are recorded here, newest first.
 
 ## [Unreleased]
 
+### Indian Bank mobile-number registration accuracy
+- Replaced unverified ATM/online menus, mandatory documents and fixed completion promises on the high-value registration page with the bank's CIF policy and source-scoped guidance. Distinguished app onboarding and missing-old-number cases; preserved title, H1, canonical and other banks, correcting only the unsupported description promise.
+
 ### Odisha Grameen ATM-PIN source scope
 - Rechecked the public Card Services portal without bypassing TLS validation. Removed the unsupported card-linked-mobile instruction from the shared visible/HowTo step, and qualified legacy-bank applicability in the FAQ, context note and description with the portal's account/card eligibility. Preserved the title, H1, canonical and other banks; the merger citation retains its earlier review date.
 
