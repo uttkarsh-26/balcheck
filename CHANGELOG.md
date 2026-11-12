@@ -4,6 +4,9 @@ All notable changes to this repository are recorded here, newest first.
 
 ## [Unreleased]
 
+### Rajasthan Gramin Aadhaar guidance
+- Corrected the existing page's KYC and DBT claims, distinguished bank, NPCI and UIDAI records, and replaced unsupported procedures with sourced guidance. Preserved page identity and other banks; corrected its description.
+
 ### UP Gramin mobile-number registration accuracy
 - Replaced unverified registration promises with source-scoped branch guidance, separated account/CIF updates from SMS, missed-call and app enrolment, and withheld the unaudited service rail on this page only. Preserved title, H1, canonical and registry; corrected the description.
 
