@@ -2,6 +2,8 @@ import { test, expect } from './fixtures';
 import { banks, type Bank } from '../src/data/banks';
 import { categorySlug, getJsonLdScripts, findSchema, gotoDom } from './utils';
 
+test.use({ localOnlyNetwork: true });
+
 const ctrTitles: Record<string, string> = {
   boi: 'BOI बैलेंस चेक नंबर 9811255430 | Missed Call',
   bandhan: 'Bandhan Bank Balance Check Number 9223008666 | Missed Call',
@@ -84,9 +86,7 @@ for (const bank of banks) {
   sweptBankSlugs.push(bank.slug);
   test.describe(`/bank/${bank.slug}`, () => {
     // Every assertion here reads static, server-rendered DOM — see gotoDom().
-    test.beforeEach(async ({ page, context, baseURL }) => {
-      const origin = new URL(baseURL!).origin;
-      await context.route('**/*', route => new URL(route.request().url()).origin === origin ? route.continue() : route.abort());
+    test.beforeEach(async ({ page }) => {
       await gotoDom(page, `/bank/${bank.slug}`);
     });
 
@@ -170,7 +170,10 @@ for (const bank of banks) {
 
       test('uses a verified, action-oriented meta description', async ({ page }) => {
         const description = await page.locator('meta[name="description"]').getAttribute('content');
-        if (bank.slug === 'ubi') {
+        if (bank.slug === 'up-gramin') {
+          expect(description).toBe(`UPGB (उत्तर प्रदेश ग्रामीण बैंक) बैलेंस चेक नंबर ${bank.missedCall}। रजिस्टर्ड घरेलू मोबाइल से मिस्ड कॉल के बाद बैलेंस SMS की जानकारी।`);
+          expect(description).not.toMatch(/तुरंत|उपलब्ध नहीं/);
+        } else if (bank.slug === 'ubi') {
           // The source-checked guide does not document instant delivery,
           // universally free enquiries or verified 24×7 availability.
           expect(description).toBe(`Union Bank balance check: ${bank.missedCall}। Primary account के लिए missed call; SMS commands, registration और charges की स्रोत-आधारित जानकारी।`);
@@ -289,9 +292,13 @@ for (const bank of banks) {
         await expect(section.locator('a[target="_blank"]')).toHaveAttribute('rel', /noopener noreferrer/);
         await expect(section).toContainText(bank.missedCall);
         await expect(section).toContainText('मिस्ड कॉल');
-        // Third-party disclaimer is mandatory whenever the snippet could be
-        // read as endorsing any non-official channel.
-        await expect(section).toContainText('आधिकारिक नहीं');
+        if (bank.slug === 'up-gramin') {
+          await expect(section).toContainText('जांचे गए');
+          await expect(section).toContainText('बैंक से पूछें');
+          await expect(section).not.toContainText('कोई भी');
+        } else {
+          await expect(section).toContainText('आधिकारिक नहीं');
+        }
       });
 
       test('extends the existing FAQPage schema with the WhatsApp question', async ({ page }) => {

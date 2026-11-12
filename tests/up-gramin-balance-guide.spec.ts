@@ -3,6 +3,8 @@ import { banks } from '../src/data/banks';
 import { getUpGraminBalanceGuide } from '../src/data/up-gramin-balance-guide';
 import { findSchema, getJsonLdScripts, gotoDom } from './utils';
 
+test.use({ localOnlyNetwork: true });
+
 const bank = banks.find(item => item.slug === 'up-gramin')!;
 const guide = '[data-testid="upgb-balance-guide"]';
 const source = 'https://upgb.bank.in/Miss-Call-Facility.php';
@@ -11,6 +13,8 @@ test('the guide follows the bank record and its unsupported-bank fallback stays 
   const changed = { ...bank, missedCall: 'TEST-NUMBER' };
   expect(getUpGraminBalanceGuide(changed)?.number).toBe(changed.missedCall);
   expect(getUpGraminBalanceGuide(changed)?.steps[0].text).toContain(changed.missedCall);
+  const original = getUpGraminBalanceGuide(bank)!;
+  expect(original.faqs.map(faq => faq.a)).toContain(original.serviceDescription);
   expect(getUpGraminBalanceGuide(banks.find(item => item.slug === 'sbi')!)).toBeUndefined();
 });
 

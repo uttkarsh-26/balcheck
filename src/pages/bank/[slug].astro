@@ -12,6 +12,7 @@ import UnionBankBalanceGuide from '../../components/UnionBankBalanceGuide.astro'
 import CanaraBalanceGuide from '../../components/CanaraBalanceGuide.astro';
 import { getCanaraBalanceGuide } from '../../data/canara-balance-guide';
 import { getBiharGraminBankGuide } from '../../data/bihar-gramin-bank-guide';
+import { getBankPageGuide } from '../../data/bank-page-guides';
 import { UNION_BALANCE_GUIDE, unionBalanceSteps } from '../../data/union-bank-balance';
 
 export function getStaticPaths() {
@@ -26,6 +27,7 @@ const { bank } = Astro.props;
 const isUnionBank = bank.slug === 'ubi';
 const canaraGuide = getCanaraBalanceGuide(bank);
 const contactGuide = getBiharGraminBankGuide(bank);
+const pageGuide = getBankPageGuide(bank);
 const isMissedCall = bank.balanceMode === 'missed-call';
 // Helpline tile: only a real 1800 number gets a /toll-free-number/<slug>/
 // page — the other banks' legacy toll-free URL 301s to /customer-care/<slug>/
@@ -34,7 +36,7 @@ const tollFreeTile = isTrueTollFreeNumber(bank.customerCare)
   ? { href: 'toll-free-number', icon: '🆓', label: 'Toll Free Number' }
   : { href: 'customer-care', icon: '🎧', label: 'Customer Care' };
 const serviceLabel = contactGuide?.label ?? (isMissedCall ? 'मिस्ड कॉल बैलेंस नंबर' : 'Customer Care / Balance Enquiry');
-const serviceInstruction = contactGuide?.instruction ?? canaraGuide?.instruction ?? (isUnionBank
+const serviceInstruction = contactGuide?.instruction ?? canaraGuide?.instruction ?? pageGuide?.instruction ?? (isUnionBank
   ? UNION_BALANCE_GUIDE.instruction
   : isMissedCall
   ? 'रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं।'
@@ -59,7 +61,10 @@ const related = banks
 const catSlug = bank.category.toLowerCase().replace(/\s+/g, '-');
 
 // FAQ items
-const baseFaqs = canaraGuide?.faqs ?? [
+const baseFaqs = canaraGuide?.faqs ?? (pageGuide ? [
+  ...pageGuide.procedure.faqs,
+  { q: `${bank.shortName} का customer care नंबर क्या है?`, a: `${bank.customerCare} बैंक का टोल-फ्री संपर्क है। सहायता और शिकायत के लिए पूछें; इसे प्रमाणित बैलेंस IVR न मानें।` },
+] : [
   {
     q: `${bank.shortName} का बैलेंस चेक करने का नंबर क्या है?`,
     a: `${bank.name} (${bank.shortName}) का balance enquiry number ${bank.missedCall} है। ${serviceInstruction}`
@@ -76,7 +81,7 @@ const baseFaqs = canaraGuide?.faqs ?? [
     q: `${bank.shortName} का customer care नंबर क्या है?`,
     a: `${bank.name} का customer care नंबर ${bank.customerCare} है। बैंकिंग सहायता और balance enquiry के लिए इस नंबर पर संपर्क करें।`
   },
-];
+]);
 
 
 // WhatsApp-banking answer — rendered ONLY for banks whose official site was
@@ -87,7 +92,7 @@ const waCheck = bank.whatsappBanking;
 const waFaqs = waCheck ? [
   {
     q: `${bank.shortName} का WhatsApp बैंकिंग नंबर क्या है?`,
-    a: `${bank.name} की आधिकारिक वेबसाइट ${waCheck.sourceUrl.replace('https://', '')} पर WhatsApp बैंकिंग का कोई नंबर नहीं दिया गया है (${waCheck.checkedOn} को जांचा गया)। बैलेंस जानने के लिए ${bank.missedCall} पर मिस्ड कॉल दें या ${bank.customerCare} पर customer care से बात करें। किसी भी तीसरे वेबसाइट पर दिया गया "WhatsApp नंबर" आधिकारिक नहीं है — उस पर अपनी जानकारी या पैसे का जोखिम न लें।`,
+    a: pageGuide?.whatsappAnswer ?? `${bank.name} की आधिकारिक वेबसाइट ${waCheck.sourceUrl.replace('https://', '')} पर WhatsApp बैंकिंग का कोई नंबर नहीं दिया गया है (${waCheck.checkedOn} को जांचा गया)। बैलेंस जानने के लिए ${bank.missedCall} पर मिस्ड कॉल दें या ${bank.customerCare} पर customer care से बात करें। किसी भी तीसरे वेबसाइट पर दिया गया "WhatsApp नंबर" आधिकारिक नहीं है — उस पर अपनी जानकारी या पैसे का जोखिम न लें।`,
   },
 ] : [];
 
@@ -233,7 +238,9 @@ const howToSchema = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
   name: `${bank.nameHindi} से बैलेंस कैसे चेक करें`,
-  step: canaraGuide
+  step: pageGuide
+    ? pageGuide.procedure.steps.map((s, index) => ({ '@type': 'HowToStep', position: index + 1, text: s.text }))
+    : canaraGuide
     ? canaraGuide.steps.map((text, index) => ({ '@type': 'HowToStep', position: index + 1, text }))
     : isUnionBank
     ? unionBalanceSteps(bank.missedCall).map(text => ({ '@type': 'HowToStep', text }))
@@ -320,7 +327,7 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
   // the WhatsApp fact stays in the description tail and the on-page FAQ.
   'up-gramin': {
     title: `Uttar Pradesh Gramin Bank Balance Check Number ${bank.missedCall}`,
-    description: `UPGB (उत्तर प्रदेश ग्रामीण बैंक) का आधिकारिक बैलेंस चेक नंबर ${bank.missedCall} — मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। WhatsApp बैंकिंग उपलब्ध नहीं।`,
+    description: pageGuide?.description,
   },
   // 25,424 impressions, 93% Latin queries @ 0.07% CTR — the worst CTR of any
   // page with volume on the site — while the 6% Devanagari impressions convert
@@ -503,7 +510,7 @@ const pageDesc = !isMissedCall
   poster="/videos/balcheck-poster.webp"
   title={contactGuide ? `${bank.nameHindi} टोल-फ्री संपर्क` : `${bank.nameHindi} बैलेंस चेक नंबर`}
   subtitle={contactGuide ? 'सहायता के लिए बैंक का प्रकाशित संपर्क' : isMissedCall ? `अपने बैंक खाते का बैलेंस जानें — मिस्ड कॉल दें` : `Customer Care / IVR से balance enquiry करें`}
-  ctaText={contactGuide ? 'बैंक संपर्क:' : `Call Now:`}
+  ctaText={contactGuide ? 'बैंक संपर्क:' : pageGuide ? 'मिस्ड कॉल:' : `Call Now:`}
   ctaNumber={bank.missedCall}
   ctaHref={`tel:${bank.missedCall}`}
   headingLevel={2}
@@ -611,6 +618,14 @@ const pageDesc = !isMissedCall
   </div>
 </section>}
 
+{pageGuide && <section data-testid="bank-page-procedure" class="max-w-copy mx-auto px-4 py-6">
+  <h2 class="text-h2 font-bold">मिस्ड कॉल से बैलेंस</h2>
+  <p>बैंक के अनुसार यह सुविधा resident accounts और रजिस्टर्ड घरेलू मोबाइल तक सीमित है; SB, CA, OD और CC खाते पात्र हैं। मोबाइल दर्ज न हो तो base branch से संपर्क करें।</p>
+  <ol>{pageGuide.procedure.steps.map(step => <li><strong>{step.name}</strong>: <span>{step.text}</span></li>)}</ol>
+  <p>{pageGuide.serviceDescription}</p>
+  <p>प्रक्रिया स्रोत: <a href={pageGuide.procedure.sourceUrl}>बैंक का Miss Call Facility पेज</a>; प्रक्रिया समीक्षा {pageGuide.procedure.checkedOn}। इस पेज के लिए प्रकाशित प्रक्रिया दोबारा पढ़ी: {pageGuide.checkedOn}; लाइव सेवा नहीं जांची गई।</p>
+</section>}
+
 {isUnionBank && <UnionBankBalanceGuide bank={bank} />}
 {canaraGuide && <CanaraBalanceGuide guide={canaraGuide} />}
 
@@ -620,6 +635,7 @@ const pageDesc = !isMissedCall
     <div class="max-w-copy mx-auto px-4 py-8">
       <h2 class="text-h2 font-bold text-gray-900 mb-3">{bank.nameHindi} — WhatsApp बैंकिंग नंबर</h2>
       <div class="bg-amber-50 rounded-xl border border-amber-200 p-4">
+        {pageGuide ? <p class="text-sm text-gray-800 leading-relaxed">{pageGuide.whatsappAnswer} ऐतिहासिक जांच का स्रोत: <a href={waCheck.sourceUrl} target="_blank" rel="noopener noreferrer" class="underline">{waCheck.sourceUrl}</a>। जांच में homepage, contact, social banking और mobile banking पेज शामिल थे।</p> : <>
         <p class="text-sm text-gray-800 leading-relaxed">
           <strong>नहीं</strong> — {bank.name} की आधिकारिक वेबसाइट (<a href={waCheck.sourceUrl} target="_blank" rel="noopener noreferrer" class="text-brand-700 underline break-all">{waCheck.sourceUrl.replace('https://', '')}</a>) पर WhatsApp बैंकिंग का कोई नंबर नहीं दिया गया है ({waCheck.checkedOn} को जांचा गया)।
         </p>
@@ -629,6 +645,7 @@ const pageDesc = !isMissedCall
         <p class="text-xs text-gray-700 leading-relaxed mt-2">
           ⚠️ सावधानी: Google या किसी ब्लॉग/एग्रीगेटर पर दिखने वाला कोई भी "{bank.shortName} WhatsApp नंबर" आधिकारिक नहीं है — ऐसे नंबर पर मैसेज न भेजें, न कोई OTP/जानकारी साझा करें। बैंक की ओर से अभी तक WhatsApp बैंकिंग शुरू होने पर ही इस पेज पर नंबर दिखाया जाएगा।
         </p>
+        </>}
       </div>
       <p class="text-xs text-gray-500 mt-3">स्रोत: {bank.name} official website, जांच तिथि {waCheck.checkedOn}</p>
     </div>
@@ -636,7 +653,7 @@ const pageDesc = !isMissedCall
 )}
 
 <!-- How It Works -->
-{!isUnionBank && !canaraGuide && !contactGuide && <section class="bg-white border-t border-gray-100">
+{!isUnionBank && !canaraGuide && !contactGuide && !pageGuide && <section class="bg-white border-t border-gray-100">
   <div class="max-w-copy mx-auto px-4 py-8">
     <h2 class="text-h2 font-bold text-gray-900 mb-6">{bank.nameHindi} से बैलेंस कैसे चेक करें?</h2>
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -674,7 +691,8 @@ const pageDesc = !isMissedCall
 </section>
 
 <!-- Predecessor banks (reverse merger links — successor pages only) -->
-{predecessors.length > 0 && (
+{pageGuide && <section class="max-w-copy mx-auto px-4 py-6"><h2 class="text-h2 font-bold">2025 के तत्काल पूर्ववर्ती बैंक</h2><p>बैंक के अनुसार 1 मई 2025 को Baroda UP Bank, Prathama UP Gramin Bank और Aryavart Bank के विलय से Uttar Pradesh Gramin Bank बना; मुख्यालय Lucknow है। <a href={pageGuide.mergerSource}>बैंक का परिचय</a> (पढ़ा {pageGuide.checkedOn})।</p></section>}
+{!pageGuide && predecessors.length > 0 && (
   <section class="bg-white border-t border-gray-100">
     <div class="max-w-copy mx-auto px-4 py-6">
       <h2 class="text-h2 font-bold text-gray-900 mb-3">पूर्व बैंक — {bank.nameHindi} में विलय हुई बैंकें</h2>
@@ -691,7 +709,7 @@ const pageDesc = !isMissedCall
 )}
 
 <!-- Banking Services Cross-Links -->
-<section class="bg-gray-50 border-t border-gray-100">
+<section class="bg-gray-50 border-t border-gray-100" data-testid={pageGuide ? "bank-services" : undefined}>
   <div class="max-w-copy mx-auto px-4 py-6">
     <h2 class="text-h2 font-bold text-gray-900 mb-3">{bank.shortName} — अन्य सेवाएं</h2>
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -702,34 +720,34 @@ const pageDesc = !isMissedCall
       </a>
       {!contactGuide && <a href={`/sms-banking/${bank.slug}/`}
          class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
-        <p class="text-xs text-gray-500">📱 SMS Banking</p>
-        <p class="text-xs font-medium text-brand-700 mt-1">Balance by SMS →</p>
+        <p class="text-xs text-gray-500">📱 {pageGuide?.smsLabel ?? 'SMS Banking'}</p>
+        <p class="text-xs font-medium text-brand-700 mt-1">{pageGuide ? 'मिस्ड कॉल का जवाब →' : 'Balance by SMS →'}</p>
       </a>}
-      <a href={`/net-banking/${bank.slug}/`}
+      {!pageGuide?.hiddenServices.has('net-banking') && <a href={`/net-banking/${bank.slug}/`}
          class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
         <p class="text-xs text-gray-500">🌐 Net Banking</p>
         <p class="text-xs font-medium text-brand-700 mt-1">Login →</p>
-      </a>
-      <a href={`/mini-statement/${bank.slug}/`}
+      </a>}
+      {!pageGuide?.hiddenServices.has('mini-statement') && <a href={`/mini-statement/${bank.slug}/`}
          class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
         <p class="text-xs text-gray-500">📄 Mini Statement</p>
         <p class="text-xs font-medium text-brand-700 mt-1">Last 5 Txns →</p>
-      </a>
-      <a href={`/mobile-number-registration/${bank.slug}/`}
+      </a>}
+      {!pageGuide?.hiddenServices.has('mobile-number-registration') && <a href={`/mobile-number-registration/${bank.slug}/`}
          class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
         <p class="text-xs text-gray-500">📱 Mobile Registration</p>
         <p class="text-xs font-medium text-brand-700 mt-1">Register Number →</p>
-      </a>
-      <a href={`/aadhaar-link/${bank.slug}/`}
+      </a>}
+      {!pageGuide?.hiddenServices.has('aadhaar-link') && <a href={`/aadhaar-link/${bank.slug}/`}
          class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
         <p class="text-xs text-gray-500">🔗 Aadhaar Link</p>
         <p class="text-xs font-medium text-brand-700 mt-1">Link Aadhaar →</p>
-      </a>
-      <a href={`/atm-pin/${bank.slug}/`}
+      </a>}
+      {!pageGuide?.hiddenServices.has('atm-pin') && <a href={`/atm-pin/${bank.slug}/`}
          class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
         <p class="text-xs text-gray-500">🔑 ATM PIN</p>
         <p class="text-xs font-medium text-brand-700 mt-1">Generate PIN →</p>
-      </a>
+      </a>}
       {!contactGuide && <a href={`/balance-enquiry/${bank.slug}/`}
          class="bg-white rounded-lg border border-gray-200 p-3 text-center hover:border-brand-300 hover:shadow-sm transition-all">
         <p class="text-xs text-gray-500">💰 Balance Enquiry</p>

@@ -120,9 +120,21 @@ export const installAdNetworkBlock = async (context: BrowserContext): Promise<vo
 };
 
 // All specs import test from this fixture; production ad/analytics tags remain unchanged.
-export const test = base.extend({
-  context: async ({ context }, use) => {
+export const test = base.extend<{ localOnlyNetwork: boolean }>({
+  localOnlyNetwork: [false, { option: true }],
+  serviceWorkers: async ({ serviceWorkers, localOnlyNetwork }, use) => {
+    await use(localOnlyNetwork ? 'block' : serviceWorkers);
+  },
+  context: async ({ context, localOnlyNetwork }, use) => {
     await installAdNetworkBlock(context);
+    // Opt-in strict isolation for source-scoped page tests: no remote requests.
+    if (localOnlyNetwork) {
+      await context.route('**/*', route => {
+        const url = new URL(route.request().url());
+        return ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname)
+          ? route.fallback() : route.abort('blockedbyclient');
+      });
+    }
     await use(context);
   },
 });
