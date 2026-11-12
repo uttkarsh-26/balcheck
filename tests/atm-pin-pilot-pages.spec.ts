@@ -1,7 +1,7 @@
 import { test, expect } from './fixtures';
 import { ATM_PIN_GUIDES, getAtmPinGuide } from '../src/data/atm-pin-guides';
 import { banks } from '../src/data/banks';
-import { findSchema, gotoDom } from './utils';
+import { findSchema, getJsonLdScripts, gotoDom } from './utils';
 
 /**
  * Rendered-HTML contract for the two-page ATM-PIN pilot.
@@ -310,6 +310,32 @@ for (const path of NON_PILOT_PATHS) {
     });
   });
 }
+
+test('Odisha PIN guidance does not infer a linked mobile or legacy-customer eligibility', async ({ page }) => {
+  await gotoDom(page, '/atm-pin/odisha-grameen/');
+  const guide = getAtmPinGuide('odisha-grameen')!;
+  await expect(page.getByTestId('atm-pin-guide-steps').locator('li').nth(2)).toContainText(
+    'Mobile Number field में अपना मोबाइल नंबर भरें',
+  );
+  await expect(page.locator('main')).toContainText('पुराने बैंक के ग्राहक हों, तो इस PIN सेवा की खाता व कार्ड पात्रता');
+  const description = 'ओडिशा ग्रामीण बैंक (Odisha Grameen Bank) ATM PIN — official Card Services portal से Generate PIN। पहले पोर्टल की खाता व कार्ड पात्रता देखें।';
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', description);
+
+  const schemas = await getJsonLdScripts(page);
+  const howTo = findSchema(schemas, 'HowTo') as { step: { text: string }[] };
+  const faq = findSchema(schemas, 'FAQPage') as { mainEntity: { acceptedAnswer: { text: string } }[] };
+  expect(howTo.step[2].text).toBe(guide.steps[2].detail);
+  expect(faq.mainEntity[1].acceptedAnswer.text).toContain('पुराने बैंक का ग्राहक होना अपने-आप इस PIN सेवा की पात्रता नहीं बताता');
+  const rendered = `${await page.locator('main').textContent()} ${description} ${JSON.stringify(schemas)}`;
+  for (const unsupported of [
+    'card से जुड़ा वही number डालें',
+    'पुराने नाम से खोजने वाले उपयोगकर्ताओं के लिए भी यही सही page है',
+    'Odisha Gramya Bank नाम से खोजें तो भी यही सही page है',
+    'अगर आपने "Odisha Gramya Bank" नाम से खोजा था, तो आप सही page पर हैं',
+  ]) {
+    expect(rendered).not.toContain(unsupported);
+  }
+});
 
 test('the pilot registry never grows past the approved two banks silently', () => {
   expect(Object.keys(ATM_PIN_GUIDES)).toHaveLength(2);

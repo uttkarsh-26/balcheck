@@ -4,6 +4,9 @@ All notable changes to this repository are recorded here, newest first.
 
 ## [Unreleased]
 
+### Odisha Grameen ATM-PIN source scope
+- Rechecked the public Card Services portal without bypassing TLS validation. Removed the unsupported card-linked-mobile instruction from the shared visible/HowTo step, and qualified legacy-bank applicability in the FAQ, context note and description with the portal's account/card eligibility. Preserved the title, H1, canonical and other banks; the merger citation retains its earlier review date.
+
 ### BOI mobile-number registration accuracy
 - On the existing BOI registration page, replaced unverified fixed timelines, mandatory-document and ATM/online sequences with source-scoped guidance; distinguished changes to the mobile number held on an account, mobile-app onboarding and service activation. FAQ and HowTo schema reuse the visible guidance. Corrected the description's unsupported ATM/website instruction while preserving the title, H1 and canonical; other banks remain unchanged.
 

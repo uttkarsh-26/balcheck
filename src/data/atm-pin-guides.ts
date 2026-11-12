@@ -179,7 +179,7 @@ export const ATM_PIN_GUIDES: Record<string, AtmPinGuide> = {
       url: 'https://mycards.ogb.bank.in/',
     },
     sourceUrl: 'https://mycards.ogb.bank.in/',
-    checkedOn: '2026-10-31',
+    checkedOn: '2026-11-12',
     sourceLabel: 'Odisha Grameen Bank — Card Services portal, Generate PIN (आधिकारिक portal)',
     prerequisites: [
       'आप Resident Individual या Senior Citizen होने चाहिए और Savings Account होना चाहिए।',
@@ -200,7 +200,7 @@ export const ATM_PIN_GUIDES: Record<string, AtmPinGuide> = {
       },
       {
         label: 'Mobile Number',
-        detail: 'Portal आपसे Mobile Number मांगेगा — card से जुड़ा वही number डालें।',
+        detail: 'Portal के Mobile Number field में अपना मोबाइल नंबर भरें और वहीं दिखने वाले सत्यापन निर्देश मानें।',
       },
       {
         label: 'Date of Birth',
@@ -246,7 +246,7 @@ export const ATM_PIN_GUIDES: Record<string, AtmPinGuide> = {
       },
       {
         q: 'Odisha Gramya Bank के लिए यह page सही है?',
-        a: 'हाँ। Odisha Grameen Bank की स्थापना 1 मई 2025 को Odisha Gramya Bank और Utkal Grameen Bank के amalgamation से हुई थी। पुराने नाम से खोजने वाले उपयोगकर्ताओं के लिए भी यही सही page है।',
+        a: 'Odisha Grameen Bank की स्थापना 1 मई 2025 को Odisha Gramya Bank और Utkal Grameen Bank के amalgamation से हुई थी। पुराने बैंक का ग्राहक होना अपने-आप इस PIN सेवा की पात्रता नहीं बताता; पोर्टल पर खाता और कार्ड संबंधी शर्तें जाँचें।',
       },
       {
         q: 'OGB Card Instant PIN Re-generation के लिए क्या ज़रूरी है?',
@@ -258,9 +258,9 @@ export const ATM_PIN_GUIDES: Record<string, AtmPinGuide> = {
       },
     ],
     metaDescription:
-      'ओडिशा ग्रामीण बैंक (Odisha Grameen Bank) ATM PIN — official Card Services portal से Generate PIN। Odisha Gramya Bank नाम से खोजें तो भी यही सही page है।',
+      'ओडिशा ग्रामीण बैंक (Odisha Grameen Bank) ATM PIN — official Card Services portal से Generate PIN। पहले पोर्टल की खाता व कार्ड पात्रता देखें।',
     contextNote: {
-      text: 'नाम बदला है: इस बैंक की स्थापना 1 मई 2025 को ओडिशा ग्राम्य बैंक (Odisha Gramya Bank) और उत्कल ग्रामीण बैंक (Utkal Grameen Bank) के amalgamation से हुई — Government of India, Department of Financial Services, Ministry of Finance, Notification No. CG-DL-E-07042025-262329 (05/04/2025)। अगर आपने "Odisha Gramya Bank" नाम से खोजा था, तो आप सही page पर हैं।',
+      text: 'नाम बदला है: इस बैंक की स्थापना 1 मई 2025 को ओडिशा ग्राम्य बैंक (Odisha Gramya Bank) और उत्कल ग्रामीण बैंक (Utkal Grameen Bank) के amalgamation से हुई — Government of India, Department of Financial Services, Ministry of Finance, Notification No. CG-DL-E-07042025-262329 (05/04/2025)। पुराने बैंक के ग्राहक हों, तो इस PIN सेवा की खाता व कार्ड पात्रता बैंक के पोर्टल पर जाँचें।',
       sourceUrl: 'https://odishabank.bank.in/',
       checkedOn: '2026-10-31',
     },
