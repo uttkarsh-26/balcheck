@@ -3,6 +3,8 @@ import { mergers } from '../src/data/mergers';
 import { banks } from '../src/data/banks';
 import { gotoDom, getJsonLdScripts, findSchema } from './utils';
 
+test.use({ localOnlyNetwork: true });
+
 // Research-backed lineage expectations (verified 2026-08-10 against gazette/RBI/
 // DICGC/official .bank.in sources — see delegation research receipts):
 // oldSlug -> [effectiveDate of each event, oldest first] -> successorSlug
@@ -253,7 +255,6 @@ test.describe('cross-links from existing bank pages', () => {
 
   test('successor bank pages show a reverse पूर्व बैंक section', async ({ page }) => {
     const expected: Record<string, string[]> = {
-      'up-gramin': ['baroda-up-gramin', 'kashi-gomti-samyut', 'purvanchal', 'allahabad-up-gramin'],
       'mp-gramin': ['narmada-jhabua', 'central-madhya-pradesh', 'madhyanchal'],
       'punjab-gramin': ['malwa', 'sutlej'],
       'karnataka-grameena': ['karnataka-vikas', 'pragathi-krishna'],
@@ -268,6 +269,21 @@ test.describe('cross-links from existing bank pages', () => {
         await expect(page.locator(`a[href="/merged-banks/${oldSlug}/"]`)).toBeVisible();
       }
     }
+  });
+
+  test('UPGB formation names the official immediate 2025 predecessors', async ({ page }) => {
+    await gotoDom(page, '/bank/up-gramin/');
+    const formation = page.locator('section').filter({
+      has: page.getByRole('heading', { level: 2, name: '2025 के तत्काल पूर्ववर्ती बैंक', exact: true }),
+    });
+    await expect(formation).toHaveCount(1);
+    const description = (await formation.locator('p').innerText()).replace(/\s+/g, ' ').trim();
+    expect(description).toMatch(/^बैंक के अनुसार 1 मई 2025 को Baroda UP Bank, Prathama UP Gramin Bank और Aryavart Bank के विलय से Uttar Pradesh Gramin Bank बना; मुख्यालय Lucknow है। बैंक का परिचय \(पढ़ा \d{4}-\d{2}-\d{2}\)।$/);
+    await expect(formation.getByRole('link')).toHaveCount(1);
+    await expect(formation.getByRole('link', { name: 'बैंक का परिचय', exact: true }))
+      .toHaveAttribute('href', 'https://upgb.bank.in/about.php');
+    await expect(formation.locator('a[href^="/merged-banks/"]')).toHaveCount(0);
+    await expect(page.locator('h2', { hasText: 'पूर्व बैंक' })).toHaveCount(0);
   });
 
   test('non-merger bank pages are untouched (no banner, no पूर्व बैंक section)', async ({ page }) => {
