@@ -4,6 +4,9 @@ All notable changes to this repository are recorded here, newest first.
 
 ## [Unreleased]
 
+### UP Gramin mobile-number registration accuracy
+- Replaced unverified registration promises with source-scoped branch guidance, separated account/CIF updates from SMS, missed-call and app enrolment, and withheld the unaudited service rail on this page only. Preserved title, H1, canonical and registry; corrected the description.
+
 ### UP Gramin bank page source scope
 - Corrected the missed-call procedure and merger history, qualified WhatsApp and contact claims, and withheld unreviewed service links on the existing bank page. Registry, linked guides, title, H1 and canonical remain unchanged.
 

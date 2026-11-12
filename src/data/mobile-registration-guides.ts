@@ -6,7 +6,54 @@ import type { Bank } from './banks';
 // This notice concerns grievance communications; it does not rule out other channels.
 // BOI mobile banking page describes app onboarding, not changing the account's mobile number:
 // https://bankofindia.bank.in/smart-banking/mobile-banking-payment
-export function getMobileRegistrationGuide(bank: Bank) {
+interface MobileRegistrationGuide {
+  description: string;
+  quickAnswer: string;
+  context: string;
+  steps: { name: string; text: string }[];
+  faqs: { q: string; a: string }[];
+  sources: { href: string; label: string }[];
+  benefits?: string[];
+  showMoreServices?: boolean;
+}
+
+export function getMobileRegistrationGuide(bank: Bank): MobileRegistrationGuide | undefined {
+  if (bank.slug === 'up-gramin') {
+    // Official public sources reviewed 2026-11-12: SMS alerts, missed-call
+    // facility and M-Tarang enrolment have different scopes; none establishes
+    // an exclusive account/CIF-number update channel.
+    const steps = [
+      { name: 'Base branch से अपनी स्थिति बताएं', text: `पहली बार नंबर जोड़ना है या मौजूदा नंबर बदलना है, और SMS या किसी सेवा की क्या जरूरत है, यह base branch से पूछें। सहायता के लिए customer care ${bank.customerCare} से मार्गदर्शन लें।` },
+      { name: 'जरूरत और प्रक्रिया पूछें', text: 'पुराना SIM उपलब्ध न हो तो बैंक को बताएं। अपनी स्थिति के लिए पहचान, फॉर्म, उपलब्ध विकल्प, शुल्क, अपेक्षित समय और पुष्टि का तरीका पूछें। OTP, PIN या password किसी को न बताएं।' },
+      { name: 'खाते और सेवाओं की स्थिति अलग पूछें', text: 'बैंक से खाते या CIF में दर्ज नंबर की पुष्टि और इच्छित SMS या missed-call सेवा की स्थिति अलग-अलग पूछें। SMS आने या न आने से सभी सेवाओं या CIF की स्थिति तय नहीं होती।' },
+    ];
+    const faqs = [
+      { q: 'UPGB में पहली बार मोबाइल नंबर कैसे जोड़ें या बदलें?', a: `SMS alerts के लिए बैंक base branch में नंबर दर्ज कराने और बदलाव पर base branch को सूचित करने को कहता है। अपनी पहली registration या बदलाव की प्रक्रिया और जरूरतें शाखा से पूछें; मार्गदर्शन के लिए ${bank.customerCare} से भी पूछें। यह अन्य विकल्पों को नकारता नहीं है।` },
+      { q: 'क्या ATM, online या app से खाते का नंबर बदल सकता है?', a: 'पढ़े गए स्रोतों से खाते या CIF का नंबर ATM, online या app से बदलने का क्रम पुष्ट नहीं हुआ। अपने खाते के लिए उपलब्ध विकल्प बैंक से पूछें। बैंक की FAQ में mobile banking registration के लिए Branch और Internet Banking दिए हैं; app enrolment खाते का नंबर बदलने का प्रमाण नहीं है।' },
+      { q: 'पुराना SIM उपलब्ध न हो तो क्या करें?', a: 'अपनी स्थिति base branch या customer care को बताएं और लागू प्रक्रिया पूछें। पढ़े गए स्रोत इस स्थिति के लिए सभी ग्राहकों की प्रक्रिया तय नहीं करते।' },
+      { q: 'कौन से documents, शुल्क, समय या OTP जरूरी हैं?', a: 'पहचान, फॉर्म, शुल्क, अपेक्षित समय और पुष्टि की जरूरत अपनी स्थिति के अनुसार बैंक से पूछें। पढ़े गए स्रोत हर मामले के लिए कोई एक दस्तावेज़ सूची, समय या OTP की शर्त नहीं बताते। OTP, PIN और password किसी को न बताएं।' },
+      { q: 'खाते और missed-call सेवा की स्थिति कैसे जानें?', a: 'खाते या CIF में दर्ज नंबर और प्रत्येक सेवा की स्थिति बैंक से अलग पूछें। SMS आने या न आने से सभी सेवाओं का activation या CIF में दर्ज नंबर सिद्ध नहीं होता। बैंक missed-call सुविधा के लिए अपंजीकृत ग्राहक को base branch से संपर्क करने को कहता है।' },
+      { q: 'क्या M-Tarang registration खाते का नंबर बदलना है?', a: 'नहीं। M-Tarang के स्रोत mobile banking app में enrolment बताते हैं, खाते या CIF का मोबाइल नंबर बदलने की प्रक्रिया नहीं। SMS alerts और missed-call सुविधा की स्थिति भी अलग से बैंक से पूछें।' },
+    ];
+    return {
+      description: 'उत्तर प्रदेश ग्रामीण बैंक (UPGB) में मोबाइल नंबर जोड़ने या बदलने के लिए शाखा से प्रक्रिया पूछें। आधिकारिक स्रोत और जरूरी सावधानियाँ।',
+      quickAnswer: `UPGB के SMS alerts स्रोत में नंबर base branch में दर्ज कराने और बदलाव पर शाखा को सूचित करने को कहा गया है। पहली registration या बदलाव और अपनी जरूरतें base branch से पूछें; मार्गदर्शन के लिए customer care ${bank.customerCare} से भी पूछें।`,
+      context: 'Uttar Pradesh Gramin Bank में खाते या CIF का नंबर, SMS alerts और missed-call सुविधा की registration तथा M-Tarang app enrolment अलग संदर्भ हैं। बैंक का missed-call निर्देश उस सुविधा के लिए है, सभी CIF बदलावों के लिए नहीं। स्रोत पढ़े गए: 2026-11-12।',
+      steps, faqs,
+      benefits: [
+        'बैंक की SMS alerts और missed-call balance सुविधाओं के संदर्भ में registered mobile प्रासंगिक है।',
+        'हर सुविधा की पात्रता और activation अलग हो सकती है; अपनी स्थिति बैंक से पुष्टि करें।',
+      ],
+      showMoreServices: false,
+      sources: [
+        { href: 'https://upgb.bank.in/sms-alert.php', label: 'UPGB: SMS alerts' },
+        { href: 'https://upgb.bank.in/Miss-Call-Facility.php', label: 'UPGB: missed-call सुविधा' },
+        { href: 'https://upgb.bank.in/mobile-banking.php', label: 'UPGB: mobile banking' },
+        { href: 'https://upgb.bank.in/webdata/FAQ%20English.pdf', label: 'UPGB: mobile banking FAQ' },
+        { href: 'https://upgb.bank.in/webdata/pdf/Mobile_Banking_2025.pdf', label: 'UPGB: M-Tarang दिशानिर्देश' },
+      ],
+    };
+  }
   if (bank.slug === 'uco-bank') {
     // UCO digital FAQ: changed number in mBanking and m-Passbook contexts.
     // https://www.uco.bank.in/faq-on-digital-products

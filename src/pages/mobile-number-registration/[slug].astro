@@ -212,12 +212,14 @@ const schema = {
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
       <h2 class="text-h2 font-semibold text-gray-900 mb-3">📱 Mobile Number क्यों Register कराएं?</h2>
       <ul class="space-y-2 text-sm text-gray-700">
+        {guide?.benefits ? guide.benefits.map(benefit => <li class="flex gap-2"><span class="text-brand-600">✓</span> {benefit}</li>) : <>
         <li class="flex gap-2"><span class="text-brand-600">✓</span> Balance enquiry — {isMissedCall ? `${bank.missedCall} पर missed call` : 'official app, ATM या Customer Care / IVR'}</li>
         <li class="flex gap-2"><span class="text-brand-600">✓</span> Bank द्वारा उपलब्ध SMS banking और statement services</li>
         <li class="flex gap-2"><span class="text-brand-600">✓</span> {guide ? 'बैंक द्वारा उपलब्ध transaction alerts' : 'Transaction alerts — हर deposit/withdrawal की SMS'}</li>
         <li class="flex gap-2"><span class="text-brand-600">✓</span> UPI और mobile banking app का उपयोग</li>
         <li class="flex gap-2"><span class="text-brand-600">✓</span> OTP verification — net banking और online transactions के लिए</li>
         <li class="flex gap-2"><span class="text-brand-600">✓</span> Card block और security alerts</li>
+        </>}
       </ul>
     </div>
 
@@ -365,6 +367,6 @@ const schema = {
       scope={`${bank.shortName} customer care`}
     />
 
-    <MoreServices bank={bank} />
+    {guide?.showMoreServices !== false && <MoreServices bank={bank} />}
   </div>
 </Layout>

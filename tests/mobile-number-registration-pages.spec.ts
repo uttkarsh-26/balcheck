@@ -3,6 +3,8 @@ import { banks } from '../src/data/banks';
 import { gotoDom, getJsonLdScripts, findSchema } from './utils';
 import { getMobileRegistrationGuide } from '../src/data/mobile-registration-guides';
 
+test.use({ localOnlyNetwork: true });
+
 const cases = ['sbi', 'uco-bank', 'ippb'].map(slug => banks.find(bank => bank.slug === slug)!);
 
 for (const bank of cases) {
