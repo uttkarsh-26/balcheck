@@ -32,6 +32,7 @@ const ctrTitles: Record<string, string> = {
   'airtel-payments': 'Airtel Payments Bank Missed Call Balance Check 8800688006',
   'maharashtra-gramin': 'MGB Balance Check Number 9549224443',
   'rajasthan-gramin': 'RGB Balance Check Number 8750187504',
+  ippb: '7799022509 IPPB Balance Check Number | Missed Call',
 };
 
 const sprint3Banks = new Set(['canara', 'psb', 'boi']);

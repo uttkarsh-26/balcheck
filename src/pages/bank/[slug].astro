@@ -441,6 +441,15 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
     title: `RGB Balance Check Number ${bank.missedCall}`,
     description: `Rajasthan Gramin Bank (RGB) balance check number ${bank.missedCall} — आधिकारिक मिस्ड कॉल सेवा। रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं। मुफ़्त, 24×7।`,
   },
+  // 30d pull 2026-11-13: the row's demand query is the published number itself
+  // ('7799022509', redacted in the artifact) — 2,279 impr @ 0.83% CTR pos 6.9.
+  // The Devanagari-first default title carried the number mid-string (and only
+  // inside the ≤60 fallback), so the snippet never LED with what the query
+  // typed. Number leads the title; no description override (the scalable
+  // default already carries the number and is unchanged).
+  ippb: {
+    title: `${bank.missedCall} IPPB Balance Check Number | Missed Call`,
+  },
 };
 
 const customerCareTitle = `${bank.name} Balance Check Number ${bank.missedCall}`;
