@@ -187,6 +187,14 @@ const h1Overrides: Partial<Record<string, string>> = {
   // @ 0.78% CTR pos 4.5 — the frozen H1 includes unverified 24x7 and balance implications. The
   // current contact source only establishes a toll-free contact number.
   'bihar-gramin': `Bihar Gramin Bank Customer Care Number 24x7 & Balance Check ${bank.missedCall}`,
+  // 30d pull 2026-11-14: the row's demand query is the published number itself
+  // ('7799022509', redacted in the artifact) — 2,278 impr @ 0.83% CTR pos 6.9.
+  // The title override (2026-11-13) already leads with the number, but the H1
+  // was 'इंडिया पोस्ट पेमेंट्स बैंक' only, so no heading carried the digits the
+  // query typed. Number leads the H1; balanceMode derives to missed-call (the
+  // published line differs from customerCare), so the wording claims nothing
+  // the page does not already carry.
+  ippb: `${bank.missedCall} IPPB Balance Check Number`,
 };
 const psbFaqs = bank.slug === 'psb' ? [
     {

@@ -76,6 +76,7 @@ const h1Overrides: Record<string, (bank: Bank) => string> = {
   'rajasthan-gramin': bank => `Rajasthan Gramin Bank (RGB) Balance Check Number ${bank.missedCall}`,
   'punjab-gramin': bank => `Punjab Gramin Bank Balance Check Number ${bank.missedCall}`,
   'bihar-gramin': bank => `Bihar Gramin Bank Customer Care Number 24x7 & Balance Check ${bank.missedCall}`,
+  ippb: bank => `${bank.missedCall} IPPB Balance Check Number`,
 };
 
 // The banks this file actually walks, recorded as the describes are generated.
@@ -334,7 +335,7 @@ test.describe('bank page coverage', () => {
   });
 
   test('asserts the H1 override contract for every overridden bank', () => {
-    const expectedOverrideSlugs = ['airtel-payments', 'bandhan', 'baroda-up-gramin', 'bihar-gramin', 'boi', 'canara', 'idbi', 'indusind', 'maharashtra', 'maharashtra-gramin', 'mp-gramin', 'psb', 'punjab-gramin', 'rajasthan-gramin', 'ubi', 'up-gramin'];
+    const expectedOverrideSlugs = ['airtel-payments', 'bandhan', 'baroda-up-gramin', 'bihar-gramin', 'boi', 'canara', 'idbi', 'indusind', 'ippb', 'maharashtra', 'maharashtra-gramin', 'mp-gramin', 'psb', 'punjab-gramin', 'rajasthan-gramin', 'ubi', 'up-gramin'];
     expect(Object.keys(h1Overrides).sort()).toEqual(expectedOverrideSlugs);
     // An override naming an unknown slug would never be asserted on any page.
     expect(expectedOverrideSlugs.every(slug => banks.some(bank => bank.slug === slug))).toBe(true);
