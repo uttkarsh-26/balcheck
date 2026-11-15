@@ -1,0 +1,222 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getArticle } from '../../data/articles';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ScannableArticleSummary from '../../components/ScannableArticleSummary.astro';
+
+const siteUrl = 'https://balcheck.in';
+const slug = 'e-challan-apk-fraud-rourkela-hdfc-employee-arrest-2026';
+const publishDate = '2026-11-15';
+const modifiedDate = '2026-11-15';
+const pageTitle = getArticle(slug).title;
+const pageDesc = getArticle(slug).description;
+
+const articleBrief = {
+  summary:
+    'Rourkela police ने fake e-challan WhatsApp message से ₹5.99 लाख UPI fraud कराने के आरोप में HDFC Bank कर्मचारी को Mumbai से गिरफ्तार किया; ठगी पर 1930/cybercrime.gov.in शिकायत करें।',
+  facts: [
+    { label: 'घटना', value: '30 मई 2026 रात करीब 22:30 बजे fake e-challan message' },
+    { label: 'नुकसान', value: '₹5,99,588.53 — 6 unauthorised UPI transactions' },
+    { label: 'गिरफ्तार', value: 'Chetan Sharad Kurhade (35), Mumbai — HDFC Bank employee' },
+    { label: 'कार्रवाई', value: '7-day transit remand, judicial custody; 4 साथियों की तलाश जारी' },
+    { label: 'स्रोत', value: 'The Times of India (Bhubaneswar) व The New Indian Express (Odisha), 14 नवंबर 2026' },
+  ],
+  timeline: [
+    {
+      date: '30 मई 2026',
+      datetime: '2026-05-30',
+      text: 'Rourkela निवासी को WhatsApp पर RTO के नाम पर ₹500 जमा करने का fake e-challan message मिला; click करते ही OTP आने लगे और 6 UPI transactions से ₹5,99,588.53 debit हो गए।',
+    },
+    {
+      date: '13 नवंबर 2026',
+      datetime: '2026-11-13',
+      text: 'Rourkela cyber police ने Mumbai के Kalachowki इलाके से आरोपी Chetan Sharad Kurhade को गिरफ्तार किया और 7 दिन की transit remand पर Rourkela लाया।',
+    },
+    {
+      date: '14 नवंबर 2026',
+      datetime: '2026-11-14',
+      text: 'आरोपी को Panposh के sub-divisional judicial magistrate के सामने पेश कर judicial custody भेजा गया; पुलिस 4 साथियों की गिरफ्तारी के प्रयास में है।',
+    },
+  ],
+  action: {
+    title: 'Fraud हो जाए तो तुरंत करने वाले काम',
+    steps: [
+      'जिस account से पैसा कटा है, उस bank की customer care को call करके transaction बताएँ और account/card block कराएँ।',
+      'cybercrime.gov.in पर NCRP complaint दर्ज करें या helpline 1930 पर call करें — जल्दी शिकायत से beneficiary account freeze हो सकता है।',
+      'WhatsApp message, भेजने वाला number, अपनाए गए APK/link, bank statement और complaint number सुरक्षित रखें।',
+      'Bank को written complaint देकर acknowledgement लें; RBI के limited-liability नियम के तहत समय पर report करने की शर्त पूरी करें।',
+    ],
+    officialUrl: 'https://cybercrime.gov.in/',
+    officialLabel: 'National Cyber Crime Reporting Portal (NCRP)',
+  },
+  details: {
+    title: 'यह मामला आम e-challan fraud से कैसे अलग है',
+    body: 'आमतौर पर fake e-challan message में भुगतान के लिए किसी UPI ID या payment page का link होता है। इस मामले में पुलिस और अखबार की रिपोर्ट के मुताबिक message को click करने पर APK file जैसी चीज़ फोन में पहुँची और उसके बाद OTP आने शुरू हो गए — यानी ठगी सीधे भुगतान से नहीं, फोन में घुसाए गए malicious file से हुई। इसीलिए नियम साफ़ है: RTO/challan से जुड़ा कोई भी message जिसमें .apk file या अनजान link हो, उसे न खोलें — challan का status केवल परिवहन विभाग के official portal या वाहन से जुड़े official app में देखें।',
+  },
+};
+
+const faqItems = [
+  {
+    q: 'Rourkela में यह fraud कैसे हुआ?',
+    a: 'The Times of India और The New Indian Express की 14 नवंबर 2026 की रिपोर्ट के मुताबिक Rourkela के एक निवासी को 30 मई 2026 की रात करीब 22:30 बजे WhatsApp पर message मिला जो official traffic e-challan notification जैसा दिख रहा था। उसमें RTO में ₹500 जमा करने को कहा गया था। रिपोर्ट के अनुसार message पर click करते ही उनके फोन पर OTP messages आने लगे और 6 unauthorised UPI transactions से कुल ₹5,99,588.53 उनके savings account से कट गए।',
+  },
+  {
+    q: 'पुलिस ने किसे गिरफ्तार किया और क्या बरामद हुआ?',
+    a: 'रिपोर्ट के मुताबिक आरोपी Chetan Sharad Kurhade (35) Mumbai के Parel इलाके (Kalachowki police station क्षेत्र) का रहने वाला है और HDFC Bank के insurance division में कर्मचारी था। Rourkela cyber police ने उसे मुंबई से गिरफ्तार कर 7 दिन की transit remand पर Rourkela लाया। पुलिस ने एक iPhone 15, दूसरा mobile phone, चार credit cards और एक PAN card ज़ब्त किया।',
+  },
+  {
+    q: 'पैसा कहाँ गया — पुलिस ने क्या पाया?',
+    a: 'पुलिस के मुताबिक investigation में transaction trail जाँचा गया और banks व payment intermediaries से beneficiary details, statements और KYC माँगे गए। पता चला कि fraud की रकम अलग-अलग banks के credit card bills के भुगतान में इस्तेमाल की गई थी। credit card details और linked mobile numbers मिलने के बाद एक police team Mumbai गई और आरोपी को पकड़ा। Rourkela के SP Nitesh Wadhwani ने बताया कि आरोपी के 4 साथियों की गिरफ्तारी के प्रयास जारी हैं।',
+  },
+  {
+    q: 'आरोपी पर कौन-सी धाराएँ लगाई गई हैं?',
+    a: 'The New Indian Express के मुताबिक आरोपी को BNS की धारा 318(4), 319(2) और 336(3) तथा IT Act की धारा 66, 66C और 66D के तहत अदालत में पेश किया गया। उसे Panposh के sub-divisional judicial magistrate के सामने पेश करने के बाद judicial custody भेजा गया। यह एक चल रहा criminal case है — दोष सिद्ध होना अदालत के फैसले पर निर्भर है।',
+  },
+  {
+    q: 'e-challan के नाम पर आने वाले message से बचाव कैसे करें?',
+    a: 'RTO या traffic challan के नाम पर आए message में दिए गए किसी भी link को न खोलें और .apk file कभी download/install न करें — सरकारी विभाग WhatsApp पर कोई app file नहीं भेजते। Challan का status सिर्फ़ official transport portal या vehicle से जुड़े official app में देखें। किसी भी message के बाद OTP आने लगे तो तुरंत रुकें, OTP किसी से साझा न करें और bank को सूचित करें। SMS/WhatsApp में आए payment request को बिना verification भुगतान न करें।',
+  },
+  {
+    q: 'पैसा कट जाए तो शिकायत कहाँ करें और कितनी जल्दी?',
+    a: 'तुरंत अपने bank की customer care को call करके account/card block कराएँ और written complaint दें। इसके साथ cybercrime.gov.in (NCRP) पर complaint दर्ज करें या राष्ट्रीय cybercrime helpline 1930 पर call करें। RBI के customer-protection नियम (circular DBR.No.Leg.BC.78/14.01.062/2017-18) के तहत unauthorised electronic transaction की सूचना 3 working days के भीतर bank को देने पर customer का liability शून्य माना गया है; देरी बढ़ने पर liability बढ़ती है। रकम वापस मिलना जाँच और suspect accounts के freeze पर निर्भर करता है, इसलिए शिकायत में देरी न करें।',
+  },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: pageTitle,
+  description: pageDesc,
+  datePublished: publishDate,
+  dateModified: modifiedDate,
+  inLanguage: 'hi-IN',
+  mainEntityOfPage: `${siteUrl}/article/${slug}/`,
+  author: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+};
+
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'Fake e-challan / APK fraud में पैसा कट जाए तो क्या करें',
+  description: 'Rourkela e-challan APK fraud मामले के आधार पर bank complaint, NCRP report और limited-liability शर्त पूरी करने की प्रक्रिया।',
+  step: [
+    { '@type': 'HowToStep', name: 'Bank को तुरंत सूचित करें', text: 'जिस account से पैसा कटा है उसकी customer care को call करें, transaction details दें और account/card block कराएँ; written complaint की acknowledgement लें।' },
+    { '@type': 'HowToStep', name: 'NCRP पर complaint दर्ज करें', text: 'cybercrime.gov.in पर complaint दर्ज करें या helpline 1930 पर call करें; तारीख, रकम, UPI reference और beneficiary जानकारी दें।' },
+    { '@type': 'HowToStep', name: 'सबूत सुरक्षित रखें', text: 'WhatsApp message, भेजने वाला नंबर, download हुआ APK, OTP messages, bank statement और complaint number सुरक्षित रखें।' },
+    { '@type': 'HowToStep', name: 'RBI समय-सीमा का ध्यान रखें', text: 'unauthorised transaction की सूचना bank को 3 working days के भीतर दें ताकि RBI के limited-liability नियम के तहत zero liability का दावा बना रहे।' },
+    { '@type': 'HowToStep', name: 'Follow-up करते रहें', text: 'bank और police से complaint की स्थिति पूछें; suspect account freeze और refund में समय लगता है और हर मामले में रकम वापसी तय नहीं होती।' },
+  ],
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+    { '@type': 'ListItem', position: 2, name: 'Fake e-Challan APK Fraud — Rourkela Case', item: `${siteUrl}/article/${slug}/` },
+  ],
+};
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <div class="min-h-screen bg-gray-50">
+    <div class="container mx-auto max-w-copy px-4 py-8">
+      <nav aria-label="breadcrumb" class="mb-4 text-sm text-gray-600">
+        <a href="/" class="hover:underline">Home</a>
+        <span aria-hidden="true"> / </span>
+        <span class="text-gray-800">Fake e-Challan APK Fraud — Rourkela Case</span>
+      </nav>
+
+      <h1 class="text-h1 mb-4 font-bold text-gray-900">Fake e-Challan Fraud: Rourkela में HDFC कर्मचारी गिरफ्तार, ₹5.99 लाख का नुकसान</h1>
+      <p class="mb-6 text-lg text-gray-700">
+        Traffic challan जैसा दिखने वाला एक WhatsApp message, ₹500 जमा करने की बात — और कुछ ही पलों में savings account से करीब ₹6 लाख निकल गए। Rourkela police ने इस मामले में Mumbai से एक bank कर्मचारी को गिरफ्तार किया है। नीचे घटनाक्रम, पुलिस की जाँच, आरोप और आपके लिए बचाव-शिकायत के official steps दिए गए हैं।
+      </p>
+
+      <ScannableArticleSummary {...articleBrief} />
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Rourkela में क्या हुआ</h2>
+      <p class="mb-4 text-gray-700">
+        The Times of India और The New Indian Express की 14 नवंबर 2026 की रिपोर्ट के मुताबिक Rourkela के एक निवासी को <strong>30 मई 2026 की रात करीब 22:30 बजे</strong> WhatsApp पर एक message मिला जो official traffic e-challan notification जैसा दिखता था। Message में RTO कार्यालय में <strong>₹500</strong> जमा करने को कहा गया था।
+      </p>
+      <p class="mb-4 text-gray-700">
+        रिपोर्ट के अनुसार message पर click करने के बाद उनके फोन पर OTP messages आने शुरू हो गए। उन्होंने तुरंत bank balance देखा तो पता चला कि <strong>6 unauthorised UPI transactions</strong> हो चुके हैं और savings account से <strong>₹5,99,588.53</strong> कट गए हैं। New Indian Express ने इस मामले को APK file fraud बताया है — यानी message के ज़रिए फोन में malicious file पहुँचाई गई और उसके बाद OTP/जानकारी का इस्तेमाल करके पैसा निकाला गया।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">गिरफ्तारी, बरामदगी और आरोप</h2>
+      <p class="mb-4 text-gray-700">
+        Rourkela के superintendent of police (SP) Nitesh Wadhwani ने press meet में बताया कि आरोपी <strong>Chetan Sharad Kurhade (35)</strong> मुंबई के Parel इलाके (Kalachowki police station क्षेत्र) का रहने वाला है। New Indian Express के मुताबिक वह HDFC Bank के insurance division में कर्मचारी था। उसे Rourkela cyber police ने मुंबई से गिरफ्तार किया और <strong>7 दिन की transit remand</strong> पर Rourkela लाया गया।
+      </p>
+      <p class="mb-4 text-gray-700">
+        पुलिस ने आरोपी से <strong>एक iPhone 15, दूसरा mobile phone, चार credit cards और एक PAN card</strong> ज़ब्त किया। उसे Panposh के sub-divisional judicial magistrate के सामने पेश किए जाने के बाद judicial custody भेजा गया। New Indian Express के मुताबिक BNS की धारा 318(4), 319(2), 336(3) और IT Act की धारा 66, 66C, 66D के तहत मामला दर्ज है, और पुलिस आरोपी के 4 साथियों की गिरफ्तारी के प्रयास में है।
+      </p>
+      <p class="mb-4 text-gray-700">
+        पुलिस की जाँच में transaction trail के साथ banks और payment intermediaries से beneficiary account details, statements और KYC माँगे गए। रिपोर्ट के मुताबिक fraud की रकम अलग-अलग banks के <strong>credit card bills के भुगतान</strong> में इस्तेमाल हुई थी; credit card details और linked mobile numbers मिलने पर police team मुंबई पहुँची।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">e-Challan और APK fraud से बचाव के 5 नियम</h2>
+      <ul class="mb-4 list-disc space-y-2 pl-5 text-gray-700">
+        <li>RTO, challan या vehicle से जुड़े message में आए <strong>किसी भी link पर click न करें</strong> और <strong>.apk file कभी install न करें</strong> — सरकारी विभाग WhatsApp पर app file नहीं भेजते।</li>
+        <li>Challan का status सिर्फ़ <strong>official transport portal या vehicle से जुड़े official app</strong> में जाँचें, message में दिए link से नहीं।</li>
+        <li>Payment के नाम पर आए message में दिया UPI ID, QR या number बिना verification भुगतान न करें; पहले official portal पर challan की प्रविष्टि देखें।</li>
+        <li>Message के तुरंत बाद OTP आने लगे तो <strong>रुक जाएँ</strong> — OTP किसी को न बताएँ, screen share/remote access app install न करें, और तुरंत bank को call करें।</li>
+        <li>फोन में अनजान app install हो गया हो तो उसे हटाएँ, bank के मोबाइल app के credentials बदलें और device को security check कराएँ; bank से नया card/PIN माँगें।</li>
+      </ul>
+      <p class="mb-4 text-gray-700">
+        ध्यान दें: ऐसे message अक्सर भेजने वाले का नंबर बदलते रहते हैं और WhatsApp पर official-looking logo/header भी दिखा दिया जाता है। कोई भी विभाग WhatsApp पर payment माँगने के लिए link नहीं भेजता — challan हमेशा official portal से generate होकर वहीं दिखता है।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">पैसा कट जाए तो शिकायत का सही क्रम</h2>
+      <p class="mb-4 text-gray-700">
+        इस मामले में पुलिस तक बात पहुँची क्योंकि complaint दर्ज हुई और transaction trail जाँचा गया। आपके लिए क्रम यही है — पहले bank, फिर cyber complaint, और दोनों की लिखित रसीद सुरक्षित:
+      </p>
+      <ul class="mb-4 list-disc space-y-2 pl-5 text-gray-700">
+        <li><strong>Bank:</strong> जिस account से पैसा कटा उसकी customer care को call करें, account/card block कराएँ और लिखित complaint देकर acknowledgement लें।</li>
+        <li><strong>Cyber complaint:</strong> <a class="text-blue-700 underline" href="https://cybercrime.gov.in/" rel="noopener noreferrer" target="_blank">cybercrime.gov.in</a> (NCRP) पर complaint दर्ज करें; राष्ट्रीय helpline <strong>1930</strong> पर भी call कर सकते हैं।</li>
+        <li><strong>RBI समय-सीमा:</strong> RBI के customer-protection circular (DBR.No.Leg.BC.78/14.01.062/2017-18) के तहत unauthorised electronic transaction की सूचना 3 working days के भीतर देने पर customer का liability शून्य माना गया है; देरी पर liability बढ़ती है।</li>
+        <li><strong>सबूत:</strong> message, भेजने वाला नंबर, download हुआ APK, OTP messages, bank statement और complaint number सुरक्षित रखें।</li>
+        <li><strong>Follow-up:</strong> bank और police से status पूछते रहें; beneficiary account freeze और refund में समय लगता है और हर मामले में पूरी रकम वापसी तय नहीं होती।</li>
+      </ul>
+      <p class="mb-4 text-gray-700">
+        यह एक चल रहा criminal case है — आरोप दर्ज होने का अर्थ दोष सिद्ध होना नहीं; अंतिम निर्णय अदालत का होगा। इस लेख का उद्देश्य घटनाक्रम की पुष्टि और आम उपभोक्ता के बचाव/शिकायत के official रास्ते बताना है।
+      </p>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">Sources / आधिकारिक लिंक</h2>
+      <ul class="mb-4 list-disc space-y-2 pl-5 text-gray-700">
+        <li>रिपोर्ट: <a class="text-blue-700 underline" href="https://timesofindia.indiatimes.com/city/bhubaneswar/e-challan-fraud-mumbai-banker-arrested-for-duping-rourkela-resident-of-rs-6l/articleshow/135815136.cms" rel="noopener noreferrer" target="_blank">The Times of India (Bhubaneswar) — "E-challan fraud: Mumbai banker arrested for duping Rourkela resident of Rs 6L"</a>, 14 नवंबर 2026।</li>
+        <li>रिपोर्ट: <a class="text-blue-700 underline" href="https://www.newindianexpress.com/states/odisha/2026/Nov/14/rourkela-police-arrest-hdfc-bank-employee-from-mumbai-in-rs-6-lakh-apk-file-fraud" rel="noopener noreferrer" target="_blank">The New Indian Express (Odisha) — "Rourkela police arrest HDFC Bank employee from Mumbai in Rs 6 lakh APK file fraud"</a>, 14 नवंबर 2026।</li>
+        <li>शिकायत: <a class="text-blue-700 underline" href="https://cybercrime.gov.in/" rel="noopener noreferrer" target="_blank">National Cyber Crime Reporting Portal (cybercrime.gov.in)</a> — helpline 1930।</li>
+        <li>नियम: <a class="text-blue-700 underline" href="https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=11155&Mode=0" rel="noopener noreferrer" target="_blank">RBI circular DBR.No.Leg.BC.78/14.01.062/2017-18</a> — unauthorised electronic transactions में customer liability।</li>
+      </ul>
+
+      <h2 class="text-h2 mb-4 mt-8 font-bold text-gray-900">अक्सर पूछे जाने वाले सवाल</h2>
+      <FaqAccordion items={faqItems} />
+    </div>
+  </div>
+</Layout>

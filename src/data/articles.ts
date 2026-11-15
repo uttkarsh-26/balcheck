@@ -78,6 +78,12 @@ export const articles: ArticleMeta[] = [
     description: 'Mumbai ₹500 करोड़ mule account मामला और RBI draft SOP: temporary debit hold, 20 दिन में explanation, 1930/cybercrime.gov.in और RBI CMS शिकायत — guide।',
     linkLabel: 'Money Mule Account — Debit Hold क्या करें',
   },
+  {
+    slug: 'e-challan-apk-fraud-rourkela-hdfc-employee-arrest-2026',
+    title: 'Fake e-Challan APK Fraud: Rourkela में HDFC कर्मचारी गिरफ्तार | BalCheck.in',
+    description: 'Rourkela में fake traffic e-challan WhatsApp message से ₹5.99 लाख का UPI fraud; HDFC Bank कर्मचारी गिरफ्तार — बचाव के नियम, 1930/cybercrime.gov.in शिकायत और RBI liability समय-सीमा।',
+    linkLabel: 'Fake e-Challan Fraud — Rourkela Arrest',
+  },
 ];
 
 export const articlePath = (slug: string): string => `/article/${slug}/`;
