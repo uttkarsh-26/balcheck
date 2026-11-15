@@ -80,8 +80,8 @@ export const articles: ArticleMeta[] = [
   },
   {
     slug: 'e-challan-apk-fraud-rourkela-hdfc-employee-arrest-2026',
-    title: 'Fake e-Challan APK Fraud: Rourkela में HDFC कर्मचारी गिरफ्तार | BalCheck.in',
-    description: 'Rourkela में fake traffic e-challan WhatsApp message से ₹5.99 लाख का UPI fraud; HDFC Bank कर्मचारी गिरफ्तार — बचाव के नियम, 1930/cybercrime.gov.in शिकायत और RBI liability समय-सीमा।',
+    title: 'Rourkela e-Challan Fraud: HDFC कर्मचारी गिरफ्तार | BalCheck.in',
+    description: 'Rourkela में fake e-challan WhatsApp message से ₹5.99 लाख UPI fraud; HDFC Bank कर्मचारी गिरफ्तार — बचाव नियम, 1930/cybercrime.gov.in शिकायत, RBI liability समय-सीमा।',
     linkLabel: 'Fake e-Challan Fraud — Rourkela Arrest',
   },
 ];
