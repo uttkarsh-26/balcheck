@@ -57,7 +57,87 @@ test.describe('homepage', () => {
     await expect(visibleCards.first()).toContainText('यूनियन बैंक');
 
     await search.fill('ककककक');
-    await expect(page.locator('#no-results')).toBeVisible();
+    await expect(page.getByRole('status')).toContainText('कोई बैंक नहीं मिला');
+  });
+
+  for (const viewport of [{ width: 1280, height: 720 }, { width: 393, height: 727 }]) {
+    test(`search feedback stays near the field at ${viewport.width}px`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      const search = page.locator('#search');
+      const status = page.getByRole('status');
+      await expect(status).toHaveAttribute('aria-live', 'polite');
+      await expect(status).toHaveAttribute('aria-atomic', 'true');
+      await expect(status).toBeEmpty();
+      await search.evaluate(el => el.scrollIntoView({ block: 'center' }));
+      await search.fill('xyznotabank');
+      await expect(status).toContainText('कोई बैंक नहीं मिला');
+      await expect(status).toContainText('अलग नाम');
+      await expect(search).toBeFocused();
+      const inputBox = (await search.boundingBox())!;
+      const statusBox = (await status.boundingBox())!;
+      expect(statusBox.y - (inputBox.y + inputBox.height)).toBeLessThan(24);
+      expect(statusBox.y + statusBox.height).toBeLessThan(viewport.height);
+
+      await search.fill('09223766666');
+      await expect(status).toContainText('Number Lookup');
+      const hint = page.getByTestId('number-hint');
+      const link = hint.getByRole('link', { name: /Number Lookup/ });
+      await expect(link).toBeVisible();
+      await expect(link).toHaveAttribute('href', '/number-lookup/');
+      await expect(search).toBeFocused();
+      const linkBox = (await link.boundingBox())!;
+      expect(linkBox.height).toBeGreaterThanOrEqual(44);
+      expect(linkBox.y - (inputBox.y + inputBox.height)).toBeLessThan(100);
+      expect(linkBox.y + linkBox.height).toBeLessThan(viewport.height);
+      await expect(status.locator('a')).toHaveCount(0);
+
+      await search.fill('');
+      await expect(hint).toBeHidden();
+      await expect(page.locator('.bank-card:visible')).toHaveCount(banks.length);
+      await expect(status).toContainText(`${banks.length}`);
+    });
+  }
+
+  test('search feedback follows the latest query and selected category', async ({ page }) => {
+    const search = page.locator('#search');
+    const status = page.getByRole('status');
+    const cards = page.locator('.bank-card:visible');
+    await page.clock.install();
+    await search.fill('xyznotabank');
+    await expect(cards).toHaveCount(0);
+    await page.clock.fastForward(100);
+    await search.fill('sbi bank');
+    await expect(cards).toHaveCount(1);
+    await page.clock.fastForward(200);
+    await expect(status).toBeEmpty();
+    await page.clock.fastForward(1000);
+    await expect(status).toContainText('1');
+    await page.locator('button[data-cat="Private Sector"]').click();
+    await expect(cards).toHaveCount(0);
+    await page.clock.fastForward(1000);
+    await expect(status).toContainText('कोई बैंक नहीं मिला');
+    await search.fill('');
+    const privateCount = banks.filter(b => b.category === 'Private Sector').length;
+    await expect(cards).toHaveCount(privateCount);
+    await page.clock.fastForward(1000);
+    await expect(status).toContainText(`${privateCount}`);
+  });
+
+  test('search feedback stays visible for an empty category intersection', async ({ page }) => {
+    await page.setViewportSize({ width: 393, height: 727 });
+    await page.locator('#search').fill('sbi bank');
+    await expect(page.locator('.bank-card:visible')).toHaveCount(1);
+    const privateCategory = page.locator('button[data-cat="Private Sector"]');
+    await privateCategory.evaluate(element => element.scrollIntoView({ block: 'center' }));
+    await expect(page.locator('#search')).not.toBeInViewport();
+    await privateCategory.click();
+    await expect(page.locator('.bank-card:visible')).toHaveCount(0);
+    const empty = page.getByTestId('bank-search-empty');
+    await expect(empty).toContainText('category');
+    await expect(empty).toBeInViewport({ ratio: 1 });
+    await expect(page.getByRole('status')).toHaveCount(1);
+    await page.locator('button[data-cat="all"]').click();
+    await expect(empty).toBeHidden();
   });
 
   test('category tabs filter bank cards', async ({ page }) => {

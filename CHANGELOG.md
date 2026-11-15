@@ -4,6 +4,9 @@ All notable changes to this repository are recorded here, newest first.
 
 ## [Unreleased]
 
+### Homepage search feedback
+- Moved search result feedback and the number-lookup action beside the search field. A persistent polite status announces debounced result counts or retry guidance while filtering remains immediate.
+
 ### Rajasthan Gramin Aadhaar guidance
 - Corrected the existing page's KYC and DBT claims, distinguished bank, NPCI and UIDAI records, and replaced unsupported procedures with sourced guidance. Preserved page identity and other banks; corrected its description.
 
