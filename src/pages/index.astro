@@ -75,17 +75,23 @@ const faqs = [
 <!-- Search + Bank Directory -->
 <div class="max-w-wide mx-auto px-4 py-8">
   <!-- Search -->
-  <div class="relative mb-6">
-    <input
-      id="search"
-      type="search"
-      enterkeyhint="search"
-      placeholder="बैंक का नाम खोजें... (जैसे SBI, HDFC, Canara)"
-      class="w-full px-5 py-3.5 pl-12 text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent shadow-sm"
-      autocomplete="off"
-      aria-label="बैंक का नाम खोजें"
-    />
-    <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+  <div class="mb-6">
+    <div class="relative">
+      <input
+        id="search"
+        type="search"
+        enterkeyhint="search"
+        placeholder="बैंक का नाम खोजें... (जैसे SBI, HDFC, Canara)"
+        class="w-full px-5 py-3.5 pl-12 text-base border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent shadow-sm"
+        autocomplete="off"
+        aria-label="बैंक का नाम खोजें"
+      />
+      <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+    </div>
+    <p id="search-status" role="status" aria-live="polite" aria-atomic="true" class="min-h-5 mt-1 text-sm text-gray-600"></p>
+    <p class="hidden text-sm" data-testid="number-hint">
+      <a href="/number-lookup/" class="inline-flex min-h-[44px] items-center font-medium text-brand-700 hover:underline">Number Lookup से जानें यह फ़ोन नंबर किस बैंक का है →</a>
+    </p>
   </div>
 
   <!-- Popular bank shortcuts for high-demand queries -->
@@ -117,6 +123,9 @@ const faqs = [
   </div>
 
   <!-- Bank Cards Grid -->
+  <p data-testid="bank-search-empty" class="hidden mb-6 rounded-xl border border-gray-200 bg-white p-4 text-sm text-gray-600">
+    कोई बैंक नहीं मिला। बैंक का नाम या category बदलकर देखें।
+  </p>
   <div id="bank-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     <!-- Icon sprite: defined once, referenced by every BankCard's call/WhatsApp buttons -->
     <svg aria-hidden="true" focusable="false" style="display:none">
@@ -124,16 +133,6 @@ const faqs = [
       <symbol id="icon-whatsapp" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></symbol>
     </svg>
     {banks.map(bank => <BankCard bank={bank} siteUrl={siteUrl} />)}
-  </div>
-
-  <!-- No Results -->
-  <div id="no-results" class="hidden py-12 text-center">
-    <p class="text-lg text-gray-500">कोई बैंक नहीं मिला।</p>
-    <p class="mt-1 text-sm text-gray-600">कृपया अलग नाम से खोजें।</p>
-    <p class="mt-3 text-sm hidden" data-testid="number-hint">
-      बैंक का नाम नहीं, <a href="/number-lookup/" class="font-medium text-brand-700 hover:underline">फ़ोन नंबर</a> डाला है?
-      <a href="/number-lookup/" class="font-medium text-brand-700 hover:underline">Number Lookup tool से जानें यह नंबर किस बैंक का है →</a>
-    </p>
   </div>
 
   <RecordEvidence
@@ -262,8 +261,11 @@ const faqs = [
   // Search filter
   const search = document.getElementById('search')!;
   const grid = document.getElementById('bank-grid')!;
-  const noResults = document.getElementById('no-results')!;
+  const status = document.getElementById('search-status')!;
+  const numberHint = document.querySelector<HTMLElement>('[data-testid="number-hint"]')!;
+  const emptyDirectory = document.querySelector<HTMLElement>('[data-testid="bank-search-empty"]')!;
   let activeCat = 'all';
+  let announcementTimer: ReturnType<typeof setTimeout>;
 
   function filter() {
     const query = (search as HTMLInputElement).value.toLowerCase().trim();
@@ -275,7 +277,6 @@ const faqs = [
     const digitsOnly = query.replace(/\D/g, '');
     const stripped = query.replace(/[\d\s+\-()]/g, '');
     const looksLikeNumber = digitsOnly.length >= 6 && stripped.length === 0;
-    document.querySelector<HTMLElement>('[data-testid="number-hint"]')?.classList.toggle('hidden', !looksLikeNumber);
     let visible = 0;
     
     grid.querySelectorAll<HTMLElement>('.bank-card').forEach(card => {
@@ -288,7 +289,17 @@ const faqs = [
       if (show) visible++;
     });
     
-    noResults.classList.toggle('hidden', visible > 0);
+    const numericMiss = looksLikeNumber && visible === 0;
+    numberHint.classList.toggle('hidden', !numericMiss);
+    emptyDirectory.classList.toggle('hidden', visible > 0);
+    clearTimeout(announcementTimer);
+    announcementTimer = setTimeout(() => {
+      status.textContent = visible > 0
+        ? `${visible} बैंक मिले।`
+        : numericMiss
+          ? 'फ़ोन नंबर से बैंक खोजने के लिए नीचे Number Lookup लिंक खोलें।'
+          : 'कोई बैंक नहीं मिला। कृपया अलग नाम से खोजें।';
+    }, 300);
   }
 
   search.addEventListener('input', filter);
