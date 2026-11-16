@@ -1,0 +1,230 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getArticle } from '../../data/articles';
+import FaqAccordion from '../../components/FaqAccordion.astro';
+import ScannableArticleSummary from '../../components/ScannableArticleSummary.astro';
+
+const siteUrl = 'https://balcheck.in';
+const slug = 'delhi-consumer-court-cyber-fraud-bank-refund-2026';
+const publishDate = '2026-11-16';
+const modifiedDate = '2026-11-16';
+const pageTitle = getArticle(slug).title;
+const pageDesc = getArticle(slug).description;
+
+const articleBrief = {
+  summary:
+    'Delhi consumer court ने 2016 के cyber fraud में private bank को ₹70,084 refund और ₹25,000 मुआवज़ा देने का आदेश दिया, क्योंकि ग्राहक ने 3 working days के भीतर सूचना दी थी।',
+  facts: [
+    { label: 'नुकसान', value: '₹70,084 — 9 जुलाई 2016 को unauthorised online debits' },
+    { label: 'सूचना', value: 'ग्राहक ने 10 जुलाई 2016 को bank को बताया — 3 working days के भीतर' },
+    { label: 'आदेश', value: '30 अक्टूबर 2026 — refund ₹70,084 + ₹25,000 compensation व litigation cost' },
+    { label: 'आधार', value: 'RBI circular (6 जुलाई 2017) — third-party breach में 3 कार्यदिन में सूचना पर bank की liability' },
+    { label: 'स्रोत', value: 'Indian Express व The New Indian Express, 13 नवंबर 2026' },
+  ],
+  timeline: [
+    {
+      date: '9 जुलाई 2016',
+      datetime: '2016-07-09',
+      text: 'ग्राहक के savings account से unauthorised online transactions हुए और ₹70,084 कट गए।',
+    },
+    {
+      date: '10 जुलाई 2016',
+      datetime: '2016-07-10',
+      text: 'ग्राहक ने bank को लिखित सूचना दी — यानी 3 working days की समय-सीमा के भीतर; bank ने रकम वापस नहीं की।',
+    },
+    {
+      date: '30 अक्टूबर 2026',
+      datetime: '2026-10-30',
+      text: 'Delhi consumer commission ने bank को deficiency in service का दोषी मानकर refund और मुआवज़े का आदेश दिया।',
+    },
+    {
+      date: '13 नवंबर 2026',
+      datetime: '2026-11-13',
+      text: 'Indian Express और The New Indian Express ने आदेश की रिपोर्ट प्रकाशित की।',
+    },
+  ],
+  action: {
+    title: 'Cyber fraud में पैसा कटे तो यह क्रम अपनाएँ',
+    steps: [
+      'उसी दिन bank की customer care को call करें, transaction की जानकारी दें, account/card block कराएँ और लिखित complaint की acknowledgement लें।',
+      'cybercrime.gov.in पर NCRP complaint दर्ज करें या helpline 1930 पर call करें — तारीख, रकम और transaction reference साथ रखें।',
+      'Bank written complaint के 30 दिन में समाधान न हो तो RBI Integrated Ombudsman (cms.rbi.org.in) पर शिकायत करें।',
+      'Bank फिर भी मना करे तो Consumer Protection Act 2019 के तहत जिला consumer commission में case दायर किया जा सकता है।',
+      'Message, OTP alert, bank statement, complaint number और पत्राचार की सभी copies सुरक्षित रखें।',
+    ],
+    officialUrl: 'https://cms.rbi.org.in/',
+    officialLabel: 'RBI Complaint Management System (Ombudsman)',
+  },
+  details: {
+    title: 'इस फैसले का सबसे ज़रूरी सबक',
+    body: 'इस मामले में जीत का आधार रकम नहीं, समय था। ग्राहक ने अगले ही दिन bank को unauthorised transaction की सूचना दी, इसलिए RBI के third-party breach वाले नियम में liability bank पर गई। अगर सूचना में देरी होती या ग्राहक ने OTP/पासवर्ड किसी से साझा किया होता, तो आदेश का आधार ही बदल जाता — इसलिए घटना के तुरंत बाद लिखित सूचना और उसकी receipt सबसे महत्वपूर्ण कागज़ है।',
+  },
+};
+
+const faqItems = [
+  {
+    q: 'Delhi consumer court ने क्या आदेश दिया?',
+    a: 'Indian Express और The New Indian Express की 13 नवंबर 2026 की रिपोर्ट के मुताबिक Delhi की consumer commission ने एक private bank को ग्राहक के ₹70,084 वापस करने और ₹25,000 compensation व litigation cost देने का आदेश दिया — कुल करीब ₹95,000। Commission ने bank को "deficiency in service" का दोषी माना, क्योंकि ग्राहक ने समय पर सूचना देने के बाद भी bank ने fraud की रकम वापस नहीं की और ग्राहक की कोई लापरवाही साबित नहीं कर पाई।',
+  },
+  {
+    q: 'Court ने किस RBI नियम का हवाला दिया?',
+    a: 'रिपोर्ट के मुताबिक commission ने RBI के 6 जुलाई 2017 के customer-protection circular का हवाला दिया, जिसमें third-party breach की स्थिति में — जहाँ bank और ग्राहक दोनों की गलती न हो — ग्राहक द्वारा 3 working days के भीतर सूचना देने पर liability bank की मानी गई है। Commission ने कहा कि ग्राहक ने 10 जुलाई 2016 को सूचना दी थी, इसलिए नुकसान bank को उठाना होगा। जानकारी के लिए: इस circular का number DBR.No.Leg.BC.78/14.01.062/2017-18 है और यह RBI की website पर उपलब्ध है।',
+  },
+  {
+    q: 'Cyber fraud में पैसा कटे तो सबसे पहले क्या करें?',
+    a: 'तुरंत bank की customer care को call करें, account/card block कराएँ और लिखित complaint देकर उसकी acknowledgement लें — मौखिक शिकायत काफ़ी नहीं है। साथ ही cybercrime.gov.in पर NCRP complaint दर्ज करें या helpline 1930 पर call करें। RBI के नियम में 3 working days के भीतर सूचना देने पर third-party breach में ग्राहक की liability शून्य मानी गई है, और देरी बढ़ने पर liability बढ़ती है।',
+  },
+  {
+    q: 'Bank रकम वापस न करे तो कहाँ शिकायत करें?',
+    a: 'पहले bank को लिखित complaint दें और 30 दिन का इंतज़ार या उसका लिखित जवाब लें। समाधान न मिलने पर RBI Integrated Ombudsman Scheme के तहत cms.rbi.org.in पर शिकायत दर्ज करें — यह सुविधा RBI-regulated banks, NBFCs और payment system participants पर लागू है। वसूली न होने पर Consumer Protection Act 2019 के तहत जिला consumer commission में उपभोक्ता शिकायत भी दायर की जा सकती है।',
+  },
+  {
+    q: 'क्या हर cyber fraud मामले में bank ही ज़िम्मेदार होता है?',
+    a: 'नहीं। RBI के नियम में अंतर साफ़ है: अगर ग्राहक की लापरवाही साबित हो — जैसे OTP, PIN या पासवर्ड किसी से साझा करना, अनजान app को permission देना, या सूचना में बड़ी देरी — तो liability ग्राहक पर आती है। इस मामले में आदेश इसलिए बना क्योंकि ग्राहक ने तुरंत सूचना दी और bank ग्राहक की लापरवाही साबित नहीं कर पाया। हर आदेश उस मामले के तथ्यों पर टिकता है और bank उसके खिलाफ appeal भी कर सकता है।',
+  },
+  {
+    q: 'Consumer commission में case कैसे दायर करें?',
+    a: 'Consumer Protection Act 2019 के तहत उपभोक्ता जिला, राज्य या राष्ट्रीय आयोग में शिकायत दायर कर सकता है — मूल्य के आधार पर आयोग तय होता है। शिकायत के साथ bank को दी गई written complaint, उसका जवाब, bank statement, transaction details और NCRP complaint number संलग्न करें। आयोग की शिकायत e-daakhil (edaakhil.nic.in) जैसे official portal से भी दर्ज की जा सकती है; घटना के 2 साल के भीतर शिकायत दायर करने की सीमा का ध्यान रखें।',
+  },
+];
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: pageTitle,
+  description: pageDesc,
+  datePublished: publishDate,
+  dateModified: modifiedDate,
+  inLanguage: 'hi-IN',
+  mainEntityOfPage: `${siteUrl}/article/${slug}/`,
+  author: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'BalCheck.in',
+    url: `${siteUrl}/`,
+  },
+};
+
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'Cyber fraud में unauthorised debit पर bank से रकम वापसी कैसे माँगें',
+  description: 'Delhi consumer court के आदेश के आधार पर bank complaint, NCRP report, RBI Ombudsman और consumer commission तक के official steps।',
+  step: [
+    { '@type': 'HowToStep', name: 'Bank को उसी दिन सूचित करें', text: 'जिस account से पैसा कटा है उसकी customer care को call करें, transaction details दें, account/card block कराएँ और लिखित complaint की acknowledgement लें।' },
+    { '@type': 'HowToStep', name: 'NCRP पर complaint दर्ज करें', text: 'cybercrime.gov.in पर complaint दर्ज करें या helpline 1930 पर call करें; तारीख, रकम, UPI/transaction reference और beneficiary detail दें।' },
+    { '@type': 'HowToStep', name: '3 working days की सीमा का ध्यान रखें', text: 'RBI के customer-protection नियम में third-party breach की सूचना 3 working days के भीतर देने पर ग्राहक की liability शून्य है; देरी पर liability बढ़ती है।' },
+    { '@type': 'HowToStep', name: 'RBI Ombudsman पर शिकायत करें', text: 'Bank 30 दिन में समाधान न करे या शिकायत ठुकराए तो cms.rbi.org.in पर Integrated Ombudsman के पास शिकायत दर्ज करें।' },
+    { '@type': 'HowToStep', name: 'Consumer commission का रास्ता अपनाएँ', text: 'वसूली न होने पर Consumer Protection Act 2019 के तहत जिला consumer commission में शिकायत दायर करें और सभी दस्तावेज़ संलग्न करें।' },
+  ],
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+    { '@type': 'ListItem', position: 2, name: 'Cyber Fraud Refund — Delhi Consumer Court Order', item: `${siteUrl}/article/${slug}/` },
+  ],
+};
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(howToSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
+  <div class="min-h-screen bg-gray-50">
+    <div class="mx-auto container max-w-copy px-4 py-8">
+      <nav aria-label="breadcrumb" class="mb-4 text-sm text-gray-600">
+        <a href="/" class="hover:underline">Home</a>
+        <span aria-hidden="true"> / </span>
+        <span class="text-gray-800">Cyber Fraud Refund — Delhi Consumer Court Order</span>
+      </nav>
+
+      <h1 class="mb-4 text-h1 font-bold text-gray-900">Cyber Fraud में Bank Refund: Delhi Consumer Court ने ₹70,084 वापसी का आदेश दिया</h1>
+      <p class="mb-6 text-lg text-gray-700">
+        2016 में account से unauthorized transaction हुए, ग्राहक ने अगले ही दिन bank को सूचना दी — और bank ने पैसा वापस नहीं किया। दस साल बाद Delhi की consumer commission ने bank को refund और मुआवज़ा देने का आदेश दिया। नीचे आदेश का आधार, RBI का नियम और आपके लिए शिकायत का official क्रम दिया गया है।
+      </p>
+
+      <ScannableArticleSummary {...articleBrief} />
+
+      <h2 class="mb-4 mt-8 text-h2 font-bold text-gray-900">मामला क्या है</h2>
+      <p class="mb-4 text-gray-700">
+        Indian Express की रिपोर्ट के मुताबिक दिल्ली की एक महिला के savings account से <strong>जुलाई 2016</strong> में unauthorized online debits हुए और <strong>₹70,084</strong> कट गए। रिपोर्ट के अनुसार रकम कटने की घटना <strong>9 जुलाई 2016</strong> की है और ग्राहक ने <strong>10 जुलाई 2016</strong> को bank को इसकी सूचना दी — यानी RBI की 3 working days की समय-सीमा के भीतर।
+      </p>
+      <p class="mb-4 text-gray-700">
+        Commission की सुनवाई में यह बात सामने आई कि bank ने fraud को स्वीकार करने या ग्राहक की किसी लापरवाही को साबित करने के बजाय रकम वापस करने से इनकार कर दिया। इसी आधार पर उपभोक्ता आयोग ने मामले को <strong>deficiency in service</strong> माना।
+      </p>
+
+      <h2 class="mb-4 mt-8 text-h2 font-bold text-gray-900">Consumer Court ने क्या कहा</h2>
+      <p class="mb-4 text-gray-700">
+        रिपोर्ट के अनुसार आदेश <strong>30 अक्टूबर 2026</strong> को पारित हुआ। Commission के president <strong>Monika Aggarwal Srivastava</strong> और member <strong>Ritu Garodia</strong> की bench ने bank को निर्देश दिया कि वह ग्राहक को <strong>₹70,084</strong> लौटाए और इसके अतिरिक्त <strong>₹25,000</strong> compensation व litigation cost का भुगतान करे — यानी कुल करीब ₹95,000।
+      </p>
+      <p class="mb-4 text-gray-700">
+        Commission की टिप्पणी का हवाला देते हुए रिपोर्ट में कहा गया है कि RBI का circular साफ़ कहता है — third-party breach के मामले में, जहाँ न bank की गलती है न ग्राहक की, और ग्राहक 3 working days के भीतर सूचना देता है, तो liability bank की होती है। इस मामले में ग्राहक ने समय पर सूचना दी, इसलिए नुकसान bank को उठाना होगा।
+      </p>
+
+      <h2 class="mb-4 mt-8 text-h2 font-bold text-gray-900">RBI का zero-liability नियम क्या कहता है</h2>
+      <p class="mb-4 text-gray-700">
+        इस फैसले का आधार RBI का customer-protection framework है, जिसे RBI ने 2017 में जारी किया था (circular number <strong>DBR.No.Leg.BC.78/14.01.062/2017-18</strong>)। इसका सार यह है:
+      </p>
+      <ul class="mb-4 list-disc space-y-2 pl-5 text-gray-700">
+        <li><strong>3 working days के भीतर सूचना:</strong> third-party breach में, जहाँ ग्राहक और bank दोनों की गलती न हो, ग्राहक पर कोई liability नहीं — पूरा नुकसान bank उठाता है।</li>
+        <li><strong>देरी होने पर:</strong> सूचना में जितनी देरी, liability उतनी बढ़ती है — bank की board-approved policy और RBI की निर्धारित सीमाओं के अनुसार।</li>
+        <li><strong>ग्राहक की लापरवाही हो:</strong> OTP, PIN या पासवर्ड साझा करना, अनजान app को access देना या गलत जानकारी देना — इन मामलों में liability ग्राहक पर आती है।</li>
+        <li><strong>सूचना किसे मिले:</strong> bank को लिखित शिकायत और उसकी acknowledgement — समय-सीमा की गिनती इसी सूचना से होती है।</li>
+      </ul>
+      <p class="mb-4 text-gray-700">
+        ध्यान रखें: यह नियम बताता है कि liability किसकी है, यह नहीं कि पैसा तुरंत मिल जाएगा। Refund की गति bank की जाँच, suspect accounts की freezing और मामले के तथ्यों पर निर्भर करती है — इसलिए शिकायत में देरी सबसे बड़ी गलती है।
+      </p>
+
+      <h2 class="mb-4 mt-8 text-h2 font-bold text-gray-900">आपको क्या करना चाहिए — शिकायत का सही क्रम</h2>
+      <ul class="mb-4 list-disc space-y-2 pl-5 text-gray-700">
+        <li><strong>उसी दिन bank को सूचित करें:</strong> जिस account से पैसा कटा है उसकी customer care को call करें, account/card block कराएँ और लिखित complaint देकर उसकी acknowledgement लें।</li>
+        <li><strong>Cyber complaint:</strong> <a class="text-blue-700 underline" href="https://cybercrime.gov.in/" rel="noopener noreferrer" target="_blank">cybercrime.gov.in</a> (NCRP) पर complaint दर्ज करें या राष्ट्रीय helpline <strong>1930</strong> पर call करें; transaction reference साथ रखें।</li>
+        <li><strong>Bank न माने तो Ombudsman:</strong> written complaint के 30 दिन में समाधान न हो या शिकायत ठुकराई जाए तो <a class="text-blue-700 underline" href="https://cms.rbi.org.in/" rel="noopener noreferrer" target="_blank">cms.rbi.org.in</a> पर RBI Integrated Ombudsman के पास शिकायत दर्ज करें।</li>
+        <li><strong>उपभोक्ता आयोग:</strong> वसूली न होने पर Consumer Protection Act 2019 के तहत जिला consumer commission में case दायर करें — जैसे इस मामले में ग्राहक ने किया।</li>
+        <li><strong>सबूत:</strong> statement, OTP alerts, transaction details, bank पत्राचार और complaint number की copies सुरक्षित रखें।</li>
+      </ul>
+
+      <h2 class="mb-4 mt-8 text-h2 font-bold text-gray-900">इस आदेश से क्या नहीं मान लेना चाहिए</h2>
+      <p class="mb-4 text-gray-700">
+        यह आदेश एक जिला स्तर के उपभोक्ता आयोग का है और केवल उसी मामले के तथ्यों पर लागू है — यह कानून की नई व्याख्या नहीं बनाता। Bank इस आदेश के खिलाफ appeal भी कर सकता है। साथ ही यह नहीं मानें कि हर fraud मामले में पूरी रकम वापस मिल जाएगी: सूचना में देरी, ग्राहक की लापरवाही या bank के पास सबूत की कमी — कोई भी कारण निर्णय बदल सकता है।
+      </p>
+      <p class="mb-4 text-gray-700">
+        व्यावहारिक सलाह: fraud की खबर मिलते ही सबसे पहले bank और NCRP — दोनों जगह लिखित शिकायत, दोनों के reference number, और पत्राचार की एक फोटो copy। मुआवज़े और court तक जाने का रास्ता तभी काम आता है जब यह कागज़ात मौजूद हों।
+      </p>
+
+      <h2 class="mb-4 mt-8 text-h2 font-bold text-gray-900">Sources / आधिकारिक लिंक</h2>
+      <ul class="mb-4 list-disc space-y-2 pl-5 text-gray-700">
+        <li>रिपोर्ट: <a class="text-blue-700 underline" href="https://indianexpress.com/article/legal-news/delhi-woman-loses-rs-70000-online-fraud-bank-pay-rs-95000-10959005/" rel="noopener noreferrer" target="_blank">Indian Express — "Delhi woman loses Rs 70,000 to online fraud, private bank ordered to pay Rs 95,000"</a>, 13 नवंबर 2026।</li>
+        <li>रिपोर्ट: <a class="text-blue-700 underline" href="https://www.newindianexpress.com/cities/delhi/2026/Nov/13/online-fraud-consumer-court-orders-bank-to-pay-delhi-woman-rs-95000" rel="noopener noreferrer" target="_blank">The New Indian Express — "Online fraud: Consumer court orders bank to pay Delhi woman Rs 95,000"</a>, 13 नवंबर 2026।</li>
+        <li>नियम: <a class="text-blue-700 underline" href="https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=11155&Mode=0" rel="noopener noreferrer" target="_blank">RBI circular DBR.No.Leg.BC.78/14.01.062/2017-18</a> — unauthorised electronic transactions में customer liability।</li>
+        <li>शिकायत: <a class="text-blue-700 underline" href="https://cybercrime.gov.in/" rel="noopener noreferrer" target="_blank">National Cyber Crime Reporting Portal (cybercrime.gov.in)</a> — helpline 1930।</li>
+        <li>Ombudsman: <a class="text-blue-700 underline" href="https://cms.rbi.org.in/" rel="noopener noreferrer" target="_blank">RBI Complaint Management System (cms.rbi.org.in)</a>।</li>
+      </ul>
+
+      <h2 class="mb-4 mt-8 text-h2 font-bold text-gray-900">अक्सर पूछे जाने वाले सवाल</h2>
+      <FaqAccordion items={faqItems} />
+    </div>
+  </div>
+</Layout>

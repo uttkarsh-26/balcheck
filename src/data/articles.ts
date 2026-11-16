@@ -84,6 +84,13 @@ export const articles: ArticleMeta[] = [
     description: 'Rourkela में fake e-challan WhatsApp message से ₹5.99 लाख UPI fraud; HDFC Bank कर्मचारी गिरफ्तार — बचाव नियम, 1930/cybercrime.gov.in शिकायत, RBI liability समय-सीमा।',
     linkLabel: 'Fake e-Challan Fraud — Rourkela Arrest',
   },
+  {
+    slug: 'delhi-consumer-court-cyber-fraud-bank-refund-2026',
+    title: 'Consumer Court ने Bank से ₹70,084 Refund दिलाए | BalCheck.in',
+    description:
+      'Delhi consumer court ने 2016 cyber fraud में bank को ₹70,084 refund + ₹25,000 मुआवज़े का आदेश दिया — RBI zero-liability नियम और शिकायत का तरीका।',
+    linkLabel: 'Cyber Fraud Refund — Delhi Court Order',
+  },
 ];
 
 export const articlePath = (slug: string): string => `/article/${slug}/`;
