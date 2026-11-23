@@ -60,6 +60,7 @@ const defaultTemplateBank = banks.find(
  * an override fails CI instead of silently retiring that page's H1 contract.
  */
 const h1Overrides: Record<string, (bank: Bank) => string> = {
+  cosmos: () => 'Cosmos Bank Login गाइड लिंक और बैलेंस चेक नंबर',
   psb: () => 'Punjab & Sind Bank (PSB) बैलेंस चेक नंबर',
   ubi: bank => `Union Bank Balance Check Number ${bank.missedCall}`,
   'up-gramin': bank => `Uttar Pradesh Gramin Bank Balance Check Number ${bank.missedCall}`,
@@ -335,7 +336,7 @@ test.describe('bank page coverage', () => {
   });
 
   test('asserts the H1 override contract for every overridden bank', () => {
-    const expectedOverrideSlugs = ['airtel-payments', 'bandhan', 'baroda-up-gramin', 'bihar-gramin', 'boi', 'canara', 'idbi', 'indusind', 'ippb', 'maharashtra', 'maharashtra-gramin', 'mp-gramin', 'psb', 'punjab-gramin', 'rajasthan-gramin', 'ubi', 'up-gramin'];
+    const expectedOverrideSlugs = ['airtel-payments', 'bandhan', 'baroda-up-gramin', 'bihar-gramin', 'boi', 'canara', 'cosmos', 'idbi', 'indusind', 'ippb', 'maharashtra', 'maharashtra-gramin', 'mp-gramin', 'psb', 'punjab-gramin', 'rajasthan-gramin', 'ubi', 'up-gramin'];
     expect(Object.keys(h1Overrides).sort()).toEqual(expectedOverrideSlugs);
     // An override naming an unknown slug would never be asserted on any page.
     expect(expectedOverrideSlugs.every(slug => banks.some(bank => bank.slug === slug))).toBe(true);

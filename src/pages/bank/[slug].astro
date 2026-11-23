@@ -103,6 +103,8 @@ const waFaqs = waCheck ? [
 // phrasing never appears as a heading; those pages must lead with the query's
 // own words. Everything else keeps the scalable Hindi-brand H1.
 const h1Overrides: Partial<Record<string, string>> = {
+  // 30d pull 2026-11-23: 'cosmos bank login' — 2,524 impr @ 0.24% CTR, pos 5.5.
+  cosmos: 'Cosmos Bank Login गाइड लिंक और बैलेंस चेक नंबर',
   psb: 'Punjab & Sind Bank (PSB) बैलेंस चेक नंबर',
   // Same 28d evidence as the seoOverride below: 20,564 Latin imp @ 0.40% vs
   // 6,354 Devanagari @ 1.45% — the H1 was the Hindi bank name only, so no
