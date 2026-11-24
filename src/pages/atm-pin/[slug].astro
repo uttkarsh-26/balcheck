@@ -4,6 +4,8 @@ import PhoneNumber from '../../components/PhoneNumber.astro';
 import MoreServices from '../../components/MoreServices.astro';
 import RecordEvidence from '../../components/RecordEvidence.astro';
 import AtmPinGuide from '../../components/AtmPinGuide.astro';
+import IndianBankPinGuide from '../../components/IndianBankPinGuide.astro';
+import { indianBankPinDescription, indianBankPinFaqs } from '../../data/indian-bank-atm-pin';
 import { banks } from '../../data/banks';
 import type { Bank } from '../../data/banks';
 import { getAtmPinGuide } from '../../data/atm-pin-guides';
@@ -37,16 +39,17 @@ const canonicalUrl = `${siteUrl}/atm-pin/${bank.slug}/`;
  * body all come from the cited official source instead.
  */
 const guide = getAtmPinGuide(bank.slug);
+const isIndianBank = bank.slug === 'indian-bank';
 
 const title = composeTitle([`${bank.shortName} ATM PIN Generate`, bank.nameHindi], 'BalCheck');
 // Full Hindi bank name leads the description even when the title drops it.
-const description = guide
+const description = isIndianBank ? composeDescription(indianBankPinDescription) : guide
   ? composeDescription(guide.metaDescription)
   : composeDescription(
       `${bank.nameHindi} (${bank.name}) ATM PIN generate करने के तरीके। Net banking, ATM, SMS या customer care से Green PIN generate करें। ${bank.shortName} debit card PIN online।`,
     );
 
-const faqs = guide ? guide.faqs : [
+const faqs = isIndianBank ? indianBankPinFaqs : guide ? guide.faqs : [
   {
     q: `${bank.shortName} ATM PIN कैसे generate करें?`,
     a: `${bank.name} ATM PIN generate करने के 4 तरीके हैं: 1) Net banking में login करके "ATM PIN Generation" से, 2) ATM में जाकर "Green PIN" या "PIN Generation" option से, 3) SMS के ज़रिए (अगर बैंक सेवा देता है), 4) Customer care ${bank.customerCare} पर call करके OTP लेकर। सबसे आसान तरीका net banking है।`,
@@ -72,7 +75,7 @@ const faqs = guide ? guide.faqs : [
 const schema = {
   "@context": "https://schema.org",
   "@graph": [
-    {
+    ...(!isIndianBank ? [{
       "@type": "HowTo",
       "name": `${bank.shortName} ATM PIN Generate कैसे करें`,
       // The pilot's description names the one channel its cited source
@@ -89,7 +92,7 @@ const schema = {
             { "@type": "HowToStep", "position": 4, "name": "ATM पर जाएं", "text": `नजदीकी ${bank.shortName} ATM पर जाकर debit card डालें और "Green PIN" या "PIN Generation" option select करें।` },
             { "@type": "HowToStep", "position": 5, "name": "नया PIN set करें", "text": `OTP डालें और अपना नया 4-digit PIN set करें। PIN तुरंत active हो जाएगा।` },
           ],
-    },
+    }] : []),
     {
       "@type": "FAQPage",
       "mainEntity": faqs.map(f => ({
@@ -135,11 +138,13 @@ const schema = {
         Instant PIN Re-generation". A pilot page names its documented channel
         (guide.channel); the other 73 banks keep the generic string.
       */}
-      <p class="text-white text-sm" data-testid="atm-pin-subtitle">{bank.nameHindi} — {guide ? guide.channel : 'Green PIN ऑनलाइन'}</p>
+      <p class="text-white text-sm" data-testid="atm-pin-subtitle">{bank.nameHindi} — {isIndianBank ? 'IndSMART और ATM की जानकारी' : guide ? guide.channel : 'Green PIN ऑनलाइन'}</p>
     </div>
 
     {
-      guide ? (
+      isIndianBank ? (
+        <IndianBankPinGuide />
+      ) : guide ? (
         <AtmPinGuide guide={guide} bank={bank} />
       ) : (
         <>
@@ -242,7 +247,7 @@ const schema = {
         // procedure is not the customer-care number's. On a pilot page it names
         // what the record actually covers — the phone numbers, not the PIN
         // procedure, which the AtmPinGuide block cites separately.
-        guide
+        guide || isIndianBank
           ? `${bank.shortName} phone number record — balance enquiry और customer care number`
           : `${bank.shortName} customer care`
       }

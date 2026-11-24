@@ -4,6 +4,9 @@ All notable changes to this repository are recorded here, newest first.
 
 ## [Unreleased]
 
+### Indian Bank debit card PIN guidance
+- Replaced unsupported generic PIN instructions with the bank's IndSMART feature list and separately qualified ATM guidance. Removed unsourced fee, customer-care OTP and mandatory ATM claims and the unsupported HowTo schema; retained FAQ/schema parity and page identity.
+
 ### Homepage search feedback
 - Moved search result feedback and the number-lookup action beside the search field. A persistent polite status announces debounced result counts or retry guidance while filtering remains immediate.
 

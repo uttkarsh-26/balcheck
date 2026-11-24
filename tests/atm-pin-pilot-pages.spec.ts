@@ -26,7 +26,7 @@ import { findSchema, getJsonLdScripts, gotoDom } from './utils';
  */
 
 const PILOT_PATHS = ['/atm-pin/odisha-grameen/', '/atm-pin/psb/'] as const;
-const NON_PILOT_PATHS = ['/atm-pin/sbi/', '/atm-pin/indian-bank/'] as const;
+const NON_PILOT_PATHS = ['/atm-pin/sbi/'] as const;
 
 /** The generic template's four-channel list, only ever in its meta description. */
 const FORBIDDEN_DESCRIPTION_CLAIM = 'Net banking, ATM, SMS या customer care से Green PIN generate करें';
