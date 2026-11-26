@@ -4,6 +4,9 @@ All notable changes to this repository are recorded here, newest first.
 
 ## [Unreleased]
 
+### IPPB missed-call registration
+- The existing IPPB missed-call page now explains the bank's separate missed-call banking registration prerequisite before balance enquiry, using the account-linked mobile and the bank's published registration numbers. FAQ and HowTo reflect the same instruction; the balance destination, page metadata and other banks remain unchanged. [IPPB instructions](https://ippbonline.bank.in/web/ippb/missed-call-banking), checked 2026-11-26.
+
 ### Indian Bank debit card PIN guidance
 - Replaced unsupported generic PIN instructions with the bank's IndSMART feature list and separately qualified ATM guidance. Removed unsourced fee, customer-care OTP and mandatory ATM claims and the unsupported HowTo schema; retained FAQ/schema parity and page identity.
 

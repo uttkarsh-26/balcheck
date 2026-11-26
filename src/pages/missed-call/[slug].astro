@@ -45,6 +45,12 @@ const spacedNumber = (value: string) => {
   return value;
 };
 const missedCallSpaced = spacedNumber(bank.missedCall);
+// IPPB distinguishes linking a mobile to the account from registering it for
+// missed-call banking: https://ippbonline.bank.in/web/ippb/missed-call-banking
+const ippbRegistration = bank.slug === 'ippb' ? {
+  source: 'https://ippbonline.bank.in/web/ippb/missed-call-banking',
+  instruction: 'पहले अपने खाते से जुड़े मोबाइल नंबर से 9650121379 या 8424054994 पर मिस्ड कॉल देकर IPPB missed call banking के लिए registration करें।',
+} : undefined;
 
 // Both lists are derived from banks.ts — never hand-maintained, so the page can
 // never drift from the hub or from /bank/[slug]/.
@@ -95,7 +101,9 @@ const faqs = [
   },
   {
     q: `क्या मिस्ड कॉल के लिए mobile app या net banking ज़रूरी है?`,
-    a: `नहीं। मिस्ड-कॉल balance check के लिए न बैंक की mobile app चाहिए, न net banking का login, न internet data pack और न ATM card। ज़रूरी सिर्फ़ इतना है कि आपका mobile number बैंक खाते में registered हो और फ़ोन में mobile network हो।`,
+    a: ippbRegistration
+      ? `नहीं। मिस्ड कॉल के लिए app या net banking की ज़रूरत नहीं है। ${ippbRegistration.instruction}`
+      : `नहीं। मिस्ड-कॉल balance check के लिए न बैंक की mobile app चाहिए, न net banking का login, न internet data pack और न ATM card। ज़रूरी सिर्फ़ इतना है कि आपका mobile number बैंक खाते में registered हो और फ़ोन में mobile network हो।`,
   },
   {
     q: `${bank.missedCall} पर कॉल करने के बाद SMS नहीं आया तो?`,
@@ -111,7 +119,7 @@ const schema = {
       "name": `${bank.shortName} को मिस्ड कॉल कैसे दें (${bank.missedCall} पर)`,
       "description": `${bank.name} के registered mobile से ${bank.missedCall} पर मिस्ड कॉल देकर SMS में बैलेंस पाने की विधि`,
       "step": [
-        { "@type": "HowToStep", "position": 1, "name": "Registered mobile निकालें", "text": `वही mobile number इस्तेमाल करें जो ${bank.name} खाते में registered है — दूसरे नंबर से SMS नहीं आएगा।` },
+        { "@type": "HowToStep", "position": 1, "name": "Registered mobile निकालें", "text": ippbRegistration ? ippbRegistration.instruction : `वही mobile number इस्तेमाल करें जो ${bank.name} खाते में registered है — दूसरे नंबर से SMS नहीं आएगा।` },
         { "@type": "HowToStep", "position": 2, "name": `${bank.missedCall} डायल करें`, "text": `यह नंबर डायल करें और 2-3 ring तक छोड़ दें — कोई menu या IVR option नहीं आता।` },
         { "@type": "HowToStep", "position": 3, "name": "कॉल अपने आप कटने दें", "text": `कॉल जवाब में नहीं जुड़ती — फ़ोन कान से हटाकर कुछ सेकंड फ़ोन पास रखें।` },
         { "@type": "HowToStep", "position": 4, "name": "SMS में बैलेंस पढ़ें", "text": `कुछ सेकंड से लेकर कुछ मिनट में SMS में खाते का available balance आ जाता है।` },
@@ -179,6 +187,12 @@ const schema = {
     </div>
 
     <!-- The number -->
+    {ippbRegistration && (
+      <div data-testid="ippb-missed-call-registration" class="bg-brand-50 rounded-xl border border-brand-100 p-4 mb-4 text-sm text-gray-700">
+        <p>{ippbRegistration.instruction}</p>
+        <a href={ippbRegistration.source} target="_blank" rel="noopener noreferrer" class="text-brand-700 font-medium">IPPB की missed call banking जानकारी</a>
+      </div>
+    )}
     <div data-testid="missed-call-service" class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
       <h2 class="text-h2 font-semibold text-gray-900 mb-3">📞 {bank.shortName} का मिस्ड कॉल नंबर</h2>
       <p class="text-gray-600 text-sm mb-4">
@@ -235,7 +249,7 @@ const schema = {
       <ol class="space-y-3 text-sm text-gray-700">
         <li class="flex gap-3">
           <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">1</span>
-          <span>वही mobile निकालें जिसका नंबर {bank.name} खाते में registered है — दूसरे नंबर से कॉल करने पर सिस्टम आपका खाता नहीं पहचान पाएगा</span>
+          <span>{ippbRegistration ? ippbRegistration.instruction : `वही mobile निकालें जिसका नंबर ${bank.name} खाते में registered है — दूसरे नंबर से कॉल करने पर सिस्टम आपका खाता नहीं पहचान पाएगा`}</span>
         </li>
         <li class="flex gap-3">
           <span class="flex-shrink-0 w-6 h-6 bg-brand-100 text-brand-700 rounded-full flex items-center justify-center text-xs font-bold">2</span>
@@ -279,7 +293,7 @@ const schema = {
           <tbody class="text-gray-700">
             <tr>
               <td class="px-3 py-2 border border-gray-200 font-medium">मिस्ड कॉल<br /><span class="text-gray-600">{bank.missedCall}</span></td>
-              <td class="px-3 py-2 border border-gray-200">registered mobile + network</td>
+              <td class="px-3 py-2 border border-gray-200">{ippbRegistration ? 'खाते से जुड़ा मोबाइल + missed call banking registration + network' : 'registered mobile + network'}</td>
               <td class="px-3 py-2 border border-gray-200">SMS में account balance</td>
               <td class="px-3 py-2 border border-gray-200">रोज़ का काम — सबसे कम मेहनत, ऐप/net banking की ज़रूरत नहीं</td>
             </tr>
