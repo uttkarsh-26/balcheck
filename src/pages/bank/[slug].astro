@@ -14,6 +14,7 @@ import { getCanaraBalanceGuide } from '../../data/canara-balance-guide';
 import { getBiharGraminBankGuide } from '../../data/bihar-gramin-bank-guide';
 import { getBankPageGuide } from '../../data/bank-page-guides';
 import { UNION_BALANCE_GUIDE, unionBalanceSteps } from '../../data/union-bank-balance';
+import { IPPB_MISSED_CALL_REGISTRATION } from '../../data/ippb-missed-call';
 
 export function getStaticPaths() {
   return banks.map(bank => ({
@@ -29,6 +30,8 @@ const canaraGuide = getCanaraBalanceGuide(bank);
 const contactGuide = getBiharGraminBankGuide(bank);
 const pageGuide = getBankPageGuide(bank);
 const isMissedCall = bank.balanceMode === 'missed-call';
+const ippbRegistration = bank.slug === 'ippb' ? IPPB_MISSED_CALL_REGISTRATION : undefined;
+const ippbSteps = ippbRegistration ? [ippbRegistration.instruction, `फिर उसी खाते से जुड़े मोबाइल से ${bank.missedCall} पर बैलेंस enquiry के लिए मिस्ड कॉल दें।`] : undefined;
 // Helpline tile: only a real 1800 number gets a /toll-free-number/<slug>/
 // page — the other banks' legacy toll-free URL 301s to /customer-care/<slug>/
 // (src/lib/legacy-redirects.mjs), so the tile must not link to a dead route.
@@ -36,7 +39,7 @@ const tollFreeTile = isTrueTollFreeNumber(bank.customerCare)
   ? { href: 'toll-free-number', icon: '🆓', label: 'Toll Free Number' }
   : { href: 'customer-care', icon: '🎧', label: 'Customer Care' };
 const serviceLabel = contactGuide?.label ?? (isMissedCall ? 'मिस्ड कॉल बैलेंस नंबर' : 'Customer Care / Balance Enquiry');
-const serviceInstruction = contactGuide?.instruction ?? canaraGuide?.instruction ?? pageGuide?.instruction ?? (isUnionBank
+const serviceInstruction = contactGuide?.instruction ?? canaraGuide?.instruction ?? pageGuide?.instruction ?? (ippbRegistration ? 'खाते से जुड़े मोबाइल पर पहले missed call banking registration करें, फिर बैलेंस के लिए मिस्ड कॉल दें।' : isUnionBank
   ? UNION_BALANCE_GUIDE.instruction
   : isMissedCall
   ? 'रजिस्टर्ड मोबाइल से मिस्ड कॉल दें, SMS में तुरंत बैलेंस पाएं।'
@@ -75,7 +78,7 @@ const baseFaqs = canaraGuide?.faqs ?? (pageGuide ? [
   },
   {
     q: `क्या ${bank.shortName} balance enquiry सेवा मुफ़्त है?`,
-    a: isUnionBank ? UNION_BALANCE_GUIDE.feeExplanation : isMissedCall ? `हाँ, ${bank.name} की verified missed-call balance enquiry सेवा मुफ़्त है।` : `यह customer-care/IVR line है; telecom या bank के सामान्य call charges लागू हो सकते हैं।`
+    a: ippbRegistration ? 'शुल्क और telecom charges की जानकारी बैंक से पूछें।' : isUnionBank ? UNION_BALANCE_GUIDE.feeExplanation : isMissedCall ? `हाँ, ${bank.name} की verified missed-call balance enquiry सेवा मुफ़्त है।` : `यह customer-care/IVR line है; telecom या bank के सामान्य call charges लागू हो सकते हैं।`
   },
   {
     q: `${bank.shortName} का customer care नंबर क्या है?`,
@@ -254,6 +257,7 @@ const howToSchema = {
     ? canaraGuide.steps.map((text, index) => ({ '@type': 'HowToStep', position: index + 1, text }))
     : isUnionBank
     ? unionBalanceSteps(bank.missedCall).map(text => ({ '@type': 'HowToStep', text }))
+    : ippbSteps ? ippbSteps.map((text, index) => ({ '@type': 'HowToStep', position: index + 1, text }))
     : isMissedCall ? [
     { '@type': 'HowToStep', text: `${bank.missedCall} पर अपने रजिस्टर्ड मोबाइल से कॉल करें` },
     { '@type': 'HowToStep', text: '2-3 ring के बाद कॉल अपने आप कट जाएगी' },
@@ -455,10 +459,11 @@ const seoOverrides: Partial<Record<string, { title: string; description?: string
   // ('7799022509', redacted in the artifact) — 2,279 impr @ 0.83% CTR pos 6.9.
   // The Devanagari-first default title carried the number mid-string (and only
   // inside the ≤60 fallback), so the snippet never LED with what the query
-  // typed. Number leads the title; no description override (the scalable
-  // default already carries the number and is unchanged).
+  // typed. Number leads the title; the description preserves the bank's
+  // missed-call banking registration prerequisite.
   ippb: {
     title: `${bank.missedCall} IPPB Balance Check Number | Missed Call`,
+    description: `IPPB बैलेंस चेक ${bank.missedCall}: खाते से जुड़े मोबाइल पर पहले missed call banking registration करें, फिर मिस्ड कॉल दें।`,
   },
 };
 
@@ -522,6 +527,11 @@ const pageDesc = !isMissedCall
     </div>
   </div>
 )}
+
+{ippbRegistration && <div data-testid="ippb-bank-registration" class="max-w-copy mx-auto px-4 py-4 text-sm text-gray-700">
+  <p>{ippbRegistration.instruction}</p>
+  <a href={ippbRegistration.source} target="_blank" rel="noopener noreferrer" class="text-brand-700 underline">IPPB की missed call banking जानकारी</a>
+</div>}
 
 <!-- Video Hero Banner — universal on all bank pages -->
 <VideoHeroBanner
@@ -672,7 +682,11 @@ const pageDesc = !isMissedCall
 )}
 
 <!-- How It Works -->
-{!isUnionBank && !canaraGuide && !contactGuide && !pageGuide && <section class="bg-white border-t border-gray-100">
+{ippbSteps && <section class="bg-white border-t border-gray-100"><div class="max-w-copy mx-auto px-4 py-8">
+  <h2 class="text-h2 font-bold text-gray-900 mb-6">{bank.nameHindi} से बैलेंस कैसे चेक करें?</h2>
+  <ol class="list-decimal pl-5 space-y-3">{ippbSteps.map(step => <li>{step}</li>)}</ol>
+</div></section>}
+{!ippbSteps && !isUnionBank && !canaraGuide && !contactGuide && !pageGuide && <section class="bg-white border-t border-gray-100">
   <div class="max-w-copy mx-auto px-4 py-8">
     <h2 class="text-h2 font-bold text-gray-900 mb-6">{bank.nameHindi} से बैलेंस कैसे चेक करें?</h2>
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">

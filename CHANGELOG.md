@@ -4,6 +4,9 @@ All notable changes to this repository are recorded here, newest first.
 
 ## [Unreleased]
 
+### IPPB bank balance reader
+- On the existing bank page, show the bank's missed-call banking registration prerequisite before the balance action, keep visible steps and HowTo aligned, and remove unsupported timing and fee promises. The existing missed-call guide's source data is shared without changing that page.
+
 ### IPPB missed-call registration
 - The existing IPPB missed-call page now explains the bank's separate missed-call banking registration prerequisite before balance enquiry, using the account-linked mobile and the bank's published registration numbers. FAQ and HowTo reflect the same instruction; the balance destination, page metadata and other banks remain unchanged. [IPPB instructions](https://ippbonline.bank.in/web/ippb/missed-call-banking), checked 2026-11-26.
 

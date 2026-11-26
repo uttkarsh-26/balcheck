@@ -184,6 +184,9 @@ for (const bank of banks) {
         } else if (bank.slug === 'bihar-gramin') {
           expect(description).toBe(`Bihar Gramin Bank का प्रकाशित टोल-फ्री संपर्क ${bank.missedCall} और BGB mBanking में सूचीबद्ध balance enquiry की जानकारी।`);
           expect(description).not.toMatch(/तुरंत|मुफ़्त|24×7/);
+        } else if (bank.slug === 'ippb') {
+          expect(description).toBe(`IPPB बैलेंस चेक ${bank.missedCall}: खाते से जुड़े मोबाइल पर पहले missed call banking registration करें, फिर मिस्ड कॉल दें।`);
+          expect(description).not.toMatch(/तुरंत|मुफ़्त/);
         } else if (bank.slug === 'canara') {
           expect(description).toContain(bank.missedCall);
           expect(description).toContain('Saving account balance');

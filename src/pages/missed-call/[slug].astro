@@ -7,6 +7,7 @@ import { banks, categoryHindi } from '../../data/banks';
 import type { Bank } from '../../data/banks';
 import { mergers } from '../../data/mergers';
 import { composeDescription, composeTitle } from '../../lib/seo';
+import { IPPB_MISSED_CALL_REGISTRATION } from '../../data/ippb-missed-call';
 
 // Scope: only banks whose balance number is a dedicated missed-call facility —
 // the same predicate the /missed-call/ hub uses (see src/pages/missed-call/index.astro).
@@ -45,12 +46,7 @@ const spacedNumber = (value: string) => {
   return value;
 };
 const missedCallSpaced = spacedNumber(bank.missedCall);
-// IPPB distinguishes linking a mobile to the account from registering it for
-// missed-call banking: https://ippbonline.bank.in/web/ippb/missed-call-banking
-const ippbRegistration = bank.slug === 'ippb' ? {
-  source: 'https://ippbonline.bank.in/web/ippb/missed-call-banking',
-  instruction: 'पहले अपने खाते से जुड़े मोबाइल नंबर से 9650121379 या 8424054994 पर मिस्ड कॉल देकर IPPB missed call banking के लिए registration करें।',
-} : undefined;
+const ippbRegistration = bank.slug === 'ippb' ? IPPB_MISSED_CALL_REGISTRATION : undefined;
 
 // Both lists are derived from banks.ts — never hand-maintained, so the page can
 // never drift from the hub or from /bank/[slug]/.
