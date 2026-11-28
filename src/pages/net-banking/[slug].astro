@@ -22,6 +22,9 @@ interface Props {
 const { bank } = Astro.props;
 const siteUrl = 'https://balcheck.in';
 const canonicalUrl = `${siteUrl}/net-banking/${bank.slug}/`;
+// The public bank site failed local TLS validation; this is not evidence that
+// retail banking is unavailable. Do not treat its card portal as retail login.
+const odishaUnverified = bank.slug === 'odisha-grameen';
 
 // GSC-driven overrides for high-impression net-banking pages.
 // Demand signal (28d GSC): SIB 151 imp (sib login, sibnet banking),
@@ -74,10 +77,25 @@ const override = netBankingOverrides[bank.slug];
 // full Hindi bank name leads the description instead.
 const title = override?.title
   ?? composeTitle([`${bank.shortName} Net Banking Login`, `${bank.nameHindi} Online Banking`], 'BalCheck');
-const description = composeDescription(override?.description
+const description = composeDescription(odishaUnverified
+  ? 'Odisha Grameen net banking login के लिए बैंक से प्रमाणित जानकारी लें। Certificate warning पर credentials न डालें; card portal अलग है।'
+  : override?.description
   ?? `${bank.nameHindi} (${bank.name}) net banking login at ${bank.website} — fund transfer, statement download, bill payment, FD/RD, 24×7 online banking.`);
 
-const faqs = [
+const faqs = odishaUnverified ? [
+  {
+    q: 'Odisha Grameen retail net banking login कहाँ मिलेगा?',
+    a: 'हम retail login URL की पुष्टि नहीं कर पाए। अपनी शाखा या बैंक से सीधे प्राप्त, सत्यापित जानकारी से सही पता और उपलब्ध सेवाएं पूछें। Card Services portal को retail net banking login न मानें।',
+  },
+  {
+    q: 'Registration या password भूलने पर क्या करें?',
+    a: 'Registration और password reset की प्रक्रिया की पुष्टि नहीं हुई है। अपनी शाखा से वर्तमान प्रक्रिया और सहायता पूछें।',
+  },
+  {
+    q: 'Browser certificate या privacy warning दिखे तो क्या करें?',
+    a: 'Warning को bypass न करें और उस पेज पर user ID, password, OTP या card details न डालें। पेज बंद करके बैंक की शाखा से संपर्क करें।',
+  },
+] : [
   {
     q: `${bank.shortName} की net banking login URL क्या है?`,
     a: `${bank.name} की net banking के लिए ${bank.website} पर जाएं। अपने user ID और password से login करें। नए user registration के लिए अपने account details और ATM card की जरूरत पड़ेगी।`,
@@ -110,7 +128,7 @@ const schema = {
       "about": {
         "@type": "BankOrCreditUnion",
         "name": bank.name,
-        "url": bank.website,
+        ...(!odishaUnverified && { "url": bank.website }),
       },
     },
     {
@@ -152,9 +170,9 @@ const schema = {
     <VideoHeroBanner
       src="/videos/balcheck-netbanking-hero.mp4"
       poster="/videos/balcheck-poster.webp"
-      title="Net Banking Login"
-      subtitle="Quick access to your bank's online banking portal"
-      ctaText="Login Now"
+      title={odishaUnverified ? 'Net Banking जानकारी' : 'Net Banking Login'}
+      subtitle={odishaUnverified ? 'सही retail login की जानकारी बैंक से लें' : "Quick access to your bank's online banking portal"}
+      ctaText={odishaUnverified ? 'जानकारी देखें' : 'Login Now'}
       ctaHref="#netbanking-content"
       headingLevel={2}
     />
@@ -165,6 +183,14 @@ const schema = {
       <p class="text-white text-sm">{bank.nameHindi} — इंटरनेट बैंकिंग सेवाएं</p>
     </div>
 
+    {odishaUnverified ? (
+    <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
+      <h2 class="text-h2 font-semibold text-amber-900 mb-3">Retail login की पुष्टि करें</h2>
+      <p class="text-sm text-amber-900 mb-3">हम Odisha Grameen Bank के retail net banking login का पता, registration या उपलब्ध सुविधाएं सत्यापित नहीं कर पाए। अपनी शाखा या बैंक से सीधे प्राप्त, सत्यापित जानकारी से सही पता और प्रक्रिया पूछें।</p>
+      <p class="text-sm text-amber-900 mb-3">Card Services portal को retail net banking login न मानें; दोनों अलग कामों के लिए हो सकते हैं।</p>
+      <p class="text-sm font-semibold text-amber-900">Browser में certificate या privacy warning दिखे तो उसे bypass न करें। उस पेज पर user ID, password, OTP या card details न डालें; पेज बंद करके शाखा से संपर्क करें।</p>
+    </div>
+    ) : (<>
     <!-- Login CTA -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
       <h2 class="text-h2 font-semibold text-gray-900 mb-3">🔒 Net Banking Login</h2>
@@ -238,6 +264,7 @@ const schema = {
       </ul>
     </div>
 
+    </>)}
     <!-- FAQ -->
     <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
       <h2 class="text-h2 font-semibold text-gray-900 mb-4">❓ अक्सर पूछे जाने वाले प्रश्न</h2>
@@ -251,6 +278,7 @@ const schema = {
       </div>
     </div>
 
+    {!odishaUnverified && (<>
     <!-- Related Links -->
     <div class="ads-resilient grid grid-cols-2 gap-3 mb-3">
       <a href={`/bank/${bank.slug}/`}
@@ -290,5 +318,6 @@ const schema = {
     />
 
     <MoreServices bank={bank} />
+    </>)}
   </div>
 </Layout>

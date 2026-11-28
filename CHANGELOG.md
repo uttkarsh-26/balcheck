@@ -4,6 +4,9 @@ All notable changes to this repository are recorded here, newest first.
 
 ## [Unreleased]
 
+### Odisha Grameen retail net banking safety
+- Replaced unverified login, registration, feature and reset claims on the existing page with branch verification and certificate-warning guidance. Distinguished Card Services from retail login and aligned FAQ/schema; canonical and other bank routes remain unchanged. Evidence: `docs/audits/odisha-retail-login-safety-2026-11-28.md`.
+
 ### IPPB bank balance reader
 - On the existing bank page, show the bank's missed-call banking registration prerequisite before the balance action, keep visible steps and HowTo aligned, and remove unsupported timing and fee promises. The existing missed-call guide's source data is shared without changing that page.
 
